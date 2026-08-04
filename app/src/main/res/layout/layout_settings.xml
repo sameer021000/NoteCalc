@@ -224,6 +224,17 @@
                     android:backgroundTint="?attr/colorAccentSecondary"/>
 
             </LinearLayout>
+
+            <!-- VERSION INFO -->
+            <TextView
+                android:id="@+id/tv_app_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NoteCalc v1.0.0"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="?android:textColorSecondary"
+                android:layout_marginBottom="40dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

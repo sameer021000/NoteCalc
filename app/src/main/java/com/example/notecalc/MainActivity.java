@@ -3511,6 +3511,8 @@ public class MainActivity extends AppCompatActivity {
         settingsView.findViewById(R.id.btn_export_pdf_all).setOnClickListener(v -> {
             generateAndOpenAllPdf();
         });
+
+
     }
 
     private void openSettings() {
