@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorAccentPrimary" format="color" />
+    <attr name="colorAccentSecondary" format="color" />
+    
+    <attr name="colorBgPrimary" format="color" />
+    <attr name="colorBgSecondary" format="color" />
+    <attr name="colorBgTertiary" format="color" />
+    <attr name="colorBorder" format="color" />
+    <attr name="colorRipple" format="color" />
+</resources>

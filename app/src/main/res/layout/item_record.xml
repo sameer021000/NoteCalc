@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_record_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="10dp"
+    android:background="?attr/colorBgPrimary"
+    android:layout_marginBottom="4dp">
+
+    <!-- Bulk Selection CheckBox -->
+    <CheckBox
+        android:id="@+id/cb_record_select"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.10"
+        android:button="@drawable/ic_checkbox_selector"
+        app:buttonTint="@null"
+        android:gravity="center"
+        android:padding="0dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone" />
+
+
+    <!-- Serial Number -->
+    <TextView
+        android:id="@+id/text_record_sno"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.12"
+        tools:text="1"
+        android:textSize="13sp"
+        android:textColor="?attr/colorAccentSecondary"
+        android:gravity="center" />
+
+    <!-- Description + Optional Remarks -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.32"
+        android:orientation="vertical"
+        android:layout_marginEnd="4dp">
+
+        <TextView
+            android:id="@+id/text_record_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Item Description"
+            android:textSize="13sp"
+            android:textColor="@color/text_primary"
+            android:maxLines="3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical">
+            
+            <TextView
+                android:id="@+id/text_record_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Food"
+                android:textSize="10sp"
+                android:textColor="@color/text_on_accent"
+                android:background="?attr/colorAccentPrimary"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/text_record_remarks"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="bought at DMart"
+                android:textSize="11sp"
+                android:textColor="@color/text_tertiary"
+                android:textStyle="italic"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Date -->
+    <TextView
+        android:id="@+id/text_record_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.23"
+        tools:text="17-06-2026"
+        android:textSize="12sp"
+        android:textColor="?attr/colorAccentSecondary"
+        android:gravity="center" />
+
+    <!-- Amount -->
+    <TextView
+        android:id="@+id/text_record_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.15"
+        tools:text="0.00"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:gravity="end" />
+</LinearLayout>

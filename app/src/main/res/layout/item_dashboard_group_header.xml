@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="8dp">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Groups"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_tertiary" />
+    <TextView
+        android:id="@+id/btn_sort_group_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title ▲"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorAccentSecondary"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_marginStart="4dp"
+        android:clickable="true"
+        android:focusable="true" />
+</LinearLayout>

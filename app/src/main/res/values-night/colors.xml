@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default Text Colors (Dark) -->
+    <color name="text_primary">#FFE2E8F0</color> 
+    <color name="text_secondary">#FF38BDF8</color> 
+    <color name="text_tertiary">#FF94A3B8</color> 
+    <color name="text_on_accent">#FFFFFFFF</color> 
+    
+    <color name="error_red">#FFEF4444</color>
+    <color name="black">#FF0B0F19</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Accent Colors (Dark variants usually same as Light for vibrant buttons) -->
+    <color name="accent_blue_primary">#FF0284C7</color>
+    <color name="accent_blue_secondary">#FF38BDF8</color>
+    <color name="accent_green_primary">#FF16A34A</color>
+    <color name="accent_green_secondary">#FF4ADE80</color>
+    <color name="accent_purple_primary">#FF9333EA</color>
+    <color name="accent_purple_secondary">#FFC084FC</color>
+    <color name="accent_red_primary">#FFDC2626</color>
+    <color name="accent_red_secondary">#FFF87171</color>
+    <color name="accent_yellow_primary">#FFCA8A04</color>
+    <color name="accent_yellow_secondary">#FFFACC15</color>
+    <color name="accent_orange_primary">#FFEA580C</color>
+    <color name="accent_orange_secondary">#FFFB923C</color>
+    <color name="accent_pink_primary">#FFDB2777</color>
+    <color name="accent_pink_secondary">#FFF472B6</color>
+
+    <!-- Blue Theme Backgrounds -->
+    <color name="bg_primary_blue">#FF0B0F19</color>
+    <color name="bg_secondary_blue">#FF161E2E</color>
+    <color name="bg_tertiary_blue">#FF1C2538</color>
+    <color name="border_blue">#FF243046</color>
+    <color name="ripple_blue">#FF1F2937</color>
+
+    <!-- Green Theme Backgrounds -->
+    <color name="bg_primary_green">#FF0B1910</color>
+    <color name="bg_secondary_green">#FF162E1D</color>
+    <color name="bg_tertiary_green">#FF1C3823</color>
+    <color name="border_green">#FF24462B</color>
+    <color name="ripple_green">#FF1F3724</color>
+
+    <!-- Purple Theme Backgrounds -->
+    <color name="bg_primary_purple">#FF130B19</color>
+    <color name="bg_secondary_purple">#FF23162E</color>
+    <color name="bg_tertiary_purple">#FF2A1C38</color>
+    <color name="border_purple">#FF352446</color>
+    <color name="ripple_purple">#FF2B1F37</color>
+
+    <!-- Red Theme Backgrounds -->
+    <color name="bg_primary_red">#FF190B0B</color>
+    <color name="bg_secondary_red">#FF2E1616</color>
+    <color name="bg_tertiary_red">#FF381C1C</color>
+    <color name="border_red">#FF462424</color>
+    <color name="ripple_red">#FF371F1F</color>
+
+    <!-- Yellow Theme Backgrounds -->
+    <color name="bg_primary_yellow">#FF19140B</color>
+    <color name="bg_secondary_yellow">#FF2E2616</color>
+    <color name="bg_tertiary_yellow">#FF382F1C</color>
+    <color name="border_yellow">#FF463A24</color>
+    <color name="ripple_yellow">#FF372D1F</color>
+
+    <!-- Orange Theme Backgrounds -->
+    <color name="bg_primary_orange">#FF19100B</color>
+    <color name="bg_secondary_orange">#FF2E1D16</color>
+    <color name="bg_tertiary_orange">#FF38231C</color>
+    <color name="border_orange">#FF462B24</color>
+    <color name="ripple_orange">#FF37241F</color>
+
+    <!-- Pink Theme Backgrounds -->
+    <color name="bg_primary_pink">#FF190B12</color>
+    <color name="bg_secondary_pink">#FF2E1621</color>
+    <color name="bg_tertiary_pink">#FF381C28</color>
+    <color name="border_pink">#FF462432</color>
+    <color name="ripple_pink">#FF371F2B</color>
+    
+    <!-- Legacy compatibility mappings -->
+    <color name="bg_primary">#FF0B0F19</color>
+    <color name="bg_secondary">#FF161E2E</color>
+    <color name="accent_dark">#FF0284C7</color>
+    <color name="border_color">#FF243046</color>
+    <color name="bg_tertiary">#FF1C2538</color>
+    <color name="ripple_mono">#FF1F2937</color>
+</resources>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_account_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/colorBgSecondary">
+
+    <!-- Top Row: Title and Navigation Chevron -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/text_account_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="Account Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:ellipsize="end"
+            android:singleLine="true" />
+
+        <ImageView
+            android:id="@+id/btn_move_account"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_move_folder"
+            android:tint="@color/text_tertiary"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Move Account" />
+
+        <ImageView
+            android:id="@+id/btn_pin_account"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_pin"
+            android:tint="@color/text_tertiary"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Pin Account" />
+
+
+
+    </LinearLayout>
+
+    <!-- Bottom Row: Total Amount and Last Modified Date -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/text_account_total_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_total_spendings_label"
+            android:textSize="13sp"
+            android:textColor="?attr/colorAccentSecondary" />
+
+        <TextView
+            android:id="@+id/text_account_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="0.00"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/text_account_purse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="(Purse: 0.00)"
+            android:textSize="12sp"
+            android:textColor="@color/text_tertiary"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_account_items_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="12 items"
+            android:textSize="12sp"
+            android:textColor="?attr/colorAccentSecondary"
+            android:layout_marginEnd="12dp" />
+
+        <TextView
+            android:id="@+id/text_account_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="17-06-2026"
+            android:textSize="12sp"
+            android:textColor="@color/text_tertiary" />
+    </LinearLayout>
+</LinearLayout>

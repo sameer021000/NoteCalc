@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editor_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorBgPrimary"
+    android:padding="8dp">
+
+
+    <!-- Header navigation bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="?attr/colorAccentSecondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Back" />
+
+        <EditText
+            android:id="@+id/edit_account_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/hint_list_title"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_tertiary"
+            android:inputType="textCapSentences"
+            android:singleLine="true"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            tools:ignore="Autofill,TextFields" />
+
+        <ImageView
+            android:id="@+id/btn_analytics"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_menu_sort_by_size" 
+            android:tint="?attr/colorAccentSecondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Analytics" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_title_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/error_title_exists"
+        android:textSize="12sp"
+        android:textColor="@color/error_red"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorBorder"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Mode Toggle: Expenses vs Budget -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/btn_mode_expenses"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Expenses"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textColor="@color/text_on_accent"
+            android:background="?attr/colorAccentPrimary"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/btn_mode_budget"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Budget"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textColor="@color/text_tertiary"
+            android:background="?attr/colorBgSecondary"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+    </LinearLayout>
+
+    <!-- Remaining Purse -->
+    <TextView
+        android:id="@+id/text_remaining_purse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Remaining Purse: 500.00"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:gravity="center"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone" />
+
+    <!-- Record Entry Form Container -->
+    <LinearLayout
+        android:id="@+id/form_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:background="?attr/colorBgSecondary">
+
+        <!-- Form Title Header and Minimize Toggle -->
+        <LinearLayout
+            android:id="@+id/form_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/label_add_record"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_add_record"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_tertiary" />
+
+            <TextView
+                android:id="@+id/btn_toggle_form"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minimize [ - ]"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorAccentSecondary"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <!-- Nested Form Inputs Container (Collapsible) -->
+        <LinearLayout
+            android:id="@+id/form_inputs_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Row for inputs: Description and Amount -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edit_record_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="@string/hint_record_desc"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_tertiary"
+                    android:inputType="textCapSentences"
+                    android:singleLine="true"
+                    android:padding="10dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="?attr/colorBgPrimary"
+                    tools:ignore="Autofill,TextFields" />
+
+                <EditText
+                    android:id="@+id/edit_record_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/hint_record_amount"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_tertiary"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    android:singleLine="true"
+                    android:padding="10dp"
+                    android:background="?attr/colorBgPrimary"
+                    tools:ignore="Autofill" />
+            </LinearLayout>
+
+            <!-- Row for optional Remarks and Cancel Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edit_record_remarks"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Remarks (e.g. bought at DMart - optional)"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_tertiary"
+                    android:inputType="textCapSentences"
+                    android:singleLine="true"
+                    android:padding="10dp"
+                    android:background="?attr/colorBgPrimary"
+                    tools:ignore="Autofill,TextFields" />
+
+                <TextView
+                    android:id="@+id/btn_cancel_edit_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_cancel_edit_record"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginStart="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="gone"
+                    android:background="?attr/colorBgPrimary" />
+            </LinearLayout>
+
+            <!-- Row for Date Selector, Category, and Add Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/btn_record_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="17-06-2026"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/colorBgPrimary" />
+                    
+                <AutoCompleteTextView
+                    android:id="@+id/edit_record_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Category"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_tertiary"
+                    android:inputType="textCapWords"
+                    android:singleLine="true"
+                    android:padding="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="?attr/colorBgPrimary"
+                    android:completionThreshold="1"
+                    tools:ignore="Autofill,TextFields" />
+
+
+
+                <TextView
+                    android:id="@+id/btn_add_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_add_record"
+                    android:textColor="@color/text_on_accent"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingLeft="24dp"
+                    android:paddingRight="24dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/colorAccentPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Search bar + Delete selected bar (relocated ABOVE table header) -->
+    <LinearLayout
+        android:id="@+id/row_search_and_bulk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+
+        <ImageView
+            android:id="@+id/btn_filter_category"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="6dp"
+            android:src="@android:drawable/ic_menu_sort_by_size" 
+            android:tint="?attr/colorAccentSecondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="Filter Categories" />
+
+        <EditText
+            android:id="@+id/edit_records_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Search by description…"
+            android:textSize="13sp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_tertiary"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="?attr/colorBgSecondary"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawableEnd="@drawable/ic_close"
+            android:drawableTint="@color/text_tertiary"
+            android:drawablePadding="8dp"
+            tools:ignore="Autofill,TextFields" />
+
+
+        <LinearLayout
+            android:id="@+id/container_bulk_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/text_selected_total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Total: 0.00"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/btn_delete_selected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/error_red"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="?attr/colorBgSecondary"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Table Header Row -->
+    <LinearLayout
+        android:id="@+id/table_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="?attr/colorBgSecondary"
+        android:layout_marginBottom="4dp">
+
+        <CheckBox
+            android:id="@+id/cb_select_all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:button="@drawable/ic_checkbox_selector"
+            app:buttonTint="@null"
+            android:gravity="center"
+            android:padding="0dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/th_sno"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.12"
+            android:text="@string/th_sno"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorAccentSecondary"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/th_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.32"
+            android:text="@string/th_desc"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorAccentSecondary" />
+
+        <TextView
+            android:id="@+id/th_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.23"
+            android:text="@string/th_date"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorAccentSecondary"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/th_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:text="@string/th_amount"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorAccentSecondary"
+            android:gravity="end" />
+    </LinearLayout>
+
+    <!-- Scrollable records container Frame Layout -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_records"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no" />
+
+        <!-- Empty state layout inside editor -->
+        <LinearLayout
+            android:id="@+id/editor_empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Expenditures Added"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorAccentSecondary"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Use the 'ADD EXPENDITURE' form above to begin noting down your costs."
+                android:textSize="12sp"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/btn_nc_agent"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:background="?attr/colorAccentPrimary"
+            android:elevation="6dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="NC Agent" />
+    </FrameLayout>
+
+    <!-- Bottom summary and save buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/colorBorder"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Total Spendings Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/text_total_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_spendings_label"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorAccentSecondary" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/text_total_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="0.00"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
+        <!-- Save Button -->
+        <TextView
+            android:id="@+id/btn_save_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_save_account"
+            android:textColor="@color/text_on_accent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/colorAccentPrimary" />
+    </LinearLayout>
+</LinearLayout>
