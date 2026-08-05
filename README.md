@@ -52,11 +52,13 @@
 
 ## 📱 Screenshots
 
-|                          Dashboard Mode                          |                          Account Editor                          |
-|:----------------------------------------------------------------:|:----------------------------------------------------------------:|
-|  ![Dashboard](screenshots/notecalc_dashboard.jpg)                |  ![Editor](screenshots/notecalc_editor.jpg)                      |
-| ![PDF Export](screenshots/notecalc_pdf_export.jpg)               | ![Settings](screenshots/notecalc_settings.jpg)                   |
-
+|                          Dashboard                           |                      Group Dashboard                       |
+|:------------------------------------------------------------:|:----------------------------------------------------------:|
+|  ![Dashboard](screenshots/dashboard_screen.jpg)              |  ![Group Dashboard](screenshots/group_dashboard_screen.jpg)|
+|                       **Expenses Mode**                      |                       **Budget Mode**                      |
+|  ![Expenses Mode](screenshots/expenses_screen.jpg)           |  ![Budget Mode](screenshots/budget_screen.jpg)             |
+|                       **Settings 1**                         |                       **Settings 2**                       |
+|  ![Settings 1](screenshots/settings_screen1.jpg)             |  ![Settings 2](screenshots/settings_screen2.jpg)           |
 ---
 
 ## 🛠️ Tech Stack
