@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     private View formInputsContainer;
     private TextView btnToggleForm;
     private CheckBox cbSelectAllHeader;
-    private TextView btnDeleteSelected;
+    private ImageView btnBulkActionsMenu;
     private View editorEmptyState;
     private View rowSearchAndBulk;
     private View tableHeaderField;
@@ -873,10 +873,7 @@ public class MainActivity extends AppCompatActivity {
             setupClickable(btnAnalytics, true, () -> showAnalytics(currentEditingAccount));
         }
         
-        ImageView btnFilterCategory = editorView.findViewById(R.id.btn_filter_category);
-        if (btnFilterCategory != null) {
-            setupClickable(btnFilterCategory, true, () -> showCategoryFilterDialog(currentEditingAccount, btnFilterCategory));
-        }
+
         
         EditText editTitle = editorView.findViewById(R.id.edit_account_title);
         TextView textTitleError = editorView.findViewById(R.id.text_title_error);
@@ -887,13 +884,8 @@ public class MainActivity extends AppCompatActivity {
         editCategoryField = editorView.findViewById(R.id.edit_record_category);
         if (editCategoryField != null) {
             java.util.Set<String> catSet = new java.util.HashSet<>();
-            for (AccountGroup group : appStorage.groups) {
-                for (Account acc : group.getAccounts()) {
-                    for (Record r : acc.getRecords()) if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
-                }
-            }
-            for (Account acc : appStorage.standaloneAccounts) {
-                for (Record r : acc.getRecords()) if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
+            for (Record r : currentEditingAccount.getRecords()) {
+                if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
             }
             java.util.List<String> catList = new java.util.ArrayList<>(catSet);
             java.util.Collections.sort(catList);
@@ -1043,13 +1035,13 @@ public class MainActivity extends AppCompatActivity {
                 // Temporarily remove
                 getActiveRecords().remove(trueIndex);
                 recordsAdapter.refreshDisplay();
-                updateDeleteSelectedButtonState();
+                updateBulkActionsState();
                 updateHeaderLabels();
                 
                 showUndoSnackbar("Record deleted", () -> {
                     getActiveRecords().add(trueIndex, deletedRecord);
                     recordsAdapter.refreshDisplay();
-                    updateDeleteSelectedButtonState();
+                    updateBulkActionsState();
                     updateHeaderLabels();
                 }, null);
             }
@@ -1062,7 +1054,7 @@ public class MainActivity extends AppCompatActivity {
         formInputsContainer = editorView.findViewById(R.id.form_inputs_container);
         btnToggleForm = editorView.findViewById(R.id.btn_toggle_form);
         cbSelectAllHeader = editorView.findViewById(R.id.cb_select_all);
-        btnDeleteSelected = editorView.findViewById(R.id.btn_delete_selected);
+        btnBulkActionsMenu = editorView.findViewById(R.id.btn_bulk_actions_menu);
         containerBulkActions = editorView.findViewById(R.id.container_bulk_actions);
         textSelectedTotal = editorView.findViewById(R.id.text_selected_total);
         editorEmptyState = editorView.findViewById(R.id.editor_empty_state);
@@ -1135,22 +1127,14 @@ public class MainActivity extends AppCompatActivity {
                     r.setSelected(isChecked);
                 }
                 recordsAdapter.notifyDataSetChanged();
-                updateDeleteSelectedButtonState();
+                updateBulkActionsState();
             }
         });
 
-        btnDeleteSelected.setBackground(createButtonSelector(Color.parseColor("#20EF4444"), 4.0f));
-        setupClickable(btnDeleteSelected, false, () -> {
-            List<Record> selectedRecords = new ArrayList<>();
-            for (Record r : getActiveRecords()) {
-                if (r.isSelected()) {
-                    selectedRecords.add(r);
-                }
-            }
-            if (!selectedRecords.isEmpty()) {
-                showDeleteMultipleConfirmationDialog(selectedRecords);
-            }
-        });
+        if (btnBulkActionsMenu != null) {
+            btnBulkActionsMenu.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
+            setupClickable(btnBulkActionsMenu, true, () -> showBulkActionsMenu(btnBulkActionsMenu));
+        }
 
         // Assign header fields and reset sort state
         thSnoField = editorView.findViewById(R.id.th_sno);
@@ -1548,7 +1532,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Sync select-all header checkbox after any list change
         updateSelectAllHeaderState();
-        updateDeleteSelectedButtonState();
+        updateBulkActionsState();
     }
 
     private void applySorting() {
@@ -1788,7 +1772,7 @@ public class MainActivity extends AppCompatActivity {
                 holder.cbSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     record.setSelected(isChecked);
                     updateSelectAllHeaderState();
-                    updateDeleteSelectedButtonState();
+                    updateBulkActionsState();
                 });
             }
 
@@ -1816,7 +1800,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!record.isSelected()) {
                     record.setSelected(true);
                     updateSelectAllHeaderState();
-                    updateDeleteSelectedButtonState();
+                    updateBulkActionsState();
                 }
             });
         }
@@ -2148,7 +2132,7 @@ public class MainActivity extends AppCompatActivity {
                 r.setSelected(isChecked);
             }
             recordsAdapter.notifyDataSetChanged();
-            updateDeleteSelectedButtonState();
+            updateBulkActionsState();
         });
     }
 
@@ -2156,8 +2140,8 @@ public class MainActivity extends AppCompatActivity {
      * Shows or hides the "Delete Selected" button based on whether any records are selected.
      */
     @android.annotation.SuppressLint("SetTextI18n")
-    private void updateDeleteSelectedButtonState() {
-        if (btnDeleteSelected == null) return;
+    private void updateBulkActionsState() {
+        if (btnBulkActionsMenu == null) return;
         boolean anySelected = false;
         double selectedTotal = 0.0;
         for (Record r : getActiveRecords()) {
@@ -2168,11 +2152,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (containerBulkActions != null) {
-            containerBulkActions.setVisibility(anySelected ? View.VISIBLE : View.GONE);
+            containerBulkActions.setVisibility(View.VISIBLE);
         }
 
-        if (textSelectedTotal != null && anySelected) {
-            textSelectedTotal.setText(String.format(Locale.getDefault(), "Total: %.2f", selectedTotal));
+        if (textSelectedTotal != null) {
+            textSelectedTotal.setVisibility(anySelected ? View.VISIBLE : View.GONE);
+            if (anySelected) textSelectedTotal.setText(String.format(Locale.getDefault(), "Total: %.2f", selectedTotal));
         }
 
         if (cbSelectAllHeader != null) {
@@ -3713,5 +3698,492 @@ public class MainActivity extends AppCompatActivity {
         
         chart.invalidate();
         chart.animateY(800);
+    }
+
+    private void showBulkActionsMenu(View anchor) {
+        View popupView = getLayoutInflater().inflate(R.layout.layout_bulk_actions_menu, null);
+        
+        android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
+                popupView,
+                (int) (220 * getResources().getDisplayMetrics().density),
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                true
+        );
+        popupWindow.setElevation(8.0f);
+        
+        View btnFilter = popupView.findViewById(R.id.btn_popup_filter);
+        View btnExport = popupView.findViewById(R.id.btn_popup_export_pdf);
+        View btnCut = popupView.findViewById(R.id.btn_popup_cut);
+        View btnCopy = popupView.findViewById(R.id.btn_popup_copy);
+        View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
+        
+        List<Record> selectedRecords = new ArrayList<>();
+        for (Record r : getActiveRecords()) if (r.isSelected()) selectedRecords.add(r);
+        boolean hasSelection = !selectedRecords.isEmpty();
+        
+        if (btnExport != null) {
+            btnExport.setAlpha(hasSelection ? 1.0f : 0.4f);
+            btnExport.setEnabled(hasSelection);
+        }
+        btnCut.setAlpha(hasSelection ? 1.0f : 0.4f);
+        btnCut.setEnabled(hasSelection);
+        btnCopy.setAlpha(hasSelection ? 1.0f : 0.4f);
+        btnCopy.setEnabled(hasSelection);
+        btnDelete.setAlpha(hasSelection ? 1.0f : 0.4f);
+        btnDelete.setEnabled(hasSelection);
+        
+        setupClickable(btnFilter, false, () -> {
+            popupWindow.dismiss();
+            showCategoryFilterDialog(currentEditingAccount, (ImageView) anchor);
+        });
+        
+        if (hasSelection) {
+            if (btnExport != null) {
+                setupClickable(btnExport, false, () -> {
+                    popupWindow.dismiss();
+                    generateAndOpenSelectedPdf(selectedRecords);
+                });
+            }
+            setupClickable(btnCut, false, () -> {
+                popupWindow.dismiss();
+                showTransferDialog(selectedRecords, true);
+            });
+            setupClickable(btnCopy, false, () -> {
+                popupWindow.dismiss();
+                showTransferDialog(selectedRecords, false);
+            });
+            setupClickable(btnDelete, false, () -> {
+                popupWindow.dismiss();
+                showDeleteMultipleConfirmationDialog(selectedRecords);
+            });
+        }
+        
+        popupWindow.showAsDropDown(anchor, 0, 0);
+    }
+
+    private void showTransferDialog(List<Record> selectedRecords, boolean isCut) {
+        List<Account> targetAccounts = new ArrayList<>();
+        for (AccountGroup g : appStorage.groups) targetAccounts.addAll(g.getAccounts());
+        targetAccounts.addAll(appStorage.standaloneAccounts);
+        
+        List<String> names = new ArrayList<>();
+        names.add("Create New List");
+        for (Account a : targetAccounts) {
+            if (a != currentEditingAccount) {
+                names.add(a.getTitle());
+            }
+        }
+        
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_transfer, null);
+        builder.setView(dialogView);
+        
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+        
+        TextView title = dialogView.findViewById(R.id.dialog_title);
+        title.setText(isCut ? "Cut to..." : "Copy to...");
+        
+        android.widget.LinearLayout container = dialogView.findViewById(R.id.transfer_list_container);
+        
+        for (int i = 0; i < names.size(); i++) {
+            final int index = i;
+            TextView item = new TextView(this);
+            item.setText(names.get(i));
+            item.setTextSize(16f);
+            item.setTextColor(getResources().getColor(R.color.text_primary, getTheme()));
+            int padding = (int) (16 * getResources().getDisplayMetrics().density);
+            item.setPadding(padding, padding, padding, padding);
+            
+            // Add a bottom border
+            android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.bottomMargin = (int) (1 * getResources().getDisplayMetrics().density);
+            item.setLayoutParams(params);
+            item.setBackgroundColor(getResources().getColor(R.color.bg_primary_blue, getTheme())); // fallback color, wait... it should use theme color.
+            // Actually, setting background to transparent and letting container show it, or a ripple is better.
+            
+            setupClickable(item, false, () -> {
+                dialog.dismiss();
+                if (index == 0) { // Create New List
+                    showNewListTitleDialog(selectedRecords, isCut);
+                } else {
+                    Account target = null;
+                    String selectedName = names.get(index);
+                    for (Account a : targetAccounts) {
+                        if (a.getTitle().equals(selectedName)) {
+                            target = a;
+                            break;
+                        }
+                    }
+                    if (target != null) {
+                        executeTransfer(selectedRecords, target, isCut);
+                    }
+                }
+            });
+            container.addView(item);
+            
+            View divider = new View(this);
+            divider.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 
+                (int) (1 * getResources().getDisplayMetrics().density)
+            ));
+            divider.setBackgroundColor(android.graphics.Color.parseColor("#15FFFFFF"));
+            container.addView(divider);
+        }
+        
+        View btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
+        btnCancel.setBackground(createButtonSelector(android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+        setupClickable(btnCancel, false, dialog::dismiss);
+        
+        dialog.show();
+    }
+
+    private void showNewListTitleDialog(List<Record> selectedRecords, boolean isCut) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_new_list, null);
+        builder.setView(dialogView);
+        
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+        
+        final android.widget.EditText input = dialogView.findViewById(R.id.edit_new_list_title);
+        
+        View btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
+        btnCancel.setBackground(createButtonSelector(android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+        setupClickable(btnCancel, false, dialog::dismiss);
+        
+        View btnCreate = dialogView.findViewById(R.id.btn_dialog_create);
+        btnCreate.setBackground(createButtonSelector(android.graphics.Color.parseColor("#2034D399"), 4.0f));
+        setupClickable(btnCreate, false, () -> {
+            String title = input.getText().toString().trim();
+            if (title.isEmpty()) {
+                android.widget.Toast.makeText(this, "Title cannot be empty", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Check if title exists
+            for (AccountGroup g : appStorage.groups) {
+                for (Account a : g.getAccounts()) {
+                    if (a.getTitle().equalsIgnoreCase(title)) {
+                        android.widget.Toast.makeText(this, "List with this title already exists", android.widget.Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            }
+            for (Account a : appStorage.standaloneAccounts) {
+                if (a.getTitle().equalsIgnoreCase(title)) {
+                    android.widget.Toast.makeText(this, "List with this title already exists", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            
+            dialog.dismiss();
+            Account newAccount = new Account(title);
+            appStorage.standaloneAccounts.add(0, newAccount);
+            executeTransfer(selectedRecords, newAccount, isCut);
+            showDashboard();
+        });
+        
+        dialog.show();
+    }
+
+    private void executeTransfer(List<Record> selectedRecords, Account targetAccount, boolean isCut) {
+        for (Record r : selectedRecords) {
+            Record copy = new Record(r.getDescription(), r.getAmount(), r.getDate());
+            copy.setRemarks(r.getRemarks());
+            copy.setCategory(r.getCategory());
+            
+            if (isBudgetMode) {
+                targetAccount.getBudgetRecords().add(copy);
+            } else {
+                targetAccount.getRecords().add(copy);
+            }
+            
+            if (isCut) {
+                if (isBudgetMode) {
+                    currentEditingAccount.getBudgetRecords().remove(r);
+                } else {
+                    currentEditingAccount.getRecords().remove(r);
+                }
+            }
+        }
+        
+        StorageHelper.saveAppStorage(this, appStorage);
+        
+        if (isCut) {
+            if (recordsAdapter != null) {
+                recordsAdapter.setFilter(currentRecordSearchQuery);
+            }
+        }
+        
+        for (Record r : getActiveRecords()) r.setSelected(false);
+        if (cbSelectAllHeader != null) {
+            cbSelectAllHeader.setOnCheckedChangeListener(null);
+            cbSelectAllHeader.setChecked(false);
+            cbSelectAllHeader.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (recordsAdapter != null) {
+                    for (Record rec : recordsAdapter.displayRecords) {
+                        rec.setSelected(isChecked);
+                    }
+                    recordsAdapter.notifyDataSetChanged();
+                    updateBulkActionsState();
+                }
+            });
+        }
+        if (recordsAdapter != null) {
+            recordsAdapter.notifyDataSetChanged();
+        }
+        updateBulkActionsState();
+        
+        String action = isCut ? "Cut" : "Copied";
+        android.widget.Toast.makeText(this, action + " " + selectedRecords.size() + " records to " + targetAccount.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
+    }
+
+    private void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords) {
+        if (selectedRecords.isEmpty()) return;
+        android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
+        int[] pageTracker = {0};
+        appendSelectedRecordsToPdf(document, currentEditingAccount, selectedRecords, pageTracker);
+        try {
+            java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
+            if (pdfDir == null) return;
+            if (!pdfDir.exists()) pdfDir.mkdirs();
+            java.io.File file = new java.io.File(pdfDir, currentEditingAccount.getTitle().replaceAll("[\\/:*?\"<>|]", "_") + "_Selected.pdf");
+            document.writeTo(new java.io.FileOutputStream(file));
+            document.close();
+            android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".fileprovider", file);
+            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            android.widget.Toast.makeText(this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+            document.close();
+        }
+    }
+    private void appendSelectedRecordsToPdf(android.graphics.pdf.PdfDocument document, Account account, java.util.List<Record> selectedRecords, int[] pageTracker) {
+        // --- Page dimensions (A4 at 72 dpi approx) ---
+        int pageWidth  = 595;
+        int pageHeight = 842;
+        int margin     = 40;
+        int contentWidth = pageWidth - margin * 2;
+        float bottomLimit = pageHeight - margin;
+
+        // --- Paints (reusable across pages) ---
+        android.graphics.Paint bgPaint = new android.graphics.Paint();
+        bgPaint.setColor(ThemeManager.getBgPrimaryColor(MainActivity.this));
+
+        android.graphics.Paint titlePaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        titlePaint.setColor(getColor(R.color.text_primary));
+        titlePaint.setTextSize(22f);
+        titlePaint.setFakeBoldText(true);
+
+        android.graphics.Paint subPaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        subPaint.setColor(getColor(R.color.text_tertiary));
+        subPaint.setTextSize(11f);
+
+        android.graphics.Paint accentPaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        accentPaint.setColor(ThemeManager.getSecondaryAccentColor(MainActivity.this));
+        accentPaint.setTextSize(11f);
+        accentPaint.setFakeBoldText(true);
+
+        android.graphics.Paint cellPaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        cellPaint.setColor(getColor(R.color.text_primary));
+        cellPaint.setTextSize(10f);
+
+        android.graphics.Paint cellMutedPaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        cellMutedPaint.setColor(getColor(R.color.text_tertiary));
+        cellMutedPaint.setTextSize(10f);
+
+        android.graphics.Paint dividerPaint = new android.graphics.Paint();
+        dividerPaint.setColor(ThemeManager.getBorderColor(MainActivity.this));
+        dividerPaint.setStrokeWidth(0.8f);
+
+        android.graphics.Paint rowEvenPaint = new android.graphics.Paint();
+        rowEvenPaint.setColor(ThemeManager.getBgSecondaryColor(MainActivity.this));
+
+        android.graphics.Paint rowOddPaint = new android.graphics.Paint();
+        rowOddPaint.setColor(ThemeManager.getBgTertiaryColor(MainActivity.this));
+
+        android.graphics.Paint totalBgPaint = new android.graphics.Paint();
+        totalBgPaint.setColor(ThemeManager.getPrimaryAccentColor(MainActivity.this));
+
+        android.graphics.Paint totalTextPaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        totalTextPaint.setColor(android.graphics.Color.WHITE);
+        totalTextPaint.setTextSize(11f);
+        totalTextPaint.setFakeBoldText(true);
+
+        android.graphics.Paint tableHeaderBgPaint = new android.graphics.Paint();
+        tableHeaderBgPaint.setColor(ThemeManager.getBgSecondaryColor(MainActivity.this));
+
+        // --- Column widths ---
+        float colSno    = 38f;
+        float colDesc   = contentWidth - colSno - 70f - 60f;
+        float colDate   = 70f;
+        float colAmount = 60f;
+        float rowHeight = 22f;
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+        String lastMod = sdf.format(new java.util.Date(account.getLastModified()));
+        
+        java.util.List<Record> recordsToPrint = new java.util.ArrayList<>(selectedRecords);
+        java.util.Collections.sort(recordsToPrint, new java.util.Comparator<Record>() {
+            @Override
+            public int compare(Record r1, Record r2) {
+                return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
+            }
+        });
+        
+        double totalAmt = 0;
+        for (Record r : recordsToPrint) totalAmt += r.getAmount();
+
+        // --- Page tracking ---
+        int pageNum = pageTracker[0];
+        android.graphics.Canvas canvas = null;
+        android.graphics.pdf.PdfDocument.Page page = null;
+        float y = 0;
+
+        pageNum++;
+        android.graphics.pdf.PdfDocument.PageInfo pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
+        page = document.startPage(pageInfo);
+        canvas = page.getCanvas();
+        canvas.drawRect(0, 0, pageWidth, pageHeight, bgPaint);
+        y = margin;
+
+        String titleText = account.getTitle() + " (Selected)";
+        float titleLineHeight = 28f;
+        float maxTitleWidth = contentWidth - 15f;
+        java.util.List<String> titleLines = wrapText(titleText, titlePaint, maxTitleWidth);
+        for (String line : titleLines) {
+            canvas.drawText(line, margin, y + 22f, titlePaint);
+            y += titleLineHeight;
+        }
+        y += 4f;
+
+        String subtitle = "Exported: " + sdf.format(new java.util.Date()) + "  |  Items: " + recordsToPrint.size();
+        canvas.drawText(subtitle, margin, y + 13f, subPaint);
+        y += 20f;
+
+        canvas.drawLine(margin, y + 4f, pageWidth - margin, y + 4f, dividerPaint);
+        y += 16f;
+
+        float hx = margin;
+        canvas.drawRect(margin, y, pageWidth - margin, y + rowHeight, tableHeaderBgPaint);
+        canvas.drawText("S.No",        hx + 4,                       y + 15f, accentPaint);
+        canvas.drawText("Description", hx + colSno + 4,              y + 15f, accentPaint);
+        canvas.drawText("Date",        hx + colSno + colDesc + 4,    y + 15f, accentPaint);
+        float amountHeaderX = hx + colSno + colDesc + colDate + colAmount - accentPaint.measureText("Amount") - 4f;
+        canvas.drawText("Amount",      amountHeaderX,                y + 15f, accentPaint);
+        y += rowHeight;
+        canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
+
+        for (int i = 0; i < recordsToPrint.size(); i++) {
+            if (y + rowHeight > bottomLimit - 10f) {
+                document.finishPage(page);
+                pageNum++;
+                pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
+                page = document.startPage(pageInfo);
+                canvas = page.getCanvas();
+                canvas.drawRect(0, 0, pageWidth, pageHeight, bgPaint);
+                y = margin;
+
+                canvas.drawText(account.getTitle() + " (contd.)", margin, y + 13f, subPaint);
+                y += 20f;
+                canvas.drawLine(margin, y + 2f, pageWidth - margin, y + 2f, dividerPaint);
+                y += 10f;
+
+                canvas.drawRect(margin, y, pageWidth - margin, y + rowHeight, tableHeaderBgPaint);
+                canvas.drawText("S.No",        margin + 4,                       y + 15f, accentPaint);
+                canvas.drawText("Description", margin + colSno + 4,              y + 15f, accentPaint);
+                canvas.drawText("Date",        margin + colSno + colDesc + 4,    y + 15f, accentPaint);
+                float ahx = margin + colSno + colDesc + colDate + colAmount - accentPaint.measureText("Amount") - 4f;
+                canvas.drawText("Amount",      ahx,                              y + 15f, accentPaint);
+                y += rowHeight;
+                canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
+            }
+
+            Record rec = recordsToPrint.get(i);
+            android.graphics.Paint rowBg = (i % 2 == 0) ? rowEvenPaint : rowOddPaint;
+
+            String recRemarks = rec.getRemarks();
+            String cat = rec.getCategory();
+            String combinedNotes = "";
+            if (cat != null && !cat.isEmpty()) combinedNotes += "[" + cat + "] ";
+            if (recRemarks != null && !recRemarks.isEmpty()) combinedNotes += recRemarks;
+            
+            boolean hasRemarks = !combinedNotes.isEmpty();
+            float actualRowHeight = hasRemarks ? rowHeight + 14f : rowHeight;
+
+            canvas.drawRect(margin, y, pageWidth - margin, y + actualRowHeight, rowBg);
+
+            float rx = margin;
+            canvas.drawText(String.valueOf(i + 1), rx + 4, y + 15f, cellMutedPaint);
+
+            String desc = rec.getDescription();
+            while (desc.length() > 1 && cellPaint.measureText(desc) > colDesc - 8f) {
+                desc = desc.substring(0, desc.length() - 1);
+            }
+            if (!desc.equals(rec.getDescription())) desc += "\u2026";
+            canvas.drawText(desc, rx + colSno + 4, y + 15f, cellPaint);
+
+            if (hasRemarks) {
+                String truncRemarks = combinedNotes;
+                while (truncRemarks.length() > 1 && cellMutedPaint.measureText(truncRemarks) > colDesc - 8f) {
+                    truncRemarks = truncRemarks.substring(0, truncRemarks.length() - 1);
+                }
+                if (!truncRemarks.equals(combinedNotes)) truncRemarks += "\u2026";
+                canvas.drawText(truncRemarks, rx + colSno + 4, y + 27f, cellMutedPaint);
+            }
+
+            canvas.drawText(formatDateCompact(rec.getDate()), rx + colSno + colDesc + 4, y + 15f, cellMutedPaint);
+
+            String amtStr = String.format(java.util.Locale.getDefault(), "%.2f", rec.getAmount());
+            float amtX = rx + colSno + colDesc + colDate + colAmount - cellPaint.measureText(amtStr) - 4f;
+            canvas.drawText(amtStr, amtX, y + 15f, cellPaint);
+
+            y += actualRowHeight;
+            canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
+        }
+
+        if (y + rowHeight + 30f > bottomLimit) {
+            document.finishPage(page);
+            pageNum++;
+            pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
+            page = document.startPage(pageInfo);
+            canvas = page.getCanvas();
+            canvas.drawRect(0, 0, pageWidth, pageHeight, bgPaint);
+            y = margin;
+        }
+
+        y += 4f;
+        canvas.drawRect(margin, y, pageWidth - margin, y + rowHeight, totalBgPaint);
+        canvas.drawText("TOTAL SELECTED", margin + 4, y + 15f, totalTextPaint);
+        String totalStr = String.format(java.util.Locale.getDefault(), "%.2f", totalAmt);
+        float totalX = margin + contentWidth - totalTextPaint.measureText(totalStr) - 4f;
+        canvas.drawText(totalStr, totalX, y + 15f, totalTextPaint);
+        y += rowHeight + 16f;
+
+        if (y + 20f > bottomLimit) {
+            document.finishPage(page);
+            pageNum++;
+            android.graphics.pdf.PdfDocument.PageInfo pi = new android.graphics.pdf.PdfDocument.PageInfo.Builder(595, 842, pageNum).create();
+            page = document.startPage(pi);
+            canvas = page.getCanvas();
+            android.graphics.Paint bg = new android.graphics.Paint();
+            bg.setColor(ThemeManager.getBgPrimaryColor(MainActivity.this));
+            canvas.drawRect(0, 0, 595, 842, bg);
+            y = 40f;
+        }
+        canvas.drawText("Generated by NoteCalc  •  " + lastMod + "  •  Page " + pageNum, 40f, y + 12f, subPaint);
+
+        document.finishPage(page);
+        pageTracker[0] = pageNum;
     }
 }

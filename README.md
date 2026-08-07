@@ -2,7 +2,7 @@
 
 ![Android](https://img.shields.io/badge/Platform-Android-green)
 ![Java](https://img.shields.io/badge/Language-Java-blue)
-![Version](https://img.shields.io/badge/Version-1.0.0-orange)
+![Version](https://img.shields.io/badge/Version-1.1.0-orange)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
 **NoteCalc** is a premium, offline-first Android expense tracker and calculator designed to bridge the gap between simple note-taking and structured financial tracking. It combines a stunning, modern interface with powerful tools like dual tracking modes, detailed PDF exports, and an organized dashboard for an intuitive accounting experience.
@@ -11,7 +11,7 @@
 
 ## 📌 App Information
 
-- **Current Version:** v1.0.0
+- **Current Version:** v1.1.0
 - **Minimum SDK:** Android 7.0 (Nougat)
 - **Language:** Java
 - **Last Updated:** August 2026
@@ -37,9 +37,11 @@
 *   **Custom Groups & Accounts**: Organize your financial data effortlessly. Create standalone accounts (e.g., "Trip to Paris", "Monthly Groceries") or group related accounts together under custom folders.
 *   **Smart Dashboard**: A beautifully designed management screen featuring dynamic search, quick sorting (Latest, Title, Total Amount), and interactive empty states.
 *   **Advanced Filtering**: Search through records by description or remarks, and filter by exact date or amount ranges.
+*   **Bulk Actions & Transfers**: Seamlessly cut or copy selected records between lists, or quickly spin up a new list from your selection.
+*   **Isolated Category Tracking**: Category dropdowns are strictly isolated to your current list, keeping your autocomplete clean and relevant.
 
 ### 🎯 **Reporting & Backup**
-*   **PDF Export Engine**: Generate beautiful, multi-table, paginated PDF reports of your accounts directly on your device, complete with footers and dynamic headers. Support for exporting individual accounts or all data at once.
+*   **PDF Export Engine**: Generate beautiful, multi-table, paginated PDF reports of your accounts directly on your device. Support for exporting individual accounts, all data at once, or generating clean, budget-free statements for a specific selection of records.
 *   **Privacy-First & Offline**: No cloud syncing forced upon you. All data is securely stored locally on your device via SharedPreferences using an optimized JSON serialization structure.
 *   **JSON Import / Export**: Easily backup your entire workspace to a JSON file and restore it whenever you switch devices or need to recover data.
 

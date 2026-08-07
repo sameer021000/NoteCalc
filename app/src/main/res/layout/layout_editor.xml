@@ -333,17 +333,7 @@
         android:layout_marginBottom="8dp">
 
 
-        <ImageView
-            android:id="@+id/btn_filter_category"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:padding="6dp"
-            android:src="@android:drawable/ic_menu_sort_by_size" 
-            android:tint="?attr/colorAccentSecondary"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="Filter Categories" />
+
 
         <EditText
             android:id="@+id/edit_records_search"
@@ -380,7 +370,7 @@
 
             <TextView
                 android:id="@+id/text_selected_total"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Total: 0.00"
@@ -388,23 +378,19 @@
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
                 android:paddingBottom="4dp" />
-
-            <TextView
-                android:id="@+id/btn_delete_selected"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="@color/error_red"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:background="?attr/colorBgSecondary"
+                
+            <ImageView
+                android:id="@+id/btn_bulk_actions_menu"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="6dp"
+                android:src="@android:drawable/ic_menu_sort_by_size" 
+                android:tint="?attr/colorAccentSecondary"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:contentDescription="Menu Actions" />
+
+
         </LinearLayout>
     </LinearLayout>
 

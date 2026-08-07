@@ -4,6 +4,22 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.1.0] - 2026-08-07
+
+### ? Added
+- **Record Transfer**: New ability to Cut and Copy selected records across different lists.
+- **Selective PDF Export**: Generate clean, budget-free PDF statements from a specific selection of records.
+- **Isolated Categories**: Category dropdown suggestions are now cleanly isolated to the currently active list.
+
+### ?? Improved
+- **UI Streamlining**: Unified all bulk actions (Filter, Cut, Copy, Delete, Export) into a single, beautifully themed popup menu.
+- **Themed Dialogs**: Re-styled list creation and transfer dialogs to perfectly match the application's premium UI.
+- **Layout Fixes**: Fixed truncation issues with the bulk selection total text.
+
+---
+
+
+
 ## [1.0.0] - 2026-08-04
 
 ### ✨ Added
