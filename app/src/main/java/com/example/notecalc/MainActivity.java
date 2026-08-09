@@ -49,6 +49,72 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    public enum PdfSortOrder {
+        SNO, DESCRIPTION, DATE, AMOUNT
+    }
+
+    public interface PdfSortCallback {
+        void onSortSelected(PdfSortOrder order);
+    }
+    
+    private void showPdfSortDialog(PdfSortCallback callback) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.CustomDialogTheme);
+        android.view.View view = getLayoutInflater().inflate(R.layout.layout_dialog_pdf_sort, null);
+        builder.setView(view);
+        android.app.AlertDialog dialog = builder.create();
+
+        TextView optSno = view.findViewById(R.id.option_sort_sno);
+        TextView optDesc = view.findViewById(R.id.option_sort_desc);
+        TextView optDate = view.findViewById(R.id.option_sort_date);
+        TextView optAmount = view.findViewById(R.id.option_sort_amount);
+        
+        android.graphics.drawable.Drawable unselectedBg = ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f);
+        android.graphics.drawable.Drawable selectedBg = ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 1.0f, 8.0f);
+        
+        final PdfSortOrder[] selectedOrder = {PdfSortOrder.SNO}; // Default
+        
+        Runnable updateSelection = () -> {
+            optSno.setBackground(selectedOrder[0] == PdfSortOrder.SNO ? selectedBg : unselectedBg);
+            optDesc.setBackground(selectedOrder[0] == PdfSortOrder.DESCRIPTION ? selectedBg : unselectedBg);
+            optDate.setBackground(selectedOrder[0] == PdfSortOrder.DATE ? selectedBg : unselectedBg);
+            optAmount.setBackground(selectedOrder[0] == PdfSortOrder.AMOUNT ? selectedBg : unselectedBg);
+            
+            optSno.setTextColor(selectedOrder[0] == PdfSortOrder.SNO ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
+            optDesc.setTextColor(selectedOrder[0] == PdfSortOrder.DESCRIPTION ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
+            optDate.setTextColor(selectedOrder[0] == PdfSortOrder.DATE ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
+            optAmount.setTextColor(selectedOrder[0] == PdfSortOrder.AMOUNT ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
+        };
+        
+        optSno.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.SNO; updateSelection.run(); });
+        optDesc.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.DESCRIPTION; updateSelection.run(); });
+        optDate.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.DATE; updateSelection.run(); });
+        optAmount.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.AMOUNT; updateSelection.run(); });
+        
+        updateSelection.run(); // Init
+
+        android.view.View btnCancel = view.findViewById(R.id.btn_dialog_cancel);
+        android.view.View btnExport = view.findViewById(R.id.btn_dialog_export);
+        
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        btnExport.setOnClickListener(v -> {
+            dialog.dismiss();
+            callback.onSortSelected(selectedOrder[0]);
+        });
+
+        android.graphics.drawable.StateListDrawable cancelSelector = new android.graphics.drawable.StateListDrawable();
+        cancelSelector.addState(new int[]{android.R.attr.state_pressed}, ResponsiveUI.createRoundedBg(this, ThemeManager.getBorderColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f));
+        cancelSelector.addState(new int[]{}, ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f));
+        btnCancel.setBackground(cancelSelector);
+
+        android.graphics.drawable.StateListDrawable exportSelector = new android.graphics.drawable.StateListDrawable();
+        exportSelector.addState(new int[]{android.R.attr.state_pressed}, ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 1.0f, 8.0f));
+        exportSelector.addState(new int[]{}, ResponsiveUI.createRoundedBg(this, ThemeManager.getSecondaryAccentColor(this), ThemeManager.getSecondaryAccentColor(this), 1.0f, 8.0f));
+        btnExport.setBackground(exportSelector);
+
+        if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
+    }
+
     
     private androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
     private androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
@@ -884,8 +950,10 @@ public class MainActivity extends AppCompatActivity {
         editCategoryField = editorView.findViewById(R.id.edit_record_category);
         if (editCategoryField != null) {
             java.util.Set<String> catSet = new java.util.HashSet<>();
-            for (Record r : currentEditingAccount.getRecords()) {
-                if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
+            if (currentEditingAccount != null) {
+                for (Record r : currentEditingAccount.getRecords()) {
+                    if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
+                }
             }
             java.util.List<String> catList = new java.util.ArrayList<>(catSet);
             java.util.Collections.sort(catList);
@@ -2303,7 +2371,7 @@ public class MainActivity extends AppCompatActivity {
         
         setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
-            generateAndOpenPdf(account);
+            showPdfSortDialog(order -> generateAndOpenPdf(account, order));
         });
         
         setupClickable(btnDelete, false, () -> {
@@ -2890,14 +2958,14 @@ public class MainActivity extends AppCompatActivity {
         for (AccountGroup group : appStorage.groups) {
             for (Account account : group.getAccounts()) {
                 if (!account.getRecords().isEmpty()) {
-                    appendAccountToPdf(document, account, pageTracker);
+                    appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
                     hasRecords = true;
                 }
             }
         }
         for (Account account : appStorage.standaloneAccounts) {
             if (!account.getRecords().isEmpty()) {
-                appendAccountToPdf(document, account, pageTracker);
+                appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
                 hasRecords = true;
             }
         }
@@ -2928,10 +2996,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void generateAndOpenPdf(Account account) {
+    private void generateAndOpenPdf(Account account, PdfSortOrder sortOrder) {
         android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
         int[] pageTracker = {0};
-        appendAccountToPdf(document, account, pageTracker);
+        appendAccountToPdf(document, account, pageTracker, sortOrder);
         try {
             java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
             if (pdfDir == null) return;
@@ -2951,7 +3019,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void appendAccountToPdf(android.graphics.pdf.PdfDocument document, Account account, int[] pageTracker) {
+    private void appendAccountToPdf(android.graphics.pdf.PdfDocument document, Account account, int[] pageTracker, PdfSortOrder sortOrder) {
         // --- Page dimensions (A4 at 72 dpi approx) ---
         int pageWidth  = 595;
         int pageHeight = 842;
@@ -3019,19 +3087,37 @@ public class MainActivity extends AppCompatActivity {
         
         // Copy and sort the records chronologically to prevent jumbled PDFs
         List<Record> expRecords = new ArrayList<>(account.getRecords());
-        java.util.Collections.sort(expRecords, new java.util.Comparator<Record>() {
-            @Override
-            public int compare(Record r1, Record r2) {
-                return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
+        java.util.Collections.sort(expRecords, (r1, r2) -> {
+            if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
+            if (sortOrder == PdfSortOrder.DATE) {
+                try {
+                    java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                    java.util.Date d1 = sortSdf.parse(r1.getDate());
+                    java.util.Date d2 = sortSdf.parse(r2.getDate());
+                    return d1.compareTo(d2);
+                } catch (Exception e) {
+                    return r1.getDate().compareTo(r2.getDate());
+                }
             }
+            if (sortOrder == PdfSortOrder.AMOUNT) return Double.compare(r1.getAmount(), r2.getAmount());
+            return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
         });
         
         List<Record> budRecords = new ArrayList<>(account.getBudgetRecords());
-        java.util.Collections.sort(budRecords, new java.util.Comparator<Record>() {
-            @Override
-            public int compare(Record r1, Record r2) {
-                return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
+        java.util.Collections.sort(budRecords, (r1, r2) -> {
+            if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
+            if (sortOrder == PdfSortOrder.DATE) {
+                try {
+                    java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                    java.util.Date d1 = sortSdf.parse(r1.getDate());
+                    java.util.Date d2 = sortSdf.parse(r2.getDate());
+                    return d1.compareTo(d2);
+                } catch (Exception e) {
+                    return r1.getDate().compareTo(r2.getDate());
+                }
             }
+            if (sortOrder == PdfSortOrder.AMOUNT) return Double.compare(r1.getAmount(), r2.getAmount());
+            return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
         });
         
         List<List<Record>> allRecordLists = new ArrayList<>();
@@ -3741,7 +3827,7 @@ public class MainActivity extends AppCompatActivity {
             if (btnExport != null) {
                 setupClickable(btnExport, false, () -> {
                     popupWindow.dismiss();
-                    generateAndOpenSelectedPdf(selectedRecords);
+                    showPdfSortDialog(order -> generateAndOpenSelectedPdf(selectedRecords, order));
                 });
             }
             setupClickable(btnCut, false, () -> {
@@ -3917,6 +4003,8 @@ public class MainActivity extends AppCompatActivity {
         StorageHelper.saveAppStorage(this, appStorage);
         
         if (isCut) {
+            getActiveRecords().removeAll(selectedRecords);
+            resequentializeRecords(getActiveRecords());
             if (recordsAdapter != null) {
                 recordsAdapter.setFilter(currentRecordSearchQuery);
             }
@@ -3945,11 +4033,11 @@ public class MainActivity extends AppCompatActivity {
         android.widget.Toast.makeText(this, action + " " + selectedRecords.size() + " records to " + targetAccount.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
     }
 
-    private void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords) {
+    private void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
         android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
         int[] pageTracker = {0};
-        appendSelectedRecordsToPdf(document, currentEditingAccount, selectedRecords, pageTracker);
+        appendSelectedRecordsToPdf(document, currentEditingAccount, selectedRecords, pageTracker, sortOrder);
         try {
             java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
             if (pdfDir == null) return;
@@ -3968,7 +4056,7 @@ public class MainActivity extends AppCompatActivity {
             document.close();
         }
     }
-    private void appendSelectedRecordsToPdf(android.graphics.pdf.PdfDocument document, Account account, java.util.List<Record> selectedRecords, int[] pageTracker) {
+    private void appendSelectedRecordsToPdf(android.graphics.pdf.PdfDocument document, Account account, java.util.List<Record> selectedRecords, int[] pageTracker, PdfSortOrder sortOrder) {
         // --- Page dimensions (A4 at 72 dpi approx) ---
         int pageWidth  = 595;
         int pageHeight = 842;
@@ -4034,11 +4122,20 @@ public class MainActivity extends AppCompatActivity {
         String lastMod = sdf.format(new java.util.Date(account.getLastModified()));
         
         java.util.List<Record> recordsToPrint = new java.util.ArrayList<>(selectedRecords);
-        java.util.Collections.sort(recordsToPrint, new java.util.Comparator<Record>() {
-            @Override
-            public int compare(Record r1, Record r2) {
-                return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
+        java.util.Collections.sort(recordsToPrint, (r1, r2) -> {
+            if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
+            if (sortOrder == PdfSortOrder.DATE) {
+                try {
+                    java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+                    java.util.Date d1 = sortSdf.parse(r1.getDate());
+                    java.util.Date d2 = sortSdf.parse(r2.getDate());
+                    return d1.compareTo(d2);
+                } catch (Exception e) {
+                    return r1.getDate().compareTo(r2.getDate());
+                }
             }
+            if (sortOrder == PdfSortOrder.AMOUNT) return Double.compare(r1.getAmount(), r2.getAmount());
+            return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
         });
         
         double totalAmt = 0;

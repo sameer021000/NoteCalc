@@ -4,6 +4,20 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.2.0] - 2026-08-09
+
+### ? Added
+- **Dynamic PDF Sorting**: Added a beautifully themed dialog before exporting PDFs to let you sort records by S.No, Description, Date, or Amount.
+
+### ?? Improved
+- **Cut Operation Workflow**: Instantly updates the visual list and intelligently re-sequentializes the remaining S.Nos after a cut operation is performed.
+- **Dialog Interactions**: Added smooth StateListDrawable touch feedback to the Cancel and Export buttons within the new sorting dialog.
+- **Date Accuracy**: Fixed a bug where dates in PDF sorting were being parsed alphabetically rather than chronologically.
+
+---
+
+
+
 ## [1.1.0] - 2026-08-07
 
 ### ? Added
