@@ -936,7 +936,13 @@ public class MainActivity extends AppCompatActivity {
         ImageView btnBack = editorView.findViewById(R.id.btn_back);
         ImageView btnAnalytics = editorView.findViewById(R.id.btn_analytics);
         if (btnAnalytics != null) {
-            setupClickable(btnAnalytics, true, () -> showAnalytics(currentEditingAccount));
+            setupClickable(btnAnalytics, true, () -> {
+                if (currentEditingAccount == null || (currentEditingAccount.getRecords().isEmpty() && currentEditingAccount.getBudgetRecords().isEmpty())) {
+                    android.widget.Toast.makeText(this, "Add some records to view analytics", android.widget.Toast.LENGTH_SHORT).show();
+                } else {
+                    showAnalytics(currentEditingAccount);
+                }
+            });
         }
         
 
@@ -1149,11 +1155,27 @@ public class MainActivity extends AppCompatActivity {
             btnToggleForm.setText(isFormInputsCollapsed ? "Expand [ + ]" : "Minimize [ - ]");
         };
         setupClickable(btnToggleForm, false, toggleForm);
-        setupClickable(formHeader, false, toggleForm);
+        
+        android.graphics.drawable.StateListDrawable toggleSelector = new android.graphics.drawable.StateListDrawable();
+        toggleSelector.addState(new int[]{android.R.attr.state_pressed}, new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        toggleSelector.addState(new int[]{}, ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 12.0f));
+        btnToggleForm.setBackground(toggleSelector);
+        
+        // Add some padding to make the pill look good
+        int pLR = (int) (12 * getResources().getDisplayMetrics().density);
+        int pTB = (int) (6 * getResources().getDisplayMetrics().density);
+        btnToggleForm.setPadding(pLR, pTB, pLR, pTB);
 
         // Apply default minimized state
-        formInputsContainer.setVisibility(View.GONE);
-        btnToggleForm.setText("Expand [ + ]");
+        if (account == null) {
+            isFormInputsCollapsed = false;
+            formInputsContainer.setVisibility(View.VISIBLE);
+            btnToggleForm.setText("Minimize [ - ]");
+        } else {
+            isFormInputsCollapsed = true;
+            formInputsContainer.setVisibility(View.GONE);
+            btnToggleForm.setText("Expand [ + ]");
+        }
 
         // Wire the record search bar
         EditText editRecordsSearch = editorView.findViewById(R.id.edit_records_search);
@@ -2485,12 +2507,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnCancelEditField.setVisibility(View.VISIBLE);
 
-        // Auto-expand inputs container if collapsed
-        if (isFormInputsCollapsed) {
-            isFormInputsCollapsed = false;
-            formInputsContainer.setVisibility(View.VISIBLE);
-            btnToggleForm.setText("Minimize [ - ]");
-        }
+
 
         populateRecordsList();
     }
