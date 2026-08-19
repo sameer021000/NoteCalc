@@ -1720,6 +1720,9 @@ public class MainActivity extends AppCompatActivity {
                             Date d2 = sdf.parse(r2.getDate());
                             if (d1 != null && d2 != null) {
                                 c = d1.compareTo(d2);
+                                if (c == 0) {
+                                    c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
+                                }
                             }
                         } catch (Exception ignored) {}
                         break;
@@ -2495,18 +2498,33 @@ public class MainActivity extends AppCompatActivity {
 
             // Show remarks below if present
             String remarks = r.getRemarks();
-            if (remarks != null && !remarks.isEmpty()) {
+            boolean hasRemarks = (remarks != null && !remarks.isEmpty());
+            boolean hasAttachments = (r.getAttachments() != null && !r.getAttachments().isEmpty());
+            
+            if (hasRemarks || hasAttachments) {
                 LinearLayout rowContainer = new LinearLayout(this);
                 rowContainer.setOrientation(LinearLayout.VERTICAL);
                 rowContainer.addView(rowView);
-
-                TextView remarksView = new TextView(this);
-                remarksView.setText("  ↳ " + remarks);
-                remarksView.setTextColor(getColor(R.color.text_tertiary));
-                remarksView.setTextSize(11f);
-                remarksView.setTypeface(null, android.graphics.Typeface.ITALIC);
-                remarksView.setPadding(0, 0, 0, padPx);
-                rowContainer.addView(remarksView);
+                
+                if (hasRemarks) {
+                    TextView remarksView = new TextView(this);
+                    remarksView.setText("  \u21B3 " + remarks);
+                    remarksView.setTextColor(getColor(R.color.text_tertiary));
+                    remarksView.setTextSize(11f);
+                    remarksView.setTypeface(null, android.graphics.Typeface.ITALIC);
+                    remarksView.setPadding(0, 0, 0, hasAttachments ? 0 : padPx);
+                    rowContainer.addView(remarksView);
+                }
+                
+                if (hasAttachments) {
+                    TextView attachView = new TextView(this);
+                    attachView.setText("  \uD83D\uDCCE " + r.getAttachments().size() + " attached file(s)");
+                    attachView.setTextColor(ThemeManager.getSecondaryAccentColor(MainActivity.this));
+                    attachView.setTextSize(11f);
+                    attachView.setPadding(0, hasRemarks ? (padPx / 2) : 0, 0, padPx);
+                    rowContainer.addView(attachView);
+                }
+                
                 selectedItemsList.addView(rowContainer);
             } else {
                 selectedItemsList.addView(rowView);
@@ -3280,12 +3298,14 @@ public class MainActivity extends AppCompatActivity {
 
         // --- Column widths ---
         float colSno    = 38f;
-        float colDesc   = contentWidth - colSno - 70f - 60f;
         float colDate   = 70f;
+        float colTime   = 55f;
         float colAmount = 60f;
+        float colDesc   = contentWidth - colSno - colDate - colTime - colAmount;
         float rowHeight = 22f;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         String lastMod = sdf.format(new Date(account.getLastModified()));
         
         // Copy and sort the records chronologically to prevent jumbled PDFs
@@ -3297,7 +3317,9 @@ public class MainActivity extends AppCompatActivity {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
                     java.util.Date d1 = sortSdf.parse(r1.getDate());
                     java.util.Date d2 = sortSdf.parse(r2.getDate());
-                    return d1.compareTo(d2);
+                    int c = d1.compareTo(d2);
+                    if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
+                    return c;
                 } catch (Exception e) {
                     return r1.getDate().compareTo(r2.getDate());
                 }
@@ -3314,7 +3336,9 @@ public class MainActivity extends AppCompatActivity {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
                     java.util.Date d1 = sortSdf.parse(r1.getDate());
                     java.util.Date d2 = sortSdf.parse(r2.getDate());
-                    return d1.compareTo(d2);
+                    int c = d1.compareTo(d2);
+                    if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
+                    return c;
                 } catch (Exception e) {
                     return r1.getDate().compareTo(r2.getDate());
                 }
@@ -3402,7 +3426,8 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawText("S.No",        hx + 4,                       y + 15f, accentPaint);
         canvas.drawText("Description", hx + colSno + 4,              y + 15f, accentPaint);
         canvas.drawText("Date",        hx + colSno + colDesc + 4,    y + 15f, accentPaint);
-        float amountHeaderX = hx + colSno + colDesc + colDate + colAmount - accentPaint.measureText("Amount") - 4f;
+        canvas.drawText("Time",        hx + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
+        float amountHeaderX = hx + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
         canvas.drawText("Amount",      amountHeaderX,                y + 15f, accentPaint);
         y += rowHeight;
         canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
@@ -3433,7 +3458,8 @@ public class MainActivity extends AppCompatActivity {
                 canvas.drawText("S.No",        margin + 4,                       y + 15f, accentPaint);
                 canvas.drawText("Description", margin + colSno + 4,              y + 15f, accentPaint);
                 canvas.drawText("Date",        margin + colSno + colDesc + 4,    y + 15f, accentPaint);
-                float ahx = margin + colSno + colDesc + colDate + colAmount - accentPaint.measureText("Amount") - 4f;
+                canvas.drawText("Time",        margin + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
+                float ahx = margin + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
                 canvas.drawText("Amount",      ahx,                              y + 15f, accentPaint);
                 y += rowHeight;
                 canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
@@ -3476,10 +3502,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             canvas.drawText(formatDateCompact(rec.getDate()), rx + colSno + colDesc + 4, y + 15f, cellMutedPaint);
+            String timeStr = rec.getTimestampMillis() > 0 ? timeSdf.format(new Date(rec.getTimestampMillis())) : "-";
+            canvas.drawText(timeStr, rx + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
 
             // Right-align amount
             String amtStr = String.format(Locale.getDefault(), "%.2f", rec.getAmount());
-            float amtX = rx + colSno + colDesc + colDate + colAmount - cellPaint.measureText(amtStr) - 4f;
+            float amtX = rx + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
             canvas.drawText(amtStr, amtX, y + 15f, cellPaint);
 
             y += actualRowHeight;
@@ -4194,10 +4222,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void executeTransfer(List<Record> selectedRecords, Account targetAccount, boolean isCut) {
+        java.util.List<Record> targetList = isBudgetMode ? targetAccount.getBudgetRecords() : targetAccount.getRecords();
+        int maxIndex = -1;
+        for (Record rec : targetList) {
+            if (rec.getOriginalIndex() > maxIndex) {
+                maxIndex = rec.getOriginalIndex();
+            }
+        }
+        
         for (Record r : selectedRecords) {
             Record copy = new Record(r.getDescription(), r.getAmount(), r.getDate());
             copy.setRemarks(r.getRemarks());
             copy.setCategory(r.getCategory());
+            if (r.getAttachments() != null) {
+                copy.getAttachments().addAll(r.getAttachments());
+            }
+            maxIndex++;
+            copy.setOriginalIndex(maxIndex);
             
             if (isBudgetMode) {
                 targetAccount.getBudgetRecords().add(copy);
@@ -4327,12 +4368,14 @@ public class MainActivity extends AppCompatActivity {
 
         // --- Column widths ---
         float colSno    = 38f;
-        float colDesc   = contentWidth - colSno - 70f - 60f;
         float colDate   = 70f;
+        float colTime   = 55f;
         float colAmount = 60f;
+        float colDesc   = contentWidth - colSno - colDate - colTime - colAmount;
         float rowHeight = 22f;
 
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+        java.text.SimpleDateFormat timeSdf = new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault());
         String lastMod = sdf.format(new java.util.Date(account.getLastModified()));
         
         java.util.List<Record> recordsToPrint = new java.util.ArrayList<>(selectedRecords);
@@ -4343,7 +4386,9 @@ public class MainActivity extends AppCompatActivity {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
                     java.util.Date d1 = sortSdf.parse(r1.getDate());
                     java.util.Date d2 = sortSdf.parse(r2.getDate());
-                    return d1.compareTo(d2);
+                    int c = d1.compareTo(d2);
+                    if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
+                    return c;
                 } catch (Exception e) {
                     return r1.getDate().compareTo(r2.getDate());
                 }
@@ -4390,7 +4435,8 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawText("S.No",        hx + 4,                       y + 15f, accentPaint);
         canvas.drawText("Description", hx + colSno + 4,              y + 15f, accentPaint);
         canvas.drawText("Date",        hx + colSno + colDesc + 4,    y + 15f, accentPaint);
-        float amountHeaderX = hx + colSno + colDesc + colDate + colAmount - accentPaint.measureText("Amount") - 4f;
+        canvas.drawText("Time",        hx + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
+        float amountHeaderX = hx + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
         canvas.drawText("Amount",      amountHeaderX,                y + 15f, accentPaint);
         y += rowHeight;
         canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
@@ -4414,7 +4460,8 @@ public class MainActivity extends AppCompatActivity {
                 canvas.drawText("S.No",        margin + 4,                       y + 15f, accentPaint);
                 canvas.drawText("Description", margin + colSno + 4,              y + 15f, accentPaint);
                 canvas.drawText("Date",        margin + colSno + colDesc + 4,    y + 15f, accentPaint);
-                float ahx = margin + colSno + colDesc + colDate + colAmount - accentPaint.measureText("Amount") - 4f;
+                canvas.drawText("Time",        margin + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
+                float ahx = margin + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
                 canvas.drawText("Amount",      ahx,                              y + 15f, accentPaint);
                 y += rowHeight;
                 canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
@@ -4454,9 +4501,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             canvas.drawText(formatDateCompact(rec.getDate()), rx + colSno + colDesc + 4, y + 15f, cellMutedPaint);
+            String timeStr = rec.getTimestampMillis() > 0 ? timeSdf.format(new java.util.Date(rec.getTimestampMillis())) : "-";
+            canvas.drawText(timeStr, rx + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
 
             String amtStr = String.format(java.util.Locale.getDefault(), "%.2f", rec.getAmount());
-            float amtX = rx + colSno + colDesc + colDate + colAmount - cellPaint.measureText(amtStr) - 4f;
+            float amtX = rx + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
             canvas.drawText(amtStr, amtX, y + 15f, cellPaint);
 
             y += actualRowHeight;

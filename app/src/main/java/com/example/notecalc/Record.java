@@ -15,12 +15,17 @@ public class Record {
     private String remarks = "";
     private boolean selected = false;
     private String category = "";
+    private long timestampMillis;
 
     public Record(String description, double amount, String date) {
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.timestampMillis = System.currentTimeMillis();
     }
+    
+    public long getTimestampMillis() { return timestampMillis; }
+    public void setTimestampMillis(long timestampMillis) { this.timestampMillis = timestampMillis; }
 
     public String getDescription() {
         return description;
@@ -108,10 +113,12 @@ public class Record {
         String remarks = obj.optString("remarks", "");
         String category = obj.optString("category", "");
         int originalIndex = obj.optInt("originalIndex", -1);
+        long timestampMillis = obj.optLong("timestampMillis", 0);
         Record r = new Record(description, amount, date);
         r.setRemarks(remarks);
         r.setCategory(category);
         r.setOriginalIndex(originalIndex);
+        r.setTimestampMillis(timestampMillis);
         
         org.json.JSONArray attachmentsArray = obj.optJSONArray("attachments");
         if (attachmentsArray != null) {
