@@ -120,4 +120,4 @@
 * **v1.1.0** – Record transfer, selective PDF export, isolated categories, unified bulk actions, and themed dialogs.
 * **v1.0.0** – Initial release with expense/budget tracking, groups, PDF export, JSON backup, filtering, and premium UI.
 
-📜 **[View the complete changelog](CHANGELOG.md)**
+📜 **[View the complete changelog](Changelog.md)**
