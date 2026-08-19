@@ -230,7 +230,7 @@
                 android:id="@+id/tv_app_version"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="NoteCalc v1.2.0"
+                android:text="NoteCalc v1.3.0"
                 android:gravity="center"
                 android:textSize="14sp"
                 android:textColor="?android:textColorSecondary"

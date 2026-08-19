@@ -49,6 +49,14 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    private java.util.List<String> tempAttachments = new java.util.ArrayList<>();
+    private static final int REQUEST_CODE_ATTACH = 1001;
+    private static final int REQUEST_CODE_CAMERA = 1002;
+    private String currentPhotoPath = null;
+    private android.widget.LinearLayout attachmentsContainer;
+    private android.widget.HorizontalScrollView attachmentsScroll;
+    private android.widget.TextView btnAttachFile;
+
     public enum PdfSortOrder {
         SNO, DESCRIPTION, DATE, AMOUNT
     }
@@ -954,6 +962,67 @@ public class MainActivity extends AppCompatActivity {
         TextView btnDate = editorView.findViewById(R.id.btn_record_date);
                 TextView btnAdd = editorView.findViewById(R.id.btn_add_record);
         editCategoryField = editorView.findViewById(R.id.edit_record_category);
+        btnAttachFile = editorView.findViewById(R.id.btn_attach_file);
+        attachmentsScroll = editorView.findViewById(R.id.attachments_scroll);
+        attachmentsContainer = editorView.findViewById(R.id.attachments_container);
+        
+        tempAttachments.clear();
+        renderEditorAttachments();
+
+        if (btnAttachFile != null) {
+            setupClickable(btnAttachFile, true, () -> {
+                if (tempAttachments.size() >= 3) {
+                    Toast.makeText(this, "Max 3 files allowed", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                android.view.View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_attach_file, null);
+                builder.setView(dialogView);
+                
+                final androidx.appcompat.app.AlertDialog dialog = builder.create();
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+                }
+                
+                android.view.View dialogRoot = dialogView.findViewById(R.id.dialog_root);
+                dialogRoot.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), 0, 0, 16.0f));
+                
+                android.widget.TextView btnTakePhoto = dialogView.findViewById(R.id.btn_take_photo);
+                android.widget.TextView btnChooseFile = dialogView.findViewById(R.id.btn_choose_file);
+                
+                btnTakePhoto.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), 0, 0, 8.0f));
+                btnChooseFile.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), 0, 0, 8.0f));
+                
+                setupClickable(btnTakePhoto, false, () -> {
+                    dialog.dismiss();
+                    try {
+                        java.io.File attachmentsDir = new java.io.File(getFilesDir(), "attachments");
+                        if (!attachmentsDir.exists()) attachmentsDir.mkdirs();
+                        String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.getDefault()).format(new java.util.Date());
+                        java.io.File imageFile = new java.io.File(attachmentsDir, "IMG_" + timeStamp + ".jpg");
+                        currentPhotoPath = imageFile.getAbsolutePath();
+                        android.net.Uri photoURI = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", imageFile);
+                        android.content.Intent takePictureIntent = new android.content.Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);
+                    } catch (Exception e) {
+                        android.widget.Toast.makeText(this, "Could not start camera", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                });
+                
+                setupClickable(btnChooseFile, false, () -> {
+                    dialog.dismiss();
+                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");
+                    String[] mimeTypes = {"image/jpeg", "image/png", "image/jpg", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+                    intent.putExtra(android.content.Intent.EXTRA_MIME_TYPES, mimeTypes);
+                    startActivityForResult(intent, REQUEST_CODE_ATTACH);
+                });
+                
+                dialog.show();
+            });
+        }
         if (editCategoryField != null) {
             java.util.Set<String> catSet = new java.util.HashSet<>();
             if (currentEditingAccount != null) {
@@ -1519,6 +1588,7 @@ public class MainActivity extends AppCompatActivity {
                 record.setDate(selectedRecordDate);
                 record.setRemarks(remarks);
                 record.setCategory(category);
+                  record.setAttachments(new java.util.ArrayList<>(tempAttachments));
                 applySorting();
                 cancelEditRecordMode();
             } else {
@@ -1526,6 +1596,7 @@ public class MainActivity extends AppCompatActivity {
                 Record newRecord = new Record(desc, amount, selectedRecordDate);
                 newRecord.setRemarks(remarks);
                 newRecord.setCategory(category);
+                  newRecord.setAttachments(new java.util.ArrayList<>(tempAttachments));
                 newRecord.setOriginalIndex(getNewOriginalIndex());
                 getActiveRecords().add(newRecord);
 
@@ -1854,6 +1925,100 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            // Bind attachments
+            if (holder.attachmentSummary != null && holder.attachmentsScroll != null && holder.attachmentsContainer != null) {
+                if (record.getAttachments() != null && !record.getAttachments().isEmpty()) {
+                    java.util.List<String> atts = record.getAttachments();
+                    String firstPath = atts.get(0);
+                    java.io.File f = new java.io.File(firstPath);
+                    String name = f.getName();
+                    if (name.length() > 15) name = name.substring(0, 15) + "...";
+                    String icon = (firstPath.toLowerCase().endsWith(".pdf") || firstPath.toLowerCase().endsWith(".doc") || firstPath.toLowerCase().endsWith(".docx")) ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ";
+                    
+                    if (atts.size() == 1) {
+                        holder.attachmentSummary.setText(icon + name);
+                    } else {
+                        holder.attachmentSummary.setText(icon + name + " \u25BE"); // ?
+                    }
+                    
+                    holder.attachmentSummary.setVisibility(View.VISIBLE);
+                    holder.attachmentsScroll.setVisibility(View.GONE);
+                    
+                    holder.attachmentsScroll.setOnTouchListener((v, event) -> {
+                        int action = event.getActionMasked();
+                        if (action == android.view.MotionEvent.ACTION_DOWN || action == android.view.MotionEvent.ACTION_MOVE) {
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                        } else if (action == android.view.MotionEvent.ACTION_UP || action == android.view.MotionEvent.ACTION_CANCEL) {
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                        }
+                        return false;
+                    });
+                    
+                    holder.attachmentsContainer.removeAllViews();
+                    for (int i = 0; i < atts.size(); i++) {
+                        String path = atts.get(i);
+                        java.io.File file = new java.io.File(path);
+                        String fname = file.getName();
+                        if (fname.length() > 15) fname = fname.substring(0, 15) + "...";
+                        String ficon = (path.toLowerCase().endsWith(".pdf") || path.toLowerCase().endsWith(".doc") || path.toLowerCase().endsWith(".docx")) ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ";
+                        
+                        android.widget.TextView chip = new android.widget.TextView(MainActivity.this);
+                        chip.setText(ficon + fname);
+                        chip.setTextSize(11);
+                        chip.setTextColor(getColor(R.color.text_primary));
+                        chip.setBackground(createButtonSelector(ThemeManager.getBgSecondaryColor(MainActivity.this), 6.0f));
+                        chip.setPadding(12, 6, 12, 6);
+                        android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+                        lp.setMargins(0, 0, 12, 0);
+                        chip.setLayoutParams(lp);
+                        
+                        chip.setOnTouchListener((v, event) -> {
+                            int action = event.getActionMasked();
+                            if (action == android.view.MotionEvent.ACTION_DOWN || action == android.view.MotionEvent.ACTION_MOVE) {
+                                v.getParent().getParent().getParent().requestDisallowInterceptTouchEvent(true);
+                            } else if (action == android.view.MotionEvent.ACTION_UP || action == android.view.MotionEvent.ACTION_CANCEL) {
+                                v.getParent().getParent().getParent().requestDisallowInterceptTouchEvent(false);
+                            }
+                            return false;
+                        });
+                        
+                        chip.setOnClickListener(_unused_v -> {
+                            try {
+                                android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", file);
+                                android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                                viewIntent.setDataAndType(uri, getContentResolver().getType(uri));
+                                viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                startActivity(viewIntent);
+                            } catch (Exception e) {
+                                android.widget.Toast.makeText(MainActivity.this, "Cannot open file", android.widget.Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        holder.attachmentsContainer.addView(chip);
+                    }
+                    
+                    setupClickable(holder.attachmentSummary, false, () -> {
+                        if (atts.size() == 1) {
+                            try {
+                                android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", f);
+                                android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                                viewIntent.setDataAndType(uri, getContentResolver().getType(uri));
+                                viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                startActivity(viewIntent);
+                            } catch (Exception e) {
+                                android.widget.Toast.makeText(MainActivity.this, "Cannot open file", android.widget.Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            holder.attachmentSummary.setVisibility(View.GONE);
+                            holder.attachmentsScroll.setVisibility(View.VISIBLE);
+                        }
+                    });
+                    
+                } else {
+                    holder.attachmentSummary.setVisibility(View.GONE);
+                    holder.attachmentsScroll.setVisibility(View.GONE);
+                }
+            }
+            
             // Bind selection checkbox without triggering the listener
             if (holder.cbSelect != null) {
                 holder.cbSelect.setVisibility(isSelectionMode ? View.VISIBLE : View.GONE);
@@ -1908,6 +2073,9 @@ public class MainActivity extends AppCompatActivity {
             TextView tvRemarks;
             TextView tvCategory;
             CheckBox cbSelect;
+            TextView attachmentSummary;
+            android.widget.HorizontalScrollView attachmentsScroll;
+            LinearLayout attachmentsContainer;
             Runnable revertDateTask;
             boolean isShowingDay = false;
 
@@ -1920,6 +2088,9 @@ public class MainActivity extends AppCompatActivity {
                 tvRemarks = itemView.findViewById(R.id.text_record_remarks);
                 tvCategory = itemView.findViewById(R.id.text_record_category);
                 cbSelect = itemView.findViewById(R.id.cb_record_select);
+                attachmentSummary = itemView.findViewById(R.id.text_record_attachment_summary);
+                attachmentsScroll = itemView.findViewById(R.id.record_attachments_scroll);
+                attachmentsContainer = itemView.findViewById(R.id.record_attachments_container);
             }
         }
     }
@@ -2493,6 +2664,18 @@ public class MainActivity extends AppCompatActivity {
         btnRecordDateField.setText(selectedRecordDate);
         if (editCategoryField != null) editCategoryField.setText(record.getCategory() == null ? "" : record.getCategory());
 
+        // Load attachments
+        tempAttachments.clear();
+        if (record.getAttachments() != null) tempAttachments.addAll(record.getAttachments());
+        renderEditorAttachments();
+
+        // Auto-expand form
+        if (formInputsContainer != null && btnToggleForm != null) {
+            isFormInputsCollapsed = false;
+            formInputsContainer.setVisibility(android.view.View.VISIBLE);
+            btnToggleForm.setText("Minimize [ - ]");
+        }
+
         if (isBudgetMode) {
             labelAddRecordField.setText("EDIT BUDGET");
             btnAddRecordField.setText("Edit Budget");
@@ -2521,6 +2704,9 @@ public class MainActivity extends AppCompatActivity {
         editAmountField.setText("");
         editRemarksField.setText("");
         btnRecordDateField.setText(selectedRecordDate);
+        
+        tempAttachments.clear();
+        renderEditorAttachments();
 
         if (isBudgetMode) {
             labelAddRecordField.setText("ADD BUDGET");
@@ -3819,6 +4005,17 @@ public class MainActivity extends AppCompatActivity {
         View btnCut = popupView.findViewById(R.id.btn_popup_cut);
         View btnCopy = popupView.findViewById(R.id.btn_popup_copy);
         View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
+        android.widget.ImageView filterIcon = popupView.findViewById(R.id.img_popup_filter_icon);
+        if (filterIcon != null && recordsAdapter != null) {
+            filterIcon.setColorFilter(null); // Clear any color filter
+            if (recordsAdapter.filterCategories.isEmpty()) {
+                android.util.TypedValue typedValue = new android.util.TypedValue();
+                getTheme().resolveAttribute(R.attr.colorAccentPrimary, typedValue, true);
+                filterIcon.setImageTintList(android.content.res.ColorStateList.valueOf(typedValue.data));
+            } else {
+                filterIcon.setImageTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getSecondaryAccentColor(this)));
+            }
+        }
         
         List<Record> selectedRecords = new ArrayList<>();
         for (Record r : getActiveRecords()) if (r.isSelected()) selectedRecords.add(r);
@@ -4299,5 +4496,120 @@ public class MainActivity extends AppCompatActivity {
 
         document.finishPage(page);
         pageTracker[0] = pageNum;
+    }
+
+    private void renderEditorAttachments() {
+        if (attachmentsContainer == null || attachmentsScroll == null) return;
+        attachmentsContainer.removeAllViews();
+        if (tempAttachments.isEmpty()) {
+            attachmentsScroll.setVisibility(View.GONE);
+            if (btnAttachFile != null) btnAttachFile.setAlpha(1.0f);
+        } else {
+            attachmentsScroll.setVisibility(View.VISIBLE);
+            if (btnAttachFile != null) btnAttachFile.setAlpha(tempAttachments.size() >= 3 ? 0.5f : 1.0f);
+            
+            for (int i = 0; i < tempAttachments.size(); i++) {
+                final int idx = i;
+                String path = tempAttachments.get(i);
+                java.io.File f = new java.io.File(path);
+                String name = f.getName();
+                if (name.length() > 15) name = name.substring(0, 15) + "...";
+                
+                LinearLayout chipContainer = new LinearLayout(this);
+                chipContainer.setOrientation(LinearLayout.HORIZONTAL);
+                chipContainer.setBackground(createButtonSelector(ThemeManager.getBgSecondaryColor(this), 8.0f));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0, 0, 16, 0);
+                chipContainer.setLayoutParams(lp);
+
+                TextView chip = new TextView(this);
+                chip.setText((path.endsWith(".pdf") || path.endsWith(".doc") || path.endsWith(".docx") ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ") + name);
+                chip.setTextSize(12);
+                chip.setTextColor(getColor(R.color.text_primary));
+                chip.setPadding(20, 10, 10, 10);
+                
+                setupClickable(chip, false, () -> {
+                    try {
+                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", f);
+                        android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                        viewIntent.setDataAndType(uri, getContentResolver().getType(uri));
+                        if (viewIntent.getType() == null) {
+                            if (path.toLowerCase().endsWith(".pdf")) viewIntent.setDataAndType(uri, "application/pdf");
+                            else if (path.toLowerCase().endsWith(".jpg") || path.toLowerCase().endsWith(".png")) viewIntent.setDataAndType(uri, "image/*");
+                            else viewIntent.setDataAndType(uri, "*/*");
+                        }
+                        viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(viewIntent);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "Cannot open file", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                TextView closeBtn = new TextView(this);
+                closeBtn.setText(" \u2715 ");
+                closeBtn.setTextSize(12);
+                closeBtn.setTextColor(getColor(R.color.error_red));
+                closeBtn.setPadding(10, 10, 20, 10);
+                
+                setupClickable(closeBtn, false, () -> {
+                    tempAttachments.remove(idx);
+                    renderEditorAttachments();
+                });
+                
+                chipContainer.addView(chip);
+                chipContainer.addView(closeBtn);
+                attachmentsContainer.addView(chipContainer);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if (requestCode == REQUEST_CODE_CAMERA) {
+            if (resultCode == RESULT_OK && currentPhotoPath != null) {
+                tempAttachments.add(currentPhotoPath);
+                renderEditorAttachments();
+            } else if (currentPhotoPath != null) {
+                java.io.File f = new java.io.File(currentPhotoPath);
+                if (f.exists()) f.delete();
+            }
+            currentPhotoPath = null;
+            return;
+        }
+        
+        if (requestCode == REQUEST_CODE_ATTACH && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            android.net.Uri uri = data.getData();
+            try {
+                java.io.File attachmentsDir = new java.io.File(getFilesDir(), "attachments");
+                if (!attachmentsDir.exists()) attachmentsDir.mkdirs();
+                
+                String originalName = "attachment_" + System.currentTimeMillis();
+                try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        int index = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                        if (index != -1) originalName = cursor.getString(index);
+                    }
+                }
+                
+                java.io.File destFile = new java.io.File(attachmentsDir, originalName);
+                java.io.InputStream in = getContentResolver().openInputStream(uri);
+                java.io.FileOutputStream out = new java.io.FileOutputStream(destFile);
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, read);
+                }
+                in.close();
+                out.close();
+                
+                tempAttachments.add(destFile.getAbsolutePath());
+                renderEditorAttachments();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Failed to attach file", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

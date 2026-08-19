@@ -320,8 +320,47 @@
                     android:focusable="true"
                     android:background="?attr/colorAccentPrimary" />
             </LinearLayout>
+            <!-- Attachments UI -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/btn_attach_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attach File (Max 3)"
+                    android:textColor="?attr/colorAccentSecondary"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:background="?attr/colorBgPrimary"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <HorizontalScrollView
+                    android:id="@+id/attachments_scroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/attachments_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
 
     <!-- Search bar + Delete selected bar (relocated ABOVE table header) -->
     <LinearLayout

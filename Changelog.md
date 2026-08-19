@@ -4,6 +4,24 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.3.0] - 2026-08-19
+
+### ✨ Added
+
+* **File Attachments**: Added the ability to attach up to 3 files (images, PDFs, and documents) per record.
+* **In-App Camera**: Integrated a direct **Take Photo** option when attaching a file, generating auto-timestamped images securely in internal storage.
+* **Attachment Viewing**: Attachments are displayed as beautifully themed chips within records and can be opened directly using Android's native file viewer.
+
+### 🎨 Improved
+
+* **Custom Attach Dialog**: Introduced a sleek, highly themed custom dialog for choosing between **Take Photo** and **Choose File**.
+* **Bulk Actions Menu Scrollability**: Wrapped the unified bulk actions popup in a scrollable view so options are never cut off on smaller screens.
+* **Dynamic Filter Icon**: The **Filter by Category** icon now dynamically changes color to reflect its active filtering state.
+* **Interactive Elements**: Enhanced the layout, text styling, and interactive scale animations for the **Attach File** and form minimize buttons.
+* **Swipe-to-Delete Conflict**: Fixed a critical conflict where horizontally scrolling through attachment chips could accidentally trigger the swipe-to-delete action on the entire record.
+
+---
+
 ## [1.2.0] - 2026-08-09
 
 ### ✨ Added

@@ -87,6 +87,32 @@
                 android:textStyle="italic"
                 android:visibility="gone" />
         </LinearLayout>
+
+                <TextView
+            android:id="@+id/text_record_attachment_summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="11sp"
+            android:textColor="?attr/colorAccentSecondary"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true" />
+            
+        <HorizontalScrollView
+            android:id="@+id/record_attachments_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/record_attachments_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
     </LinearLayout>
 
     <!-- Date -->

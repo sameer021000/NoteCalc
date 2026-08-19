@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@drawable/bg_popup_menu"
-    android:padding="8dp">
+    android:scrollbars="none">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
 
     <LinearLayout
         android:id="@+id/btn_popup_filter"
@@ -16,6 +21,7 @@
         android:clickable="true"
         android:focusable="true">
         <ImageView
+            android:id="@+id/img_popup_filter_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@android:drawable/ic_menu_sort_by_size"
@@ -149,3 +155,4 @@
             android:layout_marginStart="8dp" />
     </LinearLayout>
 </LinearLayout>
+</ScrollView>

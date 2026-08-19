@@ -11,6 +11,7 @@ public class Record {
     private double amount;
     private String date;
     private int originalIndex = -1;
+    private java.util.List<String> attachments = new java.util.ArrayList<>();
     private String remarks = "";
     private boolean selected = false;
     private String category = "";
@@ -44,6 +45,9 @@ public class Record {
     public void setDate(String date) {
         this.date = date;
     }
+
+        public java.util.List<String> getAttachments() { return attachments; }
+    public void setAttachments(java.util.List<String> attachments) { this.attachments = attachments != null ? attachments : new java.util.ArrayList<>(); }
 
     public int getOriginalIndex() {
         return originalIndex;
@@ -86,6 +90,13 @@ public class Record {
         obj.put("remarks", getRemarks());
         obj.put("category", getCategory());
         obj.put("originalIndex", originalIndex);
+        org.json.JSONArray attachmentsArray = new org.json.JSONArray();
+        if (attachments != null) {
+            for (String att : attachments) {
+                attachmentsArray.put(att);
+            }
+        }
+        obj.put("attachments", attachmentsArray);
         return obj;
     }
 
@@ -101,6 +112,16 @@ public class Record {
         r.setRemarks(remarks);
         r.setCategory(category);
         r.setOriginalIndex(originalIndex);
+        
+        org.json.JSONArray attachmentsArray = obj.optJSONArray("attachments");
+        if (attachmentsArray != null) {
+            java.util.List<String> atts = new java.util.ArrayList<>();
+            for (int i = 0; i < attachmentsArray.length(); i++) {
+                atts.add(attachmentsArray.optString(i));
+            }
+            r.setAttachments(atts);
+        }
+        
         return r;
     }
 
