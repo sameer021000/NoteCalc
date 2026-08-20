@@ -3435,8 +3435,21 @@ public class MainActivity extends AppCompatActivity {
 
         // --- Record rows (paginated) ---
         for (int i = 0; i < records.size(); i++) {
+            Record tmpRec = records.get(i);
+            String tRem = tmpRec.getRemarks();
+            String tCat = tmpRec.getCategory();
+            String tCombined = "";
+            if (tCat != null && !tCat.isEmpty()) tCombined += "[" + tCat + "] ";
+            if (tRem != null && !tRem.isEmpty()) tCombined += tRem;
+            boolean tHasRem = !tCombined.isEmpty();
+            java.util.List<String> tAtt = tmpRec.getAttachments();
+            int numFiles = (tAtt != null) ? tAtt.size() : 0;
+            float actualRowHeight = rowHeight;
+            if (tHasRem) actualRowHeight += 14f;
+            actualRowHeight += (12f * numFiles);
+
             // Check if we need a new page (need space for row + potential total row + footer)
-            if (y + rowHeight > bottomLimit - 10f) {
+            if (y + actualRowHeight > bottomLimit - 10f) {
                 // Finish current page
                 document.finishPage(page);
 
@@ -3475,11 +3488,24 @@ public class MainActivity extends AppCompatActivity {
             String combinedNotes = "";
             if (cat != null && !cat.isEmpty()) combinedNotes += "[" + cat + "] ";
             if (recRemarks != null && !recRemarks.isEmpty()) combinedNotes += recRemarks;
-            
             boolean hasRemarks = !combinedNotes.isEmpty();
-            float actualRowHeight = hasRemarks ? rowHeight + 14f : rowHeight;
+            
+            java.util.List<String> attachments = rec.getAttachments();
+            java.util.List<String> fileNames = new java.util.ArrayList<>();
+            if (attachments != null && !attachments.isEmpty()) {
+                for (int j = 0; j < attachments.size(); j++) {
+                    String path = attachments.get(j);
+                    String fileName = path;
+                    int lastSlash = path.lastIndexOf('/');
+                    if (lastSlash != -1 && lastSlash < path.length() - 1) fileName = path.substring(lastSlash + 1);
+                    fileNames.add(fileName);
+                }
+            }
+            float actualRowHeightCalc = rowHeight;
+            if (hasRemarks) actualRowHeightCalc += 14f;
+            actualRowHeightCalc += (12f * fileNames.size());
 
-            canvas.drawRect(margin, y, pageWidth - margin, y + actualRowHeight, rowBg);
+            canvas.drawRect(margin, y, pageWidth - margin, y + actualRowHeightCalc, rowBg);
 
             float rx = margin;
             canvas.drawText(String.valueOf(i + 1), rx + 4, y + 15f, cellMutedPaint);
@@ -3493,13 +3519,27 @@ public class MainActivity extends AppCompatActivity {
             canvas.drawText(desc, rx + colSno + 4, y + 15f, cellPaint);
 
             // Draw remarks/category below description if present
+            float currentY = y + 27f;
             if (hasRemarks) {
                 String truncRemarks = combinedNotes;
                 while (truncRemarks.length() > 1 && cellMutedPaint.measureText(truncRemarks) > colDesc - 8f) {
                     truncRemarks = truncRemarks.substring(0, truncRemarks.length() - 1);
                 }
                 if (!truncRemarks.equals(combinedNotes)) truncRemarks += "\u2026";
-                canvas.drawText(truncRemarks, rx + colSno + 4, y + 27f, cellMutedPaint);
+                canvas.drawText(truncRemarks, rx + colSno + 4, currentY, cellMutedPaint);
+                currentY += 12f;
+            } else {
+                currentY -= 14f;
+                currentY += 12f;
+            }
+            for (String fn : fileNames) {
+                String truncFn = "\uD83D\uDCCE " + fn;
+                while (truncFn.length() > 1 && cellMutedPaint.measureText(truncFn) > colDesc - 8f) {
+                    truncFn = truncFn.substring(0, truncFn.length() - 1);
+                }
+                if (!truncFn.equals("\uD83D\uDCCE " + fn)) truncFn += "\u2026";
+                canvas.drawText(truncFn, rx + colSno + 4, currentY, cellMutedPaint);
+                currentY += 12f;
             }
 
             canvas.drawText(formatDateCompact(rec.getDate()), rx + colSno + colDesc + 4, y + 15f, cellMutedPaint);
@@ -3511,7 +3551,7 @@ public class MainActivity extends AppCompatActivity {
             float amtX = rx + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
             canvas.drawText(amtStr, amtX, y + 15f, cellPaint);
 
-            y += actualRowHeight;
+            y += actualRowHeightCalc;
             canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
         }
 
@@ -4443,7 +4483,20 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
 
         for (int i = 0; i < recordsToPrint.size(); i++) {
-            if (y + rowHeight > bottomLimit - 10f) {
+            Record tmpRec = recordsToPrint.get(i);
+            String tRem = tmpRec.getRemarks();
+            String tCat = tmpRec.getCategory();
+            String tCombined = "";
+            if (tCat != null && !tCat.isEmpty()) tCombined += "[" + tCat + "] ";
+            if (tRem != null && !tRem.isEmpty()) tCombined += tRem;
+            boolean tHasRem = !tCombined.isEmpty();
+            java.util.List<String> tAtt = tmpRec.getAttachments();
+            int numFiles = (tAtt != null) ? tAtt.size() : 0;
+            float actualRowHeight = rowHeight;
+            if (tHasRem) actualRowHeight += 14f;
+            actualRowHeight += (12f * numFiles);
+
+            if (y + actualRowHeight > bottomLimit - 10f) {
                 document.finishPage(page);
                 pageNum++;
                 pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
@@ -4476,11 +4529,24 @@ public class MainActivity extends AppCompatActivity {
             String combinedNotes = "";
             if (cat != null && !cat.isEmpty()) combinedNotes += "[" + cat + "] ";
             if (recRemarks != null && !recRemarks.isEmpty()) combinedNotes += recRemarks;
-            
             boolean hasRemarks = !combinedNotes.isEmpty();
-            float actualRowHeight = hasRemarks ? rowHeight + 14f : rowHeight;
+            
+            java.util.List<String> attachments = rec.getAttachments();
+            java.util.List<String> fileNames = new java.util.ArrayList<>();
+            if (attachments != null && !attachments.isEmpty()) {
+                for (int j = 0; j < attachments.size(); j++) {
+                    String path = attachments.get(j);
+                    String fileName = path;
+                    int lastSlash = path.lastIndexOf('/');
+                    if (lastSlash != -1 && lastSlash < path.length() - 1) fileName = path.substring(lastSlash + 1);
+                    fileNames.add(fileName);
+                }
+            }
+            float actualRowHeightCalc = rowHeight;
+            if (hasRemarks) actualRowHeightCalc += 14f;
+            actualRowHeightCalc += (12f * fileNames.size());
 
-            canvas.drawRect(margin, y, pageWidth - margin, y + actualRowHeight, rowBg);
+            canvas.drawRect(margin, y, pageWidth - margin, y + actualRowHeightCalc, rowBg);
 
             float rx = margin;
             canvas.drawText(String.valueOf(i + 1), rx + 4, y + 15f, cellMutedPaint);
@@ -4509,7 +4575,7 @@ public class MainActivity extends AppCompatActivity {
             float amtX = rx + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
             canvas.drawText(amtStr, amtX, y + 15f, cellPaint);
 
-            y += actualRowHeight;
+            y += actualRowHeightCalc;
             canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
         }
 
