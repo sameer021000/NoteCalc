@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
+                android:background="@color/bg_secondary_blue"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
                 <TextView
@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:text="Multi-Select Magic"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorAccentSecondary"
+                    android:textColor="@color/accent_blue_secondary"
                     android:textSize="16sp" 
                     android:layout_marginBottom="6dp"/>
                 <TextView
@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
+                android:background="@color/bg_secondary_green"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
                 <TextView
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:text="Custom PDF Exports"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorAccentSecondary"
+                    android:textColor="@color/accent_green_secondary"
                     android:textSize="16sp" 
                     android:layout_marginBottom="6dp"/>
                 <TextView
@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
+                android:background="@color/bg_secondary_purple"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
                 <TextView
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:text="Smart PDF Attachments"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorAccentSecondary"
+                    android:textColor="@color/accent_purple_secondary"
                     android:textSize="16sp" 
                     android:layout_marginBottom="6dp"/>
                 <TextView
@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
+                android:background="@color/bg_secondary_red"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
                 <TextView
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:text="Swipe to Delete"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorAccentSecondary"
+                    android:textColor="@color/accent_red_secondary"
                     android:textSize="16sp" 
                     android:layout_marginBottom="6dp"/>
                 <TextView
@@ -125,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
+                android:background="@color/bg_secondary_yellow"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
                 <TextView
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:text="Move Records"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorAccentSecondary"
+                    android:textColor="@color/accent_yellow_secondary"
                     android:textSize="16sp" 
                     android:layout_marginBottom="6dp"/>
                 <TextView
@@ -149,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
+                android:background="@color/bg_secondary_orange"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
                 <TextView
@@ -157,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:text="Smart Sorting"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorAccentSecondary"
+                    android:textColor="@color/accent_orange_secondary"
                     android:textSize="16sp" 
                     android:layout_marginBottom="6dp"/>
                 <TextView
