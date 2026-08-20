@@ -1370,7 +1370,8 @@ public class MainActivity extends AppCompatActivity {
                 btnModeBudget.setBackgroundColor(isBudgetMode ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : ThemeManager.getBgSecondaryColor(MainActivity.this));
                 btnModeBudget.setTextColor(getColor(isBudgetMode ? R.color.text_on_accent : R.color.text_tertiary));
             }
-            recordsAdapter.setFilter(currentRecordSearchQuery);
+            applySorting();
+              recordsAdapter.setFilter(currentRecordSearchQuery);
             updateHeaderLabels();
             updateDateHeaderIndicator();
             updateAmountHeaderIndicator();
