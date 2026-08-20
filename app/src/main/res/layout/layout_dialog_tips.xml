@@ -9,10 +9,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tips and Tricks"
+        android:text="@string/tips_main_title"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
+        android:layout_marginBottom="4dp" />
+        
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tips_main_subtitle"
+        android:textSize="14sp"
+        android:textColor="@color/text_tertiary"
         android:layout_marginBottom="20dp" />
         
     <ScrollView
@@ -24,771 +32,1470 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            
+
+            <!-- Category Header -->
             <LinearLayout
+                android:id="@+id/header_section_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/bg_secondary_blue"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical">
                 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="@string/tips_cat1_title"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                    
+                <TextView
+                    android:id="@+id/tv_chevron_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25BC;"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:paddingStart="8dp"/>
+            </LinearLayout>
+                
+            <!-- Category Content -->
+            <LinearLayout
+                android:id="@+id/content_section_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_blue"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item1_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_blue_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item1_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Create a New List from Selected Records"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="01"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_blue_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Highlight specific records using long-press, then tap the '+' icon in the bulk menu to spin them off into a brand new standalone list."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="01"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_blue_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_green"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_green"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item2_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_green_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item2_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Move or Copy Records Between Lists"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="02"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_green_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Easily transfer expenses between different accounts! Just select the records, tap 'Cut', go to a different account, and paste them in."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="02"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_green_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_purple"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_purple"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item3_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_purple_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item3_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Use Groups to Organize Lists"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="03"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_purple_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Keep your dashboard clean by grouping related lists together into Folders. Just tap '+ Group' on the dashboard."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="03"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_purple_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_red"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_red"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item4_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_red_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item4_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pin Important Lists and Groups"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="04"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_red_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Long-press a list or group and select 'Pin' to keep it permanently at the top of your dashboard."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="04"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_red_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_yellow"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_yellow"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item5_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_yellow_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item5_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Combine Filters to Narrow Down Records"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="05"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_yellow_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="You can apply multiple filters at once (like Date Range AND Category) to pinpoint exactly what you are looking for."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="05"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_yellow_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_orange"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_orange"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item6_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_orange_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item6_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Select Multiple Categories in a Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="06"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_orange_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="When filtering by category, you can tap multiple different categories at once to view them all together."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="06"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_orange_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
             </LinearLayout>
+
+            <!-- Category Header -->
             <LinearLayout
+                android:id="@+id/header_section_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/bg_secondary_pink"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical">
                 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="@string/tips_cat2_title"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                    
+                <TextView
+                    android:id="@+id/tv_chevron_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25BC;"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:paddingStart="8dp"/>
+            </LinearLayout>
+                
+            <!-- Category Content -->
+            <LinearLayout
+                android:id="@+id/content_section_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_pink"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item1_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_pink_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item1_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Search and Filter Work Together"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="01"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_pink_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Type a keyword into the search bar and apply a category filter at the same time; NoteCalc will combine both conditions seamlessly."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="07"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_pink_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_blue"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_blue"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item2_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_blue_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item2_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Filter by an Amount Range"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="02"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_blue_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Looking for expensive purchases? You can filter records that fall exactly between a minimum and maximum amount."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="08"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_blue_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_green"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_green"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item3_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_green_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item3_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Filter by Date Range"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="03"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_green_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Easily view your expenses for a specific week or month by selecting a start and end date in the filter menu."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="09"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_green_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_purple"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_purple"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item4_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_purple_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item4_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Sort by Tapping the Column Header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="04"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_purple_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tap the 'Date' or 'Amount' headers directly above your list to instantly sort your records in ascending or descending order."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="10"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_purple_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_red"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_red"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item5_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_red_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item5_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Create a New List from a Selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="05"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_red_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Use the bulk actions menu to instantly duplicate a custom selection of records into a fresh account."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="11"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_red_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_yellow"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_yellow"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item6_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_yellow_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item6_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cut or Copy Multiple Records"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="06"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_yellow_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Use the long-press bulk actions menu to cut or copy massive batches of records simultaneously."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="12"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_yellow_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_orange"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_orange"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item7_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_orange_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item7_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Export Only Selected Records"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="07"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_orange_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Don't want to export the whole list? Highlight specific records using long-press, then tap Export to generate a PDF with only those exact items."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="13"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_orange_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_pink"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_pink"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item8_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_pink_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item8_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Delete Multiple Records Together"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="08"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_pink_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Save time by selecting multiple records and tapping the delete icon to remove them all in one single action."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="14"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_pink_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
             </LinearLayout>
+
+            <!-- Category Header -->
             <LinearLayout
+                android:id="@+id/header_section_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/bg_secondary_blue"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical">
                 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="@string/tips_cat3_title"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                    
+                <TextView
+                    android:id="@+id/tv_chevron_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25BC;"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:paddingStart="8dp"/>
+            </LinearLayout>
+                
+            <!-- Category Content -->
+            <LinearLayout
+                android:id="@+id/content_section_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_blue"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item1_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_blue_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item1_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="View Attachments from the Record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="01"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_blue_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tap on the beautiful attachment chips directly inside your list to instantly view the image or document."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="15"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_blue_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
-                    
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/bg_secondary_green"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
-                
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_green"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item2_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_green_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item2_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Attachments Can Appear in Your PDF"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="02"
+                        android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_green_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Whenever you attach photos (like receipts or bills) to a record, NoteCalc will automatically build a beautiful image gallery at the very end of your PDF export."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="16"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_green_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_purple"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
                     
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item3_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_purple_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item3_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="03"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_purple_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_red"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item4_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_red_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat3_item4_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="04"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_red_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
             </LinearLayout>
+
+            <!-- Category Header -->
             <LinearLayout
+                android:id="@+id/header_section_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/bg_secondary_purple"
-                android:padding="16dp"
-                android:layout_marginBottom="12dp">
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical">
                 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="@string/tips_cat4_title"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                    
+                <TextView
+                    android:id="@+id/tv_chevron_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25BC;"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:paddingStart="8dp"/>
+            </LinearLayout>
+                
+            <!-- Category Content -->
+            <LinearLayout
+                android:id="@+id/content_section_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_yellow"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item1_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_yellow_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item1_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
                     
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Change PDF Sorting Before Exporting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="01"
+                        android:textSize="48sp"
                         android:textStyle="bold"
-                        android:textColor="@color/accent_purple_secondary"
-                        android:textSize="16sp" 
-                        android:layout_marginBottom="6dp"/>
-                        
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="When generating a PDF, you can sort your data however you want - by Date, Amount, Description, or just the order you entered them."
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:lineSpacingExtra="4dp"/>
+                        android:textColor="@color/accent_yellow_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
                         
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_orange"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item2_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_orange_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item2_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="02"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_orange_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_pink"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item3_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_pink_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item3_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="03"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_pink_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_blue"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item4_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_blue_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item4_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="04"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_green"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item5_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_green_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item5_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="05"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_green_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_purple"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item6_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_purple_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item6_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="06"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_purple_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_red"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item7_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_red_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat4_item7_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="07"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_red_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Category Header -->
+            <LinearLayout
+                android:id="@+id/header_section_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical">
                 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="17"
-                    android:textSize="48sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/tips_cat5_title"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/accent_purple_secondary"
-                    android:alpha="0.2"
-                    android:paddingStart="16dp"/>
+                    android:textColor="@color/text_primary"/>
                     
+                <TextView
+                    android:id="@+id/tv_chevron_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#x25BC;"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:paddingStart="8dp"/>
+            </LinearLayout>
+                
+            <!-- Category Content -->
+            <LinearLayout
+                android:id="@+id/content_section_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_yellow"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item1_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_yellow_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item1_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="01"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_yellow_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_orange"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item2_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_orange_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item2_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="02"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_orange_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_pink"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item3_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_pink_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item3_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="03"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_pink_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -797,7 +1504,7 @@
         android:id="@+id/btn_tips_close"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Got it!"
+        android:text="@string/tips_btn_got_it"
         android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center"

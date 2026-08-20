@@ -635,7 +635,64 @@ public class MainActivity extends AppCompatActivity {
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
         }
-        view.findViewById(R.id.btn_tips_close).setOnClickListener(v -> dialog.dismiss());
+
+        // Setup expandable sections
+        for (int i = 1; i <= 5; i++) {
+            int headerId = getResources().getIdentifier("header_section_" + i, "id", getPackageName());
+            int contentId = getResources().getIdentifier("content_section_" + i, "id", getPackageName());
+            int chevronId = getResources().getIdentifier("tv_chevron_" + i, "id", getPackageName());
+            
+            android.view.View header = view.findViewById(headerId);
+            android.view.View content = view.findViewById(contentId);
+            android.widget.TextView chevron = view.findViewById(chevronId);
+            
+            if (header != null && content != null && chevron != null) {
+                // Apply curved bordered background to header
+                header.setBackground(ResponsiveUI.createRoundedBg(
+                        this,
+                        ThemeManager.getBgSecondaryColor(this),
+                        ThemeManager.getBorderColor(this),
+                        1.0f,
+                        10.0f
+                ));
+                
+                // Add some margin below the header so the border isn't cramped
+                android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) header.getLayoutParams();
+                params.bottomMargin = 24;
+                header.setLayoutParams(params);
+
+                header.setOnClickListener(v -> {
+                    if (content.getVisibility() == android.view.View.VISIBLE) {
+                        content.setVisibility(android.view.View.GONE);
+                        chevron.setText("\u25BC"); // down chevron
+                    } else {
+                        content.setVisibility(android.view.View.VISIBLE);
+                        chevron.setText("\u25B2"); // up chevron
+                    }
+                });
+            }
+        }
+        
+        // Round the dialog box corners
+        view.setBackground(ResponsiveUI.createRoundedBg(
+                this,
+                ThemeManager.getBgPrimaryColor(this),
+                android.graphics.Color.TRANSPARENT,
+                0f,
+                16f
+        ));
+        
+        // Round the Got it! button corners
+        android.view.View btnClose = view.findViewById(R.id.btn_tips_close);
+        btnClose.setBackground(ResponsiveUI.createRoundedBg(
+                this,
+                ThemeManager.getSecondaryAccentColor(this),
+                android.graphics.Color.TRANSPARENT,
+                0f,
+                12f
+        ));
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
     private void showDashboard() {
