@@ -3593,12 +3593,192 @@ public class MainActivity extends AppCompatActivity {
 
         document.finishPage(page);
         pageTracker[0] = pageNum;
+
+        java.util.LinkedHashMap<Record, String> recordLabels = new java.util.LinkedHashMap<>();
+        for (int listIdx = 0; listIdx < allRecordLists.size(); listIdx++) {
+            java.util.List<Record> list = allRecordLists.get(listIdx);
+            String prefix = listNames.get(listIdx) != null ? listNames.get(listIdx) + " - " : "";
+            for (int j = 0; j < list.size(); j++) {
+                recordLabels.put(list.get(j), prefix + "S.No " + (j + 1) + ": " + list.get(j).getDescription());
+            }
+        }
+        appendAttachmentsAppendixToPdf(document, recordLabels, pageTracker);
     }
 
     /**
      * Wraps text into multiple lines that fit within the given maxWidth using the given paint.
      * Uses breakText for precise measurement and supports character-level wrapping if a word exceeds maxWidth.
      */
+    private void appendAttachmentsAppendixToPdf(android.graphics.pdf.PdfDocument document, java.util.LinkedHashMap<Record, String> recordLabels, int[] pageTracker) {
+        java.util.List<Record> recordsWithImages = new java.util.ArrayList<>();
+        for (Record r : recordLabels.keySet()) {
+            java.util.List<String> atts = r.getAttachments();
+            if (atts != null) {
+                boolean hasImg = false;
+                for (String path : atts) {
+                    String lower = path.toLowerCase();
+                    if (lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".png") || lower.endsWith(".webp")) {
+                        hasImg = true;
+                        break;
+                    } else if (path.startsWith("content://")) {
+                        String mime = getContentResolver().getType(android.net.Uri.parse(path));
+                        if (mime != null && mime.startsWith("image/")) {
+                            hasImg = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasImg) recordsWithImages.add(r);
+            }
+        }
+        
+        if (recordsWithImages.isEmpty()) return;
+        
+        int pageWidth = 595;
+        int pageHeight = 842;
+        int margin = 40;
+        float bottomLimit = pageHeight - margin;
+        
+        android.graphics.Paint bgPaint = new android.graphics.Paint();
+        bgPaint.setColor(ThemeManager.getBgPrimaryColor(MainActivity.this));
+        
+        android.graphics.Paint titlePaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        titlePaint.setColor(getColor(R.color.text_primary));
+        titlePaint.setTextSize(20f);
+        titlePaint.setFakeBoldText(true);
+        
+        android.graphics.Paint subPaint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        subPaint.setColor(getColor(R.color.text_tertiary));
+        subPaint.setTextSize(12f);
+        
+        android.graphics.Paint dividerPaint = new android.graphics.Paint();
+        dividerPaint.setColor(ThemeManager.getBorderColor(MainActivity.this));
+        dividerPaint.setStrokeWidth(0.8f);
+        
+        int pageNum = pageTracker[0];
+        android.graphics.Canvas canvas = null;
+        android.graphics.pdf.PdfDocument.Page page = null;
+        float y = bottomLimit + 100f; 
+        
+        int colWidth = (pageWidth - (margin * 2) - 15) / 2;
+        int maxImgHeight = 350;
+        
+        for (Record r : recordsWithImages) {
+            java.util.List<String> imgPaths = new java.util.ArrayList<>();
+            for (String path : r.getAttachments()) {
+                String lower = path.toLowerCase();
+                boolean isImg = lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".png") || lower.endsWith(".webp");
+                if (!isImg && path.startsWith("content://")) {
+                    String mime = getContentResolver().getType(android.net.Uri.parse(path));
+                    if (mime != null && mime.startsWith("image/")) isImg = true;
+                }
+                if (isImg) imgPaths.add(path);
+            }
+            if (imgPaths.isEmpty()) continue;
+            
+            if (y + 50f > bottomLimit) {
+                if (page != null) document.finishPage(page);
+                pageNum++;
+                android.graphics.pdf.PdfDocument.PageInfo pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
+                page = document.startPage(pageInfo);
+                canvas = page.getCanvas();
+                canvas.drawRect(0, 0, pageWidth, pageHeight, bgPaint);
+                y = margin;
+                canvas.drawText("Attachments Appendix", margin, y + 15f, titlePaint);
+                y += 30f;
+                canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
+                y += 20f;
+            } else {
+                y += 20f;
+            }
+            
+            String recTitle = recordLabels.get(r);
+            if (recTitle == null) recTitle = "Record: " + r.getDescription();
+            canvas.drawText(recTitle, margin, y + 12f, subPaint);
+            y += 20f;
+            
+            for (int i = 0; i < imgPaths.size(); i += 2) {
+                if (y + 100f > bottomLimit) {
+                    if (page != null) document.finishPage(page);
+                    pageNum++;
+                    android.graphics.pdf.PdfDocument.PageInfo pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
+                    page = document.startPage(pageInfo);
+                    canvas = page.getCanvas();
+                    canvas.drawRect(0, 0, pageWidth, pageHeight, bgPaint);
+                    y = margin;
+                    canvas.drawText(recTitle + " (contd.)", margin, y + 12f, subPaint);
+                    y += 20f;
+                }
+                
+                float rowMaxHeight = 0;
+                for (int c = 0; c < 2 && i + c < imgPaths.size(); c++) {
+                    String path = imgPaths.get(i + c);
+                    try {
+                        android.graphics.Bitmap bitmap = null;
+                        if (path.startsWith("content://")) {
+                            java.io.InputStream is = getContentResolver().openInputStream(android.net.Uri.parse(path));
+                            if (is != null) {
+                                bitmap = android.graphics.BitmapFactory.decodeStream(is);
+                                is.close();
+                            }
+                        } else {
+                            bitmap = android.graphics.BitmapFactory.decodeFile(path);
+                        }
+                        
+                        if (bitmap != null) {
+                            float scale = Math.min((float) colWidth / bitmap.getWidth(), (float) maxImgHeight / bitmap.getHeight());
+                            int drawW = (int) (bitmap.getWidth() * scale);
+                            int drawH = (int) (bitmap.getHeight() * scale);
+                            float x = margin + (c * (colWidth + 15));
+                            
+                            float drawX = x + (colWidth - drawW) / 2f;
+                            
+                            float spaceLeft = bottomLimit - y - 20f; // 20f extra for text
+                            if (drawH > spaceLeft && spaceLeft > 100f) {
+                                float newScale = spaceLeft / bitmap.getHeight();
+                                if(newScale < scale) {
+                                    scale = newScale;
+                                    drawW = (int) (bitmap.getWidth() * scale);
+                                    drawH = (int) (bitmap.getHeight() * scale);
+                                    drawX = x + (colWidth - drawW) / 2f;
+                                }
+                            }
+
+                            android.graphics.Rect destRect = new android.graphics.Rect((int) drawX, (int) y, (int) (drawX + drawW), (int) (y + drawH));
+                            canvas.drawBitmap(bitmap, null, destRect, null);
+                            bitmap.recycle();
+                            
+                            // Draw filename
+                            String fileName = path;
+                            int lastSlash = path.lastIndexOf('/');
+                            if (lastSlash != -1 && lastSlash < path.length() - 1) fileName = path.substring(lastSlash + 1);
+                            
+                            String truncFn = fileName;
+                            while (truncFn.length() > 1 && subPaint.measureText(truncFn) > colWidth - 8f) {
+                                truncFn = truncFn.substring(0, truncFn.length() - 1);
+                            }
+                            if (!truncFn.equals(fileName)) truncFn += "\u2026";
+                            
+                            float fnX = x + (colWidth - subPaint.measureText(truncFn)) / 2f;
+                            canvas.drawText(truncFn, fnX, y + drawH + 15f, subPaint);
+                            
+                            if (drawH + 20f > rowMaxHeight) rowMaxHeight = drawH + 20f;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                y += rowMaxHeight + 15f;
+            }
+        }
+        
+        if (page != null) {
+            canvas.drawText("Generated by NoteCalc  \u2022  Page " + pageNum, 40f, bottomLimit + 25f, subPaint);
+            document.finishPage(page);
+        }
+        pageTracker[0] = pageNum;
+    }
+
     private List<String> wrapText(String text, Paint paint, float maxWidth) {
         List<String> lines = new ArrayList<>();
         if (text == null || text.isEmpty()) {
@@ -4627,6 +4807,12 @@ public class MainActivity extends AppCompatActivity {
 
         document.finishPage(page);
         pageTracker[0] = pageNum;
+
+        java.util.LinkedHashMap<Record, String> recordLabels = new java.util.LinkedHashMap<>();
+        for (int j = 0; j < recordsToPrint.size(); j++) {
+            recordLabels.put(recordsToPrint.get(j), "S.No " + (j + 1) + ": " + recordsToPrint.get(j).getDescription());
+        }
+        appendAttachmentsAppendixToPdf(document, recordLabels, pageTracker);
     }
 
     private void renderEditorAttachments() {
