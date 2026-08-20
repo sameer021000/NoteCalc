@@ -95,6 +95,7 @@ public class Record {
         obj.put("remarks", getRemarks());
         obj.put("category", getCategory());
         obj.put("originalIndex", originalIndex);
+        obj.put("timestampMillis", timestampMillis);
         org.json.JSONArray attachmentsArray = new org.json.JSONArray();
         if (attachments != null) {
             for (String att : attachments) {

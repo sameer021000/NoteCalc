@@ -3352,15 +3352,16 @@ public class MainActivity extends AppCompatActivity {
         List<String> listNames = new ArrayList<>();
         List<Double> listTotals = new ArrayList<>();
         
+        if (!budRecords.isEmpty()) {
+            allRecordLists.add(budRecords);
+            listNames.add("Budgets");
+            double bt = 0; for(Record r: budRecords) bt += r.getAmount();
+            listTotals.add(bt);
+        }
         if (!expRecords.isEmpty() || budRecords.isEmpty()) {
             allRecordLists.add(expRecords);
             listNames.add(budRecords.isEmpty() ? null : "Expenses");
             listTotals.add(account.calculateTotal());
-        }
-        if (!budRecords.isEmpty()) {
-            allRecordLists.add(budRecords);
-            listNames.add("Budgets");
-            listTotals.add(account.calculateTotalBudget());
         }
 
         // --- Page tracking ---
@@ -4558,13 +4559,27 @@ public class MainActivity extends AppCompatActivity {
             if (!desc.equals(rec.getDescription())) desc += "\u2026";
             canvas.drawText(desc, rx + colSno + 4, y + 15f, cellPaint);
 
+            float currentY = y + 27f;
             if (hasRemarks) {
                 String truncRemarks = combinedNotes;
                 while (truncRemarks.length() > 1 && cellMutedPaint.measureText(truncRemarks) > colDesc - 8f) {
                     truncRemarks = truncRemarks.substring(0, truncRemarks.length() - 1);
                 }
                 if (!truncRemarks.equals(combinedNotes)) truncRemarks += "\u2026";
-                canvas.drawText(truncRemarks, rx + colSno + 4, y + 27f, cellMutedPaint);
+                canvas.drawText(truncRemarks, rx + colSno + 4, currentY, cellMutedPaint);
+                currentY += 12f;
+            } else {
+                currentY -= 14f;
+                currentY += 12f;
+            }
+            for (String fn : fileNames) {
+                String truncFn = "\uD83D\uDCCE " + fn;
+                while (truncFn.length() > 1 && cellMutedPaint.measureText(truncFn) > colDesc - 8f) {
+                    truncFn = truncFn.substring(0, truncFn.length() - 1);
+                }
+                if (!truncFn.equals("\uD83D\uDCCE " + fn)) truncFn += "\u2026";
+                canvas.drawText(truncFn, rx + colSno + 4, currentY, cellMutedPaint);
+                currentY += 12f;
             }
 
             canvas.drawText(formatDateCompact(rec.getDate()), rx + colSno + colDesc + 4, y + 15f, cellMutedPaint);
