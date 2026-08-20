@@ -5,7 +5,7 @@
 ![Version](https://img.shields.io/badge/Version-1.3.0-orange)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
-**NoteCalc** is a premium, offline-first Android expense tracker and calculator designed to bridge the gap between simple note-taking and structured financial tracking. It combines a modern interface with powerful tools such as dual tracking modes, file attachments, PDF reporting, JSON backups, advanced filtering, and an organized dashboard for an intuitive accounting experience.
+**NoteCalc** is a premium, offline-first Android expense tracker and calculator designed to bridge the gap between simple note-taking and structured financial tracking. It combines a modern interface with powerful tools such as dual tracking modes, file attachments, detailed PDF reporting, JSON backups, advanced filtering, and an organized dashboard for an intuitive accounting experience.
 
 ---
 
@@ -50,21 +50,35 @@
 * **Automatic Timestamps**: Photos captured through the in-app camera are automatically timestamped and securely stored in the app's internal storage.
 * **Attachment Chips**: Attached files are displayed as beautifully themed chips directly within records.
 * **Native File Viewing**: Open attached files directly through Android's native file viewer.
+* **PDF Attachment Integration**: Attached images are embedded directly into exported PDFs in a dedicated 2-column image appendix.
+* **Attachment Names in PDFs**: Attachment names are included beneath record remarks with a paperclip indicator for easy reference.
 
-### 🎯 **Reporting & Backup**
+### 📄 **PDF Reporting**
 
 * **PDF Export Engine**: Generate beautiful, multi-table, paginated PDF reports of your accounts directly on your device.
 * **Flexible PDF Export**: Export individual accounts, all data at once, or generate clean, budget-free statements for a specific selection of records.
+* **Dynamic PDF Sorting**: Sort records by S.No, Description, Date, or Amount before generating a report.
+* **Timestamp Reporting**: PDF reports include the exact time of entry alongside the record date.
+* **Attachment Appendix**: Images attached to records are automatically embedded into a dedicated 2-column appendix within the exported PDF.
+* **Attachment References**: File names are displayed beneath remarks in the main PDF tables for easy identification.
+* **Adaptive PDF Layout**: PDF rows dynamically expand based on the number of attachments, while overly long file names are intelligently truncated to maintain a clean layout.
+* **Budget & Expense Tables**: PDF generation intelligently handles Budget and Expenses tables and maintains the appropriate table structure for each mode.
+
+### 💾 **Backup & Privacy**
+
 * **Privacy-First & Offline**: No cloud syncing is forced upon you. Your data remains stored locally on your device.
-* **JSON Import / Export**: Easily back up your entire workspace to a JSON file and restore it whenever you switch devices or need to recover your data.
+* **JSON Import / Export**: Easily back up your entire workspace to a JSON file and restore it whenever you switch devices or need to recover data.
+* **Local File Storage**: Attachments captured or selected within the app are managed locally, keeping your records and associated files available without requiring cloud storage.
 
 ### 🎨 **Premium UI/UX**
 
 * **Modern Aesthetics**: Features rounded layouts, smooth animations, custom styling, and clean Material Design. Edge-to-edge window insets provide an immersive visual experience.
 * **Dynamic Interactions**: Fluid `StateListDrawable` feedback provides responsive visual interactions throughout the application.
 * **Themed Dialogs**: Custom dialogs are designed to maintain a consistent and polished visual language across the application.
+* **Custom Attachment Dialog**: Quickly choose between **Take Photo** and **Choose File** through a dedicated themed attachment dialog.
 * **Interactive Attachments**: Attachment controls and form actions feature refined text styling, scale animations, and responsive touch interactions.
-* **Dynamic Filter State**: The **Filter by Category** icon dynamically changes appearance to clearly indicate when category filtering is active.
+* **Dynamic Filter State**: The **Filter by Category** icon dynamically changes color to clearly indicate when category filtering is active.
+* **Scrollable Actions Menu**: The bulk actions menu adapts to smaller screens so available actions remain accessible.
 * **Intuitive Editor**: Add records quickly using a refined form supporting custom dates, optional remarks, attachments, and other record details.
 
 ---
@@ -104,20 +118,20 @@
 
 2. **Open in Android Studio:**
 
-    * File > Open > Select the cloned directory.
+   * File > Open > Select the cloned directory.
 
 3. **Build & Run:**
 
-    * Sync Gradle files.
-    * Run on an emulator or physical Android device.
+   * Sync Gradle files.
+   * Run on an emulator or physical Android device.
 
 ---
 
 ## 📋 Version History
 
-* **v1.3.0** – File attachments, in-app camera, attachment viewing, improved bulk actions, dynamic filtering, and UI refinements.
-* **v1.2.0** – Dynamic PDF sorting, improved Cut workflow, dialog interactions, and date sorting accuracy.
-* **v1.1.0** – Record transfer, selective PDF export, isolated categories, unified bulk actions, and themed dialogs.
+* **v1.3.0** – Added file attachments, in-app camera, PDF attachment integration, PDF timestamps, improved PDF layouts, dynamic filtering, enhanced bulk actions, and multiple sorting and persistence fixes.
+* **v1.2.0** – Added dynamic PDF sorting and improved Cut workflow, dialog interactions, and date sorting accuracy.
+* **v1.1.0** – Added record transfer, selective PDF export, isolated categories, unified bulk actions, and themed dialogs.
 * **v1.0.0** – Initial release with expense/budget tracking, groups, PDF export, JSON backup, filtering, and premium UI.
 
 📜 **[View the complete changelog](Changelog.md)**

@@ -9,6 +9,9 @@ All notable changes to **NoteCalc** will be documented in this file.
 ### ✨ Added
 
 * **File Attachments**: Added the ability to attach up to 3 files (images, PDFs, and documents) per record.
+* **PDF Attachments Appendix**: Attached images are now magically embedded directly into PDF exports as a beautiful 2-column image appendix.
+* **PDF Attachment Names**: Included paperclip-prefixed attachment names beneath remarks in the main PDF tables.
+* **PDF Timestamp Column**: Added an exact time of entry column next to the Date column on PDFs.
 * **In-App Camera**: Integrated a direct **Take Photo** option when attaching a file, generating auto-timestamped images securely in internal storage.
 * **Attachment Viewing**: Attachments are displayed as beautifully themed chips within records and can be opened directly using Android's native file viewer.
 
@@ -19,6 +22,13 @@ All notable changes to **NoteCalc** will be documented in this file.
 * **Dynamic Filter Icon**: The **Filter by Category** icon now dynamically changes color to reflect its active filtering state.
 * **Interactive Elements**: Enhanced the layout, text styling, and interactive scale animations for the **Attach File** and form minimize buttons.
 * **Swipe-to-Delete Conflict**: Fixed a critical conflict where horizontally scrolling through attachment chips could accidentally trigger the swipe-to-delete action on the entire record.
+* **PDF Layout & Logic**: Overhauled PDF generation to properly swap Budget & Expenses tables, dynamically expand row height based on attachment count, and smartly truncate overly long file names.
+
+### 🐛 Fixed
+
+* **Sorting Logic**: Fixed a bug where toggling between Budget and Expenses modes failed to retain or properly sort list records.
+* **Budget Copy/Cut Persistence**: Fixed a bug where budget records moved between lists would appear out of order until manually resorted.
+* **Timestamp Persistence**: Fixed a bug where record timestamps would accidentally reset to zero when the app was fully closed.
 
 ---
 
