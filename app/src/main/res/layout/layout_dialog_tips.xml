@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tips &amp; Tricks"
+        android:text="Tips and Tricks"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -28,147 +28,768 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:background="@color/bg_secondary_blue"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
+                
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Multi-Select Magic"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Create a New List from Selected Records"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Highlight specific records using long-press, then tap the '+' icon in the bulk menu to spin them off into a brand new standalone list."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="01"
+                    android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/accent_blue_secondary"
-                    android:textSize="16sp" 
-                    android:layout_marginBottom="6dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Long-press on any record to enter selection mode. You can tap multiple records to delete, copy, or move them all at once!"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp"/>
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
             </LinearLayout>
-                
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:background="@color/bg_secondary_green"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
+                
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Custom PDF Exports"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Move or Copy Records Between Lists"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_green_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Easily transfer expenses between different accounts! Just select the records, tap 'Cut', go to a different account, and paste them in."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="02"
+                    android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/accent_green_secondary"
-                    android:textSize="16sp" 
-                    android:layout_marginBottom="6dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Don't want to export the whole list? Use the long-press selection mode to highlight specific records, then tap Export to generate a PDF with only those exact items."
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp"/>
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
             </LinearLayout>
-                
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:background="@color/bg_secondary_purple"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
+                
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Smart PDF Attachments"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Use Groups to Organize Lists"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_purple_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Keep your dashboard clean by grouping related lists together into Folders. Just tap '+ Group' on the dashboard."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="03"
+                    android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/accent_purple_secondary"
-                    android:textSize="16sp" 
-                    android:layout_marginBottom="6dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Whenever you attach photos (like receipts or bills) to a record, NoteCalc will automatically build a beautiful image gallery at the very end of your PDF export."
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp"/>
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
             </LinearLayout>
-                
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:background="@color/bg_secondary_red"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
+                
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Swipe to Delete"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pin Important Lists and Groups"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_red_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Long-press a list or group and select 'Pin' to keep it permanently at the top of your dashboard."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="04"
+                    android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/accent_red_secondary"
-                    android:textSize="16sp" 
-                    android:layout_marginBottom="6dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="In a rush? You can quickly delete any record just by swiping it to the left or right."
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp"/>
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
             </LinearLayout>
-                
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:background="@color/bg_secondary_yellow"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
+                
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Move Records"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Combine Filters to Narrow Down Records"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_yellow_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="You can apply multiple filters at once (like Date Range AND Category) to pinpoint exactly what you are looking for."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="05"
+                    android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/accent_yellow_secondary"
-                    android:textSize="16sp" 
-                    android:layout_marginBottom="6dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="You can easily transfer expenses between different accounts! Just select the records, tap 'Cut', go to a different account, and paste them in."
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp"/>
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
             </LinearLayout>
-                
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:background="@color/bg_secondary_orange"
                 android:padding="16dp"
                 android:layout_marginBottom="12dp">
-                <TextView
-                    android:layout_width="match_parent"
+                
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Smart Sorting"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select Multiple Categories in a Filter"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_orange_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="When filtering by category, you can tap multiple different categories at once to view them all together."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="06"
+                    android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/accent_orange_secondary"
-                    android:textSize="16sp" 
-                    android:layout_marginBottom="6dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="When generating a PDF, you can sort your data however you want - by Date, Amount, Description, or just the order you entered them."
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp"/>
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
             </LinearLayout>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_pink"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Search and Filter Work Together"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_pink_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Type a keyword into the search bar and apply a category filter at the same time; NoteCalc will combine both conditions seamlessly."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="07"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_pink_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_blue"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Filter by an Amount Range"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Looking for expensive purchases? You can filter records that fall exactly between a minimum and maximum amount."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="08"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_blue_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_green"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Filter by Date Range"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_green_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Easily view your expenses for a specific week or month by selecting a start and end date in the filter menu."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="09"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_green_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_purple"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sort by Tapping the Column Header"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_purple_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tap the 'Date' or 'Amount' headers directly above your list to instantly sort your records in ascending or descending order."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="10"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_purple_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_red"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Create a New List from a Selection"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_red_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Use the bulk actions menu to instantly duplicate a custom selection of records into a fresh account."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="11"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_red_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_yellow"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cut or Copy Multiple Records"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_yellow_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Use the long-press bulk actions menu to cut or copy massive batches of records simultaneously."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="12"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_yellow_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_orange"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Export Only Selected Records"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_orange_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Don't want to export the whole list? Highlight specific records using long-press, then tap Export to generate a PDF with only those exact items."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="13"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_orange_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_pink"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Delete Multiple Records Together"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_pink_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Save time by selecting multiple records and tapping the delete icon to remove them all in one single action."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="14"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_pink_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_blue"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="View Attachments from the Record"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tap on the beautiful attachment chips directly inside your list to instantly view the image or document."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="15"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_blue_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_green"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Attachments Can Appear in Your PDF"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_green_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Whenever you attach photos (like receipts or bills) to a record, NoteCalc will automatically build a beautiful image gallery at the very end of your PDF export."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="16"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_green_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/bg_secondary_purple"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Change PDF Sorting Before Exporting"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_purple_secondary"
+                        android:textSize="16sp" 
+                        android:layout_marginBottom="6dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="When generating a PDF, you can sort your data however you want - by Date, Amount, Description, or just the order you entered them."
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="17"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_purple_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+                    
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
     
