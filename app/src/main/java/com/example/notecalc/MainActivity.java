@@ -626,6 +626,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
+
+    private void showTipsDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        android.view.View view = getLayoutInflater().inflate(R.layout.layout_dialog_tips, null);
+        builder.setView(view);
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+        view.findViewById(R.id.btn_tips_close).setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
     private void showDashboard() {
         if (currentSnackbar != null) {
             currentSnackbar.dismiss();
@@ -639,6 +651,9 @@ public class MainActivity extends AppCompatActivity {
         
         View btnSettings = dashboardView.findViewById(R.id.btn_settings);
         if(btnSettings != null) btnSettings.setOnClickListener(v -> openSettings());
+        
+        View btnTips = dashboardView.findViewById(R.id.btn_tips);
+        if(btnTips != null) btnTips.setOnClickListener(v -> showTipsDialog());
         
         View btnCreateGroup = dashboardView.findViewById(R.id.btn_create_group);
 
@@ -856,11 +871,16 @@ public class MainActivity extends AppCompatActivity {
 
         boolean hasGroups = groupsAdapter != null && groupsAdapter.getItemCount() > 0;
         boolean hasAccounts = accountsAdapter.getItemCount() > 0;
+        boolean isListEmpty = appStorage.groups.isEmpty() && appStorage.standaloneAccounts.isEmpty();
 
-        if (!hasGroups && !hasAccounts) {
+        if (isListEmpty) {
             cardEmptyState.setVisibility(View.VISIBLE);
             contentContainer.setVisibility(View.GONE);
             editDashboardSearch.setVisibility(View.GONE);
+        } else if (!hasGroups && !hasAccounts) {
+            cardEmptyState.setVisibility(View.VISIBLE);
+            contentContainer.setVisibility(View.GONE);
+            editDashboardSearch.setVisibility(View.VISIBLE);
         } else {
             cardEmptyState.setVisibility(View.GONE);
             contentContainer.setVisibility(View.VISIBLE);

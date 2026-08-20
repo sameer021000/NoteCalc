@@ -106,26 +106,49 @@
     </LinearLayout>
 
     <!-- Dashboard Search Bar -->
-    <EditText
-        android:id="@+id/edit_dashboard_search"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search lists &amp; groups…"
-        android:textSize="14sp"
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_tertiary"
-        android:inputType="text"
-        android:imeOptions="actionSearch"
-        android:singleLine="true"
-        android:padding="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="?attr/colorBgSecondary"
-        android:drawableStart="@android:drawable/ic_menu_search"
-        android:drawableEnd="@drawable/ic_close"
-        android:drawableTint="@color/text_tertiary"
-        android:drawablePadding="8dp"
-        android:visibility="gone"
-        tools:ignore="Autofill,TextFields" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <EditText
+            android:id="@+id/edit_dashboard_search"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="Search lists &amp; groups…"
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_tertiary"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/colorBgSecondary"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawableEnd="@drawable/ic_close"
+            android:drawableTint="@color/text_tertiary"
+            android:drawablePadding="8dp"
+            android:visibility="gone"
+            tools:ignore="Autofill,TextFields" />
+        
+        <ImageView
+            android:id="@+id/btn_tips"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:src="@android:drawable/ic_menu_info_details"
+            android:tint="?attr/colorAccentSecondary"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Tips and Tricks"/>
+            
+    </LinearLayout>
 
 
     <!-- Container for List View and Empty State -->
