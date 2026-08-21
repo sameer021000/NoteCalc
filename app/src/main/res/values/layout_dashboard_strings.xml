@@ -4,6 +4,12 @@
     <string name="dashboard_btn_list">+ List</string>
     <string name="dashboard_btn_group">+ Group</string>
     <string name="dashboard_btn_settings">Settings</string>
-    <string name="dashboard_search_hint">Search lists &amp; groups �</string>
-    <string name="dashboard_btn_tips">Tips and Tricks</string>
+    <string name="dashboard_search_hint">Search lists &amp; groups</string>
+    <string name="dashboard_btn_tips">Tips and Features</string>
+    <!-- Dashboard Strings -->
+    <string name="app_subtitle">Notepad &amp; Expense Calculator</string>
+    <string name="create_new_list_btn">+ Create New List / Account</string>
+    <string name="saved_lists_label">Saved Lists</string>
+    <string name="empty_state_title">No Expense Lists Found</string>
+    <string name="empty_state_desc">Tap here or use the button above to create a new notepad expense calculation list.</string>
 </resources>
