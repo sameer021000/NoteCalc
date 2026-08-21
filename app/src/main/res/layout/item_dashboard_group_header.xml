@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Groups"
+        android:text="@string/dashboard_group_header_title"
         android:textSize="12sp"
         android:textStyle="bold"
         android:textColor="@color/text_tertiary" />
@@ -17,7 +17,7 @@
         android:id="@+id/btn_sort_group_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title ▲"
+        android:text="@string/dashboard_group_header_sort_title"
         android:textSize="11sp"
         android:textStyle="bold"
         android:textColor="?attr/colorAccentSecondary"
