@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboard_root"
     android:layout_width="match_parent"
@@ -14,7 +15,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="12dp"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -30,11 +32,11 @@
                 android:padding="8dp"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="?attr/colorAccentSecondary"
+                app:tint="?attr/colorAccentSecondary"
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="gone"
-                android:contentDescription="Back" />
+                android:contentDescription="@string/dashboard_btn_back" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -68,7 +70,7 @@
                 android:id="@+id/btn_create_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+ List"
+                android:text="@string/dashboard_btn_list"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -82,7 +84,7 @@
                 android:id="@+id/btn_create_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+ Group"
+                android:text="@string/dashboard_btn_group"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -97,11 +99,11 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="12dp"
                 android:src="@android:drawable/ic_menu_preferences"
-                android:tint="?attr/colorAccentSecondary"
+                app:tint="?attr/colorAccentSecondary"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:contentDescription="Settings"/>
+                android:contentDescription="@string/dashboard_btn_settings"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -118,7 +120,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:hint="Search lists &amp; groups…"
+            android:hint="@string/dashboard_search_hint"
             android:textSize="14sp"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_tertiary"
@@ -142,11 +144,11 @@
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
             android:src="@android:drawable/ic_menu_info_details"
-            android:tint="?attr/colorAccentSecondary"
+            app:tint="?attr/colorAccentSecondary"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Tips and Tricks"/>
+            android:contentDescription="@string/dashboard_btn_tips"/>
             
     </LinearLayout>
 
