@@ -24,6 +24,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_folder"
+        android:contentDescription="@string/item_group_icon_desc"
             android:layout_marginEnd="8dp"
             app:tint="?attr/colorAccentPrimary" />
 
@@ -49,7 +50,7 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_marginStart="8dp"
-            android:contentDescription="Pin Group" />
+            android:contentDescription="@string/item_group_btn_pin" />
 
         <ImageView
             android:id="@+id/btn_delete_group"
@@ -61,7 +62,7 @@
             android:clickable="true"
             android:focusable="true"
             android:layout_marginStart="8dp"
-            android:contentDescription="Delete Group" />
+            android:contentDescription="@string/item_group_btn_delete" />
 
     </LinearLayout>
 

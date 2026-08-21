@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="item_group_icon_desc">Group Icon</string>
+    <string name="item_group_btn_pin">Pin Group</string>
+    <string name="item_group_btn_delete">Delete Group</string>
+</resources>
