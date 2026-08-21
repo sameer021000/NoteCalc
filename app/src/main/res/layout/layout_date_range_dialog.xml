@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Filter by Date Range"
+        android:text="@string/date_range_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -25,16 +25,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="From Date"
+            android:text="@string/date_range_from"
             android:textSize="12sp"
             android:textColor="?attr/colorAccentSecondary"
             android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/dialog_date_from"
+            android:contentDescription="@string/date_range_select_from_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Date"
+            android:text="@string/date_range_select_date"
             android:textSize="16sp"
             android:textColor="@color/text_primary"
             android:padding="12dp"
@@ -46,16 +47,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="To Date"
+            android:text="@string/date_range_to"
             android:textSize="12sp"
             android:textColor="?attr/colorAccentSecondary"
             android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/dialog_date_to"
+            android:contentDescription="@string/date_range_select_to_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Date"
+            android:text="@string/date_range_select_date"
             android:textSize="16sp"
             android:textColor="@color/text_primary"
             android:padding="12dp"
@@ -75,7 +77,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Clear"
+            android:text="@string/date_range_btn_clear"
             android:gravity="center"
             android:padding="12dp"
             android:textSize="14sp"
@@ -90,7 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel"
+            android:text="@string/date_range_btn_cancel"
             android:gravity="center"
             android:padding="12dp"
             android:textSize="14sp"
@@ -105,7 +107,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Apply"
+            android:text="@string/date_range_btn_apply"
             android:gravity="center"
             android:padding="12dp"
             android:textSize="14sp"

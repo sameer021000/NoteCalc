@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="date_range_title">Filter by Date Range</string>
+    <string name="date_range_from">From Date</string>
+    <string name="date_range_to">To Date</string>
+    <string name="date_range_select_date">Select Date</string>
+    <string name="date_range_btn_clear">Clear</string>
+    <string name="date_range_btn_cancel">Cancel</string>
+    <string name="date_range_btn_apply">Apply</string>
+    <string name="date_range_select_from_desc">Select From Date</string>
+    <string name="date_range_select_to_desc">Select To Date</string>
+</resources>
