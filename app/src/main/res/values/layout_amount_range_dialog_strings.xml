@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="amount_range_title">Filter by Amount Range</string>
+    <string name="amount_range_min">Min Amount</string>
+    <string name="amount_range_hint_min">0.00</string>
+    <string name="amount_range_max">Max Amount</string>
+    <string name="amount_range_hint_max">No Limit</string>
+    <string name="amount_range_btn_clear">Clear</string>
+    <string name="amount_range_btn_cancel">Cancel</string>
+    <string name="amount_range_btn_apply">Apply</string>
+</resources>

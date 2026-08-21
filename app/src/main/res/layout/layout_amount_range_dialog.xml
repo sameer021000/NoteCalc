@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Filter by Amount Range"
+        android:text="@string/amount_range_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -25,16 +25,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Min Amount"
+            android:text="@string/amount_range_min"
             android:textSize="12sp"
             android:textColor="?attr/colorAccentSecondary"
             android:layout_marginBottom="4dp" />
 
         <EditText
             android:id="@+id/dialog_amount_from"
+            android:importantForAutofill="no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="0.00"
+            android:hint="@string/amount_range_hint_min"
             android:inputType="numberDecimal"
             android:textSize="16sp"
             android:textColor="@color/text_primary"
@@ -46,16 +47,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Max Amount"
+            android:text="@string/amount_range_max"
             android:textSize="12sp"
             android:textColor="?attr/colorAccentSecondary"
             android:layout_marginBottom="4dp" />
 
         <EditText
             android:id="@+id/dialog_amount_to"
+            android:importantForAutofill="no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="No Limit"
+            android:hint="@string/amount_range_hint_max"
             android:inputType="numberDecimal"
             android:textSize="16sp"
             android:textColor="@color/text_primary"
@@ -75,7 +77,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Clear"
+            android:text="@string/amount_range_btn_clear"
             android:gravity="center"
             android:padding="12dp"
             android:textSize="14sp"
@@ -90,7 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel"
+            android:text="@string/amount_range_btn_cancel"
             android:gravity="center"
             android:padding="12dp"
             android:textSize="14sp"
@@ -105,7 +107,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Apply"
+            android:text="@string/amount_range_btn_apply"
             android:gravity="center"
             android:padding="12dp"
             android:textSize="14sp"
