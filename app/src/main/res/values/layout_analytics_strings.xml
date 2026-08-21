@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="analytics_btn_back">Back</string>
+    <string name="analytics_title">Analytics</string>
+    <string name="analytics_custom">Custom</string>
+    <string name="analytics_date_range_placeholder">Jan 1 - Jan 7</string>
+    <string name="analytics_smart_insights">Smart Insights</string>
+    <string name="analytics_total_spent">Total Spent</string>
+    <string name="analytics_zero_amount">.00</string>
+    <string name="analytics_zero_budget_used">0% of budget used</string>
+    <string name="analytics_daily_average">Daily Average</string>
+    <string name="analytics_highest_transaction">Highest Transaction</string>
+    <string name="analytics_highest_spending_day">Highest Spending Day</string>
+    <string name="analytics_none">None</string>
+</resources>
