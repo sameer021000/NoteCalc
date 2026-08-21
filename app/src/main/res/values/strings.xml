@@ -31,12 +31,4 @@
     <string name="error_title_exists">Title already exists</string>
     <string name="placeholder_total_spendings_label">Spent : </string>
     <string name="date_prefix">Date: %1$s</string>
-
-    <!-- Delete Dialog Strings -->
-    <string name="dialog_delete_title">Delete Item</string>
-    <string name="dialog_delete_message">Are you sure you want to delete this expenditure?</string>
-    <string name="dialog_label_item">Item:</string>
-    <string name="dialog_label_date">Date:</string>
-    <string name="dialog_label_amount">Amount:</string>
-    <string name="btn_delete">Delete</string>
 </resources>
