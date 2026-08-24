@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_sort_title">Export as PDF</string>
+    <string name="pdf_sort_desc">Select how to sort the records:</string>
+    <string name="pdf_sort_sno">S.No (Original)</string>
+    <string name="pdf_sort_desc_az">Description (A-Z)</string>
+    <string name="pdf_sort_date">Date (Oldest First)</string>
+    <string name="pdf_sort_amount">Amount (Low to High)</string>
+    <string name="pdf_sort_btn_export">Export</string>
+</resources>
