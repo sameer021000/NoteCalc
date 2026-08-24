@@ -39,7 +39,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -287,6 +286,29 @@ public class MainActivity extends AppCompatActivity {
 
         // Load existing saved storage (groups and standalone accounts)
         appStorage = StorageHelper.loadAppStorage(this);
+
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (currentEditingAccount != null || (mainContainer.getChildAt(0) != null && mainContainer.getChildAt(0).getId() != R.id.dashboard_root)) {
+                    if (tempRecords != null) for (Record r : tempRecords) r.setSelected(false);
+                    if (tempBudgetRecords != null) for (Record r : tempBudgetRecords) r.setSelected(false);
+                    currentEditingAccount = null;
+                    tempRecords = null;
+                    tempBudgetRecords = null;
+                    dashboardSearchQuery = "";
+                    showDashboard();
+                } else if (currentViewGroup != null) {
+                    currentViewGroup = null;
+                    dashboardSearchQuery = "";
+                    showDashboard();
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
 
         // Open the dashboard screen
         showDashboard();
@@ -4010,25 +4032,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (currentEditingAccount != null || (mainContainer.getChildAt(0) != null && mainContainer.getChildAt(0).getId() != R.id.dashboard_root)) {
-            if (tempRecords != null) for (Record r : tempRecords) r.setSelected(false);
-            if (tempBudgetRecords != null) for (Record r : tempBudgetRecords) r.setSelected(false);
-            currentEditingAccount = null;
-            tempRecords = null;
-            tempBudgetRecords = null;
-            dashboardSearchQuery = "";
-            showDashboard();
-            return;
-        } else if (currentViewGroup != null) {
-            currentViewGroup = null;
-            dashboardSearchQuery = "";
-            showDashboard();
-            return;
-        }
-        super.onBackPressed();
-    }
 
     private List<Record> getActiveRecords() {
         return isBudgetMode ? tempBudgetRecords : tempRecords;
