@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="popup_menu_btn_download">Download</string>
+    <string name="popup_menu_btn_delete">Delete</string>
+    <string name="popup_menu_icon_desc">Menu Icon</string>
+</resources>
