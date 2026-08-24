@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_group_title">Create New Group</string>
+    <string name="create_group_name_hint">Group Name</string>
+    <string name="create_group_btn_cancel">Cancel</string>
+    <string name="create_group_btn_create">Create</string>
+</resources>
