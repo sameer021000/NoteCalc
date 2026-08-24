@@ -12,7 +12,7 @@
         android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete Selected"
+        android:text="@string/delete_multiple_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/error_red"
@@ -23,7 +23,7 @@
         android:id="@+id/dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Are you sure you want to delete the following selected expenditures?"
+        android:text="@string/delete_multiple_message"
         android:textSize="14sp"
         android:textColor="@color/text_primary"
         android:layout_marginBottom="16dp" />

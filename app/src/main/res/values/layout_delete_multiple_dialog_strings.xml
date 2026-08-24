@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="delete_multiple_title">Delete Selected</string>
+    <string name="delete_multiple_message">Are you sure you want to delete the following selected expenditures?</string>
+</resources>
