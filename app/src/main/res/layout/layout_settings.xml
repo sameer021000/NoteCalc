@@ -22,13 +22,13 @@
             android:layout_height="48dp"
             android:src="@android:drawable/ic_menu_revert"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Back"
-            android:tint="?attr/colorAccentPrimary" />
+            android:contentDescription="@string/back"
+            app:tint="?attr/colorAccentPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preferences"
+            android:text="@string/preferences"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="?android:textColorPrimary"
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Appearance"
+                android:text="@string/appearance"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -72,7 +72,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Theme Mode"
+                    android:text="@string/theme_mode"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="?android:textColorPrimary"/>
@@ -87,19 +87,19 @@
                         android:id="@+id/rb_theme_system"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="System Default"
+                        android:text="@string/system_default"
                         android:textColor="?android:textColorPrimary"/>
                     <RadioButton
                         android:id="@+id/rb_theme_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Light Mode"
+                        android:text="@string/light_mode"
                         android:textColor="?android:textColorPrimary"/>
                     <RadioButton
                         android:id="@+id/rb_theme_dark"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dark Mode"
+                        android:text="@string/dark_mode"
                         android:textColor="?android:textColorPrimary"/>
                 </RadioGroup>
 
@@ -113,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Accent Color"
+                    android:text="@string/accent_color"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="?android:textColorPrimary" />
@@ -139,7 +139,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data &amp; Backup"
+                android:text="@string/data_backup"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -160,7 +160,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Export &amp; Import Workspace"
+                    android:text="@string/export_import_workspace"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="?android:textColorPrimary"
@@ -170,7 +170,7 @@
                     android:id="@+id/btn_export_json"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="Export Backup (JSON)"
+                    android:text="@string/export_backup_json"
                     android:textColor="@color/text_on_accent"
                     android:backgroundTint="?attr/colorAccentPrimary"/>
 
@@ -179,7 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="12dp"
-                    android:text="Import Backup (JSON)"
+                    android:text="@string/import_backup_json"
                     android:textColor="?attr/colorAccentPrimary"
                     android:backgroundTint="?attr/colorBgTertiary"/>
 
@@ -189,7 +189,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Print &amp; Share"
+                android:text="@string/print_share"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textAllCaps="true"
@@ -210,7 +210,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save all data to a single PDF document."
+                    android:text="@string/save_all_data_to_a_single_pdf_document"
                     android:textSize="14sp"
                     android:textColor="?android:textColorPrimary"
                     android:layout_marginBottom="16dp"/>
@@ -219,7 +219,7 @@
                     android:id="@+id/btn_export_pdf_all"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="Export All to PDF"
+                    android:text="@string/export_all_to_pdf"
                     android:textColor="@color/text_on_accent"
                     android:backgroundTint="?attr/colorAccentSecondary"/>
 
@@ -230,7 +230,7 @@
                 android:id="@+id/tv_app_version"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="NoteCalc v1.3.0"
+                android:text="@string/notecalc_v1_3_0"
                 android:gravity="center"
                 android:textSize="14sp"
                 android:textColor="?android:textColorSecondary"
