@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_delete_group_title">Delete Group?</string>
+    <string name="confirm_delete_group_details">Group contains X lists.</string>
+    <string name="confirm_delete_group_btn_cancel">Cancel</string>
+    <string name="confirm_delete_group_btn_delete">Delete</string>
+</resources>
