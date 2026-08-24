@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="editor_btn_back">Back</string>
+    <string name="editor_btn_analytics">Analytics</string>
+    <string name="editor_tab_expenses">Expenses</string>
+    <string name="editor_tab_budget">Budget</string>
+    <string name="editor_btn_minimize">Minimize [ - ]</string>
+    <string name="editor_hint_remarks">Remarks (e.g. bought at DMart - optional)</string>
+    <string name="editor_hint_category">Category</string>
+    <string name="editor_btn_attach_file">Attach File (Max 3)</string>
+    <string name="editor_search_hint">Search by description…</string>
+    <string name="editor_total_placeholder">Total: 0.00</string>
+    <string name="editor_menu_actions">Menu Actions</string>
+    <string name="editor_empty_title">No Expenditures Added</string>
+    <string name="editor_empty_desc">Use the \'ADD EXPENDITURE\' form above to begin noting down your costs.</string>
+    <string name="editor_btn_nc_agent">NC Agent</string>
+    <string name="editor_amount_desc">Enter Expenditure Amount</string>
+</resources>

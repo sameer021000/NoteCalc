@@ -24,10 +24,10 @@
             android:layout_height="40dp"
             android:padding="8dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="?attr/colorAccentSecondary"
+            app:tint="?attr/colorAccentSecondary"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Back" />
+            android:contentDescription="@string/editor_btn_back" />
 
         <EditText
             android:id="@+id/edit_account_title"
@@ -51,10 +51,10 @@
             android:layout_height="40dp"
             android:padding="8dp"
             android:src="@android:drawable/ic_menu_sort_by_size" 
-            android:tint="?attr/colorAccentSecondary"
+            app:tint="?attr/colorAccentSecondary"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Analytics" />
+            android:contentDescription="@string/editor_btn_analytics" />
     </LinearLayout>
 
     <TextView
@@ -87,7 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Expenses"
+            android:text="@string/editor_tab_expenses"
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -102,7 +102,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Budget"
+            android:text="@string/editor_tab_budget"
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -162,7 +162,7 @@
                 android:id="@+id/btn_toggle_form"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Minimize [ - ]"
+                android:text="@string/editor_btn_minimize"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorAccentSecondary"
@@ -234,7 +234,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Remarks (e.g. bought at DMart - optional)"
+                    android:hint="@string/editor_hint_remarks"
                     android:textSize="14sp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_tertiary"
@@ -289,7 +289,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Category"
+                    android:hint="@string/editor_hint_category"
                     android:textSize="14sp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_tertiary"
@@ -331,7 +331,7 @@
                     android:id="@+id/btn_attach_file"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Attach File (Max 3)"
+                    android:text="@string/editor_btn_attach_file"
                     android:textColor="?attr/colorAccentSecondary"
                     android:textStyle="bold"
                     android:textSize="12sp"
@@ -379,7 +379,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Search by description…"
+            android:hint="@string/editor_search_hint"
             android:textSize="13sp"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_tertiary"
@@ -412,7 +412,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Total: 0.00"
+                android:text="@string/editor_total_placeholder"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -424,10 +424,10 @@
                 android:layout_height="36dp"
                 android:padding="6dp"
                 android:src="@android:drawable/ic_menu_sort_by_size" 
-                android:tint="?attr/colorAccentSecondary"
+                app:tint="?attr/colorAccentSecondary"
                 android:clickable="true"
                 android:focusable="true"
-                android:contentDescription="Menu Actions" />
+                android:contentDescription="@string/editor_menu_actions" />
 
 
         </LinearLayout>
@@ -527,7 +527,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No Expenditures Added"
+                android:text="@string/editor_empty_title"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorAccentSecondary"
@@ -536,7 +536,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Use the 'ADD EXPENDITURE' form above to begin noting down your costs."
+                android:text="@string/editor_empty_desc"
                 android:textSize="12sp"
                 android:textColor="@color/text_tertiary"
                 android:gravity="center"
@@ -554,7 +554,7 @@
             android:elevation="6dp"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="NC Agent" />
+            android:contentDescription="@string/editor_btn_nc_agent" />
     </FrameLayout>
 
     <!-- Bottom summary and save buttons -->
