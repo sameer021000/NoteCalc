@@ -48,7 +48,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private java.util.List<String> tempAttachments = new java.util.ArrayList<>();
+    private final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
     private static final int REQUEST_CODE_ATTACH = 1001;
     private static final int REQUEST_CODE_CAMERA = 1002;
     private String currentPhotoPath = null;
@@ -246,8 +246,8 @@ public class MainActivity extends AppCompatActivity {
                 android.net.Uri uri = result.getData().getData();
                 if (uri != null) {
                     new androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
-                        .setTitle("Restore Backup")
-                        .setMessage("Are you sure? This will completely overwrite your current data.")
+                        .setTitle(getString(R.string.auto_restore_backup_38))
+                        .setMessage(getString(R.string.auto_are_you_sure_this_wi_39))
                         .setPositiveButton("Overwrite", (d, w) -> {
                             try {
                                 java.io.InputStream is = getContentResolver().openInputStream(uri);
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (uniqueCats.isEmpty()) {
-            Toast.makeText(this, "No categories available to filter.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.auto_no_categories_availa_1), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
         root.setPadding(pad, pad, pad, pad);
         
         TextView title = new TextView(this);
-        title.setText("Filter by Category");
+        title.setText(getString(R.string.auto_filter_by_category_12));
         title.setTextSize(20);
         title.setTextColor(getColor(R.color.text_primary));
         title.setTypeface(null, android.graphics.Typeface.BOLD);
@@ -393,12 +393,12 @@ public class MainActivity extends AppCompatActivity {
         btnLayout.setPadding(0, pad, 0, 0);
         
         android.widget.Button btnClear = new android.widget.Button(this);
-        btnClear.setText("CLEAR ALL");
+        btnClear.setText(getString(R.string.auto_clear_all_13));
         btnClear.setTextColor(getColor(R.color.text_tertiary));
         btnClear.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         
         android.widget.Button btnApply = new android.widget.Button(this);
-        btnApply.setText("APPLY");
+        btnApply.setText(getString(R.string.auto_apply_14));
         btnApply.setTextColor(ThemeManager.getPrimaryAccentColor(this));
         btnApply.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         
@@ -461,7 +461,7 @@ public class MainActivity extends AppCompatActivity {
         sheet.setPadding(pad, pad, pad, pad);
         
         TextView title = new TextView(this);
-        title.setText("NC Agent");
+        title.setText(getString(R.string.auto_nc_agent_15));
         title.setTextSize(20);
         title.setTextColor(getColor(R.color.text_primary));
         title.setTypeface(null, android.graphics.Typeface.BOLD);
@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         sheet.addView(title);
         
         EditText input = new EditText(this);
-        input.setHint("e.g. Bought 2 coffees for 50");
+        input.setHint(getString(R.string.auto_e_g_bought_2_coffees_31));
         input.setTextColor(getColor(R.color.text_primary));
         input.setHintTextColor(getColor(R.color.text_secondary));
         input.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8f));
@@ -479,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
         sheet.addView(input);
         
         android.widget.Button btnAnalyze = new android.widget.Button(this);
-        btnAnalyze.setText("Analyze");
+        btnAnalyze.setText(getString(R.string.auto_analyze_16));
         btnAnalyze.setTextColor(getColor(R.color.text_on_accent));
         btnAnalyze.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 0f, 8f));
         LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -500,12 +500,12 @@ public class MainActivity extends AppCompatActivity {
         actionButtons.setVisibility(View.GONE);
         
         android.widget.Button btnCancel = new android.widget.Button(this);
-        btnCancel.setText("Cancel");
+        btnCancel.setText(getString(R.string.auto_cancel_17));
         btnCancel.setTextColor(getColor(R.color.text_primary));
         btnCancel.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         
         android.widget.Button btnConfirm = new android.widget.Button(this);
-        btnConfirm.setText("Confirm");
+        btnConfirm.setText(getString(R.string.auto_confirm_18));
         btnConfirm.setTextColor(ThemeManager.getPrimaryAccentColor(this));
         btnConfirm.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         
@@ -659,14 +659,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Setup expandable sections
-        for (int i = 1; i <= 5; i++) {
-            int headerId = getResources().getIdentifier("header_section_" + i, "id", getPackageName());
-            int contentId = getResources().getIdentifier("content_section_" + i, "id", getPackageName());
-            int chevronId = getResources().getIdentifier("tv_chevron_" + i, "id", getPackageName());
-            
-            android.view.View header = view.findViewById(headerId);
-            android.view.View content = view.findViewById(contentId);
-            android.widget.TextView chevron = view.findViewById(chevronId);
+        int[] headerIds = {R.id.header_section_1, R.id.header_section_2, R.id.header_section_3, R.id.header_section_4, R.id.header_section_5};
+        int[] contentIds = {R.id.content_section_1, R.id.content_section_2, R.id.content_section_3, R.id.content_section_4, R.id.content_section_5};
+        int[] chevronIds = {R.id.tv_chevron_1, R.id.tv_chevron_2, R.id.tv_chevron_3, R.id.tv_chevron_4, R.id.tv_chevron_5};
+
+        for (int i = 0; i < 5; i++) {
+            android.view.View header = view.findViewById(headerIds[i]);
+            android.view.View content = view.findViewById(contentIds[i]);
+            android.widget.TextView chevron = view.findViewById(chevronIds[i]);
             
             if (header != null && content != null && chevron != null) {
                 // Apply curved bordered background to header
@@ -686,10 +686,10 @@ public class MainActivity extends AppCompatActivity {
                 header.setOnClickListener(v -> {
                     if (content.getVisibility() == android.view.View.VISIBLE) {
                         content.setVisibility(android.view.View.GONE);
-                        chevron.setText("\u25BC"); // down chevron
+                        chevron.setText("▼"); // down chevron
                     } else {
                         content.setVisibility(android.view.View.VISIBLE);
-                        chevron.setText("\u25B2"); // up chevron
+                        chevron.setText("▲"); // up chevron
                     }
                 });
             }
@@ -717,6 +717,7 @@ public class MainActivity extends AppCompatActivity {
         btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
     private void showDashboard() {
         if (currentSnackbar != null) {
             currentSnackbar.dismiss();
@@ -871,6 +872,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 }
+                v.performClick();
             }
             return false;
         });
@@ -1071,7 +1073,7 @@ public class MainActivity extends AppCompatActivity {
         if (btnAttachFile != null) {
             setupClickable(btnAttachFile, true, () -> {
                 if (tempAttachments.size() >= 3) {
-                    Toast.makeText(this, "Max 3 files allowed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.auto_max_3_files_allowed_2), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 
@@ -1316,7 +1318,6 @@ public class MainActivity extends AppCompatActivity {
         isFormInputsCollapsed = true;
 
         // Wire the collapsible form header click action
-        View formHeader = editorView.findViewById(R.id.form_header);
         Runnable toggleForm = () -> {
             isFormInputsCollapsed = !isFormInputsCollapsed;
             formInputsContainer.setVisibility(isFormInputsCollapsed ? View.GONE : View.VISIBLE);
@@ -1338,11 +1339,11 @@ public class MainActivity extends AppCompatActivity {
         if (account == null) {
             isFormInputsCollapsed = false;
             formInputsContainer.setVisibility(View.VISIBLE);
-            btnToggleForm.setText("Minimize [ - ]");
+            btnToggleForm.setText(getString(R.string.auto_minimize_19));
         } else {
             isFormInputsCollapsed = true;
             formInputsContainer.setVisibility(View.GONE);
-            btnToggleForm.setText("Expand [ + ]");
+            btnToggleForm.setText(getString(R.string.auto_expand_20));
         }
 
         // Wire the record search bar
@@ -1363,6 +1364,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 }
+                v.performClick();
             }
             return false;
         });
@@ -1664,7 +1666,7 @@ public class MainActivity extends AppCompatActivity {
             String category = editCategoryField != null ? editCategoryField.getText().toString().trim() : "";
 
             if (desc.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Please enter a description", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.auto_please_enter_a_descr_3), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -1672,11 +1674,11 @@ public class MainActivity extends AppCompatActivity {
             try {
                 amount = Double.parseDouble(amountStr);
                 if (amount <= 0) {
-                    Toast.makeText(MainActivity.this, "Amount must be positive", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.auto_amount_must_be_posit_4), Toast.LENGTH_SHORT).show();
                     return;
                 }
             } catch (NumberFormatException e) {
-                Toast.makeText(MainActivity.this, "Please enter a valid numeric amount", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.auto_please_enter_a_valid_5), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -1715,12 +1717,12 @@ public class MainActivity extends AppCompatActivity {
             String title = editTitle.getText().toString().trim();
 
             if (title.isEmpty()) {
-                Toast.makeText(MainActivity.this, "List title cannot be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.auto_list_title_cannot_be_6), Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (isDuplicateTitle(title)) {
-                Toast.makeText(MainActivity.this, "A list with this title already exists", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.auto_a_list_with_this_tit_7), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -1954,6 +1956,8 @@ public class MainActivity extends AppCompatActivity {
             return new RecordViewHolder(rowView);
         }
 
+        @androidx.annotation.NonNull
+        @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
         @Override
         public void onBindViewHolder(@androidx.annotation.NonNull RecordViewHolder holder, int position) {
             Record record = displayRecords.get(position);
@@ -2041,7 +2045,7 @@ public class MainActivity extends AppCompatActivity {
                     if (atts.size() == 1) {
                         holder.attachmentSummary.setText(icon + name);
                     } else {
-                        holder.attachmentSummary.setText(icon + name + " \u25BE"); // ?
+                        holder.attachmentSummary.setText(icon + name + " ▾"); // ?
                     }
                     
                     holder.attachmentSummary.setVisibility(View.VISIBLE);
@@ -2053,6 +2057,9 @@ public class MainActivity extends AppCompatActivity {
                             v.getParent().requestDisallowInterceptTouchEvent(true);
                         } else if (action == android.view.MotionEvent.ACTION_UP || action == android.view.MotionEvent.ACTION_CANCEL) {
                             v.getParent().requestDisallowInterceptTouchEvent(false);
+                            if (action == android.view.MotionEvent.ACTION_UP) {
+                                v.performClick();
+                            }
                         }
                         return false;
                     });
@@ -2329,11 +2336,11 @@ public class MainActivity extends AppCompatActivity {
                             appStorage.standaloneAccounts.add(account);
                             StorageHelper.saveAppStorage(MainActivity.this, appStorage);
                             refreshDashboardList();
-                            Toast.makeText(MainActivity.this, "Moved to Dashboard", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.auto_moved_to_dashboard_8), Toast.LENGTH_SHORT).show();
                         } else {
                             // Move into a group
                             if (appStorage.groups.isEmpty()) {
-                                Toast.makeText(MainActivity.this, "No groups available. Create a group first.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, getString(R.string.auto_no_groups_available__9), Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             
@@ -2791,19 +2798,19 @@ public class MainActivity extends AppCompatActivity {
         if (formInputsContainer != null && btnToggleForm != null) {
             isFormInputsCollapsed = false;
             formInputsContainer.setVisibility(android.view.View.VISIBLE);
-            btnToggleForm.setText("Minimize [ - ]");
+            btnToggleForm.setText(getString(R.string.auto_minimize_21));
         }
 
         if (isBudgetMode) {
-            labelAddRecordField.setText("EDIT BUDGET");
-            btnAddRecordField.setText("Edit Budget");
-            editDescField.setHint("Description");
-            editRemarksField.setHint("Remarks (optional)");
+            labelAddRecordField.setText(getString(R.string.auto_edit_budget_22));
+            btnAddRecordField.setText(getString(R.string.auto_edit_budget_23));
+            editDescField.setHint(getString(R.string.auto_description_32));
+            editRemarksField.setHint(getString(R.string.auto_remarks_optional_33));
         } else {
             labelAddRecordField.setText(R.string.label_edit_record);
             btnAddRecordField.setText(R.string.btn_edit_record);
             editDescField.setHint(R.string.hint_record_desc);
-            editRemarksField.setHint("Remarks (e.g. bought at DMart - optional)");
+            editRemarksField.setHint(getString(R.string.auto_remarks_e_g_bought_a_34));
         }
 
         btnCancelEditField.setVisibility(View.VISIBLE);
@@ -2827,15 +2834,15 @@ public class MainActivity extends AppCompatActivity {
         renderEditorAttachments();
 
         if (isBudgetMode) {
-            labelAddRecordField.setText("ADD BUDGET");
-            btnAddRecordField.setText("Add Budget");
-            editDescField.setHint("Description");
-            editRemarksField.setHint("Remarks (optional)");
+            labelAddRecordField.setText(getString(R.string.auto_add_budget_24));
+            btnAddRecordField.setText(getString(R.string.auto_add_budget_25));
+            editDescField.setHint(getString(R.string.auto_description_35));
+            editRemarksField.setHint(getString(R.string.auto_remarks_optional_36));
         } else {
             labelAddRecordField.setText(R.string.label_add_record);
             btnAddRecordField.setText(R.string.btn_add_record);
             editDescField.setHint(R.string.hint_record_desc);
-            editRemarksField.setHint("Remarks (e.g. bought at DMart - optional)");
+            editRemarksField.setHint(getString(R.string.auto_remarks_e_g_bought_a_37));
         }
 
         btnCancelEditField.setVisibility(View.GONE);
@@ -4199,12 +4206,12 @@ public class MainActivity extends AppCompatActivity {
         
         if (timeMode == 1) { // Last 7 Days
             startTime = now - (7L * 24 * 60 * 60 * 1000);
-            tvDateRange.setText("Last 7 Days");
+            tvDateRange.setText(getString(R.string.auto_last_7_days_26));
         } else if (timeMode == 2) { // Last 30 Days
             startTime = now - (30L * 24 * 60 * 60 * 1000);
-            tvDateRange.setText("Last 30 Days");
+            tvDateRange.setText(getString(R.string.auto_last_30_days_27));
         } else {
-            tvDateRange.setText("All Time");
+            tvDateRange.setText(getString(R.string.auto_all_time_28));
         }
 
         double totalAmount = 0;
@@ -4262,7 +4269,7 @@ public class MainActivity extends AppCompatActivity {
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault());
             tvHighDay.setText(sdf.format(new java.util.Date(highDayTs)) + " (" + nf.format(highDayAmt) + ")");
         } else {
-            tvHighDay.setText("None");
+            tvHighDay.setText(getString(R.string.auto_none_29));
         }
         
         if (account.hasBudget()) {
@@ -4276,7 +4283,7 @@ public class MainActivity extends AppCompatActivity {
                 double pct = (expenses / budget) * 100.0;
                 tvBudgetPct.setText(String.format(java.util.Locale.getDefault(), "%.1f%% of budget spent", pct));
             } else {
-                tvBudgetPct.setText("0% of budget spent");
+                tvBudgetPct.setText(getString(R.string.auto_0_of_budget_spent_30));
             }
         } else {
             tvBudgetPct.setVisibility(View.GONE);
@@ -4938,7 +4945,7 @@ public class MainActivity extends AppCompatActivity {
                         viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         startActivity(viewIntent);
                     } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, "Cannot open file", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.auto_cannot_open_file_10), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -5005,7 +5012,7 @@ public class MainActivity extends AppCompatActivity {
                 renderEditorAttachments();
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Failed to attach file", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.auto_failed_to_attach_fil_11), Toast.LENGTH_SHORT).show();
             }
         }
     }

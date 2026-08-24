@@ -31,4 +31,45 @@
     <string name="error_title_exists">Title already exists</string>
     <string name="placeholder_total_spendings_label">Spent : </string>
     <string name="date_prefix">Date: %1$s</string>
+
+    <!-- MainActivity.java Strings -->
+    <string name="auto_no_categories_availa_1">No categories available to filter.</string>
+    <string name="auto_max_3_files_allowed_2">Max 3 files allowed</string>
+    <string name="auto_please_enter_a_descr_3">Please enter a description</string>
+    <string name="auto_amount_must_be_posit_4">Amount must be positive</string>
+    <string name="auto_please_enter_a_valid_5">Please enter a valid numeric amount</string>
+    <string name="auto_list_title_cannot_be_6">List title cannot be empty</string>
+    <string name="auto_a_list_with_this_tit_7">A list with this title already exists</string>
+    <string name="auto_moved_to_dashboard_8">Moved to Dashboard</string>
+    <string name="auto_no_groups_available__9">No groups available. Create a group first.</string>
+    <string name="auto_cannot_open_file_10">Cannot open file</string>
+    <string name="auto_failed_to_attach_fil_11">Failed to attach file</string>
+    <string name="auto_filter_by_category_12">Filter by Category</string>
+    <string name="auto_clear_all_13">CLEAR ALL</string>
+    <string name="auto_apply_14">APPLY</string>
+    <string name="auto_nc_agent_15">NC Agent</string>
+    <string name="auto_analyze_16">Analyze</string>
+    <string name="auto_cancel_17">Cancel</string>
+    <string name="auto_confirm_18">Confirm</string>
+    <string name="auto_minimize_19">Minimize [ - ]</string>
+    <string name="auto_expand_20">Expand [ + ]</string>
+    <string name="auto_minimize_21">Minimize [ - ]</string>
+    <string name="auto_edit_budget_22">EDIT BUDGET</string>
+    <string name="auto_edit_budget_23">Edit Budget</string>
+    <string name="auto_add_budget_24">ADD BUDGET</string>
+    <string name="auto_add_budget_25">Add Budget</string>
+    <string name="auto_last_7_days_26">Last 7 Days</string>
+    <string name="auto_last_30_days_27">Last 30 Days</string>
+    <string name="auto_all_time_28">All Time</string>
+    <string name="auto_none_29">None</string>
+    <string name="auto_0_of_budget_spent_30">0% of budget spent</string>
+    <string name="auto_e_g_bought_2_coffees_31">e.g. Bought 2 coffees for 50</string>
+    <string name="auto_description_32">Description</string>
+    <string name="auto_remarks_optional_33">Remarks (optional)</string>
+    <string name="auto_remarks_e_g_bought_a_34">Remarks (e.g. bought at DMart - optional)</string>
+    <string name="auto_description_35">Description</string>
+    <string name="auto_remarks_optional_36">Remarks (optional)</string>
+    <string name="auto_remarks_e_g_bought_a_37">Remarks (e.g. bought at DMart - optional)</string>
+    <string name="auto_restore_backup_38">Restore Backup</string>
+    <string name="auto_are_you_sure_this_wi_39">Are you sure? This will completely overwrite your current data.</string>
 </resources>
