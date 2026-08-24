@@ -10,7 +10,7 @@
         android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New List Title"
+        android:text="@string/new_list_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -20,12 +20,13 @@
         android:id="@+id/edit_new_list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter list title"
+        android:hint="@string/new_list_hint"
         android:inputType="text"
         android:textColor="@color/text_primary"
         android:textColorHint="@color/text_tertiary"
         android:padding="12dp"
         android:background="?attr/colorBgPrimary"
+        android:importantForAutofill="no"
         android:layout_marginBottom="20dp" />
 
     <LinearLayout
@@ -54,7 +55,7 @@
             android:id="@+id/btn_dialog_create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create"
+            android:text="@string/new_list_btn_create"
             android:textColor="@color/text_on_accent"
             android:textSize="14sp"
             android:textStyle="bold"

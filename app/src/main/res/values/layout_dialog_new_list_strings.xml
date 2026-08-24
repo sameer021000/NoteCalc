@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_list_title">New List Title</string>
+    <string name="new_list_hint">Enter list title</string>
+    <string name="new_list_btn_create">Create</string>
+</resources>
