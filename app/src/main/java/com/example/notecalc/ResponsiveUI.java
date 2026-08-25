@@ -103,4 +103,11 @@ public class ResponsiveUI {
         }
         return gd;
     }
+
+    // Dynamic Helper to build responsive rounded backgrounds with a ripple touch effect
+    public static android.graphics.drawable.RippleDrawable createRippleRoundedBg(Context context, int bgColor, int strokeColor, float strokeWidthDp, float cornerRadiusDp) {
+        GradientDrawable content = createRoundedBg(context, bgColor, strokeColor, strokeWidthDp, cornerRadiusDp);
+        android.content.res.ColorStateList rippleColor = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#40888888"));
+        return new android.graphics.drawable.RippleDrawable(rippleColor, content, content);
+    }
 }

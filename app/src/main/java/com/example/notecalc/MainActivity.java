@@ -4451,7 +4451,7 @@ public class MainActivity extends AppCompatActivity {
                 item.setTextColor(ThemeManager.getPrimaryAccentColor(this));
                 item.setTypeface(null, android.graphics.Typeface.BOLD);
                 item.setText("+  " + names.get(i));
-                item.setBackground(ResponsiveUI.createRoundedBg(
+                item.setBackground(ResponsiveUI.createRippleRoundedBg(
                         this,
                         ThemeManager.getBgPrimaryColor(this),
                         ThemeManager.getPrimaryAccentColor(this),
@@ -4460,7 +4460,7 @@ public class MainActivity extends AppCompatActivity {
                 ));
             } else {
                 item.setTextColor(getResources().getColor(R.color.text_primary, getTheme()));
-                item.setBackground(ResponsiveUI.createRoundedBg(
+                item.setBackground(ResponsiveUI.createRippleRoundedBg(
                         this,
                         ThemeManager.getBgPrimaryColor(this),
                         ThemeManager.getBorderColor(this),
@@ -4498,7 +4498,7 @@ public class MainActivity extends AppCompatActivity {
         }
         
         View btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        btnCancel.setBackground(ResponsiveUI.createRoundedBg(
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
                 this,
                 ThemeManager.getBgPrimaryColor(this),
                 ThemeManager.getBorderColor(this),
@@ -4520,14 +4520,44 @@ public class MainActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
         }
         
+        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
+        if (dialogRoot != null) {
+            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
+                    this,
+                    ThemeManager.getBgSecondaryColor(this),
+                    ThemeManager.getBorderColor(this),
+                    1.5f,
+                    12f
+            ));
+        }
+        
         final android.widget.EditText input = dialogView.findViewById(R.id.edit_new_list_title);
+        input.setBackground(ResponsiveUI.createRoundedBg(
+                this,
+                ThemeManager.getBgPrimaryColor(this),
+                ThemeManager.getBorderColor(this),
+                1.0f,
+                6f
+        ));
         
         View btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        btnCancel.setBackground(createButtonSelector(android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
+                this,
+                ThemeManager.getBgPrimaryColor(this),
+                ThemeManager.getBorderColor(this),
+                1.0f,
+                6f
+        ));
         setupClickable(btnCancel, false, dialog::dismiss);
         
         View btnCreate = dialogView.findViewById(R.id.btn_dialog_create);
-        btnCreate.setBackground(createButtonSelector(android.graphics.Color.parseColor("#2034D399"), 4.0f));
+        btnCreate.setBackground(ResponsiveUI.createRippleRoundedBg(
+                this,
+                ThemeManager.getPrimaryAccentColor(this),
+                0,
+                0f,
+                6f
+        ));
         setupClickable(btnCreate, false, () -> {
             String title = input.getText().toString().trim();
             if (title.isEmpty()) {
