@@ -2428,7 +2428,7 @@ public class MainActivity extends AppCompatActivity {
                 setupClickable(grpHolder.itemView, false, () -> {
                     currentViewGroup = group;
                     showDashboard(); // Refresh dashboard into group view
-                });
+                }, () -> showGroupPopupMenu(grpHolder.itemView, group));
                 
                 setupClickable(grpHolder.btnDeleteGroup, false, () -> showDeleteGroupConfirmation(group));
             }
@@ -2687,6 +2687,47 @@ public class MainActivity extends AppCompatActivity {
         setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
             showDeleteAccountConfirmationDialog(account);
+        });
+        
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int popupHeight = popupView.getMeasuredHeight();
+        
+        int[] location = new int[2];
+        anchor.getLocationOnScreen(location);
+        int anchorY = location[1];
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        
+        if (anchorY + popupHeight > screenHeight - 150) {
+            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() - popupHeight);
+        } else {
+            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() / 2);
+        }
+    }
+
+    @android.annotation.SuppressLint({"SetTextI18n", "InflateParams"})
+    private void showGroupPopupMenu(View anchor, AccountGroup group) {
+        View popupView = getLayoutInflater().inflate(R.layout.layout_popup_menu, null);
+        
+        android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
+                popupView,
+                (int) (180 * getResources().getDisplayMetrics().density),
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                true
+        );
+
+        popupWindow.setElevation(8.0f);
+        
+        View btnDownload = popupView.findViewById(R.id.btn_popup_download);
+        View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
+        
+        setupClickable(btnDownload, false, () -> {
+            popupWindow.dismiss();
+            showPdfSortDialog(order -> generateAndOpenGroupPdf(group, order));
+        });
+        
+        setupClickable(btnDelete, false, () -> {
+            popupWindow.dismiss();
+            showDeleteGroupConfirmation(group);
         });
         
         popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -3357,6 +3398,65 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 java.io.File file = new java.io.File(pdfDir, "All_Accounts_Export.pdf");
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
+                    document.writeTo(fos);
+                }
+                document.close();
+
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "application/pdf");
+                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                });
+            } catch (Exception e) {
+                android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                });
+                document.close();
+            }
+        }).start();
+    }
+
+    private void generateAndOpenGroupPdf(AccountGroup group, PdfSortOrder sortOrder) {
+        android.app.Dialog progressDialog = showProgressDialog();
+        
+        new Thread(() -> {
+            android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
+            int[] pageTracker = {0};
+            boolean hasRecords = false;
+            
+            for (Account account : group.getAccounts()) {
+                if (!account.getRecords().isEmpty()) {
+                    appendAccountToPdf(document, account, pageTracker, sortOrder);
+                    hasRecords = true;
+                }
+            }
+            
+            if (!hasRecords) {
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.widget.Toast.makeText(MainActivity.this, "No records found to export in this group.", android.widget.Toast.LENGTH_SHORT).show();
+                });
+                document.close();
+                return;
+            }
+
+            try {
+                java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
+                if (pdfDir == null) {
+                    runOnUiThread(progressDialog::dismiss);
+                    return;
+                }
+                if (!pdfDir.exists() && !pdfDir.mkdirs()) {
+                    runOnUiThread(progressDialog::dismiss);
+                    return;
+                }
+                java.io.File file = new java.io.File(pdfDir, group.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + "_Export.pdf");
                 try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
                     document.writeTo(fos);
                 }
