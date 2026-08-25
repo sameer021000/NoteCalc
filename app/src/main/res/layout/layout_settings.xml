@@ -7,33 +7,31 @@
     android:orientation="vertical">
 
     <!-- Header -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:background="?attr/colorBgSecondary"
-        android:elevation="6dp">
+        android:paddingHorizontal="16dp">
 
         <ImageButton
             android:id="@+id/btn_settings_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_centerVertical="true"
             android:src="@android:drawable/ic_menu_revert"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/back"
-            app:tint="?attr/colorAccentPrimary" />
+            app:tint="?android:textColorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="@string/preferences"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="?android:textColorPrimary"
-            android:layout_marginStart="16dp"/>
-    </LinearLayout>
+            android:letterSpacing="0.05"
+            android:textColor="?android:textColorPrimary" />
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -61,10 +59,10 @@
                 android:layout_marginStart="4dp"/>
 
             <LinearLayout
+                android:id="@+id/card_appearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
                 android:padding="20dp"
                 android:elevation="2dp"
                 android:layout_marginBottom="24dp">
@@ -77,31 +75,45 @@
                     android:textStyle="bold"
                     android:textColor="?android:textColorPrimary"/>
                 
-                <RadioGroup
-                    android:id="@+id/rg_theme_mode"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_marginTop="12dp"
-                    android:orientation="vertical">
-                    <RadioButton
-                        android:id="@+id/rb_theme_system"
-                        android:layout_width="match_parent"
+                    android:weightSum="3">
+                    <TextView
+                        android:id="@+id/btn_theme_system"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/system_default"
-                        android:textColor="?android:textColorPrimary"/>
-                    <RadioButton
-                        android:id="@+id/rb_theme_light"
-                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:layout_marginEnd="8dp" />
+                    <TextView
+                        android:id="@+id/btn_theme_light"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/light_mode"
-                        android:textColor="?android:textColorPrimary"/>
-                    <RadioButton
-                        android:id="@+id/rb_theme_dark"
-                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:layout_marginEnd="8dp" />
+                    <TextView
+                        android:id="@+id/btn_theme_dark"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/dark_mode"
-                        android:textColor="?android:textColorPrimary"/>
-                </RadioGroup>
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:padding="10dp" />
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -149,10 +161,10 @@
                 android:layout_marginStart="4dp"/>
 
             <LinearLayout
+                android:id="@+id/card_data_backup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
                 android:padding="20dp"
                 android:elevation="2dp"
                 android:layout_marginBottom="24dp">
@@ -166,22 +178,26 @@
                     android:textColor="?android:textColorPrimary"
                     android:layout_marginBottom="16dp"/>
 
-                <Button
+                <TextView
                     android:id="@+id/btn_export_json"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
                     android:text="@string/export_backup_json"
-                    android:textColor="@color/text_on_accent"
-                    android:backgroundTint="?attr/colorAccentPrimary"/>
+                    android:textColor="@color/text_on_accent" />
 
-                <Button
+                <TextView
                     android:id="@+id/btn_import_json"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
                     android:layout_marginTop="12dp"
                     android:text="@string/import_backup_json"
-                    android:textColor="?attr/colorAccentPrimary"
-                    android:backgroundTint="?attr/colorBgTertiary"/>
+                    android:textColor="?attr/colorAccentPrimary" />
 
             </LinearLayout>
 
@@ -199,10 +215,10 @@
                 android:layout_marginStart="4dp"/>
 
             <LinearLayout
+                android:id="@+id/card_print_share"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="?attr/colorBgSecondary"
                 android:padding="20dp"
                 android:elevation="2dp"
                 android:layout_marginBottom="40dp">
@@ -215,26 +231,45 @@
                     android:textColor="?android:textColorPrimary"
                     android:layout_marginBottom="16dp"/>
 
-                <Button
+                <TextView
                     android:id="@+id/btn_export_pdf_all"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
                     android:text="@string/export_all_to_pdf"
-                    android:textColor="@color/text_on_accent"
-                    android:backgroundTint="?attr/colorAccentSecondary"/>
+                    android:textColor="@color/text_on_accent" />
 
             </LinearLayout>
 
             <!-- VERSION INFO -->
-            <TextView
-                android:id="@+id/tv_app_version"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/version_container"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notecalc_v1_3_0"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textColor="?android:textColorSecondary"
-                android:layout_marginBottom="40dp" />
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_marginBottom="40dp">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_info_details"
+                    app:tint="?attr/colorAccentSecondary" />
+                <TextView
+                    android:id="@+id/tv_app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/notecalc_v1_3_0"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05"
+                    android:textColor="?android:textColorPrimary" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -4050,19 +4050,36 @@ public class MainActivity extends AppCompatActivity {
         settingsView = getLayoutInflater().inflate(R.layout.layout_settings, null);
         
         settingsView.findViewById(R.id.btn_settings_back).setOnClickListener(v -> closeSettings());
-        
-        android.widget.RadioGroup rgTheme = settingsView.findViewById(R.id.rg_theme_mode);
-        int currentMode = ThemeManager.getDarkMode(this);
-        if (currentMode == ThemeManager.MODE_DARK) rgTheme.check(R.id.rb_theme_dark);
-        else if (currentMode == ThemeManager.MODE_LIGHT) rgTheme.check(R.id.rb_theme_light);
-        else rgTheme.check(R.id.rb_theme_system);
 
-        rgTheme.setOnCheckedChangeListener((group, checkedId) -> {
-            int newMode = ThemeManager.MODE_SYSTEM;
-            if (checkedId == R.id.rb_theme_dark) newMode = ThemeManager.MODE_DARK;
-            else if (checkedId == R.id.rb_theme_light) newMode = ThemeManager.MODE_LIGHT;
-            ThemeManager.setDarkMode(this, newMode);
-        });
+        // Style the main cards
+        View cardAppearance = settingsView.findViewById(R.id.card_appearance);
+        View cardData = settingsView.findViewById(R.id.card_data_backup);
+        View cardPrint = settingsView.findViewById(R.id.card_print_share);
+        
+        cardAppearance.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16f));
+        cardData.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16f));
+        cardPrint.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16f));
+
+        // Setup theme buttons instead of RadioGroup
+        android.widget.TextView btnSystem = settingsView.findViewById(R.id.btn_theme_system);
+        android.widget.TextView btnLight = settingsView.findViewById(R.id.btn_theme_light);
+        android.widget.TextView btnDark = settingsView.findViewById(R.id.btn_theme_dark);
+        
+        Runnable updateThemeButtons = () -> {
+            int currentMode = ThemeManager.getDarkMode(this);
+            btnSystem.setBackground(ResponsiveUI.createRippleRoundedBg(this, currentMode == ThemeManager.MODE_SYSTEM ? ThemeManager.getPrimaryAccentColor(this) : android.graphics.Color.TRANSPARENT, ThemeManager.getBorderColor(this), 1f, 8f));
+            btnLight.setBackground(ResponsiveUI.createRippleRoundedBg(this, currentMode == ThemeManager.MODE_LIGHT ? ThemeManager.getPrimaryAccentColor(this) : android.graphics.Color.TRANSPARENT, ThemeManager.getBorderColor(this), 1f, 8f));
+            btnDark.setBackground(ResponsiveUI.createRippleRoundedBg(this, currentMode == ThemeManager.MODE_DARK ? ThemeManager.getPrimaryAccentColor(this) : android.graphics.Color.TRANSPARENT, ThemeManager.getBorderColor(this), 1f, 8f));
+            
+            btnSystem.setTextColor(currentMode == ThemeManager.MODE_SYSTEM ? getColor(R.color.text_on_accent) : getColor(R.color.text_tertiary));
+            btnLight.setTextColor(currentMode == ThemeManager.MODE_LIGHT ? getColor(R.color.text_on_accent) : getColor(R.color.text_tertiary));
+            btnDark.setTextColor(currentMode == ThemeManager.MODE_DARK ? getColor(R.color.text_on_accent) : getColor(R.color.text_tertiary));
+        };
+        updateThemeButtons.run();
+        
+        setupClickable(btnSystem, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_SYSTEM); updateThemeButtons.run(); });
+        setupClickable(btnLight, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_LIGHT); updateThemeButtons.run(); });
+        setupClickable(btnDark, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_DARK); updateThemeButtons.run(); });
 
         android.widget.LinearLayout llColors = settingsView.findViewById(R.id.ll_accent_colors);
         String[] colors = {ThemeManager.ACCENT_BLUE, ThemeManager.ACCENT_GREEN, ThemeManager.ACCENT_PURPLE, ThemeManager.ACCENT_YELLOW, ThemeManager.ACCENT_ORANGE, ThemeManager.ACCENT_PINK};
@@ -4077,20 +4094,24 @@ public class MainActivity extends AppCompatActivity {
             circle.setLayoutParams(lp);
             
             android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
-            gd.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            gd.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+            gd.setCornerRadius(16f);
             gd.setColor(android.graphics.Color.parseColor(hexes[i]));
             if (cName.equals(active)) {
                 gd.setStroke(8, ThemeManager.getSecondaryAccentColor(MainActivity.this));
             }
             circle.setBackground(gd);
-            circle.setOnClickListener(v -> {
+            setupClickable(circle, true, () -> {
                 ThemeManager.setAccentColor(this, cName);
                 recreate();
             });
             llColors.addView(circle);
         }
 
-        setupClickable(settingsView.findViewById(R.id.btn_export_json), true, () -> {
+        // Setup settings buttons with new design
+        android.widget.TextView btnExportJson = settingsView.findViewById(R.id.btn_export_json);
+        btnExportJson.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), 0, 0f, 12f));
+        setupClickable(btnExportJson, true, () -> {
             android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
@@ -4098,16 +4119,24 @@ public class MainActivity extends AppCompatActivity {
             exportJsonLauncher.launch(intent);
         });
 
-        setupClickable(settingsView.findViewById(R.id.btn_import_json), true, () -> {
+        android.widget.TextView btnImportJson = settingsView.findViewById(R.id.btn_import_json);
+        btnImportJson.setBackground(ResponsiveUI.createRippleRoundedBg(this, android.graphics.Color.TRANSPARENT, ThemeManager.getPrimaryAccentColor(this), 1.5f, 12f));
+        setupClickable(btnImportJson, true, () -> {
             android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
             importJsonLauncher.launch(intent);
         });
 
-        setupClickable(settingsView.findViewById(R.id.btn_export_pdf_all), true, this::generateAndOpenAllPdf);
+        android.widget.TextView btnExportPdf = settingsView.findViewById(R.id.btn_export_pdf_all);
+        btnExportPdf.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getSecondaryAccentColor(this), 0, 0f, 12f));
+        setupClickable(btnExportPdf, true, this::generateAndOpenAllPdf);
 
-
+        // Format version container
+        android.view.View versionContainer = settingsView.findViewById(R.id.version_container);
+        if (versionContainer != null) {
+            versionContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 24f));
+        }
     }
 
     private void openSettings() {

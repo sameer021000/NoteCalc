@@ -20,6 +20,7 @@
     <string name="th_sno">S.N.</string>
     <string name="th_desc">Description</string>
     <string name="th_date">Date</string>
+
     <string name="th_amount">Amount</string>
     <string name="th_action">Del</string>
     

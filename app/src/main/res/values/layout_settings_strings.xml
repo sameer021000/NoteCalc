@@ -4,7 +4,7 @@
     <string name="preferences">Preferences</string>
     <string name="appearance">Appearance</string>
     <string name="theme_mode">Theme Mode</string>
-    <string name="system_default">System Default</string>
+    <string name="system_default">System</string>
     <string name="light_mode">Light Mode</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="accent_color">Accent Color</string>
