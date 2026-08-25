@@ -2689,7 +2689,19 @@ public class MainActivity extends AppCompatActivity {
             showDeleteAccountConfirmationDialog(account);
         });
         
-        popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() / 2);
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int popupHeight = popupView.getMeasuredHeight();
+        
+        int[] location = new int[2];
+        anchor.getLocationOnScreen(location);
+        int anchorY = location[1];
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        
+        if (anchorY + popupHeight > screenHeight - 150) {
+            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() - popupHeight);
+        } else {
+            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() / 2);
+        }
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
@@ -4488,7 +4500,19 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         
-        popupWindow.showAsDropDown(anchor, 0, 0);
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int popupHeight = popupView.getMeasuredHeight();
+        
+        int[] location = new int[2];
+        anchor.getLocationOnScreen(location);
+        int anchorY = location[1];
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        
+        if (anchorY + popupHeight > screenHeight - 150) {
+            popupWindow.showAsDropDown(anchor, 0, -anchor.getHeight() - popupHeight);
+        } else {
+            popupWindow.showAsDropDown(anchor, 0, 0);
+        }
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
