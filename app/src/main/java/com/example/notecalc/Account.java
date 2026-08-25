@@ -11,8 +11,8 @@ public class Account {
     private String title;
     private List<Record> records;
     private long lastModified;
-    private boolean pinned = false;
-    private boolean hasBudget = false;
+    private boolean pinned;
+    private boolean hasBudget;
     private List<Record> budgetRecords;
 
     public Account(String title) {
