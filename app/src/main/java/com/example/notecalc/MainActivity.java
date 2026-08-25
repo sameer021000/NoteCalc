@@ -2574,14 +2574,14 @@ public class MainActivity extends AppCompatActivity {
                 1.0f,
                 6f
         ));
-        btnCancel.setBackground(ResponsiveUI.createRoundedBg(
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
                 this,
                 ThemeManager.getBgPrimaryColor(MainActivity.this),
                 ThemeManager.getBorderColor(MainActivity.this),
                 1.0f,
                 4f
         ));
-        btnDelete.setBackground(ResponsiveUI.createRoundedBg(
+        btnDelete.setBackground(ResponsiveUI.createRippleRoundedBg(
                 this,
                 getColor(R.color.error_red),
                 0,
