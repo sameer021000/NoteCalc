@@ -1956,7 +1956,6 @@ public class MainActivity extends AppCompatActivity {
             return new RecordViewHolder(rowView);
         }
 
-        @androidx.annotation.NonNull
         @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
         @Override
         public void onBindViewHolder(@androidx.annotation.NonNull RecordViewHolder holder, int position) {
@@ -2502,7 +2501,7 @@ public class MainActivity extends AppCompatActivity {
             for (Record r : recordsAdapter.displayRecords) {
                 r.setSelected(isChecked);
             }
-            recordsAdapter.notifyDataSetChanged();
+            recordsAdapter.notifyItemRangeChanged(0, recordsAdapter.getItemCount());
             updateBulkActionsState();
         });
     }
@@ -2615,7 +2614,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 if (hasRemarks) {
                     TextView remarksView = new TextView(this);
-                    remarksView.setText("  \u21B3 " + remarks);
+                    remarksView.setText("  ↳ " + remarks);
                     remarksView.setTextColor(getColor(R.color.text_tertiary));
                     remarksView.setTextSize(11f);
                     remarksView.setTypeface(null, android.graphics.Typeface.ITALIC);
@@ -3307,7 +3306,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
             if (pdfDir == null) return;
-            if (!pdfDir.exists()) pdfDir.mkdirs();
+            if (!pdfDir.exists() && !pdfDir.mkdirs()) return;
             java.io.File file = new java.io.File(pdfDir, "All_Accounts_Export.pdf");
             document.writeTo(new java.io.FileOutputStream(file));
             document.close();
@@ -3318,7 +3317,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
             android.widget.Toast.makeText(this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
             document.close();
         }
@@ -3331,8 +3330,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
             if (pdfDir == null) return;
-            if (!pdfDir.exists()) pdfDir.mkdirs();
-            java.io.File file = new java.io.File(pdfDir, account.getTitle().replaceAll("[\\\\/:*?\\\"<>|]", "_") + ".pdf");
+            if (!pdfDir.exists() && !pdfDir.mkdirs()) return;
+            java.io.File file = new java.io.File(pdfDir, account.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + ".pdf");
             document.writeTo(new java.io.FileOutputStream(file));
             document.close();
             android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".fileprovider", file);
@@ -3341,7 +3340,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
             android.widget.Toast.makeText(this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
             document.close();
         }
@@ -3417,14 +3416,14 @@ public class MainActivity extends AppCompatActivity {
         
         // Copy and sort the records chronologically to prevent jumbled PDFs
         List<Record> expRecords = new ArrayList<>(account.getRecords());
-        java.util.Collections.sort(expRecords, (r1, r2) -> {
+        expRecords.sort((r1, r2) -> {
             if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
             if (sortOrder == PdfSortOrder.DATE) {
                 try {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
                     java.util.Date d1 = sortSdf.parse(r1.getDate());
                     java.util.Date d2 = sortSdf.parse(r2.getDate());
-                    int c = d1.compareTo(d2);
+                    int c = (d1 != null && d2 != null) ? d1.compareTo(d2) : 0;
                     if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
                     return c;
                 } catch (Exception e) {
@@ -3436,14 +3435,14 @@ public class MainActivity extends AppCompatActivity {
         });
         
         List<Record> budRecords = new ArrayList<>(account.getBudgetRecords());
-        java.util.Collections.sort(budRecords, (r1, r2) -> {
+        budRecords.sort((r1, r2) -> {
             if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
             if (sortOrder == PdfSortOrder.DATE) {
                 try {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
                     java.util.Date d1 = sortSdf.parse(r1.getDate());
                     java.util.Date d2 = sortSdf.parse(r2.getDate());
-                    int c = d1.compareTo(d2);
+                    int c = (d1 != null && d2 != null) ? d1.compareTo(d2) : 0;
                     if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
                     return c;
                 } catch (Exception e) {
@@ -3472,9 +3471,9 @@ public class MainActivity extends AppCompatActivity {
 
         // --- Page tracking ---
         int pageNum = pageTracker[0];
-        Canvas canvas = null;
-        PdfDocument.Page page = null;
-        float y = 0;
+        Canvas canvas;
+        PdfDocument.Page page;
+        float y;
 
         // ===== PAGE 1: Header + Table Header + Rows =====
         pageNum++;
@@ -3529,13 +3528,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
         // --- Draw table header row ---
-        float hx = margin;
         canvas.drawRect(margin, y, pageWidth - margin, y + rowHeight, tableHeaderBgPaint);
-        canvas.drawText("S.No",        hx + 4,                       y + 15f, accentPaint);
-        canvas.drawText("Description", hx + colSno + 4,              y + 15f, accentPaint);
-        canvas.drawText("Date",        hx + colSno + colDesc + 4,    y + 15f, accentPaint);
-        canvas.drawText("Time",        hx + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
-        float amountHeaderX = hx + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
+        canvas.drawText("S.No",        margin + 4,                       y + 15f, accentPaint);
+        canvas.drawText("Description", margin + colSno + 4,              y + 15f, accentPaint);
+        canvas.drawText("Date",        margin + colSno + colDesc + 4,    y + 15f, accentPaint);
+        canvas.drawText("Time",        margin + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
+        float amountHeaderX = margin + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
         canvas.drawText("Amount",      amountHeaderX,                y + 15f, accentPaint);
         y += rowHeight;
         canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
@@ -3614,16 +3612,15 @@ public class MainActivity extends AppCompatActivity {
 
             canvas.drawRect(margin, y, pageWidth - margin, y + actualRowHeightCalc, rowBg);
 
-            float rx = margin;
-            canvas.drawText(String.valueOf(i + 1), rx + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(String.valueOf(i + 1), margin + 4, y + 15f, cellMutedPaint);
 
             // Truncate long descriptions to fit column width
             String desc = rec.getDescription();
             while (desc.length() > 1 && cellPaint.measureText(desc) > colDesc - 8f) {
                 desc = desc.substring(0, desc.length() - 1);
             }
-            if (!desc.equals(rec.getDescription())) desc += "\u2026";
-            canvas.drawText(desc, rx + colSno + 4, y + 15f, cellPaint);
+            if (!desc.equals(rec.getDescription())) desc += "…";
+            canvas.drawText(desc, margin + colSno + 4, y + 15f, cellPaint);
 
             // Draw remarks/category below description if present
             float currentY = y + 27f;
@@ -3632,8 +3629,8 @@ public class MainActivity extends AppCompatActivity {
                 while (truncRemarks.length() > 1 && cellMutedPaint.measureText(truncRemarks) > colDesc - 8f) {
                     truncRemarks = truncRemarks.substring(0, truncRemarks.length() - 1);
                 }
-                if (!truncRemarks.equals(combinedNotes)) truncRemarks += "\u2026";
-                canvas.drawText(truncRemarks, rx + colSno + 4, currentY, cellMutedPaint);
+                if (!truncRemarks.equals(combinedNotes)) truncRemarks += "…";
+                canvas.drawText(truncRemarks, margin + colSno + 4, currentY, cellMutedPaint);
                 currentY += 12f;
             } else {
                 currentY -= 14f;
@@ -3644,18 +3641,18 @@ public class MainActivity extends AppCompatActivity {
                 while (truncFn.length() > 1 && cellMutedPaint.measureText(truncFn) > colDesc - 8f) {
                     truncFn = truncFn.substring(0, truncFn.length() - 1);
                 }
-                if (!truncFn.equals("\uD83D\uDCCE " + fn)) truncFn += "\u2026";
-                canvas.drawText(truncFn, rx + colSno + 4, currentY, cellMutedPaint);
+                if (!truncFn.equals("\uD83D\uDCCE " + fn)) truncFn += "…";
+                canvas.drawText(truncFn, margin + colSno + 4, currentY, cellMutedPaint);
                 currentY += 12f;
             }
 
-            canvas.drawText(formatDateCompact(rec.getDate()), rx + colSno + colDesc + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(formatDateCompact(rec.getDate()), margin + colSno + colDesc + 4, y + 15f, cellMutedPaint);
             String timeStr = rec.getTimestampMillis() > 0 ? timeSdf.format(new Date(rec.getTimestampMillis())) : "-";
-            canvas.drawText(timeStr, rx + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(timeStr, margin + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
 
             // Right-align amount
             String amtStr = String.format(Locale.getDefault(), "%.2f", rec.getAmount());
-            float amtX = rx + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
+            float amtX = margin + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
             canvas.drawText(amtStr, amtX, y + 15f, cellPaint);
 
             y += actualRowHeightCalc;
@@ -3782,7 +3779,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (imgPaths.isEmpty()) continue;
             
-            if (y + 50f > bottomLimit) {
+            if (canvas == null || y + 50f > bottomLimit) {
                 if (page != null) document.finishPage(page);
                 pageNum++;
                 android.graphics.pdf.PdfDocument.PageInfo pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
@@ -3805,7 +3802,7 @@ public class MainActivity extends AppCompatActivity {
             
             for (int i = 0; i < imgPaths.size(); i += 2) {
                 if (y + 100f > bottomLimit) {
-                    if (page != null) document.finishPage(page);
+                    document.finishPage(page);
                     pageNum++;
                     android.graphics.pdf.PdfDocument.PageInfo pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
                     page = document.startPage(pageInfo);
@@ -3863,7 +3860,7 @@ public class MainActivity extends AppCompatActivity {
                             while (truncFn.length() > 1 && subPaint.measureText(truncFn) > colWidth - 8f) {
                                 truncFn = truncFn.substring(0, truncFn.length() - 1);
                             }
-                            if (!truncFn.equals(fileName)) truncFn += "\u2026";
+                            if (!truncFn.equals(fileName)) truncFn += "…";
                             
                             float fnX = x + (colWidth - subPaint.measureText(truncFn)) / 2f;
                             canvas.drawText(truncFn, fnX, y + drawH + 15f, subPaint);
@@ -3871,7 +3868,7 @@ public class MainActivity extends AppCompatActivity {
                             if (drawH + 20f > rowMaxHeight) rowMaxHeight = drawH + 20f;
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        android.util.Log.e("NoteCalc", "Error appending attachment", e);
                     }
                 }
                 y += rowMaxHeight + 15f;
@@ -3879,7 +3876,7 @@ public class MainActivity extends AppCompatActivity {
         }
         
         if (page != null) {
-            canvas.drawText("Generated by NoteCalc  \u2022  Page " + pageNum, 40f, bottomLimit + 25f, subPaint);
+            canvas.drawText("Generated by NoteCalc  •  Page " + pageNum, 40f, bottomLimit + 25f, subPaint);
             document.finishPage(page);
         }
         pageTracker[0] = pageNum;
@@ -4047,12 +4044,7 @@ public class MainActivity extends AppCompatActivity {
     private void resequentializeRecords(List<Record> records) {
         if (records == null || records.isEmpty()) return;
         List<Record> copy = new ArrayList<>(records);
-        java.util.Collections.sort(copy, new java.util.Comparator<Record>() {
-            @Override
-            public int compare(Record r1, Record r2) {
-                return Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
-            }
-        });
+        copy.sort(java.util.Comparator.comparingInt(Record::getOriginalIndex));
         for (int i = 0; i < copy.size(); i++) {
             copy.get(i).setOriginalIndex(i);
         }
@@ -4060,6 +4052,7 @@ public class MainActivity extends AppCompatActivity {
 
     private android.view.View settingsView;
 
+    @android.annotation.SuppressLint("InflateParams")
     private void initSettings() {
         settingsView = getLayoutInflater().inflate(R.layout.layout_settings, null);
         
@@ -4119,9 +4112,7 @@ public class MainActivity extends AppCompatActivity {
             importJsonLauncher.launch(intent);
         });
 
-        settingsView.findViewById(R.id.btn_export_pdf_all).setOnClickListener(v -> {
-            generateAndOpenAllPdf();
-        });
+        settingsView.findViewById(R.id.btn_export_pdf_all).setOnClickListener(v -> generateAndOpenAllPdf());
 
 
     }
@@ -4137,6 +4128,7 @@ public class MainActivity extends AppCompatActivity {
         showDashboard();
     }
 
+    @android.annotation.SuppressLint("SetTextI18n")
     private void showAnalytics(Account account) {
         View analyticsRoot = getLayoutInflater().inflate(R.layout.layout_analytics, mainContainer, false);
         mainContainer.removeAllViews();
@@ -4197,6 +4189,7 @@ public class MainActivity extends AppCompatActivity {
         chart.getAxisRight().setEnabled(false);
     }
 
+    @android.annotation.SuppressLint("SetTextI18n")
     private void updateAnalyticsData(Account account, int timeMode, BarChart chart, TextView tvTotal, TextView tvHighTxn, TextView tvDailyAvg, TextView tvHighDay, TextView tvBudgetPct, TextView tvDateRange) {
         List<Record> allRecords = account.getRecords();
         List<Record> filtered = new ArrayList<>();
@@ -4223,8 +4216,11 @@ public class MainActivity extends AppCompatActivity {
             long rTs = 0;
             try {
                 java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                rTs = format.parse(r.getDate()).getTime();
-            } catch(Exception ex) {}
+                java.util.Date parsedDate = format.parse(r.getDate());
+                if (parsedDate != null) rTs = parsedDate.getTime();
+            } catch(Exception ex) {
+                android.util.Log.e("NoteCalc", "Error parsing date", ex);
+            }
 
             if (rTs >= startTime) {
                 filtered.add(r);
@@ -4244,7 +4240,9 @@ public class MainActivity extends AppCompatActivity {
                 c.set(Calendar.MILLISECOND, 0);
                 long dayStart = c.getTimeInMillis();
                 
-                dailyTotals.put(dayStart, dailyTotals.getOrDefault(dayStart, 0.0) + amt);
+                Double currentDayTotal = dailyTotals.get(dayStart);
+                double totalSoFar = (currentDayTotal != null) ? currentDayTotal : 0.0;
+                dailyTotals.put(dayStart, totalSoFar + amt);
             }
         }
 
@@ -4326,6 +4324,7 @@ public class MainActivity extends AppCompatActivity {
         chart.animateY(800);
     }
 
+    @android.annotation.SuppressLint("InflateParams")
     private void showBulkActionsMenu(View anchor) {
         View popupView = getLayoutInflater().inflate(R.layout.layout_bulk_actions_menu, null);
         
@@ -4530,6 +4529,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @android.annotation.SuppressLint("NotifyDataSetChanged")
     private void executeTransfer(List<Record> selectedRecords, Account targetAccount, boolean isCut) {
         java.util.List<Record> targetList = isBudgetMode ? targetAccount.getBudgetRecords() : targetAccount.getRecords();
         int maxIndex = -1;
@@ -4606,7 +4606,7 @@ public class MainActivity extends AppCompatActivity {
             java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
             if (pdfDir == null) return;
             if (!pdfDir.exists()) pdfDir.mkdirs();
-            java.io.File file = new java.io.File(pdfDir, currentEditingAccount.getTitle().replaceAll("[\\/:*?\"<>|]", "_") + "_Selected.pdf");
+            java.io.File file = new java.io.File(pdfDir, currentEditingAccount.getTitle().replaceAll("[/\\\\:*?\"<>|]", "_") + "_Selected.pdf");
             document.writeTo(new java.io.FileOutputStream(file));
             document.close();
             android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".fileprovider", file);
@@ -4615,7 +4615,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
             android.widget.Toast.makeText(this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
             document.close();
         }
@@ -4688,14 +4688,14 @@ public class MainActivity extends AppCompatActivity {
         String lastMod = sdf.format(new java.util.Date(account.getLastModified()));
         
         java.util.List<Record> recordsToPrint = new java.util.ArrayList<>(selectedRecords);
-        java.util.Collections.sort(recordsToPrint, (r1, r2) -> {
+        recordsToPrint.sort((r1, r2) -> {
             if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
             if (sortOrder == PdfSortOrder.DATE) {
                 try {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
                     java.util.Date d1 = sortSdf.parse(r1.getDate());
                     java.util.Date d2 = sortSdf.parse(r2.getDate());
-                    int c = d1.compareTo(d2);
+                    int c = (d1 != null && d2 != null) ? d1.compareTo(d2) : 0;
                     if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
                     return c;
                 } catch (Exception e) {
@@ -4711,9 +4711,9 @@ public class MainActivity extends AppCompatActivity {
 
         // --- Page tracking ---
         int pageNum = pageTracker[0];
-        android.graphics.Canvas canvas = null;
-        android.graphics.pdf.PdfDocument.Page page = null;
-        float y = 0;
+        android.graphics.Canvas canvas;
+        android.graphics.pdf.PdfDocument.Page page;
+        float y;
 
         pageNum++;
         android.graphics.pdf.PdfDocument.PageInfo pageInfo = new android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNum).create();
@@ -4739,13 +4739,12 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawLine(margin, y + 4f, pageWidth - margin, y + 4f, dividerPaint);
         y += 16f;
 
-        float hx = margin;
         canvas.drawRect(margin, y, pageWidth - margin, y + rowHeight, tableHeaderBgPaint);
-        canvas.drawText("S.No",        hx + 4,                       y + 15f, accentPaint);
-        canvas.drawText("Description", hx + colSno + 4,              y + 15f, accentPaint);
-        canvas.drawText("Date",        hx + colSno + colDesc + 4,    y + 15f, accentPaint);
-        canvas.drawText("Time",        hx + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
-        float amountHeaderX = hx + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
+        canvas.drawText("S.No",        margin + 4,                       y + 15f, accentPaint);
+        canvas.drawText("Description", margin + colSno + 4,              y + 15f, accentPaint);
+        canvas.drawText("Date",        margin + colSno + colDesc + 4,    y + 15f, accentPaint);
+        canvas.drawText("Time",        margin + colSno + colDesc + colDate + 4, y + 15f, accentPaint);
+        float amountHeaderX = margin + colSno + colDesc + colDate + colTime + colAmount - accentPaint.measureText("Amount") - 4f;
         canvas.drawText("Amount",      amountHeaderX,                y + 15f, accentPaint);
         y += rowHeight;
         canvas.drawLine(margin, y, pageWidth - margin, y, dividerPaint);
@@ -4816,15 +4815,14 @@ public class MainActivity extends AppCompatActivity {
 
             canvas.drawRect(margin, y, pageWidth - margin, y + actualRowHeightCalc, rowBg);
 
-            float rx = margin;
-            canvas.drawText(String.valueOf(i + 1), rx + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(String.valueOf(i + 1), margin + 4, y + 15f, cellMutedPaint);
 
             String desc = rec.getDescription();
             while (desc.length() > 1 && cellPaint.measureText(desc) > colDesc - 8f) {
                 desc = desc.substring(0, desc.length() - 1);
             }
-            if (!desc.equals(rec.getDescription())) desc += "\u2026";
-            canvas.drawText(desc, rx + colSno + 4, y + 15f, cellPaint);
+            if (!desc.equals(rec.getDescription())) desc += "…";
+            canvas.drawText(desc, margin + colSno + 4, y + 15f, cellPaint);
 
             float currentY = y + 27f;
             if (hasRemarks) {
@@ -4832,8 +4830,8 @@ public class MainActivity extends AppCompatActivity {
                 while (truncRemarks.length() > 1 && cellMutedPaint.measureText(truncRemarks) > colDesc - 8f) {
                     truncRemarks = truncRemarks.substring(0, truncRemarks.length() - 1);
                 }
-                if (!truncRemarks.equals(combinedNotes)) truncRemarks += "\u2026";
-                canvas.drawText(truncRemarks, rx + colSno + 4, currentY, cellMutedPaint);
+                if (!truncRemarks.equals(combinedNotes)) truncRemarks += "…";
+                canvas.drawText(truncRemarks, margin + colSno + 4, currentY, cellMutedPaint);
                 currentY += 12f;
             } else {
                 currentY -= 14f;
@@ -4844,17 +4842,17 @@ public class MainActivity extends AppCompatActivity {
                 while (truncFn.length() > 1 && cellMutedPaint.measureText(truncFn) > colDesc - 8f) {
                     truncFn = truncFn.substring(0, truncFn.length() - 1);
                 }
-                if (!truncFn.equals("\uD83D\uDCCE " + fn)) truncFn += "\u2026";
-                canvas.drawText(truncFn, rx + colSno + 4, currentY, cellMutedPaint);
+                if (!truncFn.equals("\uD83D\uDCCE " + fn)) truncFn += "…";
+                canvas.drawText(truncFn, margin + colSno + 4, currentY, cellMutedPaint);
                 currentY += 12f;
             }
 
-            canvas.drawText(formatDateCompact(rec.getDate()), rx + colSno + colDesc + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(formatDateCompact(rec.getDate()), margin + colSno + colDesc + 4, y + 15f, cellMutedPaint);
             String timeStr = rec.getTimestampMillis() > 0 ? timeSdf.format(new java.util.Date(rec.getTimestampMillis())) : "-";
-            canvas.drawText(timeStr, rx + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(timeStr, margin + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
 
             String amtStr = String.format(java.util.Locale.getDefault(), "%.2f", rec.getAmount());
-            float amtX = rx + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
+            float amtX = margin + colSno + colDesc + colDate + colTime + colAmount - cellPaint.measureText(amtStr) - 4f;
             canvas.drawText(amtStr, amtX, y + 15f, cellPaint);
 
             y += actualRowHeightCalc;
@@ -4902,6 +4900,7 @@ public class MainActivity extends AppCompatActivity {
         appendAttachmentsAppendixToPdf(document, recordLabels, pageTracker);
     }
 
+    @android.annotation.SuppressLint("SetTextI18n")
     private void renderEditorAttachments() {
         if (attachmentsContainer == null || attachmentsScroll == null) return;
         attachmentsContainer.removeAllViews();
@@ -4950,7 +4949,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 TextView closeBtn = new TextView(this);
-                closeBtn.setText(" \u2715 ");
+                closeBtn.setText(" ✕ ");
                 closeBtn.setTextSize(12);
                 closeBtn.setTextColor(getColor(R.color.error_red));
                 closeBtn.setPadding(10, 10, 20, 10);
@@ -4977,7 +4976,7 @@ public class MainActivity extends AppCompatActivity {
                 renderEditorAttachments();
             } else if (currentPhotoPath != null) {
                 java.io.File f = new java.io.File(currentPhotoPath);
-                if (f.exists()) f.delete();
+                if (f.exists() && !f.delete()) android.util.Log.w("NoteCalc", "Failed to delete temp file");
             }
             currentPhotoPath = null;
             return;
@@ -4993,12 +4992,16 @@ public class MainActivity extends AppCompatActivity {
                 try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
                     if (cursor != null && cursor.moveToFirst()) {
                         int index = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
-                        if (index != -1) originalName = cursor.getString(index);
+                        if (index != -1) {
+                            String tempName = cursor.getString(index);
+                            if (tempName != null) originalName = new java.io.File(tempName).getName().replaceAll("[/\\\\:*?\"<>|]", "_");
+                        }
                     }
                 }
                 
                 java.io.File destFile = new java.io.File(attachmentsDir, originalName);
                 java.io.InputStream in = getContentResolver().openInputStream(uri);
+                if (in == null) throw new java.io.IOException("Failed to open input stream");
                 java.io.FileOutputStream out = new java.io.FileOutputStream(destFile);
                 byte[] buffer = new byte[1024];
                 int read;
@@ -5011,7 +5014,7 @@ public class MainActivity extends AppCompatActivity {
                 tempAttachments.add(destFile.getAbsolutePath());
                 renderEditorAttachments();
             } catch (Exception e) {
-                e.printStackTrace();
+                android.util.Log.e("NoteCalc", "Failed to attach file", e);
                 Toast.makeText(this, getString(R.string.auto_failed_to_attach_fil_11), Toast.LENGTH_SHORT).show();
             }
         }
