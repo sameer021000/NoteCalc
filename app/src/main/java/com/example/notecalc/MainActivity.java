@@ -4090,7 +4090,7 @@ public class MainActivity extends AppCompatActivity {
             llColors.addView(circle);
         }
 
-        settingsView.findViewById(R.id.btn_export_json).setOnClickListener(v -> {
+        setupClickable(settingsView.findViewById(R.id.btn_export_json), true, () -> {
             android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
@@ -4098,14 +4098,14 @@ public class MainActivity extends AppCompatActivity {
             exportJsonLauncher.launch(intent);
         });
 
-        settingsView.findViewById(R.id.btn_import_json).setOnClickListener(v -> {
+        setupClickable(settingsView.findViewById(R.id.btn_import_json), true, () -> {
             android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
             importJsonLauncher.launch(intent);
         });
 
-        settingsView.findViewById(R.id.btn_export_pdf_all).setOnClickListener(v -> generateAndOpenAllPdf());
+        setupClickable(settingsView.findViewById(R.id.btn_export_pdf_all), true, this::generateAndOpenAllPdf);
 
 
     }
