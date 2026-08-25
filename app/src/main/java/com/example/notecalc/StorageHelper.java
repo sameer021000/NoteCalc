@@ -54,7 +54,7 @@ public class StorageHelper {
                 }
             }
         } catch (IOException | JSONException e) {
-            e.printStackTrace();
+            android.util.Log.e("StorageHelper", "Error loading storage", e);
         }
         return storage;
     }
@@ -81,7 +81,7 @@ public class StorageHelper {
                 fos.write(jsonStr.getBytes(StandardCharsets.UTF_8));
             }
         } catch (IOException | JSONException e) {
-            e.printStackTrace();
+            android.util.Log.e("StorageHelper", "Error saving storage", e);
         }
     }
 }
