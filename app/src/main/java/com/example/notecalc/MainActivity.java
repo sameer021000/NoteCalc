@@ -3270,7 +3270,7 @@ public class MainActivity extends AppCompatActivity {
      * Supports word-wrapping for long titles and automatic pagination for all record rows.
      */
     
-    private android.app.Dialog showProgressDialog(String message) {
+    private android.app.Dialog showProgressDialog() {
         android.app.Dialog dialog = new android.app.Dialog(this);
         dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -3288,7 +3288,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getPrimaryAccentColor(this)));
 
         android.widget.TextView tvMessage = new android.widget.TextView(this);
-        tvMessage.setText(message);
+        tvMessage.setText(getString(R.string.msg_generating_pdf));
         tvMessage.setTextColor(getColor(R.color.text_primary));
         tvMessage.setTextSize(16f);
         tvMessage.setPadding(40, 0, 0, 0);
@@ -3303,7 +3303,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generateAndOpenAllPdf() {
-        android.app.Dialog progressDialog = showProgressDialog("Generating PDF...");
+        android.app.Dialog progressDialog = showProgressDialog();
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -3370,7 +3370,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generateAndOpenPdf(Account account, PdfSortOrder sortOrder) {
-        android.app.Dialog progressDialog = showProgressDialog("Generating PDF...");
+        android.app.Dialog progressDialog = showProgressDialog();
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -4755,7 +4755,7 @@ public class MainActivity extends AppCompatActivity {
     private void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
         
-        android.app.Dialog progressDialog = showProgressDialog("Generating PDF...");
+        android.app.Dialog progressDialog = showProgressDialog();
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
