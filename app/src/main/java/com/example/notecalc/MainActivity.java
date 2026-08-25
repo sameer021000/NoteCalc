@@ -3048,9 +3048,9 @@ public class MainActivity extends AppCompatActivity {
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
         tvFrom.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
         tvTo.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnClear.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnCancel.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnApply.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(MainActivity.this), 0, 0, 4f));
+        btnClear.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
+        btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(MainActivity.this), ThemeManager.getPrimaryAccentColor(MainActivity.this), 0f, 4f));
         btnApply.setTextColor(getColor(R.color.text_primary));
 
         // Track temp selections for this dialog session
@@ -3094,15 +3094,15 @@ public class MainActivity extends AppCompatActivity {
         tvFrom.setOnClickListener(v -> pickFrom.run());
         tvTo.setOnClickListener(v -> pickTo.run());
 
-        setupClickable(btnClear, () -> {
+        setupClickable(btnClear, true, () -> {
             setFilterDateFrom(null);
             setFilterDateTo(null);
             if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
             updateDateHeaderIndicator();
             dialog.dismiss();
         });
-        setupClickable(btnCancel, dialog::dismiss);
-        setupClickable(btnApply, () -> {
+        setupClickable(btnCancel, true, dialog::dismiss);
+        setupClickable(btnApply, true, () -> {
             setFilterDateFrom(tempFrom[0]);
             setFilterDateTo(tempTo[0]);
             if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
@@ -3152,24 +3152,24 @@ public class MainActivity extends AppCompatActivity {
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
         etFrom.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
         etTo.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnClear.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnCancel.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnApply.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(MainActivity.this), 0, 0, 4f));
+        btnClear.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
+        btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(MainActivity.this), ThemeManager.getPrimaryAccentColor(MainActivity.this), 0f, 4f));
         btnApply.setTextColor(getColor(R.color.text_primary));
 
         // Populate with current filter values if active
         if (getFilterAmountFrom() != null) etFrom.setText(String.format(Locale.getDefault(), "%.2f", getFilterAmountFrom()));
         if (getFilterAmountTo() != null) etTo.setText(String.format(Locale.getDefault(), "%.2f", getFilterAmountTo()));
 
-        setupClickable(btnClear, () -> {
+        setupClickable(btnClear, true, () -> {
             setFilterAmountFrom(null);
             setFilterAmountTo(null);
             if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
             updateAmountHeaderIndicator();
             dialog.dismiss();
         });
-        setupClickable(btnCancel, dialog::dismiss);
-        setupClickable(btnApply, () -> {
+        setupClickable(btnCancel, true, dialog::dismiss);
+        setupClickable(btnApply, true, () -> {
             String fromStr = etFrom.getText().toString().trim();
             String toStr = etTo.getText().toString().trim();
             setFilterAmountFrom(fromStr.isEmpty() ? null : Double.parseDouble(fromStr));
