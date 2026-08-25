@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_version_title">What\'s New in NoteCalc v1.3.0</string>
-    <string name="about_version_content"><![CDATA[
-        <b>\uD83D\uDCCE File Attachments</b><br/>You can now attach images, PDFs, and documents directly to your records!<br/><br/>
-        <b>\uD83D\uDCF7 In-App Camera</b><br/>Snap photos instantly right from the app when attaching files.<br/><br/>
-        <b>\uD83D\uDCD1 Smarter PDF Exports</b><br/>Your exported PDFs now include beautiful image appendices, exact timestamps, and perfectly formatted tables.<br/><br/>
-        <b>\uD83C\uDFA8 Smoother Experience</b><br/>We\'ve polished menus, animations, and dialogs to make NoteCalc feel more premium and responsive.<br/><br/>
-        <b>\uD83D\uDC1B Bug Fixes</b><br/>We\'ve squashed some pesky bugs related to sorting, transfers, and timestamps.
-    ]]></string>
     <string name="about_version_btn_dismiss">Awesome!</string>
+    
+    <string name="about_item1_title">\uD83D\uDCCE File Attachments</string>
+    <string name="about_item1_desc">You can now attach images, PDFs, and documents directly to your records!</string>
+    
+    <string name="about_item2_title">\uD83D\uDCF7 In-App Camera</string>
+    <string name="about_item2_desc">Snap photos instantly right from the app when attaching files.</string>
+    
+    <string name="about_item3_title">\uD83D\uDCD1 Smarter PDF Exports</string>
+    <string name="about_item3_desc">Your exported PDFs now include beautiful image appendices, exact timestamps, and perfectly formatted tables.</string>
+    
+    <string name="about_item4_title">\uD83C\uDFA8 Smoother Experience</string>
+    <string name="about_item4_desc">We\'ve polished menus, animations, and dialogs to make NoteCalc feel more premium and responsive.</string>
+    
+    <string name="about_item5_title">\uD83D\uDC1B Bug Fixes</string>
+    <string name="about_item5_desc">We\'ve squashed some pesky bugs related to sorting, transfers, and timestamps.</string>
 </resources>

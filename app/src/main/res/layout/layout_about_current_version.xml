@@ -22,14 +22,277 @@
         android:fadeScrollbars="false"
         android:scrollbarThumbVertical="?attr/colorAccentSecondary">
 
-        <TextView
-            android:id="@+id/tv_about_version_content"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/about_version_content"
-            android:textColor="@color/text_primary"
-            android:textSize="15sp"
-            android:lineSpacingExtra="4dp" />
+            android:orientation="vertical">
+
+            <!-- Card 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_tip_card_blue"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item1_title"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/accent_blue_secondary"
+                        android:alpha="0.3"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item1_desc"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="01"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_blue_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+            </LinearLayout>
+
+            <!-- Card 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_tip_card_green"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item2_title"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_green_secondary"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/accent_green_secondary"
+                        android:alpha="0.3"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item2_desc"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="02"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_green_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+            </LinearLayout>
+
+            <!-- Card 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_tip_card_purple"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item3_title"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_purple_secondary"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/accent_purple_secondary"
+                        android:alpha="0.3"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item3_desc"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="03"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_purple_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+            </LinearLayout>
+
+            <!-- Card 4 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_tip_card_red"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item4_title"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_red_secondary"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/accent_red_secondary"
+                        android:alpha="0.3"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item4_desc"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="04"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_red_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+            </LinearLayout>
+
+            <!-- Card 5 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_tip_card_yellow"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item5_title"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_yellow_secondary"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/accent_yellow_secondary"
+                        android:alpha="0.3"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_item5_desc"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp"/>
+                        
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="05"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_yellow_secondary"
+                    android:alpha="0.2"
+                    android:paddingStart="16dp"/>
+            </LinearLayout>
+            
+        </LinearLayout>
     </ScrollView>
 
     <TextView
@@ -41,7 +304,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:padding="16dp"
+        android:padding="12dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
         android:focusable="true" />

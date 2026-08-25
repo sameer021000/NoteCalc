@@ -710,7 +710,7 @@ public class MainActivity extends AppCompatActivity {
                 12f
         ));
 
-        btnClose.setOnClickListener(v -> dialog.dismiss());
+        setupClickable(btnClose, true, dialog::dismiss);
         dialog.show();
     }
     @android.annotation.SuppressLint("ClickableViewAccessibility")
@@ -2987,18 +2987,18 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Custom premium touch listener that animates scaling and pressed states to give physical click feedback.
      */
-    private void setupClickable(View view, final Runnable onClickAction) {
+    public void setupClickable(View view, final Runnable onClickAction) {
         setupClickable(view, true, onClickAction);
     }
 
     /**
      * Custom premium touch listener with optional scale animations.
      */
-    private void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction) {
+    public void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction) {
         setupClickable(view, useScaleAnimation, onClickAction, null);
     }
 
-    private void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction, final Runnable onLongClickAction) {
+    public void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction, final Runnable onLongClickAction) {
         view.setOnTouchListener(new View.OnTouchListener() {
             private boolean isInside = false;
             private boolean longPressExecuted = false;
