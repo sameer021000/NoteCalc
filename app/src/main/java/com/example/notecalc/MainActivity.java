@@ -4476,7 +4476,7 @@ public class MainActivity extends AppCompatActivity {
             params.bottomMargin = (int) (8 * getResources().getDisplayMetrics().density);
             item.setLayoutParams(params);
             
-            setupClickable(item, false, () -> {
+            setupClickable(item, true, () -> {
                 dialog.dismiss();
                 if (index == 0) { // Create New List
                     showNewListTitleDialog(selectedRecords, isCut);
@@ -4505,7 +4505,7 @@ public class MainActivity extends AppCompatActivity {
                 1.0f,
                 6f
         ));
-        setupClickable(btnCancel, false, dialog::dismiss);
+        setupClickable(btnCancel, true, dialog::dismiss);
         
         dialog.show();
     }
@@ -4548,7 +4548,7 @@ public class MainActivity extends AppCompatActivity {
                 1.0f,
                 6f
         ));
-        setupClickable(btnCancel, false, dialog::dismiss);
+        setupClickable(btnCancel, true, dialog::dismiss);
         
         View btnCreate = dialogView.findViewById(R.id.btn_dialog_create);
         btnCreate.setBackground(ResponsiveUI.createRippleRoundedBg(
@@ -4558,7 +4558,7 @@ public class MainActivity extends AppCompatActivity {
                 0f,
                 6f
         ));
-        setupClickable(btnCreate, false, () -> {
+        setupClickable(btnCreate, true, () -> {
             String title = input.getText().toString().trim();
             if (title.isEmpty()) {
                 android.widget.Toast.makeText(this, "Title cannot be empty", android.widget.Toast.LENGTH_SHORT).show();
