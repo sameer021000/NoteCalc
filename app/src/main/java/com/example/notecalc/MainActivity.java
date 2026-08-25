@@ -102,21 +102,16 @@ public class MainActivity extends AppCompatActivity {
         android.view.View btnCancel = view.findViewById(R.id.btn_dialog_cancel);
         android.view.View btnExport = view.findViewById(R.id.btn_dialog_export);
         
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-        btnExport.setOnClickListener(v -> {
+        view.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.5f, 12f));
+
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f));
+        btnExport.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 1.0f, 8.0f));
+
+        setupClickable(btnCancel, true, dialog::dismiss);
+        setupClickable(btnExport, true, () -> {
             dialog.dismiss();
             callback.onSortSelected(selectedOrder[0]);
         });
-
-        android.graphics.drawable.StateListDrawable cancelSelector = new android.graphics.drawable.StateListDrawable();
-        cancelSelector.addState(new int[]{android.R.attr.state_pressed}, ResponsiveUI.createRoundedBg(this, ThemeManager.getBorderColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f));
-        cancelSelector.addState(new int[]{}, ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f));
-        btnCancel.setBackground(cancelSelector);
-
-        android.graphics.drawable.StateListDrawable exportSelector = new android.graphics.drawable.StateListDrawable();
-        exportSelector.addState(new int[]{android.R.attr.state_pressed}, ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 1.0f, 8.0f));
-        exportSelector.addState(new int[]{}, ResponsiveUI.createRoundedBg(this, ThemeManager.getSecondaryAccentColor(this), ThemeManager.getSecondaryAccentColor(this), 1.0f, 8.0f));
-        btnExport.setBackground(exportSelector);
 
         if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
