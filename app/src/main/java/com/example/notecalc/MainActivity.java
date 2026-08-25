@@ -3270,73 +3270,145 @@ public class MainActivity extends AppCompatActivity {
      * Supports word-wrapping for long titles and automatic pagination for all record rows.
      */
     
+    private android.app.Dialog showProgressDialog(String message) {
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        layout.setPadding(60, 60, 60, 60);
+        layout.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        layout.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16.0f));
+
+        android.widget.ProgressBar progressBar = new android.widget.ProgressBar(this);
+        progressBar.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getPrimaryAccentColor(this)));
+
+        android.widget.TextView tvMessage = new android.widget.TextView(this);
+        tvMessage.setText(message);
+        tvMessage.setTextColor(getColor(R.color.text_primary));
+        tvMessage.setTextSize(16f);
+        tvMessage.setPadding(40, 0, 0, 0);
+
+        layout.addView(progressBar);
+        layout.addView(tvMessage);
+
+        dialog.setContentView(layout);
+        dialog.show();
+
+        return dialog;
+    }
+
     private void generateAndOpenAllPdf() {
-        android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
-        int[] pageTracker = {0};
-        boolean hasRecords = false;
+        android.app.Dialog progressDialog = showProgressDialog("Generating PDF...");
         
-        for (AccountGroup group : appStorage.groups) {
-            for (Account account : group.getAccounts()) {
+        new Thread(() -> {
+            android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
+            int[] pageTracker = {0};
+            boolean hasRecords = false;
+            
+            for (AccountGroup group : appStorage.groups) {
+                for (Account account : group.getAccounts()) {
+                    if (!account.getRecords().isEmpty()) {
+                        appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
+                        hasRecords = true;
+                    }
+                }
+            }
+            for (Account account : appStorage.standaloneAccounts) {
                 if (!account.getRecords().isEmpty()) {
                     appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
                     hasRecords = true;
                 }
             }
-        }
-        for (Account account : appStorage.standaloneAccounts) {
-            if (!account.getRecords().isEmpty()) {
-                appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
-                hasRecords = true;
+            
+            if (!hasRecords) {
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.widget.Toast.makeText(MainActivity.this, "No records found to export.", android.widget.Toast.LENGTH_SHORT).show();
+                });
+                document.close();
+                return;
             }
-        }
-        
-        if (!hasRecords) {
-            android.widget.Toast.makeText(this, "No records found to export.", android.widget.Toast.LENGTH_SHORT).show();
-            document.close();
-            return;
-        }
 
-        try {
-            java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
-            if (pdfDir == null) return;
-            if (!pdfDir.exists() && !pdfDir.mkdirs()) return;
-            java.io.File file = new java.io.File(pdfDir, "All_Accounts_Export.pdf");
-            document.writeTo(new java.io.FileOutputStream(file));
-            document.close();
+            try {
+                java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
+                if (pdfDir == null) {
+                    runOnUiThread(progressDialog::dismiss);
+                    return;
+                }
+                if (!pdfDir.exists() && !pdfDir.mkdirs()) {
+                    runOnUiThread(progressDialog::dismiss);
+                    return;
+                }
+                java.io.File file = new java.io.File(pdfDir, "All_Accounts_Export.pdf");
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
+                    document.writeTo(fos);
+                }
+                document.close();
 
-            android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".fileprovider", file);
-            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/pdf");
-            intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
-        } catch (Exception e) {
-            android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
-            android.widget.Toast.makeText(this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
-            document.close();
-        }
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "application/pdf");
+                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                });
+            } catch (Exception e) {
+                android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                });
+                document.close();
+            }
+        }).start();
     }
 
     private void generateAndOpenPdf(Account account, PdfSortOrder sortOrder) {
-        android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
-        int[] pageTracker = {0};
-        appendAccountToPdf(document, account, pageTracker, sortOrder);
-        try {
-            java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
-            if (pdfDir == null) return;
-            if (!pdfDir.exists() && !pdfDir.mkdirs()) return;
-            java.io.File file = new java.io.File(pdfDir, account.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + ".pdf");
-            document.writeTo(new java.io.FileOutputStream(file));
-            document.close();
-            android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".fileprovider", file);
-            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/pdf");
-            intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
-        } catch (Exception e) {
-            android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
-            android.widget.Toast.makeText(this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
-            document.close();
-        }
+        android.app.Dialog progressDialog = showProgressDialog("Generating PDF...");
+        
+        new Thread(() -> {
+            android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
+            int[] pageTracker = {0};
+            appendAccountToPdf(document, account, pageTracker, sortOrder);
+            try {
+                java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
+                if (pdfDir == null) {
+                    runOnUiThread(progressDialog::dismiss);
+                    return;
+                }
+                if (!pdfDir.exists() && !pdfDir.mkdirs()) {
+                    runOnUiThread(progressDialog::dismiss);
+                    return;
+                }
+                java.io.File file = new java.io.File(pdfDir, account.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + ".pdf");
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
+                    document.writeTo(fos);
+                }
+                document.close();
+                
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "application/pdf");
+                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                });
+            } catch (Exception e) {
+                android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                });
+                document.close();
+            }
+        }).start();
     }
 
     private void appendAccountToPdf(android.graphics.pdf.PdfDocument document, Account account, int[] pageTracker, PdfSortOrder sortOrder) {
@@ -4682,26 +4754,43 @@ public class MainActivity extends AppCompatActivity {
 
     private void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
-        android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
-        int[] pageTracker = {0};
-        appendSelectedRecordsToPdf(document, currentEditingAccount, selectedRecords, pageTracker, sortOrder);
-        try {
-            java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
-            if (pdfDir == null) return;
-            if (!pdfDir.exists()) pdfDir.mkdirs();
-            java.io.File file = new java.io.File(pdfDir, currentEditingAccount.getTitle().replaceAll("[/\\\\:*?\"<>|]", "_") + "_Selected.pdf");
-            document.writeTo(new java.io.FileOutputStream(file));
-            document.close();
-            android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".fileprovider", file);
-            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/pdf");
-            intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
-        } catch (Exception e) {
-            android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
-            android.widget.Toast.makeText(this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
-            document.close();
-        }
+        
+        android.app.Dialog progressDialog = showProgressDialog("Generating PDF...");
+        
+        new Thread(() -> {
+            android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
+            int[] pageTracker = {0};
+            appendSelectedRecordsToPdf(document, currentEditingAccount, selectedRecords, pageTracker, sortOrder);
+            try {
+                java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
+                if (pdfDir == null) {
+                    runOnUiThread(progressDialog::dismiss);
+                    return;
+                }
+                if (!pdfDir.exists()) pdfDir.mkdirs();
+                java.io.File file = new java.io.File(pdfDir, "Selected_Export.pdf");
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
+                    document.writeTo(fos);
+                }
+                document.close();
+                
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "application/pdf");
+                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                });
+            } catch (Exception e) {
+                android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                });
+                document.close();
+            }
+        }).start();
     }
     private void appendSelectedRecordsToPdf(android.graphics.pdf.PdfDocument document, Account account, java.util.List<Record> selectedRecords, int[] pageTracker, PdfSortOrder sortOrder) {
         // --- Page dimensions (A4 at 72 dpi approx) ---
@@ -5087,19 +5176,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 
                 java.io.File destFile = new java.io.File(attachmentsDir, originalName);
-                java.io.InputStream in = getContentResolver().openInputStream(uri);
-                if (in == null) throw new java.io.IOException("Failed to open input stream");
-                java.io.FileOutputStream out = new java.io.FileOutputStream(destFile);
-                byte[] buffer = new byte[1024];
-                int read;
-                while ((read = in.read(buffer)) != -1) {
-                    out.write(buffer, 0, read);
+                if (destFile.exists() || destFile.createNewFile()) {
+                    try (java.io.InputStream in = getContentResolver().openInputStream(uri);
+                         java.io.FileOutputStream out = new java.io.FileOutputStream(destFile)) {
+                        if (in == null) throw new java.io.IOException("Failed to open input stream");
+                        byte[] buffer = new byte[1024];
+                        int read;
+                        while ((read = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, read);
+                        }
+                    }
+                    tempAttachments.add(destFile.getAbsolutePath());
+                    renderEditorAttachments();
                 }
-                in.close();
-                out.close();
-                
-                tempAttachments.add(destFile.getAbsolutePath());
-                renderEditorAttachments();
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to attach file", e);
                 Toast.makeText(this, getString(R.string.auto_failed_to_attach_fil_11), Toast.LENGTH_SHORT).show();
