@@ -72,4 +72,8 @@
     <string name="auto_remarks_e_g_bought_a_37">Remarks (e.g. bought at DMart - optional)</string>
     <string name="auto_restore_backup_38">Restore Backup</string>
     <string name="auto_are_you_sure_this_wi_39">Are you sure? This will completely overwrite your current data.</string>
+    
+    <!-- EditorUIHelper.java Strings -->
+    <string name="total_of_selection">TOTAL OF SELECTION</string>
+    <string name="records_count">Records : %1$d</string>
 </resources>

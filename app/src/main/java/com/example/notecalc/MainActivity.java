@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView btnSortTotal;
     private TextView btnSortLatest;
     private TextView textTotalValField;
+    private TextView textTotalLabelField;
     private com.google.android.material.snackbar.Snackbar currentSnackbar;
 
     private TextView thSnoField;
@@ -1196,6 +1197,7 @@ public class MainActivity extends AppCompatActivity {
         TextView btnCancelEdit = editorView.findViewById(R.id.btn_cancel_edit_record);
         RecyclerView listRecordsRecyclerView = editorView.findViewById(R.id.list_records);
         TextView textTotalVal = editorView.findViewById(R.id.text_total_value);
+        TextView textTotalLabel = editorView.findViewById(R.id.text_total_label);
         TextView btnSave = editorView.findViewById(R.id.btn_save_account);
         View formContainer = editorView.findViewById(R.id.form_container);
         View tableHeader = editorView.findViewById(R.id.table_header);
@@ -1292,6 +1294,7 @@ public class MainActivity extends AppCompatActivity {
         };
         new androidx.recyclerview.widget.ItemTouchHelper(recordSwipeCallback).attachToRecyclerView(listRecordsRecyclerView);
         textTotalValField = textTotalVal;
+        textTotalLabelField = textTotalLabel;
 
         // Collapsible form, remarks, empty state, and bulk delete view mappings
         editRemarksField = editorView.findViewById(R.id.edit_record_remarks);
@@ -1772,11 +1775,6 @@ public class MainActivity extends AppCompatActivity {
      * Helper to render the records in the table format.
      */
     private void populateRecordsList() {
-        double total = 0;
-        for (Record record : getActiveRecords()) {
-            total += record.getAmount();
-        }
-        textTotalValField.setText(String.format(Locale.getDefault(), "%.2f", total));
         if (recordsAdapter != null) {
             recordsAdapter.refreshDisplay();
         }
@@ -1940,6 +1938,7 @@ public class MainActivity extends AppCompatActivity {
                 displayRecords.add(r);
             }
             notifyDataSetChanged();
+            updateBulkActionsState();
         }
 
         /** Call this whenever tempRecords changes (add/edit/delete/sort) to refresh display. */
@@ -2506,33 +2505,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isFilterActive() {
+        if (recordsAdapter != null && !recordsAdapter.filterCategories.isEmpty()) return true;
+        if (currentRecordSearchQuery != null && !currentRecordSearchQuery.trim().isEmpty()) return true;
+        if (getFilterDateFrom() != null || getFilterDateTo() != null) return true;
+        return getFilterAmountFrom() != null || getFilterAmountTo() != null;
+    }
+
     /**
      * Shows or hides the "Delete Selected" button based on whether any records are selected.
      */
     @android.annotation.SuppressLint("SetTextI18n")
     private void updateBulkActionsState() {
         if (btnBulkActionsMenu == null) return;
-        boolean anySelected = false;
-        double selectedTotal = 0.0;
-        for (Record r : getActiveRecords()) {
-            if (r.isSelected()) {
-                anySelected = true;
-                selectedTotal += r.getAmount();
-            }
-        }
-
-        if (containerBulkActions != null) {
-            containerBulkActions.setVisibility(View.VISIBLE);
-        }
-
-        if (textSelectedTotal != null) {
-            textSelectedTotal.setVisibility(anySelected ? View.VISIBLE : View.GONE);
-            if (anySelected) textSelectedTotal.setText(String.format(Locale.getDefault(), "Total: %.2f", selectedTotal));
-        }
-
-        if (cbSelectAllHeader != null) {
-            cbSelectAllHeader.setVisibility(anySelected ? View.VISIBLE : View.GONE);
-        }
+        
+        int filterCount = recordsAdapter != null ? recordsAdapter.displayRecords.size() : 0;
+        
+        boolean anySelected = EditorUIHelper.updateTotalsAndBulkActions(
+                getActiveRecords(),
+                filterCount,
+                isFilterActive(),
+                containerBulkActions,
+                textSelectedTotal,
+                textTotalValField,
+                textTotalLabelField,
+                cbSelectAllHeader
+        );
 
         if (recordsAdapter != null) {
             recordsAdapter.setSelectionMode(anySelected);
