@@ -391,12 +391,12 @@ public class MainActivity extends AppCompatActivity {
         android.widget.Button btnClear = new android.widget.Button(this);
         btnClear.setText(getString(R.string.auto_clear_all_13));
         btnClear.setTextColor(getColor(R.color.text_tertiary));
-        btnClear.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        btnClear.setBackground(ResponsiveUI.createRippleRoundedBg(this, android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT, 0f, 4f));
         
         android.widget.Button btnApply = new android.widget.Button(this);
         btnApply.setText(getString(R.string.auto_apply_14));
         btnApply.setTextColor(ThemeManager.getPrimaryAccentColor(this));
-        btnApply.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(this, android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT, 0f, 4f));
         
         btnLayout.addView(btnClear);
         btnLayout.addView(btnApply);
@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.getWindow().setLayout((int)(300 * getResources().getDisplayMetrics().density), android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         
-        btnApply.setOnClickListener(v -> {
+        setupClickable(btnApply, true, () -> {
             java.util.Set<String> selected = new java.util.HashSet<>();
             android.util.SparseBooleanArray checked = listView.getCheckedItemPositions();
             for (int i = 0; i < catList.size(); i++) {
@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.dismiss();
         });
         
-        btnClear.setOnClickListener(v -> {
+        setupClickable(btnClear, true, () -> {
             if (recordsAdapter != null) {
                 recordsAdapter.setFilterCategories(new java.util.HashSet<>());
             }
