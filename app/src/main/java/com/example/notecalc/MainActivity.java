@@ -2737,7 +2737,7 @@ public class MainActivity extends AppCompatActivity {
                 6f
         ));
 
-        btnCancel.setBackground(ResponsiveUI.createRoundedBg(
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
                 this,
                 ThemeManager.getBgPrimaryColor(MainActivity.this),
                 ThemeManager.getBorderColor(MainActivity.this),
@@ -2745,18 +2745,18 @@ public class MainActivity extends AppCompatActivity {
                 4f
         ));
 
-        btnDelete.setBackground(ResponsiveUI.createRoundedBg(
+        btnDelete.setBackground(ResponsiveUI.createRippleRoundedBg(
                 this,
                 getColor(R.color.error_red),
-                0,
-                0,
+                getColor(R.color.error_red),
+                0f,
                 4f
         ));
 
         ResponsiveUI.applyResponsiveness(dialogView);
 
-        setupClickable(btnCancel, dialog::dismiss);
-        setupClickable(btnDelete, () -> {
+        setupClickable(btnCancel, true, dialog::dismiss);
+        setupClickable(btnDelete, true, () -> {
             dialog.dismiss();
             if (currentViewGroup != null) {
                 currentViewGroup.getAccounts().remove(account);
