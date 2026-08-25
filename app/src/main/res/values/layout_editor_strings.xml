@@ -14,5 +14,21 @@
     <string name="editor_empty_title">No Expenditures Added</string>
     <string name="editor_empty_desc">Use the \'ADD EXPENDITURE\' form above to begin noting down your costs.</string>
     <string name="editor_btn_nc_agent">NC Agent</string>
-    <string name="editor_amount_desc">Enter Expenditure Amount</string>
+
+    <string name="label_add_record">ADD EXPENDITURE</string>
+    <string name="label_edit_record">EDIT EXPENDITURE</string>
+    <string name="btn_add_record">Add Item</string>
+    <string name="btn_edit_record">Update Item</string>
+    <string name="btn_cancel_edit_record">Cancel</string>
+    <string name="hint_list_title">Enter List Title (e.g. June Expenses)</string>
+    <string name="hint_record_desc">Description (e.g. Milk)</string>
+    <string name="hint_record_amount">Amount</string>
+    <string name="th_sno">S.N.</string>
+    <string name="th_desc">Description</string>
+    <string name="th_date">Date</string>
+    <string name="th_amount">Amount</string>
+    <string name="total_spendings_label">TOTAL SPENDINGS</string>
+    <string name="btn_save_account">Save Expense List</string>
+    <string name="error_title_exists">Title already exists</string>
+    <string name="placeholder_total_spendings_label">Spent : </string>
 </resources>
