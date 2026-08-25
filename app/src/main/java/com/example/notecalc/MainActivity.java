@@ -4397,18 +4397,22 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAsDropDown(anchor, 0, 0);
     }
 
+    @android.annotation.SuppressLint("SetTextI18n")
     private void showTransferDialog(List<Record> selectedRecords, boolean isCut) {
         List<Account> targetAccounts = new ArrayList<>();
         for (AccountGroup g : appStorage.groups) targetAccounts.addAll(g.getAccounts());
         targetAccounts.addAll(appStorage.standaloneAccounts);
         
-        List<String> names = new ArrayList<>();
-        names.add("Create New List");
+        List<String> accountNames = new ArrayList<>();
         for (Account a : targetAccounts) {
             if (a != currentEditingAccount) {
-                names.add(a.getTitle());
+                accountNames.add(a.getTitle());
             }
         }
+        accountNames.sort(String.CASE_INSENSITIVE_ORDER);
+        List<String> names = new ArrayList<>();
+        names.add("Create New List");
+        names.addAll(accountNames);
         
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_transfer, null);
@@ -4417,6 +4421,17 @@ public class MainActivity extends AppCompatActivity {
         final androidx.appcompat.app.AlertDialog dialog = builder.create();
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+        
+        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
+        if (dialogRoot != null) {
+            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
+                    this,
+                    ThemeManager.getBgSecondaryColor(this),
+                    ThemeManager.getBorderColor(this),
+                    1.5f,
+                    12f
+            ));
         }
         
         TextView title = dialogView.findViewById(R.id.dialog_title);
@@ -4429,19 +4444,37 @@ public class MainActivity extends AppCompatActivity {
             TextView item = new TextView(this);
             item.setText(names.get(i));
             item.setTextSize(16f);
-            item.setTextColor(getResources().getColor(R.color.text_primary, getTheme()));
             int padding = (int) (16 * getResources().getDisplayMetrics().density);
             item.setPadding(padding, padding, padding, padding);
             
-            // Add a bottom border
+            if (i == 0) {
+                item.setTextColor(ThemeManager.getPrimaryAccentColor(this));
+                item.setTypeface(null, android.graphics.Typeface.BOLD);
+                item.setText("+  " + names.get(i));
+                item.setBackground(ResponsiveUI.createRoundedBg(
+                        this,
+                        ThemeManager.getBgPrimaryColor(this),
+                        ThemeManager.getPrimaryAccentColor(this),
+                        1.5f,
+                        6f
+                ));
+            } else {
+                item.setTextColor(getResources().getColor(R.color.text_primary, getTheme()));
+                item.setBackground(ResponsiveUI.createRoundedBg(
+                        this,
+                        ThemeManager.getBgPrimaryColor(this),
+                        ThemeManager.getBorderColor(this),
+                        1.0f,
+                        6f
+                ));
+            }
+            
             android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
                 android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 
                 android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.bottomMargin = (int) (1 * getResources().getDisplayMetrics().density);
+            params.bottomMargin = (int) (8 * getResources().getDisplayMetrics().density);
             item.setLayoutParams(params);
-            item.setBackgroundColor(getResources().getColor(R.color.bg_primary_blue, getTheme())); // fallback color, wait... it should use theme color.
-            // Actually, setting background to transparent and letting container show it, or a ripple is better.
             
             setupClickable(item, false, () -> {
                 dialog.dismiss();
@@ -4462,18 +4495,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             container.addView(item);
-            
-            View divider = new View(this);
-            divider.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 
-                (int) (1 * getResources().getDisplayMetrics().density)
-            ));
-            divider.setBackgroundColor(android.graphics.Color.parseColor("#15FFFFFF"));
-            container.addView(divider);
         }
         
         View btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        btnCancel.setBackground(createButtonSelector(android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+        btnCancel.setBackground(ResponsiveUI.createRoundedBg(
+                this,
+                ThemeManager.getBgPrimaryColor(this),
+                ThemeManager.getBorderColor(this),
+                1.0f,
+                6f
+        ));
         setupClickable(btnCancel, false, dialog::dismiss);
         
         dialog.show();
@@ -4994,7 +5025,11 @@ public class MainActivity extends AppCompatActivity {
                         int index = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
                         if (index != -1) {
                             String tempName = cursor.getString(index);
-                            if (tempName != null) originalName = new java.io.File(tempName).getName().replaceAll("[/\\\\:*?\"<>|]", "_");
+                            if (tempName != null) {
+                                int lastSlash = tempName.lastIndexOf('/');
+                                String nameOnly = (lastSlash != -1) ? tempName.substring(lastSlash + 1) : tempName;
+                                originalName = nameOnly.replaceAll("[/\\\\:*?\"<>|]", "_");
+                            }
                         }
                     }
                 }
