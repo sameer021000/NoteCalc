@@ -4320,6 +4320,7 @@ public class MainActivity extends AppCompatActivity {
         android.view.View versionContainer = settingsView.findViewById(R.id.version_container);
         if (versionContainer != null) {
             versionContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 24f));
+            setupClickable(versionContainer, true, () -> AboutCurrentVersionHelper.showDialog(MainActivity.this));
         }
     }
 
