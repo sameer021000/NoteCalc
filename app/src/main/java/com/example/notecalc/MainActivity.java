@@ -1688,7 +1688,8 @@ public class MainActivity extends AppCompatActivity {
                 record.setDate(selectedRecordDate);
                 record.setRemarks(remarks);
                 record.setCategory(category);
-                  record.setAttachments(new java.util.ArrayList<>(tempAttachments));
+                record.setAttachments(new java.util.ArrayList<>(tempAttachments));
+                record.setTimestampMillis(System.currentTimeMillis());
                 applySorting();
                 cancelEditRecordMode();
             } else {
@@ -4823,6 +4824,7 @@ public class MainActivity extends AppCompatActivity {
             Record copy = new Record(r.getDescription(), r.getAmount(), r.getDate());
             copy.setRemarks(r.getRemarks());
             copy.setCategory(r.getCategory());
+            copy.setTimestampMillis(r.getTimestampMillis());
             if (r.getAttachments() != null) {
                 copy.getAttachments().addAll(r.getAttachments());
             }

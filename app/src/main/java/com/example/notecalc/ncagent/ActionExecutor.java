@@ -104,6 +104,10 @@ public class ActionExecutor {
                     updatedRecord.setCategory(matches.get(0).getCategory());
                     updatedRecord.setRemarks(matches.get(0).getRemarks());
                     updatedRecord.setOriginalIndex(matches.get(0).getOriginalIndex());
+                    updatedRecord.setTimestampMillis(System.currentTimeMillis());
+                    if (matches.get(0).getAttachments() != null) {
+                        updatedRecord.getAttachments().addAll(matches.get(0).getAttachments());
+                    }
                     
                     // Apply new
                     if (candidate.getDescription() != null && !candidate.getDescription().isEmpty()) updatedRecord.setDescription(candidate.getDescription());
