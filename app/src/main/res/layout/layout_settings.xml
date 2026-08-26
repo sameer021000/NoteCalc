@@ -258,13 +258,14 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@android:drawable/ic_menu_info_details"
-                    app:tint="?attr/colorAccentSecondary" />
+                    app:tint="?attr/colorAccentSecondary"
+                    android:contentDescription="@null" />
                 <TextView
                     android:id="@+id/tv_app_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/notecalc_v1_3_0"
+                    android:text="@string/notecalc_vx_x_x"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.05"
