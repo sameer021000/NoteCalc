@@ -4,6 +4,26 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.4.0] - 2026-08-25
+
+### ✨ Added
+
+* **Group PDF Export**: You can now download all lists within a specific group as a single combined PDF by long-pressing the group from the dashboard.
+* **What's New Dialog**: Added a beautiful, premium "What's New" rainbow card dialog to view recent changelogs, accessible by tapping the version number in Settings.
+* **Filter Record Count**: The UI now dynamically displays the total number of matching records whenever a search or filter is applied.
+
+### 🎨 Improved
+
+* **Settings Screen UI**: Overhauled the Settings screen layout for a cleaner, more modern look.
+* **Unified Touch Feedback**: Standardized the premium "bounce and ripple" touch animations across all buttons throughout the application.
+* **Code Quality & String Migration**: Migrated all hardcoded strings into dedicated string resource files and resolved all layout warnings across screens for better localization and cleaner code.
+
+### 🐛 Fixed
+
+* **PDF Generation Crash**: Fixed a major crash occurring when navigating away from the app after generating a PDF by offloading PDF generation to background threads and ensuring resources are safely closed.
+
+---
+
 ## [1.3.0] - 2026-08-19
 
 ### ✨ Added
@@ -70,7 +90,7 @@ All notable changes to **NoteCalc** will be documented in this file.
 * **Groups & Standalone Accounts**: Create organized folders for accounts or keep them standalone.
 * **PDF Export Engine**: Capability to generate and export paginated, multi-table PDF reports for individual accounts or the entire app.
 * **JSON Backup System**: Added secure, offline-first JSON Import and Export capabilities via the Settings screen.
-* **Advanced Filtering & Sorting**: Added dynamic search bars (including remarks), date range filters, and amount range filters.
+* **Advanced Filtering**: Search through records by description or remarks, and filter by exact dates or amount ranges. The UI will dynamically display the total number of matching records found.
 
 ### 🎨 Improved
 

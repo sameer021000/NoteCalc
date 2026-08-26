@@ -745,6 +745,54 @@
                         android:paddingStart="16dp"/>
                         
                 </LinearLayout>
+                
+                <!-- NEW CARD: Item 9 (Filter Count) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_blue"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item9_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_blue_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat2_item9_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="@string/tips_watermark_09"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"/>
+                        
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Category Header -->
@@ -1494,6 +1542,100 @@
                         android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_pink_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                
+                <!-- NEW CARD -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_blue"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item4_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_blue_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item4_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="@string/tips_watermark_04"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
+                
+                <!-- NEW CARD: Item 5 (Group PDF) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_green"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item5_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_green_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat5_item5_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="@string/tips_watermark_05"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_green_secondary"
                         android:alpha="0.2"
                         android:paddingStart="16dp"/>
                         

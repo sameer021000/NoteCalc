@@ -18,9 +18,9 @@
     <string name="tips_cat1_item6_desc">You can keep important lists and groups easier to access by pinning them.\n\n<b>How:</b>\nTap the pin icon on a list or group.</string>
     <string name="tips_cat2_title">2. Search, Filter &amp; Sort</string>
     <string name="tips_cat2_item1_title">Tap a Date to See the Day</string>
-    <string name="tips_cat2_item1_desc">The date displayed in a record can show the day of the week temporarily.\n\n<b>How:</b>\nTap the date in a record.\n\nFor example, 20-08-2026 can temporarily change to Thursday.\n\nIt automatically changes back after a few seconds.</string>
+    <string name="tips_cat2_item1_desc">The date displayed in a record can show the day of the week temporarily.\n\n<b>How:</b>\nTap the date in a record.\n\nFor example, 20&#8211;08&#8211;2026 can temporarily change to Thursday.\n\nIt automatically changes back after a few seconds.</string>
     <string name="tips_cat2_item2_title">Combine Search and Filters</string>
-    <string name="tips_cat2_item2_desc">Search and filters can be used together.\n\n<b>Example:</b>\nSearch for Lunch and apply a Category or Date Range filter at the same time.\n\nThis helps narrow down a large list quickly.</string>
+    <string name="tips_cat2_item2_desc">Search and filters can be used together.\n\n<b>Example:</b>\nSearch for Lunch and apply a Category or Date Range filter at the same time.\n\nThis helps narrow down a large list quickly. NoteCalc will also display the total number of matching records found.</string>
     <string name="tips_cat2_item3_title">Filter by Category</string>
     <string name="tips_cat2_item3_desc">You can filter records based on their categories.</string>
     <string name="tips_cat2_item4_title">Filter by Date Range</string>
@@ -33,9 +33,11 @@
     <string name="tips_cat2_item7_desc">If your Dashboard contains many lists, use the search bar to find a list quickly.</string>
     <string name="tips_cat2_item8_title">Sort Lists from the Dashboard</string>
     <string name="tips_cat2_item8_desc">Your Dashboard lists can also be sorted by:\n\nTitle\nTotal\nLatest Modified\n\nTap the corresponding sorting option to change the order.</string>
+    <string name="tips_cat2_item9_title">View Filter Results Count</string>
+    <string name="tips_cat2_item9_desc">When you apply a search query or filter, NoteCalc dynamically displays the total number of matching records that were found.</string>
     <string name="tips_cat3_title">3. Bulk Actions</string>
-    <string name="tips_cat3_item1_title">See the Total of Selected Records</string>
-    <string name="tips_cat3_item1_desc">When records are selected, NoteCalc shows the combined amount of the selected records.\n\n<b>Where:</b>\nLook at the total amount displayed in the Bulk Actions/selection area after selecting records.\n\nThis is useful when you want to quickly know the total of a particular selection.</string>
+    <string name="tips_cat3_item1_title">See the Count and Total of Selected Records</string>
+    <string name="tips_cat3_item1_desc">When records are selected, NoteCalc shows the number of selected records and their combined amount.\n\n<b>Where:</b>\nLook at the information displayed in the Bulk Actions/selection area after selecting records.</string>
     <string name="tips_cat3_item2_title">Export Only Selected Records</string>
     <string name="tips_cat3_item2_desc">You don\'t have to export the entire list.\n\n<b>How:</b>\nSelect the records &#x2192; Bulk Actions &#x2192; Export as PDF.\n\nThe PDF will contain only the selected records.</string>
     <string name="tips_cat3_item3_title">Delete Multiple Records Together</string>
@@ -64,4 +66,8 @@
     <string name="tips_cat5_item2_desc">You can restore your data from a previously exported JSON backup.\n\n<b>How:</b>\nGo to Settings &#x2192; Data &amp; Backup &#x2192; Import Backup (JSON).\n\nWarning: Restoring a backup overwrites your current NoteCalc data.</string>
     <string name="tips_cat5_item3_title">Export All Lists to One PDF</string>
     <string name="tips_cat5_item3_desc">You can create a PDF containing all your available records instead of exporting lists individually.\n\n<b>How:</b>\nGo to Settings &#x2192; Data &amp; Backup &#x2192; Export All to PDF.</string>
+    <string name="tips_cat5_item4_title">View What\'s New</string>
+    <string name="tips_cat5_item4_desc">You can view the latest features and changes added to NoteCalc.\n\n<b>How:</b>\nGo to Settings and tap on the App Version number at the bottom of the screen.</string>
+    <string name="tips_cat5_item5_title">Export a Group to PDF</string>
+    <string name="tips_cat5_item5_desc">You can download all the lists inside a specific Group as a single combined PDF.\n\n<b>How:</b>\nLong-press on a Group in the Dashboard and select Export Group as PDF.</string>
 </resources>
