@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_version_title">What\'s New in NoteCalc v1.3.0</string>
+    <string name="about_version_title">What\'s New in NoteCalc v1.4.0</string>
     <string name="about_version_btn_dismiss">Awesome!</string>
     
-    <string name="about_item1_title">\uD83D\uDCCE File Attachments</string>
-    <string name="about_item1_desc">You can now attach images, PDFs, and documents directly to your records!</string>
+    <string name="about_item1_title">\uD83D\uDCC1 Group PDF Export</string>
+    <string name="about_item1_desc">You can now download all lists within a specific group as a single combined PDF by long-pressing the group from the dashboard!</string>
     
-    <string name="about_item2_title">\uD83D\uDCF7 In-App Camera</string>
-    <string name="about_item2_desc">Snap photos instantly right from the app when attaching files.</string>
+    <string name="about_item2_title">\uD83D\uDD22 Filter Record Count</string>
+    <string name="about_item2_desc">The UI now dynamically displays the total number of matching records whenever a search or filter is applied.</string>
     
-    <string name="about_item3_title">\uD83D\uDCD1 Smarter PDF Exports</string>
-    <string name="about_item3_desc">Your exported PDFs now include beautiful image appendices, exact timestamps, and perfectly formatted tables.</string>
+    <string name="about_item3_title">\u2728 What\'s New Dialog</string>
+    <string name="about_item3_desc">You\'re looking at it! We added this beautiful rainbow card dialog to help you discover new features directly from Settings.</string>
     
-    <string name="about_item4_title">\uD83C\uDFA8 Smoother Experience</string>
-    <string name="about_item4_desc">We\'ve polished menus, animations, and dialogs to make NoteCalc feel more premium and responsive.</string>
+    <string name="about_item4_title">\uD83C\uDFA8 UI Overhauls</string>
+    <string name="about_item4_desc">We\'ve redesigned the Settings screen and standardized premium \'bounce\' touch animations across all buttons.</string>
     
     <string name="about_item5_title">\uD83D\uDC1B Bug Fixes</string>
-    <string name="about_item5_desc">We\'ve squashed some pesky bugs related to sorting, transfers, and timestamps.</string>
+    <string name="about_item5_desc">We\'ve improved string localization across the app and fixed a major crash related to background PDF generation.</string>
 </resources>
