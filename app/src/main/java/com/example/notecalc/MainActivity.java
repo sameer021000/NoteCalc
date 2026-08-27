@@ -2609,6 +2609,24 @@ public class MainActivity extends AppCompatActivity {
      */
     @android.annotation.SuppressLint("SetTextI18n")
     private void showDeleteMultipleConfirmationDialog(List<Record> selectedRecords) {
+        if (selectedRecords.size() <= 2) {
+            for (Record r : selectedRecords) {
+                int idx = getActiveRecords().indexOf(r);
+                if (idx != -1) {
+                    if (editingRecordIndex == idx) {
+                        cancelEditRecordMode();
+                    } else if (editingRecordIndex > idx) {
+                        editingRecordIndex--;
+                    }
+                }
+            }
+            getActiveRecords().removeAll(selectedRecords);
+            populateRecordsList();
+            updateBulkActionsState();
+            updateHeaderLabels();
+            return;
+        }
+
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.layout_delete_multiple_dialog, null);
         builder.setView(dialogView);
@@ -2730,6 +2748,8 @@ public class MainActivity extends AppCompatActivity {
             }
             getActiveRecords().removeAll(selectedRecords);
             populateRecordsList();
+            updateBulkActionsState();
+            updateHeaderLabels();
         });
 
         dialog.show();
