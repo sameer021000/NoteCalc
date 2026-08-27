@@ -16,6 +16,8 @@
     <string name="tips_cat1_item5_desc">You can place a list inside a Group to keep the Dashboard organized.\n\n<b>How:</b>\nOpen the list options menu for the list you want to organize &#x2192; choose Move to Group &#x2192; select the destination Group.</string>
     <string name="tips_cat1_item6_title">Pin Frequently Used Lists and Groups</string>
     <string name="tips_cat1_item6_desc">You can keep important lists and groups easier to access by pinning them.\n\n<b>How:</b>\nTap the pin icon on a list or group.</string>
+    <string name="tips_cat1_item7_title">Archive Old Lists and Groups</string>
+    <string name="tips_cat1_item7_desc">You can archive lists and groups to declutter your Dashboard. Archived items are read-only to prevent accidental changes.\n\n<b>How:</b>\nLong press a list or group and select Archive.\n\nTo view or unarchive them, tap the Archive icon at the top of the Dashboard.</string>
     <string name="tips_cat2_title">2. Search, Filter &amp; Sort</string>
     <string name="tips_cat2_item1_title">Tap a Date to See the Day</string>
     <string name="tips_cat2_item1_desc">The date displayed in a record can show the day of the week temporarily.\n\n<b>How:</b>\nTap the date in a record.\n\nFor example, 20&#8211;08&#8211;2026 can temporarily change to Thursday.\n\nIt automatically changes back after a few seconds.</string>

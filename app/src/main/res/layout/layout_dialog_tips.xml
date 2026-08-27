@@ -344,6 +344,52 @@
                         android:paddingStart="16dp"/>
                         
                 </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_blue"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item7_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_blue_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item7_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="@string/tips_watermark_07"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_blue_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Category Header -->
