@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_version_title">What\'s New in NoteCalc v1.4.0</string>
+    <string name="about_version_title">What\'s New in NoteCalc v1.5.0</string>
     <string name="about_version_btn_dismiss">Awesome!</string>
     
-    <string name="about_item1_title">\uD83D\uDCC1 Group PDF Export</string>
-    <string name="about_item1_desc">You can now download all lists within a specific group as a single combined PDF by long-pressing the group from the dashboard!</string>
+    <string name="about_item1_title">\uD83D\uDDC4\uFE0F Archiving System</string>
+    <string name="about_item1_desc">Declutter your dashboard by archiving old lists and groups! Archived items become completely read-only to prevent accidental changes.</string>
     
-    <string name="about_item2_title">\uD83D\uDD22 Filter Record Count</string>
-    <string name="about_item2_desc">The UI now dynamically displays the total number of matching records whenever a search or filter is applied.</string>
+    <string name="about_item2_title">\uD83D\uDD0D Dedicated Archive View</string>
+    <string name="about_item2_desc">Access, sort, and search through all of your archived lists and groups safely separated from your active items via the new dashboard icon.</string>
     
-    <string name="about_item3_title">\u2728 What\'s New Dialog</string>
-    <string name="about_item3_desc">You\'re looking at it! We added this beautiful rainbow card dialog to help you discover new features directly from Settings.</string>
+    <string name="about_item3_title">\u26A1 Quick Delete</string>
+    <string name="about_item3_desc">We\'ve bypassed the confirmation dialog when you are bulk-deleting 2 or fewer records for a much faster workflow.</string>
     
-    <string name="about_item4_title">\uD83C\uDFA8 UI Overhauls</string>
-    <string name="about_item4_desc">We\'ve redesigned the Settings screen and standardized premium \'bounce\' touch animations across all buttons.</string>
+    <string name="about_item4_title">\uD83D\uDEE1\uFE0F Bulk Transfer Safety</string>
+    <string name="about_item4_desc">To keep your past financial data securely intact, you can no longer accidentally cut or copy active records into archived lists.</string>
     
-    <string name="about_item5_title">\uD83D\uDC1B Bug Fixes</string>
-    <string name="about_item5_desc">We\'ve improved string localization across the app and fixed a major crash related to background PDF generation.</string>
+    <string name="about_item5_title">\uD83D\uDCA1 New Tips &amp; Features</string>
+    <string name="about_item5_desc">Added a brand new tip card detailing exactly how to manage Archived items and when to use them.</string>
 </resources>
