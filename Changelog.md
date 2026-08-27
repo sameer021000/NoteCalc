@@ -4,6 +4,20 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.5.0] - 2026-08-27
+
+### ✨ Added
+
+* **List and Group Archiving**: You can now archive old lists and groups to declutter your dashboard! Archived items become completely read-only to prevent accidental changes, ensuring your past financial data remains securely intact.
+* **Archive View**: Dedicated Archive screen to view, sort, and search through all of your archived lists and groups safely separated from active items.
+
+### 🎨 Improved
+
+* **Tips & Features**: Added a new tip card detailing how to manage Archived items.
+* **Bulk Transfer Safety**: Prevented users from accidentally cutting or copying active records into archived lists.
+
+---
+
 ## [1.4.0] - 2026-08-25
 
 ### ✨ Added
