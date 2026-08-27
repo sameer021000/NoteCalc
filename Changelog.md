@@ -13,6 +13,7 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ### 🎨 Improved
 
+* **Quick Delete**: Bypassed the confirmation dialog when bulk-deleting 2 or fewer records for a faster workflow.
 * **Tips & Features**: Added a new tip card detailing how to manage Archived items.
 * **Bulk Transfer Safety**: Prevented users from accidentally cutting or copying active records into archived lists.
 
