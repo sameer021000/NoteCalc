@@ -14,6 +14,7 @@ public class Account {
     private boolean pinned;
     private boolean hasBudget;
     private List<Record> budgetRecords;
+    private boolean isArchived;
 
     public Account(String title) {
         this.title = title;
@@ -22,6 +23,7 @@ public class Account {
         this.lastModified = System.currentTimeMillis();
         this.pinned = false;
         this.hasBudget = false;
+        this.isArchived = false;
     }
 
     public Account(String title, List<Record> records, long lastModified) {
@@ -31,6 +33,7 @@ public class Account {
         this.lastModified = lastModified;
         this.pinned = false;
         this.hasBudget = false;
+        this.isArchived = false;
     }
 
     public Account(String title, List<Record> records, long lastModified, boolean pinned) {
@@ -40,6 +43,7 @@ public class Account {
         this.lastModified = lastModified;
         this.pinned = pinned;
         this.hasBudget = false;
+        this.isArchived = false;
     }
 
     public Account(String title, List<Record> records, long lastModified, boolean pinned, boolean hasBudget, List<Record> budgetRecords) {
@@ -49,6 +53,7 @@ public class Account {
         this.pinned = pinned;
         this.hasBudget = hasBudget;
         this.budgetRecords = budgetRecords != null ? budgetRecords : new ArrayList<>();
+        this.isArchived = false;
     }
 
     public String getTitle() {
@@ -83,6 +88,15 @@ public class Account {
 
     public void setPinned(boolean pinned) {
         this.pinned = pinned;
+    }
+    
+    public boolean isArchived() {
+        return isArchived;
+    }
+    
+    public void setArchived(boolean archived) {
+        this.isArchived = archived;
+        this.lastModified = System.currentTimeMillis();
     }
 
     public double calculateTotal() {
@@ -128,6 +142,7 @@ public class Account {
         obj.put("title", title);
         obj.put("lastModified", lastModified);
         obj.put("pinned", pinned);
+        obj.put("isArchived", isArchived);
         
         JSONArray recordsArray = new JSONArray();
         for (Record record : records) {
@@ -149,6 +164,7 @@ public class Account {
         String title = obj.getString("title");
         long lastModified = obj.optLong("lastModified", System.currentTimeMillis());
         boolean pinned = obj.optBoolean("pinned", false);
+        boolean isArchived = obj.optBoolean("isArchived", false);
         
         List<Record> records = new ArrayList<>();
         JSONArray recordsArray = obj.getJSONArray("records");
@@ -165,6 +181,8 @@ public class Account {
             }
         }
         
-        return new Account(title, records, lastModified, pinned, hasBudget, budgetRecords);
+        Account acc = new Account(title, records, lastModified, pinned, hasBudget, budgetRecords);
+        acc.setArchived(isArchived);
+        return acc;
     }
 }

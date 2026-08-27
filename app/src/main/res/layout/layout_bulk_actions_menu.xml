@@ -39,6 +39,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/sep_cut"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/colorBorder"
@@ -71,6 +72,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/sep_copy"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/colorBorder"
@@ -103,6 +105,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/sep_export"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/colorBorder"
@@ -135,6 +138,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/sep_delete"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/colorBorder"

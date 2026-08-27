@@ -171,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
     // Dashboard sort state: 0 = Title, 1 = Total Spending, 2 = Latest Modified
     private int dashboardSortMode = 0;
     private boolean dashboardSortAscending = true;
+    
+    private int archivedDashboardSortMode = 0;
+    private boolean archivedDashboardSortAscending = true;
+    private boolean archivedGroupSortAscending = true;
 
     // Editor record search query (persists while in editor, reset on openEditor)
     private String currentRecordSearchQuery = "";
@@ -728,11 +732,17 @@ public class MainActivity extends AppCompatActivity {
         View btnSettings = dashboardView.findViewById(R.id.btn_settings);
         if(btnSettings != null) btnSettings.setOnClickListener(v -> openSettings());
         
+        View btnArchive = dashboardView.findViewById(R.id.btn_archive);
+        if(btnArchive != null) btnArchive.setOnClickListener(v -> {
+            ArchiveHelper.isShowingArchive = !ArchiveHelper.isShowingArchive;
+            updateDashboardSortUI();
+            refreshDashboardList();
+        });
+        
         View btnTips = dashboardView.findViewById(R.id.btn_tips);
         if(btnTips != null) btnTips.setOnClickListener(v -> showTipsDialog());
         
         View btnCreateGroup = dashboardView.findViewById(R.id.btn_create_group);
-
         View cardEmptyState = dashboardView.findViewById(R.id.card_empty_state);
 
         RecyclerView listAccountsContainer = dashboardView.findViewById(R.id.list_accounts);
@@ -750,7 +760,7 @@ public class MainActivity extends AppCompatActivity {
         TextView btnSortGroupTitle = dashboardView.findViewById(R.id.btn_sort_group_title);
         if (btnSortGroupTitle != null) {
             setupClickable(btnSortGroupTitle, false, () -> {
-                groupSortAscending = !groupSortAscending;
+                setGroupSortAscending(!getGroupSortAscending());
                 updateDashboardSortUI();
                 refreshDashboardList();
             });
@@ -911,7 +921,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView btnSortGroupTitle = findViewById(R.id.btn_sort_group_title);
         if (btnSortGroupTitle != null) {
-            btnSortGroupTitle.setText("Title " + (groupSortAscending ? "▲" : "▼"));
+            btnSortGroupTitle.setText("Title " + (getGroupSortAscending() ? "▲" : "▼"));
         }
     }
 
@@ -921,17 +931,29 @@ public class MainActivity extends AppCompatActivity {
         List<Object> combinedGroups = new ArrayList<>();
         List<Object> combinedAccounts = new ArrayList<>();
 
+        TextView textAppTitle = findViewById(R.id.text_app_title);
+        TextView textAppSubtitle = findViewById(R.id.text_app_subtitle);
+        if (textAppTitle != null) textAppTitle.setText(ArchiveHelper.isShowingArchive ? "Archive" : getString(R.string.app_name));
+        if (textAppSubtitle != null) textAppSubtitle.setText(ArchiveHelper.isShowingArchive ? "Read-only history" : getString(R.string.app_subtitle));
+
+        View btnCreateAccount = findViewById(R.id.btn_create_account);
+        View btnCreateGroup = findViewById(R.id.btn_create_group);
+        android.widget.ImageView btnArchive = findViewById(R.id.btn_archive);
+        if (btnCreateAccount != null) btnCreateAccount.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
+        if (btnCreateGroup != null) btnCreateGroup.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
+        if (btnArchive != null) btnArchive.setImageResource(ArchiveHelper.isShowingArchive ? R.drawable.ic_archive : R.drawable.ic_archive_outline);
+
         if (currentViewGroup != null) {
-            combinedAccounts.addAll(applyDashboardSort(currentViewGroup.getAccounts()));
+            combinedAccounts.addAll(applyDashboardSort(ArchiveHelper.getVisibleAccounts(currentViewGroup.getAccounts())));
         } else {
-            List<AccountGroup> sortedGroups = new ArrayList<>(appStorage.groups);
+            List<AccountGroup> sortedGroups = new ArrayList<>(ArchiveHelper.getVisibleGroups(appStorage.groups));
             sortedGroups.sort((a, b) -> {
                 if (a.isPinned() != b.isPinned()) return a.isPinned() ? -1 : 1;
                 int titleCompare = a.getTitle().compareToIgnoreCase(b.getTitle());
-                return groupSortAscending ? titleCompare : -titleCompare;
+                return getGroupSortAscending() ? titleCompare : -titleCompare;
             });
             combinedGroups.addAll(sortedGroups);
-            combinedAccounts.addAll(applyDashboardSort(appStorage.standaloneAccounts));
+            combinedAccounts.addAll(applyDashboardSort(ArchiveHelper.getVisibleAccounts(appStorage.standaloneAccounts)));
         }
         
         String query = dashboardSearchQuery.trim().toLowerCase(Locale.getDefault());
@@ -977,8 +999,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Account> applyDashboardSort(List<Account> source) {
         List<Account> sorted = new ArrayList<>(source);
         
-        int mode = currentViewGroup != null ? currentViewGroup.getSortMode() : dashboardSortMode;
-        boolean asc = currentViewGroup != null ? currentViewGroup.isSortAscending() : dashboardSortAscending;
+        int mode = getDashboardSortColumn();
+        boolean asc = getDashboardSortAscending();
         
         sorted.sort((a, b) -> {
             // First check pin status
@@ -1002,18 +1024,31 @@ public class MainActivity extends AppCompatActivity {
 
 
     private int getDashboardSortColumn() {
-        return currentViewGroup != null ? currentViewGroup.getSortMode() : dashboardSortMode;
+        if (currentViewGroup != null) return currentViewGroup.getSortMode();
+        return ArchiveHelper.isShowingArchive ? archivedDashboardSortMode : dashboardSortMode;
     }
     private void setDashboardSortColumn(int mode) {
         if (currentViewGroup != null) currentViewGroup.setSortMode(mode);
+        else if (ArchiveHelper.isShowingArchive) archivedDashboardSortMode = mode;
         else dashboardSortMode = mode;
     }
     private boolean getDashboardSortAscending() {
-        return currentViewGroup != null ? currentViewGroup.isSortAscending() : dashboardSortAscending;
+        if (currentViewGroup != null) return currentViewGroup.isSortAscending();
+        return ArchiveHelper.isShowingArchive ? archivedDashboardSortAscending : dashboardSortAscending;
     }
     private void setDashboardSortAscending(boolean asc) {
         if (currentViewGroup != null) currentViewGroup.setSortAscending(asc);
+        else if (ArchiveHelper.isShowingArchive) archivedDashboardSortAscending = asc;
         else dashboardSortAscending = asc;
+    }
+    
+    private boolean getGroupSortAscending() {
+        return ArchiveHelper.isShowingArchive ? archivedGroupSortAscending : groupSortAscending;
+    }
+    
+    private void setGroupSortAscending(boolean asc) {
+        if (ArchiveHelper.isShowingArchive) archivedGroupSortAscending = asc;
+        else groupSortAscending = asc;
     }
 
     /**
@@ -1219,14 +1254,24 @@ public class MainActivity extends AppCompatActivity {
             btnNCAgent.setColorFilter(getColor(R.color.text_on_accent));
             btnNCAgent.setImageResource(android.R.drawable.ic_btn_speak_now); // Unique microphone/voice icon representing natural language
             btnNCAgent.setOnClickListener(v -> showNCAgentBottomSheet());
+            if (account != null && account.isArchived()) {
+                btnNCAgent.setVisibility(View.GONE);
+            }
         }
-
+        
         // Setup Swipe-to-Delete and Drag-and-Drop for Records
         androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback recordSwipeCallback = new androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback(0, androidx.recyclerview.widget.ItemTouchHelper.RIGHT) {
             private boolean isDragActive = false;
 
             @Override
+            public int getSwipeDirs(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
+                if (currentEditingAccount != null && currentEditingAccount.isArchived()) return 0;
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+
+            @Override
             public int getDragDirs(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
+                if (currentEditingAccount != null && currentEditingAccount.isArchived()) return 0;
                 boolean isDefaultSort = getSortColumn() == 0 && getSortAscending();
                 boolean noSearch = currentRecordSearchQuery == null || currentRecordSearchQuery.trim().isEmpty();
                 if (isDefaultSort && noSearch) {
@@ -1344,6 +1389,12 @@ public class MainActivity extends AppCompatActivity {
             btnToggleForm.setText(getString(R.string.auto_expand_20));
         }
 
+        if (account != null && account.isArchived()) {
+            if (formContainer != null) {
+                formContainer.setVisibility(View.GONE);
+            }
+        }
+
         // Wire the record search bar
         EditText editRecordsSearch = editorView.findViewById(R.id.edit_records_search);
         editRecordsSearch.setBackground(ResponsiveUI.createRoundedBg(
@@ -1434,6 +1485,10 @@ public class MainActivity extends AppCompatActivity {
         if (account != null) {
             
             editTitle.setText(account.getTitle());
+            if (account.isArchived()) {
+                editTitle.setEnabled(false);
+                editTitle.setAlpha(0.7f);
+            }
             originalTitle = account.getTitle();
             tempRecords.addAll(account.getRecords());
             
@@ -1598,6 +1653,9 @@ public class MainActivity extends AppCompatActivity {
                 4.0f
         ));
 
+        if (account != null && account.isArchived()) {
+            btnSave.setVisibility(View.GONE);
+        }
         btnSave.setBackground(ResponsiveUI.createRoundedBg(
                 this,
                 ThemeManager.getPrimaryAccentColor(MainActivity.this),
@@ -2155,7 +2213,10 @@ public class MainActivity extends AppCompatActivity {
                 ));
             }
 
-            setupClickable(holder.itemView, true, () -> enterEditRecordMode(trueIndex, record), () -> {
+            setupClickable(holder.itemView, true, () -> {
+                if (currentEditingAccount != null && currentEditingAccount.isArchived()) return;
+                enterEditRecordMode(trueIndex, record);
+            }, () -> {
                 if (!record.isSelected()) {
                     record.setSelected(true);
                     updateSelectAllHeaderState();
@@ -2358,8 +2419,18 @@ public class MainActivity extends AppCompatActivity {
                             btnCancel.setBackground(createButtonSelector(Color.parseColor("#20EF4444"), 4.0f));
                             btnCancel.setTextColor(getColor(R.color.error_red));
                             
-                            for (int i = 0; i < appStorage.groups.size(); i++) {
-                                final AccountGroup selectedGroup = appStorage.groups.get(i);
+                            List<AccountGroup> targetGroups = new ArrayList<>();
+                            for (AccountGroup g : appStorage.groups) {
+                                if (g.isArchived() == account.isArchived()) targetGroups.add(g);
+                            }
+                            
+                            if (targetGroups.isEmpty()) {
+                                Toast.makeText(MainActivity.this, getString(R.string.auto_no_groups_available__9), Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                            
+                            for (int i = 0; i < targetGroups.size(); i++) {
+                                final AccountGroup selectedGroup = targetGroups.get(i);
                                 TextView tvGroup = new TextView(MainActivity.this);
                                 tvGroup.setText(selectedGroup.getTitle());
                                 tvGroup.setTextColor(getColor(R.color.text_primary));
@@ -2377,7 +2448,7 @@ public class MainActivity extends AppCompatActivity {
                                 });
                                 detailsContainer.addView(tvGroup);
                                 
-                                if (i < appStorage.groups.size() - 1) {
+                                if (i < targetGroups.size() - 1) {
                                     View divider = new View(MainActivity.this);
                                     divider.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1));
                                     divider.setBackgroundColor(ThemeManager.getBorderColor(MainActivity.this));
@@ -2685,6 +2756,19 @@ public class MainActivity extends AppCompatActivity {
             showPdfSortDialog(order -> generateAndOpenPdf(account, order));
         });
         
+        View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
+        TextView textArchive = popupView.findViewById(R.id.text_popup_archive);
+        if (textArchive != null) {
+            textArchive.setText(account.isArchived() ? "Un-Archive" : "Archive");
+        }
+        
+        setupClickable(btnArchive, false, () -> {
+            popupWindow.dismiss();
+            account.setArchived(!account.isArchived());
+            StorageHelper.saveAppStorage(MainActivity.this, appStorage);
+            refreshDashboardList();
+        });
+
         setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
             showDeleteAccountConfirmationDialog(account);
@@ -2726,6 +2810,23 @@ public class MainActivity extends AppCompatActivity {
             showPdfSortDialog(order -> generateAndOpenGroupPdf(group, order));
         });
         
+        View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
+        TextView textArchive = popupView.findViewById(R.id.text_popup_archive);
+        if (textArchive != null) {
+            textArchive.setText(group.isArchived() ? "Un-Archive" : "Archive");
+        }
+        
+        setupClickable(btnArchive, false, () -> {
+            popupWindow.dismiss();
+            group.setArchived(!group.isArchived());
+            // Also archive/un-archive all lists within this group
+            for (Account acc : group.getAccounts()) {
+                acc.setArchived(group.isArchived());
+            }
+            StorageHelper.saveAppStorage(MainActivity.this, appStorage);
+            refreshDashboardList();
+        });
+
         setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
             showDeleteGroupConfirmation(group);
@@ -4576,6 +4677,18 @@ public class MainActivity extends AppCompatActivity {
         btnDelete.setAlpha(hasSelection ? 1.0f : 0.4f);
         btnDelete.setEnabled(hasSelection);
         
+        if (currentEditingAccount != null && currentEditingAccount.isArchived()) {
+            btnCut.setVisibility(View.GONE);
+            btnCopy.setVisibility(View.GONE);
+            btnDelete.setVisibility(View.GONE);
+            View sepCut = popupView.findViewById(R.id.sep_cut);
+            View sepCopy = popupView.findViewById(R.id.sep_copy);
+            View sepDelete = popupView.findViewById(R.id.sep_delete);
+            if (sepCut != null) sepCut.setVisibility(View.GONE);
+            if (sepCopy != null) sepCopy.setVisibility(View.GONE);
+            if (sepDelete != null) sepDelete.setVisibility(View.GONE);
+        }
+        
         setupClickable(btnFilter, false, () -> {
             popupWindow.dismiss();
             showCategoryFilterDialog(currentEditingAccount, (ImageView) anchor);
@@ -4625,7 +4738,7 @@ public class MainActivity extends AppCompatActivity {
         
         List<String> accountNames = new ArrayList<>();
         for (Account a : targetAccounts) {
-            if (a != currentEditingAccount) {
+            if (a != currentEditingAccount && !a.isArchived()) {
                 accountNames.add(a.getTitle());
             }
         }

@@ -19,6 +19,9 @@
     <string name="auto_apply_14">APPLY</string>
     <string name="auto_nc_agent_15">NC Agent</string>
     <string name="auto_analyze_16">Analyze</string>
+    <string name="group_expanded_desc">Collapse group</string>
+    <string name="action_archive">Archive</string>
+
     <string name="auto_cancel_17">Cancel</string>
     <string name="auto_confirm_18">Confirm</string>
     <string name="auto_minimize_19">Minimize [ - ]</string>

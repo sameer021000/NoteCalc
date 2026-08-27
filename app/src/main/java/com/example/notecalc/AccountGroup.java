@@ -14,6 +14,7 @@ public class AccountGroup {
     private int sortMode = 2; // Default to 2 (Latest)
     private boolean sortAscending = false; // Default to false (Latest first)
     private boolean pinned = false;
+    private boolean isArchived = false;
 
     public AccountGroup(String title) {
         this.title = title;
@@ -77,6 +78,15 @@ public class AccountGroup {
         this.pinned = pinned;
     }
 
+    public boolean isArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.isArchived = archived;
+        this.lastModified = System.currentTimeMillis();
+    }
+
     public JSONObject toJSONObject() throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("title", title);
@@ -90,6 +100,7 @@ public class AccountGroup {
         obj.put("sortMode", sortMode);
         obj.put("sortAscending", sortAscending);
         obj.put("pinned", pinned);
+        obj.put("isArchived", isArchived);
         return obj;
     }
 
@@ -108,6 +119,7 @@ public class AccountGroup {
         group.setSortMode(obj.optInt("sortMode", 2));
         group.setSortAscending(obj.optBoolean("sortAscending", false));
         group.setPinned(obj.optBoolean("pinned", false));
+        group.setArchived(obj.optBoolean("isArchived", false));
         return group;
     }
 }
