@@ -3482,56 +3482,75 @@ public class MainActivity extends AppCompatActivity {
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
-            int[] pageTracker = {0};
-            boolean hasRecords = false;
-            
-            for (AccountGroup group : appStorage.groups) {
-                for (Account account : group.getAccounts()) {
+            try {
+                int[] pageTracker = {0};
+                boolean hasRecords = false;
+                
+                for (AccountGroup group : appStorage.groups) {
+                    for (Account account : group.getAccounts()) {
+                        if (!account.getRecords().isEmpty()) {
+                            appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
+                            hasRecords = true;
+                        }
+                    }
+                }
+                for (Account account : appStorage.standaloneAccounts) {
                     if (!account.getRecords().isEmpty()) {
                         appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
                         hasRecords = true;
                     }
                 }
-            }
-            for (Account account : appStorage.standaloneAccounts) {
-                if (!account.getRecords().isEmpty()) {
-                    appendAccountToPdf(document, account, pageTracker, PdfSortOrder.SNO);
-                    hasRecords = true;
+                
+                if (!hasRecords) {
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "No records found to export.", android.widget.Toast.LENGTH_SHORT).show();
+                    });
+                    document.close();
+                    return;
                 }
-            }
-            
-            if (!hasRecords) {
-                runOnUiThread(() -> {
-                    progressDialog.dismiss();
-                    android.widget.Toast.makeText(MainActivity.this, "No records found to export.", android.widget.Toast.LENGTH_SHORT).show();
-                });
-                document.close();
-                return;
-            }
 
-            try {
                 java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
                 if (pdfDir == null) {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
+                    });
+                    document.close();
                     return;
                 }
                 if (!pdfDir.exists() && !pdfDir.mkdirs()) {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "Failed to create directory.", android.widget.Toast.LENGTH_LONG).show();
+                    });
+                    document.close();
                     return;
                 }
                 java.io.File file = new java.io.File(pdfDir, "All_Accounts_Export.pdf");
                 try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
                     document.writeTo(fos);
                 }
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
 
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
-                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                    intent.setDataAndType(uri, "application/pdf");
-                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                    try {
+                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                        intent.setDataAndType(uri, "application/pdf");
+                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        
+                        // Check if any app can handle the PDF intent
+                        if (intent.resolveActivity(getPackageManager()) == null) {
+                            android.widget.Toast.makeText(MainActivity.this, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        startActivity(intent);
+                    } catch (Exception ex) {
+                        android.widget.Toast.makeText(MainActivity.this, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                    }
                 });
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
@@ -3539,7 +3558,7 @@ public class MainActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
                 });
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
             }
         }).start();
     }
@@ -3549,48 +3568,67 @@ public class MainActivity extends AppCompatActivity {
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
-            int[] pageTracker = {0};
-            boolean hasRecords = false;
-            
-            for (Account account : group.getAccounts()) {
-                if (!account.getRecords().isEmpty()) {
-                    appendAccountToPdf(document, account, pageTracker, sortOrder);
-                    hasRecords = true;
-                }
-            }
-            
-            if (!hasRecords) {
-                runOnUiThread(() -> {
-                    progressDialog.dismiss();
-                    android.widget.Toast.makeText(MainActivity.this, "No records found to export in this group.", android.widget.Toast.LENGTH_SHORT).show();
-                });
-                document.close();
-                return;
-            }
-
             try {
+                int[] pageTracker = {0};
+                boolean hasRecords = false;
+                
+                for (Account account : group.getAccounts()) {
+                    if (!account.getRecords().isEmpty()) {
+                        appendAccountToPdf(document, account, pageTracker, sortOrder);
+                        hasRecords = true;
+                    }
+                }
+                
+                if (!hasRecords) {
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "No records found to export in this group.", android.widget.Toast.LENGTH_SHORT).show();
+                    });
+                    document.close();
+                    return;
+                }
+
                 java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
                 if (pdfDir == null) {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
+                    });
+                    document.close();
                     return;
                 }
                 if (!pdfDir.exists() && !pdfDir.mkdirs()) {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "Failed to create directory.", android.widget.Toast.LENGTH_LONG).show();
+                    });
+                    document.close();
                     return;
                 }
                 java.io.File file = new java.io.File(pdfDir, group.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + "_Export.pdf");
                 try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
                     document.writeTo(fos);
                 }
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
 
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
-                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                    intent.setDataAndType(uri, "application/pdf");
-                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                    try {
+                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                        intent.setDataAndType(uri, "application/pdf");
+                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        
+                        // Check if any app can handle the PDF intent
+                        if (intent.resolveActivity(getPackageManager()) == null) {
+                            android.widget.Toast.makeText(MainActivity.this, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        startActivity(intent);
+                    } catch (Exception ex) {
+                        android.widget.Toast.makeText(MainActivity.this, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                    }
                 });
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
@@ -3598,7 +3636,7 @@ public class MainActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
                 });
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
             }
         }).start();
     }
@@ -3608,31 +3646,50 @@ public class MainActivity extends AppCompatActivity {
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
-            int[] pageTracker = {0};
-            appendAccountToPdf(document, account, pageTracker, sortOrder);
             try {
+                int[] pageTracker = {0};
+                appendAccountToPdf(document, account, pageTracker, sortOrder);
                 java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
                 if (pdfDir == null) {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
+                    });
+                    document.close();
                     return;
                 }
                 if (!pdfDir.exists() && !pdfDir.mkdirs()) {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "Failed to create directory.", android.widget.Toast.LENGTH_LONG).show();
+                    });
+                    document.close();
                     return;
                 }
                 java.io.File file = new java.io.File(pdfDir, account.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + ".pdf");
                 try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
                     document.writeTo(fos);
                 }
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
                 
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
-                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                    intent.setDataAndType(uri, "application/pdf");
-                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                    try {
+                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                        intent.setDataAndType(uri, "application/pdf");
+                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        
+                        // Check if any app can handle the PDF intent
+                        if (intent.resolveActivity(getPackageManager()) == null) {
+                            android.widget.Toast.makeText(MainActivity.this, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        startActivity(intent);
+                    } catch (Exception ex) {
+                        android.widget.Toast.makeText(MainActivity.this, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                    }
                 });
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
@@ -3640,7 +3697,7 @@ public class MainActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
                 });
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
             }
         }).start();
     }
@@ -3716,17 +3773,23 @@ public class MainActivity extends AppCompatActivity {
         // Copy and sort the records chronologically to prevent jumbled PDFs
         List<Record> expRecords = new ArrayList<>(account.getRecords());
         expRecords.sort((r1, r2) -> {
-            if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
+            if (sortOrder == PdfSortOrder.DESCRIPTION) {
+                String d1 = r1.getDescription() == null ? "" : r1.getDescription();
+                String d2 = r2.getDescription() == null ? "" : r2.getDescription();
+                return d1.compareToIgnoreCase(d2);
+            }
             if (sortOrder == PdfSortOrder.DATE) {
                 try {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                    java.util.Date d1 = sortSdf.parse(r1.getDate());
-                    java.util.Date d2 = sortSdf.parse(r2.getDate());
+                    java.util.Date d1 = r1.getDate() == null ? null : sortSdf.parse(r1.getDate());
+                    java.util.Date d2 = r2.getDate() == null ? null : sortSdf.parse(r2.getDate());
                     int c = (d1 != null && d2 != null) ? d1.compareTo(d2) : 0;
                     if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
                     return c;
                 } catch (Exception e) {
-                    return r1.getDate().compareTo(r2.getDate());
+                    String d1 = r1.getDate() == null ? "" : r1.getDate();
+                    String d2 = r2.getDate() == null ? "" : r2.getDate();
+                    return d1.compareTo(d2);
                 }
             }
             if (sortOrder == PdfSortOrder.AMOUNT) return Double.compare(r1.getAmount(), r2.getAmount());
@@ -3735,17 +3798,23 @@ public class MainActivity extends AppCompatActivity {
         
         List<Record> budRecords = new ArrayList<>(account.getBudgetRecords());
         budRecords.sort((r1, r2) -> {
-            if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
+            if (sortOrder == PdfSortOrder.DESCRIPTION) {
+                String d1 = r1.getDescription() == null ? "" : r1.getDescription();
+                String d2 = r2.getDescription() == null ? "" : r2.getDescription();
+                return d1.compareToIgnoreCase(d2);
+            }
             if (sortOrder == PdfSortOrder.DATE) {
                 try {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                    java.util.Date d1 = sortSdf.parse(r1.getDate());
-                    java.util.Date d2 = sortSdf.parse(r2.getDate());
+                    java.util.Date d1 = r1.getDate() == null ? null : sortSdf.parse(r1.getDate());
+                    java.util.Date d2 = r2.getDate() == null ? null : sortSdf.parse(r2.getDate());
                     int c = (d1 != null && d2 != null) ? d1.compareTo(d2) : 0;
                     if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
                     return c;
                 } catch (Exception e) {
-                    return r1.getDate().compareTo(r2.getDate());
+                    String d1 = r1.getDate() == null ? "" : r1.getDate();
+                    String d2 = r2.getDate() == null ? "" : r2.getDate();
+                    return d1.compareTo(d2);
                 }
             }
             if (sortOrder == PdfSortOrder.AMOUNT) return Double.compare(r1.getAmount(), r2.getAmount());
@@ -5019,12 +5088,16 @@ public class MainActivity extends AppCompatActivity {
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
-            int[] pageTracker = {0};
-            appendSelectedRecordsToPdf(document, currentEditingAccount, selectedRecords, pageTracker, sortOrder);
             try {
+                int[] pageTracker = {0};
+                appendSelectedRecordsToPdf(document, currentEditingAccount, selectedRecords, pageTracker, sortOrder);
                 java.io.File pdfDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
                 if (pdfDir == null) {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        android.widget.Toast.makeText(MainActivity.this, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
+                    });
+                    document.close();
                     return;
                 }
                 if (!pdfDir.exists()) pdfDir.mkdirs();
@@ -5032,15 +5105,26 @@ public class MainActivity extends AppCompatActivity {
                 try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
                     document.writeTo(fos);
                 }
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
                 
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
-                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                    intent.setDataAndType(uri, "application/pdf");
-                    intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(android.content.Intent.createChooser(intent, "Open PDF with"));
+                    try {
+                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", file);
+                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+                        intent.setDataAndType(uri, "application/pdf");
+                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        
+                        // Check if any app can handle the PDF intent
+                        if (intent.resolveActivity(getPackageManager()) == null) {
+                            android.widget.Toast.makeText(MainActivity.this, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        startActivity(intent);
+                    } catch (Exception ex) {
+                        android.widget.Toast.makeText(MainActivity.this, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                    }
                 });
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
@@ -5048,7 +5132,7 @@ public class MainActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     android.widget.Toast.makeText(MainActivity.this, "Failed to generate PDF: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
                 });
-                document.close();
+                try { document.close(); } catch (Exception ignored) {}
             }
         }).start();
     }
@@ -5121,17 +5205,23 @@ public class MainActivity extends AppCompatActivity {
         
         java.util.List<Record> recordsToPrint = new java.util.ArrayList<>(selectedRecords);
         recordsToPrint.sort((r1, r2) -> {
-            if (sortOrder == PdfSortOrder.DESCRIPTION) return r1.getDescription().compareToIgnoreCase(r2.getDescription());
+            if (sortOrder == PdfSortOrder.DESCRIPTION) {
+                String d1 = r1.getDescription() == null ? "" : r1.getDescription();
+                String d2 = r2.getDescription() == null ? "" : r2.getDescription();
+                return d1.compareToIgnoreCase(d2);
+            }
             if (sortOrder == PdfSortOrder.DATE) {
                 try {
                     java.text.SimpleDateFormat sortSdf = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                    java.util.Date d1 = sortSdf.parse(r1.getDate());
-                    java.util.Date d2 = sortSdf.parse(r2.getDate());
+                    java.util.Date d1 = r1.getDate() == null ? null : sortSdf.parse(r1.getDate());
+                    java.util.Date d2 = r2.getDate() == null ? null : sortSdf.parse(r2.getDate());
                     int c = (d1 != null && d2 != null) ? d1.compareTo(d2) : 0;
                     if (c == 0) c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
                     return c;
                 } catch (Exception e) {
-                    return r1.getDate().compareTo(r2.getDate());
+                    String d1 = r1.getDate() == null ? "" : r1.getDate();
+                    String d2 = r2.getDate() == null ? "" : r2.getDate();
+                    return d1.compareTo(d2);
                 }
             }
             if (sortOrder == PdfSortOrder.AMOUNT) return Double.compare(r1.getAmount(), r2.getAmount());
