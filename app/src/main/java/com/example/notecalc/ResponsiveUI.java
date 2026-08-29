@@ -1,5 +1,6 @@
 package com.example.notecalc;
 
+import android.view.MotionEvent;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.util.DisplayMetrics;
@@ -110,4 +111,94 @@ public class ResponsiveUI {
         android.content.res.ColorStateList rippleColor = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#40888888"));
         return new android.graphics.drawable.RippleDrawable(rippleColor, content, content);
     }
+    public static void setupClickable(View view, final Runnable onClickAction) {
+        setupClickable(view, true, onClickAction);
+    }
+
+    /**
+     * Custom premium touch listener with optional scale animations.
+     */
+    public static void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction) {
+        setupClickable(view, useScaleAnimation, onClickAction, null);
+    }
+
+    public static void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction, final Runnable onLongClickAction) {
+        view.setOnTouchListener(new View.OnTouchListener() {
+            private boolean isInside = false;
+            private boolean longPressExecuted = false;
+            private final android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
+            private final Runnable longPressRunnable = () -> {
+                    if (isInside && onLongClickAction != null) {
+                        longPressExecuted = true;
+                        onLongClickAction.run();
+                        // Prevent regular click
+                        isInside = false;
+                        view.setPressed(false);
+                        if (useScaleAnimation) {
+                            view.animate().scaleX(1.0f).scaleY(1.0f).setDuration(60).start();
+                        }
+                    }
+            };
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isInside = true;
+                        longPressExecuted = false;
+                        if (useScaleAnimation) {
+                            v.animate().scaleX(0.96f).scaleY(0.96f).setDuration(60).start();
+                        }
+                        v.setPressed(true);
+                        if (onLongClickAction != null) {
+                            handler.postDelayed(longPressRunnable, 500); // 500 ms standard long press
+                        }
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        float x = event.getX();
+                        float y = event.getY();
+                        float slop = 40.0f; // generous slop to prevent accidental cancellation
+                        boolean nowInside = (x >= -slop && x <= v.getWidth() + slop && y >= -slop && y <= v.getHeight() + slop);
+                        if (nowInside != isInside) {
+                            isInside = nowInside;
+                            if (useScaleAnimation) {
+                                float targetScale = isInside ? 0.96f : 1.0f;
+                                v.animate().scaleX(targetScale).scaleY(targetScale).setDuration(60).start();
+                            }
+                            v.setPressed(isInside);
+                            if (!isInside && onLongClickAction != null) {
+                                handler.removeCallbacks(longPressRunnable);
+                            }
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (onLongClickAction != null) {
+                            handler.removeCallbacks(longPressRunnable);
+                        }
+                        if (useScaleAnimation) {
+                            v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(60).start();
+                        }
+                        v.setPressed(false);
+                        if (isInside && !longPressExecuted) {
+                            v.performClick();
+                            if (onClickAction != null) {
+                                onClickAction.run();
+                            }
+                        }
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        if (onLongClickAction != null) {
+                            handler.removeCallbacks(longPressRunnable);
+                        }
+                        if (useScaleAnimation) {
+                            v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(60).start();
+                        }
+                        v.setPressed(false);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
 }

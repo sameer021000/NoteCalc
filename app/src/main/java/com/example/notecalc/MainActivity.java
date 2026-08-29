@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f));
         btnExport.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 1.0f, 8.0f));
 
-        setupClickable(btnCancel, true, dialog::dismiss);
-        setupClickable(btnExport, true, () -> {
+        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnExport, true, () -> {
             dialog.dismiss();
             callback.onSortSelected(selectedOrder[0]);
         });
@@ -408,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.getWindow().setLayout((int)(300 * getResources().getDisplayMetrics().density), android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         
-        setupClickable(btnApply, true, () -> {
+        ResponsiveUI.setupClickable(btnApply, true, () -> {
             java.util.Set<String> selected = new java.util.HashSet<>();
             android.util.SparseBooleanArray checked = listView.getCheckedItemPositions();
             for (int i = 0; i < catList.size(); i++) {
@@ -425,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.dismiss();
         });
         
-        setupClickable(btnClear, true, () -> {
+        ResponsiveUI.setupClickable(btnClear, true, () -> {
             if (recordsAdapter != null) {
                 recordsAdapter.setFilterCategories(new java.util.HashSet<>());
             }
@@ -708,7 +708,7 @@ public class MainActivity extends AppCompatActivity {
                 12f
         ));
 
-        setupClickable(btnClose, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnClose, true, dialog::dismiss);
         dialog.show();
     }
     @android.annotation.SuppressLint("ClickableViewAccessibility")
@@ -753,7 +753,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView btnSortGroupTitle = dashboardView.findViewById(R.id.btn_sort_group_title);
         if (btnSortGroupTitle != null) {
-            setupClickable(btnSortGroupTitle, false, () -> {
+            ResponsiveUI.setupClickable(btnSortGroupTitle, false, () -> {
                 setGroupSortAscending(!getGroupSortAscending());
                 updateDashboardSortUI();
                 refreshDashboardList();
@@ -764,21 +764,21 @@ public class MainActivity extends AppCompatActivity {
         TextView btnSortTotal = dashboardView.findViewById(R.id.btn_sort_total);
         TextView btnSortLatest = dashboardView.findViewById(R.id.btn_sort_latest);
 
-        if (btnSortTitle != null) setupClickable(btnSortTitle, false, () -> {
+        if (btnSortTitle != null) ResponsiveUI.setupClickable(btnSortTitle, false, () -> {
             if (getDashboardSortColumn() == 0) setDashboardSortAscending(!getDashboardSortAscending());
             else { setDashboardSortColumn(0); setDashboardSortAscending(true); }
             StorageHelper.saveAppStorage(this, appStorage);
             updateDashboardSortUI();
             refreshDashboardList();
         });
-        if (btnSortTotal != null) setupClickable(btnSortTotal, false, () -> {
+        if (btnSortTotal != null) ResponsiveUI.setupClickable(btnSortTotal, false, () -> {
             if (getDashboardSortColumn() == 1) setDashboardSortAscending(!getDashboardSortAscending());
             else { setDashboardSortColumn(1); setDashboardSortAscending(false); }
             StorageHelper.saveAppStorage(this, appStorage);
             updateDashboardSortUI();
             refreshDashboardList();
         });
-        if (btnSortLatest != null) setupClickable(btnSortLatest, false, () -> {
+        if (btnSortLatest != null) ResponsiveUI.setupClickable(btnSortLatest, false, () -> {
             if (getDashboardSortColumn() == 2) setDashboardSortAscending(!getDashboardSortAscending());
             else { setDashboardSortColumn(2); setDashboardSortAscending(false); }
             StorageHelper.saveAppStorage(this, appStorage);
@@ -822,11 +822,11 @@ public class MainActivity extends AppCompatActivity {
         ));
 
         // Set up click actions
-        setupClickable(btnCreateAccount, () -> openEditor(null));
+        ResponsiveUI.setupClickable(btnCreateAccount, () -> openEditor(null));
         if (btnCreateGroup != null) {
-            setupClickable(btnCreateGroup, this::showCreateGroupDialog);
+            ResponsiveUI.setupClickable(btnCreateGroup, this::showCreateGroupDialog);
         }
-        setupClickable(cardEmptyState, () -> {
+        ResponsiveUI.setupClickable(cardEmptyState, () -> {
             if (currentViewGroup != null) {
                 openEditor(null);
             }
@@ -843,7 +843,7 @@ public class MainActivity extends AppCompatActivity {
             if (btnCreateGroup != null) btnCreateGroup.setVisibility(View.GONE);
             if (btnDashboardBack != null) {
                 btnDashboardBack.setVisibility(View.VISIBLE);
-                setupClickable(btnDashboardBack, false, () -> {
+                ResponsiveUI.setupClickable(btnDashboardBack, false, () -> {
                     currentViewGroup = null;
                     showDashboard();
                 });
@@ -1070,7 +1070,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView btnBack = editorView.findViewById(R.id.btn_back);
         ImageView btnAnalytics = editorView.findViewById(R.id.btn_analytics);
         if (btnAnalytics != null) {
-            setupClickable(btnAnalytics, true, () -> {
+            ResponsiveUI.setupClickable(btnAnalytics, true, () -> {
                 if (currentEditingAccount == null || (currentEditingAccount.getRecords().isEmpty() && currentEditingAccount.getBudgetRecords().isEmpty())) {
                     android.widget.Toast.makeText(this, "Add some records to view analytics", android.widget.Toast.LENGTH_SHORT).show();
                 } else {
@@ -1096,7 +1096,7 @@ public class MainActivity extends AppCompatActivity {
         renderEditorAttachments();
 
         if (btnAttachFile != null) {
-            setupClickable(btnAttachFile, true, () -> {
+            ResponsiveUI.setupClickable(btnAttachFile, true, () -> {
                 if (tempAttachments.size() >= 3) {
                     Toast.makeText(this, getString(R.string.auto_max_3_files_allowed_2), Toast.LENGTH_SHORT).show();
                     return;
@@ -1120,7 +1120,7 @@ public class MainActivity extends AppCompatActivity {
                 btnTakePhoto.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), 0, 0, 8.0f));
                 btnChooseFile.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), 0, 0, 8.0f));
                 
-                setupClickable(btnTakePhoto, false, () -> {
+                ResponsiveUI.setupClickable(btnTakePhoto, false, () -> {
                     dialog.dismiss();
                     try {
                         java.io.File attachmentsDir = new java.io.File(getFilesDir(), "attachments");
@@ -1137,7 +1137,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 
-                setupClickable(btnChooseFile, false, () -> {
+                ResponsiveUI.setupClickable(btnChooseFile, false, () -> {
                     dialog.dismiss();
                     android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_GET_CONTENT);
                     intent.setType("*/*");
@@ -1360,7 +1360,7 @@ public class MainActivity extends AppCompatActivity {
             formInputsContainer.setVisibility(isFormInputsCollapsed ? View.GONE : View.VISIBLE);
             btnToggleForm.setText(isFormInputsCollapsed ? "Expand [ + ]" : "Minimize [ - ]");
         };
-        setupClickable(btnToggleForm, false, toggleForm);
+        ResponsiveUI.setupClickable(btnToggleForm, false, toggleForm);
         
         android.graphics.drawable.StateListDrawable toggleSelector = new android.graphics.drawable.StateListDrawable();
         toggleSelector.addState(new int[]{android.R.attr.state_pressed}, new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -1436,7 +1436,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (btnBulkActionsMenu != null) {
             btnBulkActionsMenu.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
-            setupClickable(btnBulkActionsMenu, true, () -> showBulkActionsMenu(btnBulkActionsMenu));
+            ResponsiveUI.setupClickable(btnBulkActionsMenu, true, () -> showBulkActionsMenu(btnBulkActionsMenu));
         }
 
         // Assign header fields and reset sort state
@@ -1456,8 +1456,8 @@ public class MainActivity extends AppCompatActivity {
         thDateField.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
         thAmountField.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
 
-        setupClickable(thSnoField, false, () -> onHeaderClicked(0));
-        setupClickable(thDescField, false, () -> onHeaderClicked(1));
+        ResponsiveUI.setupClickable(thSnoField, false, () -> onHeaderClicked(0));
+        ResponsiveUI.setupClickable(thDescField, false, () -> onHeaderClicked(1));
 
         // Date header: click = sort, long-press (1s) = date range filter
         thDateField.setOnClickListener(v -> onHeaderClicked(2));
@@ -1539,14 +1539,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         
-        if (btnModeExpenses != null) setupClickable(btnModeExpenses, false, () -> {
+        if (btnModeExpenses != null) ResponsiveUI.setupClickable(btnModeExpenses, false, () -> {
             if (isBudgetMode) {
                 isBudgetMode = false;
                 cancelEditRecordMode();
                 updateModeToggleUI.run();
             }
         });
-        if (btnModeBudget != null) setupClickable(btnModeBudget, false, () -> {
+        if (btnModeBudget != null) ResponsiveUI.setupClickable(btnModeBudget, false, () -> {
             if (!isBudgetMode) {
                 isBudgetMode = true;
                 cancelEditRecordMode();
@@ -1695,7 +1695,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Set up click listeners with touch styling
-        setupClickable(btnBack, false, () -> {
+        ResponsiveUI.setupClickable(btnBack, false, () -> {
             dashboardSearchQuery = "";
             if (tempRecords != null) for (Record r : tempRecords) r.setSelected(false);
             if (tempBudgetRecords != null) for (Record r : tempBudgetRecords) r.setSelected(false);
@@ -1703,13 +1703,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Date picker action
-        setupClickable(btnDate, () -> showDatePicker(btnDate));
+        ResponsiveUI.setupClickable(btnDate, () -> showDatePicker(btnDate));
 
         // Cancel edit action
-        setupClickable(btnCancelEdit, this::cancelEditRecordMode);
+        ResponsiveUI.setupClickable(btnCancelEdit, this::cancelEditRecordMode);
 
         // Add/Update item action
-        setupClickable(btnAdd, () -> {
+        ResponsiveUI.setupClickable(btnAdd, () -> {
             String desc = editDesc.getText().toString().trim();
             String amountStr = editAmount.getText().toString().trim();
             String remarks = editRemarksField.getText().toString().trim();
@@ -1764,7 +1764,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Save Account action
-        setupClickable(btnSave, () -> {
+        ResponsiveUI.setupClickable(btnSave, () -> {
             String title = editTitle.getText().toString().trim();
 
             if (title.isEmpty()) {
@@ -2152,7 +2152,7 @@ public class MainActivity extends AppCompatActivity {
                         holder.attachmentsContainer.addView(chip);
                     }
                     
-                    setupClickable(holder.attachmentSummary, false, () -> {
+                    ResponsiveUI.setupClickable(holder.attachmentSummary, false, () -> {
                         if (atts.size() == 1) {
                             try {
                                 android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", f);
@@ -2207,7 +2207,7 @@ public class MainActivity extends AppCompatActivity {
                 ));
             }
 
-            setupClickable(holder.itemView, true, () -> {
+            ResponsiveUI.setupClickable(holder.itemView, true, () -> {
                 if (currentEditingAccount != null && currentEditingAccount.isArchived()) return;
                 enterEditRecordMode(trueIndex, record);
             }, () -> {
@@ -2362,7 +2362,7 @@ public class MainActivity extends AppCompatActivity {
                     accountParentGroup = temp;
                 }
 
-                setupClickable(accHolder.itemView, false, () -> {
+                ResponsiveUI.setupClickable(accHolder.itemView, false, () -> {
                     currentViewGroup = accountParentGroup;
                     openEditor(account);
                 }, () -> showAccountPopupMenu(accHolder.itemView, account));
@@ -2378,7 +2378,7 @@ public class MainActivity extends AppCompatActivity {
                             getColor(R.color.text_tertiary),
                             ThemeManager.getSecondaryAccentColor(MainActivity.this)
                     ));
-                    setupClickable(accHolder.btnMoveAccount, false, () -> {
+                    ResponsiveUI.setupClickable(accHolder.btnMoveAccount, false, () -> {
                         if (accountParentGroup != null) {
                             // Move out of group (back to standalone)
                             accountParentGroup.getAccounts().remove(account);
@@ -2431,7 +2431,7 @@ public class MainActivity extends AppCompatActivity {
                                 tvGroup.setTextSize(16f);
                                 tvGroup.setPadding(32, 24, 32, 24);
                                 tvGroup.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
-                                setupClickable(tvGroup, false, () -> {
+                                ResponsiveUI.setupClickable(tvGroup, false, () -> {
                                     appStorage.standaloneAccounts.remove(account);
                                     selectedGroup.getAccounts().add(account);
                                     selectedGroup.updateLastModified();
@@ -2450,7 +2450,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             
-                            setupClickable(btnCancel, false, dialog::cancel);
+                            ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
                             dialog.show();
                         }
                     });
@@ -2461,7 +2461,7 @@ public class MainActivity extends AppCompatActivity {
                         account.isPinned() ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : getColor(R.color.text_tertiary),
                         ThemeManager.getSecondaryAccentColor(MainActivity.this)
                 ));
-                setupClickable(accHolder.btnPinAccount, false, () -> {
+                ResponsiveUI.setupClickable(accHolder.btnPinAccount, false, () -> {
                     account.setPinned(!account.isPinned());
                     StorageHelper.saveAppStorage(MainActivity.this, appStorage);
                     refreshDashboardList();
@@ -2491,12 +2491,12 @@ public class MainActivity extends AppCompatActivity {
                         Color.parseColor("#FF6B6B")
                 ));
                 
-                setupClickable(grpHolder.itemView, false, () -> {
+                ResponsiveUI.setupClickable(grpHolder.itemView, false, () -> {
                     currentViewGroup = group;
                     showDashboard(); // Refresh dashboard into group view
                 }, () -> showGroupPopupMenu(grpHolder.itemView, group));
                 
-                setupClickable(grpHolder.btnDeleteGroup, false, () -> showDeleteGroupConfirmation(group));
+                ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> showDeleteGroupConfirmation(group));
             }
         }
 
@@ -2726,8 +2726,8 @@ public class MainActivity extends AppCompatActivity {
 
         ResponsiveUI.applyResponsiveness(dialogView);
 
-        setupClickable(btnCancel, dialog::dismiss);
-        setupClickable(btnDelete, () -> {
+        ResponsiveUI.setupClickable(btnCancel, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnDelete, () -> {
             dialog.dismiss();
             // Deselect and adjust editingRecordIndex before removal
             for (Record r : selectedRecords) {
@@ -2765,7 +2765,7 @@ public class MainActivity extends AppCompatActivity {
         View btnDownload = popupView.findViewById(R.id.btn_popup_download);
         View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
         
-        setupClickable(btnDownload, false, () -> {
+        ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
             showPdfSortDialog(order -> generateAndOpenPdf(account, order));
         });
@@ -2776,14 +2776,14 @@ public class MainActivity extends AppCompatActivity {
             textArchive.setText(account.isArchived() ? "Un-Archive" : "Archive");
         }
         
-        setupClickable(btnArchive, false, () -> {
+        ResponsiveUI.setupClickable(btnArchive, false, () -> {
             popupWindow.dismiss();
             account.setArchived(!account.isArchived());
             StorageHelper.saveAppStorage(MainActivity.this, appStorage);
             refreshDashboardList();
         });
 
-        setupClickable(btnDelete, false, () -> {
+        ResponsiveUI.setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
             showDeleteAccountConfirmationDialog(account);
         });
@@ -2819,7 +2819,7 @@ public class MainActivity extends AppCompatActivity {
         View btnDownload = popupView.findViewById(R.id.btn_popup_download);
         View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
         
-        setupClickable(btnDownload, false, () -> {
+        ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
             showPdfSortDialog(order -> generateAndOpenGroupPdf(group, order));
         });
@@ -2830,7 +2830,7 @@ public class MainActivity extends AppCompatActivity {
             textArchive.setText(group.isArchived() ? "Un-Archive" : "Archive");
         }
         
-        setupClickable(btnArchive, false, () -> {
+        ResponsiveUI.setupClickable(btnArchive, false, () -> {
             popupWindow.dismiss();
             group.setArchived(!group.isArchived());
             // Also archive/un-archive all lists within this group
@@ -2841,7 +2841,7 @@ public class MainActivity extends AppCompatActivity {
             refreshDashboardList();
         });
 
-        setupClickable(btnDelete, false, () -> {
+        ResponsiveUI.setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
             showDeleteGroupConfirmation(group);
         });
@@ -2924,8 +2924,8 @@ public class MainActivity extends AppCompatActivity {
 
         ResponsiveUI.applyResponsiveness(dialogView);
 
-        setupClickable(btnCancel, true, dialog::dismiss);
-        setupClickable(btnDelete, true, () -> {
+        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnDelete, true, () -> {
             dialog.dismiss();
             if (currentViewGroup != null) {
                 currentViewGroup.getAccounts().remove(account);
@@ -3103,95 +3103,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Custom premium touch listener that animates scaling and pressed states to give physical click feedback.
      */
-    public void setupClickable(View view, final Runnable onClickAction) {
-        setupClickable(view, true, onClickAction);
-    }
-
-    /**
-     * Custom premium touch listener with optional scale animations.
-     */
-    public void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction) {
-        setupClickable(view, useScaleAnimation, onClickAction, null);
-    }
-
-    public void setupClickable(View view, boolean useScaleAnimation, final Runnable onClickAction, final Runnable onLongClickAction) {
-        view.setOnTouchListener(new View.OnTouchListener() {
-            private boolean isInside = false;
-            private boolean longPressExecuted = false;
-            private final android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
-            private final Runnable longPressRunnable = () -> {
-                    if (isInside && onLongClickAction != null) {
-                        longPressExecuted = true;
-                        onLongClickAction.run();
-                        // Prevent regular click
-                        isInside = false;
-                        view.setPressed(false);
-                        if (useScaleAnimation) {
-                            view.animate().scaleX(1.0f).scaleY(1.0f).setDuration(60).start();
-                        }
-                    }
-            };
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        isInside = true;
-                        longPressExecuted = false;
-                        if (useScaleAnimation) {
-                            v.animate().scaleX(0.96f).scaleY(0.96f).setDuration(60).start();
-                        }
-                        v.setPressed(true);
-                        if (onLongClickAction != null) {
-                            handler.postDelayed(longPressRunnable, 500); // 500 ms standard long press
-                        }
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        float x = event.getX();
-                        float y = event.getY();
-                        float slop = 40.0f; // generous slop to prevent accidental cancellation
-                        boolean nowInside = (x >= -slop && x <= v.getWidth() + slop && y >= -slop && y <= v.getHeight() + slop);
-                        if (nowInside != isInside) {
-                            isInside = nowInside;
-                            if (useScaleAnimation) {
-                                float targetScale = isInside ? 0.96f : 1.0f;
-                                v.animate().scaleX(targetScale).scaleY(targetScale).setDuration(60).start();
-                            }
-                            v.setPressed(isInside);
-                            if (!isInside && onLongClickAction != null) {
-                                handler.removeCallbacks(longPressRunnable);
-                            }
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (onLongClickAction != null) {
-                            handler.removeCallbacks(longPressRunnable);
-                        }
-                        if (useScaleAnimation) {
-                            v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(60).start();
-                        }
-                        v.setPressed(false);
-                        if (isInside && !longPressExecuted) {
-                            v.performClick();
-                            if (onClickAction != null) {
-                                onClickAction.run();
-                            }
-                        }
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                        if (onLongClickAction != null) {
-                            handler.removeCallbacks(longPressRunnable);
-                        }
-                        if (useScaleAnimation) {
-                            v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(60).start();
-                        }
-                        v.setPressed(false);
-                        break;
-                }
-                return true;
-            }
-        });
-    }
 
     /** Opens a dialog to set a date range filter on the records list. */
     private void showDateRangeFilterDialog() {
@@ -3263,15 +3174,15 @@ public class MainActivity extends AppCompatActivity {
         tvFrom.setOnClickListener(v -> pickFrom.run());
         tvTo.setOnClickListener(v -> pickTo.run());
 
-        setupClickable(btnClear, true, () -> {
+        ResponsiveUI.setupClickable(btnClear, true, () -> {
             setFilterDateFrom(null);
             setFilterDateTo(null);
             if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
             updateDateHeaderIndicator();
             dialog.dismiss();
         });
-        setupClickable(btnCancel, true, dialog::dismiss);
-        setupClickable(btnApply, true, () -> {
+        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnApply, true, () -> {
             setFilterDateFrom(tempFrom[0]);
             setFilterDateTo(tempTo[0]);
             if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
@@ -3330,15 +3241,15 @@ public class MainActivity extends AppCompatActivity {
         if (getFilterAmountFrom() != null) etFrom.setText(String.format(Locale.getDefault(), "%.2f", getFilterAmountFrom()));
         if (getFilterAmountTo() != null) etTo.setText(String.format(Locale.getDefault(), "%.2f", getFilterAmountTo()));
 
-        setupClickable(btnClear, true, () -> {
+        ResponsiveUI.setupClickable(btnClear, true, () -> {
             setFilterAmountFrom(null);
             setFilterAmountTo(null);
             if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
             updateAmountHeaderIndicator();
             dialog.dismiss();
         });
-        setupClickable(btnCancel, true, dialog::dismiss);
-        setupClickable(btnApply, true, () -> {
+        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnApply, true, () -> {
             String fromStr = etFrom.getText().toString().trim();
             String toStr = etTo.getText().toString().trim();
             setFilterAmountFrom(fromStr.isEmpty() ? null : Double.parseDouble(fromStr));
@@ -4338,8 +4249,8 @@ public class MainActivity extends AppCompatActivity {
         btnApply.setBackground(createButtonSelector(ThemeManager.getPrimaryAccentColor(MainActivity.this), 4.0f));
         btnApply.setTextColor(getColor(R.color.text_primary));
 
-        setupClickable(btnCancel, false, dialog::cancel);
-        setupClickable(btnApply, false, () -> {
+        ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
+        ResponsiveUI.setupClickable(btnApply, false, () -> {
             String title = input.getText().toString().trim();
             if (!title.isEmpty()) {
                 AccountGroup group = new AccountGroup(title);
@@ -4387,8 +4298,8 @@ public class MainActivity extends AppCompatActivity {
         }
         tvDetails.setText(details.toString());
 
-        setupClickable(btnCancel, false, dialog::cancel);
-        setupClickable(btnDelete, false, () -> {
+        ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
+        ResponsiveUI.setupClickable(btnDelete, false, () -> {
             appStorage.groups.remove(group);
             StorageHelper.saveAppStorage(this, appStorage);
             refreshDashboardList();
@@ -4446,9 +4357,9 @@ public class MainActivity extends AppCompatActivity {
         };
         updateThemeButtons.run();
         
-        setupClickable(btnSystem, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_SYSTEM); updateThemeButtons.run(); });
-        setupClickable(btnLight, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_LIGHT); updateThemeButtons.run(); });
-        setupClickable(btnDark, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_DARK); updateThemeButtons.run(); });
+        ResponsiveUI.setupClickable(btnSystem, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_SYSTEM); updateThemeButtons.run(); });
+        ResponsiveUI.setupClickable(btnLight, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_LIGHT); updateThemeButtons.run(); });
+        ResponsiveUI.setupClickable(btnDark, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_DARK); updateThemeButtons.run(); });
 
         android.widget.LinearLayout llColors = settingsView.findViewById(R.id.ll_accent_colors);
         String[] colors = {ThemeManager.ACCENT_BLUE, ThemeManager.ACCENT_GREEN, ThemeManager.ACCENT_PURPLE, ThemeManager.ACCENT_YELLOW, ThemeManager.ACCENT_ORANGE, ThemeManager.ACCENT_PINK};
@@ -4470,7 +4381,7 @@ public class MainActivity extends AppCompatActivity {
                 gd.setStroke(8, ThemeManager.getSecondaryAccentColor(MainActivity.this));
             }
             circle.setBackground(gd);
-            setupClickable(circle, true, () -> {
+            ResponsiveUI.setupClickable(circle, true, () -> {
                 ThemeManager.setAccentColor(this, cName);
                 recreate();
             });
@@ -4480,7 +4391,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup settings buttons with new design
         android.widget.TextView btnExportJson = settingsView.findViewById(R.id.btn_export_json);
         btnExportJson.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), 0, 0f, 12f));
-        setupClickable(btnExportJson, true, () -> {
+        ResponsiveUI.setupClickable(btnExportJson, true, () -> {
             android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
@@ -4490,7 +4401,7 @@ public class MainActivity extends AppCompatActivity {
 
         android.widget.TextView btnImportJson = settingsView.findViewById(R.id.btn_import_json);
         btnImportJson.setBackground(ResponsiveUI.createRippleRoundedBg(this, android.graphics.Color.TRANSPARENT, ThemeManager.getPrimaryAccentColor(this), 1.5f, 12f));
-        setupClickable(btnImportJson, true, () -> {
+        ResponsiveUI.setupClickable(btnImportJson, true, () -> {
             android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
@@ -4499,13 +4410,13 @@ public class MainActivity extends AppCompatActivity {
 
         android.widget.TextView btnExportPdf = settingsView.findViewById(R.id.btn_export_pdf_all);
         btnExportPdf.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getSecondaryAccentColor(this), 0, 0f, 12f));
-        setupClickable(btnExportPdf, true, this::generateAndOpenAllPdf);
+        ResponsiveUI.setupClickable(btnExportPdf, true, this::generateAndOpenAllPdf);
 
         // Format version container
         android.view.View versionContainer = settingsView.findViewById(R.id.version_container);
         if (versionContainer != null) {
             versionContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 24f));
-            setupClickable(versionContainer, true, () -> AboutCurrentVersionHelper.showDialog(MainActivity.this));
+            ResponsiveUI.setupClickable(versionContainer, true, () -> AboutCurrentVersionHelper.showDialog(MainActivity.this));
         }
     }
 
@@ -4527,7 +4438,7 @@ public class MainActivity extends AppCompatActivity {
         mainContainer.addView(analyticsRoot);
 
         android.widget.ImageButton btnBack = analyticsRoot.findViewById(R.id.btn_analytics_back);
-        setupClickable(btnBack, true, () -> openEditor(account));
+        ResponsiveUI.setupClickable(btnBack, true, () -> openEditor(account));
 
         TextView tvTitle = analyticsRoot.findViewById(R.id.tv_analytics_title);
         tvTitle.setText(account.getTitle() + " Analytics");
@@ -4772,27 +4683,27 @@ public class MainActivity extends AppCompatActivity {
             if (sepDelete != null) sepDelete.setVisibility(View.GONE);
         }
         
-        setupClickable(btnFilter, false, () -> {
+        ResponsiveUI.setupClickable(btnFilter, false, () -> {
             popupWindow.dismiss();
             showCategoryFilterDialog(currentEditingAccount, (ImageView) anchor);
         });
         
         if (hasSelection) {
             if (btnExport != null) {
-                setupClickable(btnExport, false, () -> {
+                ResponsiveUI.setupClickable(btnExport, false, () -> {
                     popupWindow.dismiss();
                     showPdfSortDialog(order -> generateAndOpenSelectedPdf(selectedRecords, order));
                 });
             }
-            setupClickable(btnCut, false, () -> {
+            ResponsiveUI.setupClickable(btnCut, false, () -> {
                 popupWindow.dismiss();
                 showTransferDialog(selectedRecords, true);
             });
-            setupClickable(btnCopy, false, () -> {
+            ResponsiveUI.setupClickable(btnCopy, false, () -> {
                 popupWindow.dismiss();
                 showTransferDialog(selectedRecords, false);
             });
-            setupClickable(btnDelete, false, () -> {
+            ResponsiveUI.setupClickable(btnDelete, false, () -> {
                 popupWindow.dismiss();
                 showDeleteMultipleConfirmationDialog(selectedRecords);
             });
@@ -4892,7 +4803,7 @@ public class MainActivity extends AppCompatActivity {
             params.bottomMargin = (int) (8 * getResources().getDisplayMetrics().density);
             item.setLayoutParams(params);
             
-            setupClickable(item, true, () -> {
+            ResponsiveUI.setupClickable(item, true, () -> {
                 dialog.dismiss();
                 if (index == 0) { // Create New List
                     showNewListTitleDialog(selectedRecords, isCut);
@@ -4921,7 +4832,7 @@ public class MainActivity extends AppCompatActivity {
                 1.0f,
                 6f
         ));
-        setupClickable(btnCancel, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
         
         dialog.show();
     }
@@ -4964,7 +4875,7 @@ public class MainActivity extends AppCompatActivity {
                 1.0f,
                 6f
         ));
-        setupClickable(btnCancel, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
         
         View btnCreate = dialogView.findViewById(R.id.btn_dialog_create);
         btnCreate.setBackground(ResponsiveUI.createRippleRoundedBg(
@@ -4974,7 +4885,7 @@ public class MainActivity extends AppCompatActivity {
                 0f,
                 6f
         ));
-        setupClickable(btnCreate, true, () -> {
+        ResponsiveUI.setupClickable(btnCreate, true, () -> {
             String title = input.getText().toString().trim();
             if (title.isEmpty()) {
                 android.widget.Toast.makeText(this, "Title cannot be empty", android.widget.Toast.LENGTH_SHORT).show();
@@ -5447,7 +5358,7 @@ public class MainActivity extends AppCompatActivity {
                 chip.setTextColor(getColor(R.color.text_primary));
                 chip.setPadding(20, 10, 10, 10);
                 
-                setupClickable(chip, false, () -> {
+                ResponsiveUI.setupClickable(chip, false, () -> {
                     try {
                         android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", f);
                         android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
@@ -5470,7 +5381,7 @@ public class MainActivity extends AppCompatActivity {
                 closeBtn.setTextColor(getColor(R.color.error_red));
                 closeBtn.setPadding(10, 10, 20, 10);
                 
-                setupClickable(closeBtn, false, () -> {
+                ResponsiveUI.setupClickable(closeBtn, false, () -> {
                     tempAttachments.remove(idx);
                     renderEditorAttachments();
                 });

@@ -41,7 +41,7 @@ public class AboutCurrentVersionHelper {
                 0f,
                 12f
         ));
-        activity.setupClickable(btnDismiss, true, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnDismiss, true, dialog::dismiss);
 
         dialog.show();
     }
