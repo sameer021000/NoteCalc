@@ -25,7 +25,7 @@ public class MenuHelper {
         
         ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
-            activity.showPdfSortDialog(order -> activity.generateAndOpenPdf(account, order));
+            DialogHelper.showPdfSortDialog(activity, order -> activity.generateAndOpenPdf(account, order));
         });
         
         View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
@@ -43,7 +43,7 @@ public class MenuHelper {
 
         ResponsiveUI.setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
-            activity.showDeleteAccountConfirmationDialog(account);
+            DialogHelper.showDeleteAccountConfirmationDialog(activity, account);
         });
         
         popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -78,7 +78,7 @@ public class MenuHelper {
         
         ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
-            activity.showPdfSortDialog(order -> activity.generateAndOpenGroupPdf(group, order));
+            DialogHelper.showPdfSortDialog(activity, order -> activity.generateAndOpenGroupPdf(group, order));
         });
         
         View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
@@ -100,7 +100,7 @@ public class MenuHelper {
 
         ResponsiveUI.setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
-            activity.showDeleteGroupConfirmation(group);
+            DialogHelper.showDeleteGroupConfirmation(activity, group);
         });
         
         popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -182,7 +182,7 @@ public class MenuHelper {
             if (btnExport != null) {
                 ResponsiveUI.setupClickable(btnExport, false, () -> {
                     popupWindow.dismiss();
-                    activity.showPdfSortDialog(order -> activity.generateAndOpenSelectedPdf(selectedRecords, order));
+                    DialogHelper.showPdfSortDialog(activity, order -> activity.generateAndOpenSelectedPdf(selectedRecords, order));
                 });
             }
             ResponsiveUI.setupClickable(btnCut, false, () -> {
@@ -195,7 +195,7 @@ public class MenuHelper {
             });
             ResponsiveUI.setupClickable(btnDelete, false, () -> {
                 popupWindow.dismiss();
-                activity.showDeleteMultipleConfirmationDialog(selectedRecords);
+                DialogHelper.showDeleteMultipleConfirmationDialog(activity, selectedRecords);
             });
         }
         

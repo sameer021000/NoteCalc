@@ -32,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import com.example.notecalc.pdf.PdfSortOrder;
-import com.example.notecalc.pdf.PdfSortCallback;
 
 public class MainActivity extends AppCompatActivity {
     private SettingsHelper settingsHelper;
@@ -45,58 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private android.widget.HorizontalScrollView attachmentsScroll;
     private android.widget.TextView btnAttachFile;
 
-    void showPdfSortDialog(PdfSortCallback callback) {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.CustomDialogTheme);
-        android.view.View view = getLayoutInflater().inflate(R.layout.layout_dialog_pdf_sort, null);
-        builder.setView(view);
-        android.app.AlertDialog dialog = builder.create();
-
-        TextView optSno = view.findViewById(R.id.option_sort_sno);
-        TextView optDesc = view.findViewById(R.id.option_sort_desc);
-        TextView optDate = view.findViewById(R.id.option_sort_date);
-        TextView optAmount = view.findViewById(R.id.option_sort_amount);
-        
-        android.graphics.drawable.Drawable unselectedBg = ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f);
-        android.graphics.drawable.Drawable selectedBg = ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 1.0f, 8.0f);
-        
-        final PdfSortOrder[] selectedOrder = {PdfSortOrder.SNO}; // Default
-        
-        Runnable updateSelection = () -> {
-            optSno.setBackground(selectedOrder[0] == PdfSortOrder.SNO ? selectedBg : unselectedBg);
-            optDesc.setBackground(selectedOrder[0] == PdfSortOrder.DESCRIPTION ? selectedBg : unselectedBg);
-            optDate.setBackground(selectedOrder[0] == PdfSortOrder.DATE ? selectedBg : unselectedBg);
-            optAmount.setBackground(selectedOrder[0] == PdfSortOrder.AMOUNT ? selectedBg : unselectedBg);
-            
-            optSno.setTextColor(selectedOrder[0] == PdfSortOrder.SNO ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
-            optDesc.setTextColor(selectedOrder[0] == PdfSortOrder.DESCRIPTION ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
-            optDate.setTextColor(selectedOrder[0] == PdfSortOrder.DATE ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
-            optAmount.setTextColor(selectedOrder[0] == PdfSortOrder.AMOUNT ? android.graphics.Color.WHITE : getColor(R.color.text_primary));
-        };
-        
-        optSno.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.SNO; updateSelection.run(); });
-        optDesc.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.DESCRIPTION; updateSelection.run(); });
-        optDate.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.DATE; updateSelection.run(); });
-        optAmount.setOnClickListener(v -> { selectedOrder[0] = PdfSortOrder.AMOUNT; updateSelection.run(); });
-        
-        updateSelection.run(); // Init
-
-        android.view.View btnCancel = view.findViewById(R.id.btn_dialog_cancel);
-        android.view.View btnExport = view.findViewById(R.id.btn_dialog_export);
-        
-        view.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.5f, 12f));
-
-        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8.0f));
-        btnExport.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 1.0f, 8.0f));
-
-        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
-        ResponsiveUI.setupClickable(btnExport, true, () -> {
-            dialog.dismiss();
-            callback.onSortSelected(selectedOrder[0]);
-        });
-
-        if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.show();
-    }
+    
 
     
     androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
@@ -104,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     FrameLayout mainContainer;
     AppStorage appStorage;
-    private AccountGroup currentViewGroup = null; // null means we are in the Dashboard
+    AccountGroup currentViewGroup = null; // null means we are in the Dashboard
     Account currentEditingAccount;
     
     // Editor state
@@ -115,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private String originalTitle = "";
     private String selectedRecordDate = "";
 
-    private int editingRecordIndex = -1;
+    int editingRecordIndex = -1;
     private EditText editDescField;
     private EditText editAmountField;
     private TextView btnRecordDateField;
@@ -621,7 +569,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up click actions
         ResponsiveUI.setupClickable(btnCreateAccount, () -> openEditor(null));
         if (btnCreateGroup != null) {
-            ResponsiveUI.setupClickable(btnCreateGroup, this::showCreateGroupDialog);
+            ResponsiveUI.setupClickable(btnCreateGroup, () -> DialogHelper.showCreateGroupDialog(MainActivity.this));
         }
         ResponsiveUI.setupClickable(cardEmptyState, () -> {
             if (currentViewGroup != null) {
@@ -1619,7 +1567,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Helper to render the records in the table format.
      */
-    private void populateRecordsList() {
+    void populateRecordsList() {
         if (recordsAdapter != null) {
             recordsAdapter.refreshDisplay();
         }
@@ -1681,7 +1629,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    private void updateHeaderLabels() {
+    void updateHeaderLabels() {
         if (thSnoField != null) {
             thSnoField.setText(getString(R.string.th_sno) + (getSortColumn() == 0 ? (getSortAscending() ? "  ▲" : "  ▼") : ""));
         }
@@ -2293,7 +2241,7 @@ public class MainActivity extends AppCompatActivity {
                     showDashboard(); // Refresh dashboard into group view
                 }, () -> MenuHelper.showGroupPopupMenu(MainActivity.this, grpHolder.itemView, group));
                 
-                ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> showDeleteGroupConfirmation(group));
+                ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> DialogHelper.showDeleteGroupConfirmation(MainActivity.this, group));
             }
         }
 
@@ -2373,7 +2321,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Shows or hides the "Delete Selected" button based on whether any records are selected.
      */
-    @android.annotation.SuppressLint("SetTextI18n")
+
     void updateBulkActionsState() {
         if (btnBulkActionsMenu == null) return;
         
@@ -2398,153 +2346,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Shows a confirmation dialog listing the selected records before performing bulk delete.
      */
-    @android.annotation.SuppressLint("SetTextI18n")
-    void showDeleteMultipleConfirmationDialog(List<Record> selectedRecords) {
-        if (selectedRecords.size() <= 2) {
-            for (Record r : selectedRecords) {
-                int idx = getActiveRecords().indexOf(r);
-                if (idx != -1) {
-                    if (editingRecordIndex == idx) {
-                        cancelEditRecordMode();
-                    } else if (editingRecordIndex > idx) {
-                        editingRecordIndex--;
-                    }
-                }
-            }
-            getActiveRecords().removeAll(selectedRecords);
-            populateRecordsList();
-            updateBulkActionsState();
-            updateHeaderLabels();
-            return;
-        }
 
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_delete_multiple_dialog, null);
-        builder.setView(dialogView);
-
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        View detailsContainer = dialogView.findViewById(R.id.details_container);
-        LinearLayout selectedItemsList = dialogView.findViewById(R.id.selected_items_list);
-        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        TextView btnDelete = dialogView.findViewById(R.id.btn_dialog_delete);
-
-        // Style dialog
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgSecondaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.5f,
-                12f
-        ));
-        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.0f,
-                6f
-        ));
-        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.0f,
-                4f
-        ));
-        btnDelete.setBackground(ResponsiveUI.createRippleRoundedBg(
-                this,
-                getColor(R.color.error_red),
-                0,
-                0,
-                4f
-        ));
-
-        // Populate selected items list inside the dialog
-                for (Record r : selectedRecords) {
-            // Build a simple text row for each selected item
-            TextView rowView = new TextView(this);
-            String lineText = "• " + r.getDescription()
-                    + "   " + AppUtils.formatDateCompact(r.getDate())
-                    + "   " + String.format(Locale.getDefault(), "%.2f", r.getAmount());
-            rowView.setText(lineText);
-            rowView.setTextColor(getColor(R.color.text_primary));
-            rowView.setTextSize(13f);
-            int padPx = (int) (6 * getResources().getDisplayMetrics().density);
-            rowView.setPadding(0, padPx, 0, padPx);
-
-            // Show remarks below if present
-            String remarks = r.getRemarks();
-            boolean hasRemarks = (remarks != null && !remarks.isEmpty());
-            boolean hasAttachments = (r.getAttachments() != null && !r.getAttachments().isEmpty());
-            
-            if (hasRemarks || hasAttachments) {
-                LinearLayout rowContainer = new LinearLayout(this);
-                rowContainer.setOrientation(LinearLayout.VERTICAL);
-                rowContainer.addView(rowView);
-                
-                if (hasRemarks) {
-                    TextView remarksView = new TextView(this);
-                    remarksView.setText("  ↳ " + remarks);
-                    remarksView.setTextColor(getColor(R.color.text_tertiary));
-                    remarksView.setTextSize(11f);
-                    remarksView.setTypeface(null, android.graphics.Typeface.ITALIC);
-                    remarksView.setPadding(0, 0, 0, hasAttachments ? 0 : padPx);
-                    rowContainer.addView(remarksView);
-                }
-                
-                if (hasAttachments) {
-                    TextView attachView = new TextView(this);
-                    attachView.setText("  \uD83D\uDCCE " + r.getAttachments().size() + " attached file(s)");
-                    attachView.setTextColor(ThemeManager.getSecondaryAccentColor(MainActivity.this));
-                    attachView.setTextSize(11f);
-                    attachView.setPadding(0, hasRemarks ? (padPx / 2) : 0, 0, padPx);
-                    rowContainer.addView(attachView);
-                }
-                
-                selectedItemsList.addView(rowContainer);
-            } else {
-                selectedItemsList.addView(rowView);
-            }
-
-            // Add a thin divider between items (except last)
-            if (selectedRecords.indexOf(r) < selectedRecords.size() - 1) {
-                View divider = new View(this);
-                divider.setBackgroundColor(ThemeManager.getBorderColor(MainActivity.this));
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                divider.setLayoutParams(lp);
-                selectedItemsList.addView(divider);
-            }
-        }
-
-        ResponsiveUI.applyResponsiveness(dialogView);
-
-        ResponsiveUI.setupClickable(btnCancel, dialog::dismiss);
-        ResponsiveUI.setupClickable(btnDelete, () -> {
-            dialog.dismiss();
-            // Deselect and adjust editingRecordIndex before removal
-            for (Record r : selectedRecords) {
-                int idx = getActiveRecords().indexOf(r);
-                if (idx != -1) {
-                    if (editingRecordIndex == idx) {
-                        cancelEditRecordMode();
-                    } else if (editingRecordIndex > idx) {
-                        editingRecordIndex--;
-                    }
-                }
-            }
-            getActiveRecords().removeAll(selectedRecords);
-            populateRecordsList();
-            updateBulkActionsState();
-            updateHeaderLabels();
-        });
-
-        dialog.show();
-    }
+    
 
 
     
@@ -2553,85 +2356,10 @@ public class MainActivity extends AppCompatActivity {
     
 
 
-    @android.annotation.SuppressLint("SetTextI18n")
-    void showDeleteAccountConfirmationDialog(final Account account) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_delete_account_dialog, null);
-        builder.setView(dialogView);
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
+    
 
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        View detailsContainer = dialogView.findViewById(R.id.details_container);
-        TextView tvAccountTitle = dialogView.findViewById(R.id.dialog_account_title);
-        TextView tvItemsCount = dialogView.findViewById(R.id.dialog_account_items_count);
-        TextView tvAmount = dialogView.findViewById(R.id.dialog_account_amount);
-        TextView tvDate = dialogView.findViewById(R.id.dialog_account_date);
-        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        TextView btnDelete = dialogView.findViewById(R.id.btn_dialog_delete);
 
-        // Populate account details
-        tvAccountTitle.setText(account.getTitle());
-        tvItemsCount.setText(String.valueOf(account.getRecords().size()));
-        tvAmount.setText(String.format(Locale.getDefault(), "%.2f", account.calculateTotal()));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        String accountDateFormatted = sdf.format(new Date(account.getLastModified()));
-        tvDate.setText(accountDateFormatted + " (" + AppUtils.formatDateCompact(accountDateFormatted) + ")");
-
-        // Apply premium styling
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgSecondaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.5f,
-                12f
-        ));
-
-        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.0f,
-                6f
-        ));
-
-        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.0f,
-                4f
-        ));
-
-        btnDelete.setBackground(ResponsiveUI.createRippleRoundedBg(
-                this,
-                getColor(R.color.error_red),
-                getColor(R.color.error_red),
-                0f,
-                4f
-        ));
-
-        ResponsiveUI.applyResponsiveness(dialogView);
-
-        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
-        ResponsiveUI.setupClickable(btnDelete, true, () -> {
-            dialog.dismiss();
-            if (currentViewGroup != null) {
-                currentViewGroup.getAccounts().remove(account);
-            } else {
-                appStorage.standaloneAccounts.remove(account);
-            }
-            StorageHelper.saveAppStorage(MainActivity.this, appStorage);
-            refreshDashboardList();
-        });
-
-        dialog.show();
-    }
-
-    @android.annotation.SuppressLint("SetTextI18n")
     private void enterEditRecordMode(int index, Record record) {
         editingRecordIndex = index;
         selectedRecordDate = record.getDate();
@@ -2674,7 +2402,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    private void cancelEditRecordMode() {
+    void cancelEditRecordMode() {
         editingRecordIndex = -1;
         selectedRecordDate = AppUtils.getCurrentDateString();
 
@@ -2796,40 +2524,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private android.app.Dialog showProgressDialog() {
-        android.app.Dialog dialog = new android.app.Dialog(this);
-        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
-        layout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        layout.setPadding(60, 60, 60, 60);
-        layout.setGravity(android.view.Gravity.CENTER_VERTICAL);
-        layout.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16.0f));
-
-        android.widget.ProgressBar progressBar = new android.widget.ProgressBar(this);
-        progressBar.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getPrimaryAccentColor(this)));
-
-        android.widget.TextView tvMessage = new android.widget.TextView(this);
-        tvMessage.setText(getString(R.string.msg_generating_pdf));
-        tvMessage.setTextColor(getColor(R.color.text_primary));
-        tvMessage.setTextSize(16f);
-        tvMessage.setPadding(40, 0, 0, 0);
-
-        layout.addView(progressBar);
-        layout.addView(tvMessage);
-
-        dialog.setContentView(layout);
-        dialog.show();
-
-        return dialog;
-    }
+    
 
     void generateAndOpenAllPdf() {
-        android.app.Dialog progressDialog = showProgressDialog();
+        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(MainActivity.this);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -2915,7 +2613,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void generateAndOpenGroupPdf(AccountGroup group, PdfSortOrder sortOrder) {
-        android.app.Dialog progressDialog = showProgressDialog();
+        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(MainActivity.this);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -2993,7 +2691,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void generateAndOpenPdf(Account account, PdfSortOrder sortOrder) {
-        android.app.Dialog progressDialog = showProgressDialog();
+        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(MainActivity.this);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -3609,90 +3307,6 @@ public class MainActivity extends AppCompatActivity {
      */
     
 
-    private void showCreateGroupDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
-        builder.setView(dialogView);
-
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        View detailsContainer = dialogView.findViewById(R.id.details_container);
-        EditText input = dialogView.findViewById(R.id.edit_group_name);
-        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
-
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.5f, 12f));
-        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
-        btnCancel.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 4.0f));
-        btnCancel.setTextColor(getColor(R.color.error_red));
-        btnApply.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, ThemeManager.getPrimaryAccentColor(MainActivity.this), 4.0f));
-        btnApply.setTextColor(getColor(R.color.text_primary));
-
-        ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
-        ResponsiveUI.setupClickable(btnApply, false, () -> {
-            String title = input.getText().toString().trim();
-            if (!title.isEmpty()) {
-                AccountGroup group = new AccountGroup(title);
-                appStorage.groups.add(group);
-                StorageHelper.saveAppStorage(this, appStorage);
-                refreshDashboardList();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
-    void showDeleteGroupConfirmation(AccountGroup group) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_confirm_delete_group, null);
-        builder.setView(dialogView);
-
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        View detailsContainer = dialogView.findViewById(R.id.details_container);
-        TextView tvDetails = dialogView.findViewById(R.id.text_group_details);
-        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        TextView btnDelete = dialogView.findViewById(R.id.btn_dialog_delete);
-
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.5f, 12f));
-        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
-        btnCancel.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 4.0f));
-        btnCancel.setTextColor(getColor(R.color.text_primary));
-        btnDelete.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 4.0f));
-        btnDelete.setTextColor(getColor(R.color.error_red));
-
-        StringBuilder details = new StringBuilder();
-        int listCount = group.getAccounts().size();
-        details.append("This group contains ").append(listCount).append(listCount == 1 ? " list" : " lists").append(".");
-        if (listCount > 0) {
-            details.append("\n\nLists:");
-            for (Account acc : group.getAccounts()) {
-                details.append("\n• ").append(acc.getTitle());
-            }
-        }
-        tvDetails.setText(details.toString());
-
-        ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
-        ResponsiveUI.setupClickable(btnDelete, false, () -> {
-            appStorage.groups.remove(group);
-            StorageHelper.saveAppStorage(this, appStorage);
-            refreshDashboardList();
-            dialog.dismiss();
-        });
-
-        dialog.show();
-    }
-
-
     List<Record> getActiveRecords() {
         return isBudgetMode ? tempBudgetRecords : tempRecords;
     }
@@ -3713,7 +3327,7 @@ public class MainActivity extends AppCompatActivity {
     void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
         
-        android.app.Dialog progressDialog = showProgressDialog();
+        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(MainActivity.this);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
