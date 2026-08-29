@@ -36,6 +36,8 @@ import com.example.notecalc.pdf.PdfSortOrder;
 import com.example.notecalc.pdf.PdfSortCallback;
 
 public class MainActivity extends AppCompatActivity {
+    private SettingsHelper settingsHelper;
+
     private final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
     private static final int REQUEST_CODE_ATTACH = 1001;
     private static final int REQUEST_CODE_CAMERA = 1002;
@@ -98,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     
-    private androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
-    private androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
+    androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
+    androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
 
-    private FrameLayout mainContainer;
+    FrameLayout mainContainer;
     private AppStorage appStorage;
     private AccountGroup currentViewGroup = null; // null means we are in the Dashboard
     private Account currentEditingAccount;
@@ -199,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.applyTheme(this);
         super.onCreate(savedInstanceState);
+        settingsHelper = new SettingsHelper(this);
         androidx.activity.EdgeToEdge.enable(this);
         
         exportJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> {
@@ -627,7 +630,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
     @android.annotation.SuppressLint("ClickableViewAccessibility")
-    private void showDashboard() {
+    void showDashboard() {
         if (currentSnackbar != null) {
             currentSnackbar.dismiss();
             currentSnackbar = null;
@@ -639,7 +642,7 @@ public class MainActivity extends AppCompatActivity {
         View btnCreateAccount = dashboardView.findViewById(R.id.btn_create_account);
         
         View btnSettings = dashboardView.findViewById(R.id.btn_settings);
-        if(btnSettings != null) btnSettings.setOnClickListener(v -> openSettings());
+        if(btnSettings != null) btnSettings.setOnClickListener(v -> settingsHelper.openSettings());
         
         View btnArchive = dashboardView.findViewById(R.id.btn_archive);
         if(btnArchive != null) btnArchive.setOnClickListener(v -> {
@@ -3190,7 +3193,7 @@ public class MainActivity extends AppCompatActivity {
         return dialog;
     }
 
-    private void generateAndOpenAllPdf() {
+    void generateAndOpenAllPdf() {
         android.app.Dialog progressDialog = showProgressDialog();
         
         new Thread(() -> {
@@ -4061,113 +4064,6 @@ public class MainActivity extends AppCompatActivity {
 
     
 
-    private android.view.View settingsView;
-
-    @android.annotation.SuppressLint("InflateParams")
-    private void initSettings() {
-        settingsView = getLayoutInflater().inflate(R.layout.layout_settings, null);
-        
-        settingsView.findViewById(R.id.btn_settings_back).setOnClickListener(v -> closeSettings());
-
-        // Style the main cards
-        View cardAppearance = settingsView.findViewById(R.id.card_appearance);
-        View cardData = settingsView.findViewById(R.id.card_data_backup);
-        View cardPrint = settingsView.findViewById(R.id.card_print_share);
-        
-        cardAppearance.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16f));
-        cardData.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16f));
-        cardPrint.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16f));
-
-        // Setup theme buttons instead of RadioGroup
-        android.widget.TextView btnSystem = settingsView.findViewById(R.id.btn_theme_system);
-        android.widget.TextView btnLight = settingsView.findViewById(R.id.btn_theme_light);
-        android.widget.TextView btnDark = settingsView.findViewById(R.id.btn_theme_dark);
-        
-        Runnable updateThemeButtons = () -> {
-            int currentMode = ThemeManager.getDarkMode(this);
-            btnSystem.setBackground(ResponsiveUI.createRippleRoundedBg(this, currentMode == ThemeManager.MODE_SYSTEM ? ThemeManager.getPrimaryAccentColor(this) : android.graphics.Color.TRANSPARENT, ThemeManager.getBorderColor(this), 1f, 8f));
-            btnLight.setBackground(ResponsiveUI.createRippleRoundedBg(this, currentMode == ThemeManager.MODE_LIGHT ? ThemeManager.getPrimaryAccentColor(this) : android.graphics.Color.TRANSPARENT, ThemeManager.getBorderColor(this), 1f, 8f));
-            btnDark.setBackground(ResponsiveUI.createRippleRoundedBg(this, currentMode == ThemeManager.MODE_DARK ? ThemeManager.getPrimaryAccentColor(this) : android.graphics.Color.TRANSPARENT, ThemeManager.getBorderColor(this), 1f, 8f));
-            
-            btnSystem.setTextColor(currentMode == ThemeManager.MODE_SYSTEM ? getColor(R.color.text_on_accent) : getColor(R.color.text_tertiary));
-            btnLight.setTextColor(currentMode == ThemeManager.MODE_LIGHT ? getColor(R.color.text_on_accent) : getColor(R.color.text_tertiary));
-            btnDark.setTextColor(currentMode == ThemeManager.MODE_DARK ? getColor(R.color.text_on_accent) : getColor(R.color.text_tertiary));
-        };
-        updateThemeButtons.run();
-        
-        ResponsiveUI.setupClickable(btnSystem, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_SYSTEM); updateThemeButtons.run(); });
-        ResponsiveUI.setupClickable(btnLight, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_LIGHT); updateThemeButtons.run(); });
-        ResponsiveUI.setupClickable(btnDark, true, () -> { ThemeManager.setDarkMode(this, ThemeManager.MODE_DARK); updateThemeButtons.run(); });
-
-        android.widget.LinearLayout llColors = settingsView.findViewById(R.id.ll_accent_colors);
-        String[] colors = {ThemeManager.ACCENT_BLUE, ThemeManager.ACCENT_GREEN, ThemeManager.ACCENT_PURPLE, ThemeManager.ACCENT_YELLOW, ThemeManager.ACCENT_ORANGE, ThemeManager.ACCENT_PINK};
-        String[] hexes = {"#0284C7", "#16A34A", "#9333EA", "#CA8A04", "#EA580C", "#DB2777"};
-        String active = ThemeManager.getAccentColorName(this);
-
-        for (int i=0; i<colors.length; i++) {
-            final String cName = colors[i];
-            android.view.View circle = new android.view.View(this);
-            android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(100, 100);
-            lp.setMargins(16, 16, 16, 16);
-            circle.setLayoutParams(lp);
-            
-            android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
-            gd.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
-            gd.setCornerRadius(16f);
-            gd.setColor(android.graphics.Color.parseColor(hexes[i]));
-            if (cName.equals(active)) {
-                gd.setStroke(8, ThemeManager.getSecondaryAccentColor(MainActivity.this));
-            }
-            circle.setBackground(gd);
-            ResponsiveUI.setupClickable(circle, true, () -> {
-                ThemeManager.setAccentColor(this, cName);
-                recreate();
-            });
-            llColors.addView(circle);
-        }
-
-        // Setup settings buttons with new design
-        android.widget.TextView btnExportJson = settingsView.findViewById(R.id.btn_export_json);
-        btnExportJson.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), 0, 0f, 12f));
-        ResponsiveUI.setupClickable(btnExportJson, true, () -> {
-            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
-            intent.setType("application/json");
-            intent.putExtra(android.content.Intent.EXTRA_TITLE, "NoteCalc_Backup.json");
-            exportJsonLauncher.launch(intent);
-        });
-
-        android.widget.TextView btnImportJson = settingsView.findViewById(R.id.btn_import_json);
-        btnImportJson.setBackground(ResponsiveUI.createRippleRoundedBg(this, android.graphics.Color.TRANSPARENT, ThemeManager.getPrimaryAccentColor(this), 1.5f, 12f));
-        ResponsiveUI.setupClickable(btnImportJson, true, () -> {
-            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
-            intent.setType("application/json");
-            importJsonLauncher.launch(intent);
-        });
-
-        android.widget.TextView btnExportPdf = settingsView.findViewById(R.id.btn_export_pdf_all);
-        btnExportPdf.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getSecondaryAccentColor(this), 0, 0f, 12f));
-        ResponsiveUI.setupClickable(btnExportPdf, true, this::generateAndOpenAllPdf);
-
-        // Format version container
-        android.view.View versionContainer = settingsView.findViewById(R.id.version_container);
-        if (versionContainer != null) {
-            versionContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 24f));
-            ResponsiveUI.setupClickable(versionContainer, true, () -> AboutCurrentVersionHelper.showDialog(MainActivity.this));
-        }
-    }
-
-    private void openSettings() {
-        if (settingsView == null) initSettings();
-        mainContainer.removeAllViews();
-        mainContainer.addView(settingsView);
-    }
-
-    private void closeSettings() {
-        mainContainer.removeAllViews();
-        showDashboard();
-    }
     @android.annotation.SuppressLint("InflateParams")
     private void showBulkActionsMenu(View anchor) {
         View popupView = getLayoutInflater().inflate(R.layout.layout_bulk_actions_menu, null);
