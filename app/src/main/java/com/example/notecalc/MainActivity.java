@@ -22,7 +22,6 @@ import android.widget.ScrollView;
 import java.util.List;
 import java.util.ArrayList;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.Calendar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -188,14 +187,14 @@ public class MainActivity extends AppCompatActivity {
     private Double budgetFilterAmountFrom = null;
     private Double budgetFilterAmountTo = null;
 
-    private String getFilterDateFrom() { return isBudgetMode ? budgetFilterDateFrom : expenseFilterDateFrom; }
-    private void setFilterDateFrom(String val) { if (isBudgetMode) budgetFilterDateFrom = val; else expenseFilterDateFrom = val; }
-    private String getFilterDateTo() { return isBudgetMode ? budgetFilterDateTo : expenseFilterDateTo; }
-    private void setFilterDateTo(String val) { if (isBudgetMode) budgetFilterDateTo = val; else expenseFilterDateTo = val; }
-    private Double getFilterAmountFrom() { return isBudgetMode ? budgetFilterAmountFrom : expenseFilterAmountFrom; }
-    private void setFilterAmountFrom(Double val) { if (isBudgetMode) budgetFilterAmountFrom = val; else expenseFilterAmountFrom = val; }
-    private Double getFilterAmountTo() { return isBudgetMode ? budgetFilterAmountTo : expenseFilterAmountTo; }
-    private void setFilterAmountTo(Double val) { if (isBudgetMode) budgetFilterAmountTo = val; else expenseFilterAmountTo = val; }
+    String getFilterDateFrom() { return isBudgetMode ? budgetFilterDateFrom : expenseFilterDateFrom; }
+    void setFilterDateFrom(String val) { if (isBudgetMode) budgetFilterDateFrom = val; else expenseFilterDateFrom = val; }
+    String getFilterDateTo() { return isBudgetMode ? budgetFilterDateTo : expenseFilterDateTo; }
+    void setFilterDateTo(String val) { if (isBudgetMode) budgetFilterDateTo = val; else expenseFilterDateTo = val; }
+    Double getFilterAmountFrom() { return isBudgetMode ? budgetFilterAmountFrom : expenseFilterAmountFrom; }
+    void setFilterAmountFrom(Double val) { if (isBudgetMode) budgetFilterAmountFrom = val; else expenseFilterAmountFrom = val; }
+    Double getFilterAmountTo() { return isBudgetMode ? budgetFilterAmountTo : expenseFilterAmountTo; }
+    void setFilterAmountTo(Double val) { if (isBudgetMode) budgetFilterAmountTo = val; else expenseFilterAmountTo = val; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -303,127 +302,7 @@ public class MainActivity extends AppCompatActivity {
     
     
     @android.annotation.SuppressLint("SetTextI18n")
-    private void showCategoryFilterDialog(Account account, ImageView btnFilterIcon) {
-        java.util.Set<String> uniqueCats = new java.util.HashSet<>();
-        for (Record r : account.getRecords()) {
-            if (r.getCategory() != null && !r.getCategory().isEmpty()) {
-                uniqueCats.add(r.getCategory());
-            }
-        }
-        if (uniqueCats.isEmpty()) {
-            Toast.makeText(this, getString(R.string.auto_no_categories_availa_1), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        List<String> catList = new ArrayList<>(uniqueCats);
-        java.util.Collections.sort(catList);
-        
-        boolean[] checkedItems = new boolean[catList.size()];
-        for (int i = 0; i < catList.size(); i++) {
-            if (recordsAdapter != null && recordsAdapter.filterCategories.contains(catList.get(i))) {
-                checkedItems[i] = true;
-            }
-        }
-
-        android.app.Dialog dialog = new android.app.Dialog(this);
-        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-        
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        int pad = (int)(20 * getResources().getDisplayMetrics().density);
-        root.setPadding(pad, pad, pad, pad);
-        
-        TextView title = new TextView(this);
-        title.setText(getString(R.string.auto_filter_by_category_12));
-        title.setTextSize(20);
-        title.setTextColor(getColor(R.color.text_primary));
-        title.setTypeface(null, android.graphics.Typeface.BOLD);
-        title.setPadding(0, 0, 0, pad);
-        root.addView(title);
-        
-        android.widget.ListView listView = new android.widget.ListView(this);
-        listView.setDividerHeight(0);
-        
-        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, catList) {
-            @androidx.annotation.NonNull
-            @Override
-            public android.view.View getView(int position, @androidx.annotation.Nullable android.view.View convertView, @androidx.annotation.NonNull android.view.ViewGroup parent) {
-                android.view.View view = super.getView(position, convertView, parent);
-                if (view instanceof android.widget.CheckedTextView) {
-                    android.widget.CheckedTextView ctv = (android.widget.CheckedTextView) view;
-                    ctv.setTextColor(getColor(R.color.text_primary));
-                    ctv.setCheckMarkTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getPrimaryAccentColor(MainActivity.this)));
-                    int ipads = (int)(12 * getResources().getDisplayMetrics().density);
-                    ctv.setPadding(ipads, ipads, ipads, ipads);
-                }
-                view.setBackgroundColor(ThemeManager.getBgPrimaryColor(MainActivity.this));
-                return view;
-            }
-        };
-        listView.setAdapter(adapter);
-        listView.setChoiceMode(android.widget.ListView.CHOICE_MODE_MULTIPLE);
-        for (int i = 0; i < checkedItems.length; i++) {
-            listView.setItemChecked(i, checkedItems[i]);
-        }
-        
-        LinearLayout.LayoutParams listParams = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
-        root.addView(listView, listParams);
-        
-        LinearLayout btnLayout = new LinearLayout(this);
-        btnLayout.setOrientation(LinearLayout.HORIZONTAL);
-        btnLayout.setGravity(android.view.Gravity.END);
-        btnLayout.setPadding(0, pad, 0, 0);
-        
-        android.widget.Button btnClear = new android.widget.Button(this);
-        btnClear.setText(getString(R.string.auto_clear_all_13));
-        btnClear.setTextColor(getColor(R.color.text_tertiary));
-        btnClear.setBackground(ResponsiveUI.createRippleRoundedBg(this, android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT, 0f, 4f));
-        
-        android.widget.Button btnApply = new android.widget.Button(this);
-        btnApply.setText(getString(R.string.auto_apply_14));
-        btnApply.setTextColor(ThemeManager.getPrimaryAccentColor(this));
-        btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(this, android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT, 0f, 4f));
-        
-        btnLayout.addView(btnClear);
-        btnLayout.addView(btnApply);
-        root.addView(btnLayout);
-        
-        dialog.setContentView(root);
-        
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 16.0f));
-            // Set max height if needed
-            dialog.getWindow().setLayout((int)(300 * getResources().getDisplayMetrics().density), android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-        
-        ResponsiveUI.setupClickable(btnApply, true, () -> {
-            java.util.Set<String> selected = new java.util.HashSet<>();
-            android.util.SparseBooleanArray checked = listView.getCheckedItemPositions();
-            for (int i = 0; i < catList.size(); i++) {
-                if (checked.get(i)) selected.add(catList.get(i));
-            }
-            if (recordsAdapter != null) {
-                recordsAdapter.setFilterCategories(selected);
-            }
-            if (selected.isEmpty()) {
-                btnFilterIcon.setColorFilter(ThemeManager.getSecondaryAccentColor(this));
-            } else {
-                btnFilterIcon.setColorFilter(ThemeManager.getPrimaryAccentColor(this));
-            }
-            dialog.dismiss();
-        });
-        
-        ResponsiveUI.setupClickable(btnClear, true, () -> {
-            if (recordsAdapter != null) {
-                recordsAdapter.setFilterCategories(new java.util.HashSet<>());
-            }
-            btnFilterIcon.setColorFilter(ThemeManager.getSecondaryAccentColor(this));
-            dialog.dismiss();
-        });
-        
-        dialog.show();
-    }
+    
 
     
     private final NCAgent ncAgent = new NCAgent();
@@ -1380,14 +1259,14 @@ public class MainActivity extends AppCompatActivity {
         // Date header: click = sort, long-press (1s) = date range filter
         thDateField.setOnClickListener(v -> onHeaderClicked(2));
         thDateField.setOnLongClickListener(v -> {
-            showDateRangeFilterDialog();
+            FilterHelper.showDateRangeFilterDialog(MainActivity.this);
             return true;
         });
 
         // Amount header: click = sort, long-press (1s) = amount range filter
         thAmountField.setOnClickListener(v -> onHeaderClicked(3));
         thAmountField.setOnLongClickListener(v -> {
-            showAmountRangeFilterDialog();
+            FilterHelper.showAmountRangeFilterDialog(MainActivity.this);
             return true;
         });
 
@@ -2484,7 +2363,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isFilterActive() {
+    boolean isFilterActive() {
         if (recordsAdapter != null && !recordsAdapter.filterCategories.isEmpty()) return true;
         if (currentRecordSearchQuery != null && !currentRecordSearchQuery.trim().isEmpty()) return true;
         if (getFilterDateFrom() != null || getFilterDateTo() != null) return true;
@@ -2955,164 +2834,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /** Opens a dialog to set a date range filter on the records list. */
-    private void showDateRangeFilterDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_date_range_dialog, null);
-        builder.setView(dialogView);
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        View detailsContainer = dialogView.findViewById(R.id.details_container);
-        TextView tvFrom = dialogView.findViewById(R.id.dialog_date_from);
-        TextView tvTo = dialogView.findViewById(R.id.dialog_date_to);
-        TextView btnClear = dialogView.findViewById(R.id.btn_dialog_clear);
-        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
-
-        // Style dialog
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.5f, 12f));
-        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
-        tvFrom.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        tvTo.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnClear.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(MainActivity.this), ThemeManager.getPrimaryAccentColor(MainActivity.this), 0f, 4f));
-        btnApply.setTextColor(getColor(R.color.text_primary));
-
-        // Track temp selections for this dialog session
-        final String[] tempFrom = {getFilterDateFrom()};
-        final String[] tempTo = {getFilterDateTo()};
-
-        // Populate with current filter values if active
-        tvFrom.setText(tempFrom[0] != null ? tempFrom[0] : "Select Date");
-        tvTo.setText(tempTo[0] != null ? tempTo[0] : "Select Date");
-
-        // Helper to pick a date and update a TextView
-        Runnable pickFrom = () -> {
-            Calendar cal = Calendar.getInstance();
-            if (tempFrom[0] != null) {
-                try {
-                    java.util.Date parsed = new java.text.SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(tempFrom[0]);
-                    if (parsed != null) cal.setTime(parsed);
-                } catch (Exception ignored) {}
-            }
-            new android.app.DatePickerDialog(this, (view, year, month, day) -> {
-                String picked = String.format(Locale.getDefault(), "%02d-%02d-%04d", day, month + 1, year);
-                tempFrom[0] = picked;
-                tvFrom.setText(picked);
-            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
-        };
-        Runnable pickTo = () -> {
-            Calendar cal = Calendar.getInstance();
-            if (tempTo[0] != null) {
-                try {
-                    java.util.Date parsed = new java.text.SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(tempTo[0]);
-                    if (parsed != null) cal.setTime(parsed);
-                } catch (Exception ignored) {}
-            }
-            new android.app.DatePickerDialog(this, (view, year, month, day) -> {
-                String picked = String.format(Locale.getDefault(), "%02d-%02d-%04d", day, month + 1, year);
-                tempTo[0] = picked;
-                tvTo.setText(picked);
-            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
-        };
-
-        tvFrom.setOnClickListener(v -> pickFrom.run());
-        tvTo.setOnClickListener(v -> pickTo.run());
-
-        ResponsiveUI.setupClickable(btnClear, true, () -> {
-            setFilterDateFrom(null);
-            setFilterDateTo(null);
-            if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
-            updateDateHeaderIndicator();
-            dialog.dismiss();
-        });
-        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
-        ResponsiveUI.setupClickable(btnApply, true, () -> {
-            setFilterDateFrom(tempFrom[0]);
-            setFilterDateTo(tempTo[0]);
-            if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
-            updateDateHeaderIndicator();
-            dialog.dismiss();
-        });
-
-        ResponsiveUI.applyResponsiveness(dialogView);
-        dialog.show();
-    }
+    
 
     /** Visual indicator on Date column header when filter is active. */
-    private void updateDateHeaderIndicator() {
+    void updateDateHeaderIndicator() {
         if (thDateField == null) return;
         boolean active = (getFilterDateFrom() != null || getFilterDateTo() != null);
         thDateField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : ThemeManager.getSecondaryAccentColor(MainActivity.this));
     }
 
     /** Visual indicator on Amount column header when filter is active. */
-    private void updateAmountHeaderIndicator() {
+    void updateAmountHeaderIndicator() {
         if (thAmountField == null) return;
         boolean active = (getFilterAmountFrom() != null || getFilterAmountTo() != null);
         thAmountField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : ThemeManager.getSecondaryAccentColor(MainActivity.this));
     }
 
-    /** Opens a dialog to set an amount range filter on the records list. */
-    private void showAmountRangeFilterDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_amount_range_dialog, null);
-        builder.setView(dialogView);
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        View detailsContainer = dialogView.findViewById(R.id.details_container);
-        android.widget.EditText etFrom = dialogView.findViewById(R.id.dialog_amount_from);
-        android.widget.EditText etTo = dialogView.findViewById(R.id.dialog_amount_to);
-        TextView btnClear = dialogView.findViewById(R.id.btn_dialog_clear);
-        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
-
-        // Style dialog
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.5f, 12f));
-        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
-        etFrom.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        etTo.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnClear.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 4f));
-        btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(this, ThemeManager.getPrimaryAccentColor(MainActivity.this), ThemeManager.getPrimaryAccentColor(MainActivity.this), 0f, 4f));
-        btnApply.setTextColor(getColor(R.color.text_primary));
-
-        // Populate with current filter values if active
-        if (getFilterAmountFrom() != null) etFrom.setText(String.format(Locale.getDefault(), "%.2f", getFilterAmountFrom()));
-        if (getFilterAmountTo() != null) etTo.setText(String.format(Locale.getDefault(), "%.2f", getFilterAmountTo()));
-
-        ResponsiveUI.setupClickable(btnClear, true, () -> {
-            setFilterAmountFrom(null);
-            setFilterAmountTo(null);
-            if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
-            updateAmountHeaderIndicator();
-            dialog.dismiss();
-        });
-        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
-        ResponsiveUI.setupClickable(btnApply, true, () -> {
-            String fromStr = etFrom.getText().toString().trim();
-            String toStr = etTo.getText().toString().trim();
-            setFilterAmountFrom(fromStr.isEmpty() ? null : Double.parseDouble(fromStr));
-            setFilterAmountTo(toStr.isEmpty() ? null : Double.parseDouble(toStr));
-            if (recordsAdapter != null) recordsAdapter.setFilter(currentRecordSearchQuery);
-            updateAmountHeaderIndicator();
-            dialog.dismiss();
-        });
-
-        ResponsiveUI.applyResponsiveness(dialogView);
-        dialog.show();
-    }
+    
 
     /**
      * Shows a Snackbar with an Undo action. 
@@ -4122,7 +3862,7 @@ public class MainActivity extends AppCompatActivity {
         
         ResponsiveUI.setupClickable(btnFilter, false, () -> {
             popupWindow.dismiss();
-            showCategoryFilterDialog(currentEditingAccount, (ImageView) anchor);
+            FilterHelper.showCategoryFilterDialog(MainActivity.this, currentEditingAccount, (ImageView) anchor);
         });
         
         if (hasSelection) {
