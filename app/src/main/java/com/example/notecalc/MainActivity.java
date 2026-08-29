@@ -26,9 +26,6 @@ import java.util.Calendar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -1353,7 +1350,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (btnBulkActionsMenu != null) {
-            btnBulkActionsMenu.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
+            btnBulkActionsMenu.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
             ResponsiveUI.setupClickable(btnBulkActionsMenu, true, () -> showBulkActionsMenu(btnBulkActionsMenu));
         }
 
@@ -1369,10 +1366,10 @@ public class MainActivity extends AppCompatActivity {
         budgetSortAscending = false;
 
         // Set up header touch backgrounds and click listeners
-        thSnoField.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
-        thDescField.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
-        thDateField.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
-        thAmountField.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
+        thSnoField.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
+        thDescField.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
+        thDateField.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
+        thAmountField.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
 
         ResponsiveUI.setupClickable(thSnoField, false, () -> onHeaderClicked(0));
         ResponsiveUI.setupClickable(thDescField, false, () -> onHeaderClicked(1));
@@ -2040,7 +2037,7 @@ public class MainActivity extends AppCompatActivity {
                         chip.setText(ficon + fname);
                         chip.setTextSize(11);
                         chip.setTextColor(getColor(R.color.text_primary));
-                        chip.setBackground(createButtonSelector(ThemeManager.getBgSecondaryColor(MainActivity.this), 6.0f));
+                        chip.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, ThemeManager.getBgSecondaryColor(MainActivity.this), 6.0f));
                         chip.setPadding(12, 6, 12, 6);
                         android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
                         lp.setMargins(0, 0, 12, 0);
@@ -2255,16 +2252,16 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                 accHolder.tvDate.setText(sdf.format(new Date(account.getLastModified())));
 
-                accHolder.itemView.setBackground(createCardSelector());
+                accHolder.itemView.setBackground(ResponsiveUI.createCardSelector(MainActivity.this));
 
 
 
                 accHolder.btnPinAccount.setImageResource(account.isPinned() ? R.drawable.ic_pin_filled : R.drawable.ic_pin);
-                accHolder.btnPinAccount.setImageTintList(createIconTintSelector(
+                accHolder.btnPinAccount.setImageTintList(ResponsiveUI.createIconTintSelector(
                         account.isPinned() ? ThemeManager.getSecondaryAccentColor(MainActivity.this) : getColor(R.color.text_tertiary),
                         ThemeManager.getSecondaryAccentColor(MainActivity.this)
                 ));
-                accHolder.btnPinAccount.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 6.0f));
+                accHolder.btnPinAccount.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 6.0f));
 
                 final AccountGroup accountParentGroup;
                 if (currentViewGroup != null) {
@@ -2291,8 +2288,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         accHolder.btnMoveAccount.setImageResource(R.drawable.ic_move_folder);
                     }
-                    accHolder.btnMoveAccount.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 6.0f));
-                    accHolder.btnMoveAccount.setImageTintList(createIconTintSelector(
+                    accHolder.btnMoveAccount.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 6.0f));
+                    accHolder.btnMoveAccount.setImageTintList(ResponsiveUI.createIconTintSelector(
                             getColor(R.color.text_tertiary),
                             ThemeManager.getSecondaryAccentColor(MainActivity.this)
                     ));
@@ -2328,7 +2325,7 @@ public class MainActivity extends AppCompatActivity {
                             
                             dialogRoot.setBackground(ResponsiveUI.createRoundedBg(MainActivity.this, ThemeManager.getBgSecondaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.5f, 12f));
                             detailsContainer.setBackground(ResponsiveUI.createRoundedBg(MainActivity.this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
-                            btnCancel.setBackground(createButtonSelector(Color.parseColor("#20EF4444"), 4.0f));
+                            btnCancel.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 4.0f));
                             btnCancel.setTextColor(getColor(R.color.error_red));
                             
                             List<AccountGroup> targetGroups = new ArrayList<>();
@@ -2348,7 +2345,7 @@ public class MainActivity extends AppCompatActivity {
                                 tvGroup.setTextColor(getColor(R.color.text_primary));
                                 tvGroup.setTextSize(16f);
                                 tvGroup.setPadding(32, 24, 32, 24);
-                                tvGroup.setBackground(createButtonSelector(Color.parseColor("#15FFFFFF"), 4.0f));
+                                tvGroup.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
                                 ResponsiveUI.setupClickable(tvGroup, false, () -> {
                                     appStorage.standaloneAccounts.remove(account);
                                     selectedGroup.getAccounts().add(account);
@@ -2375,7 +2372,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 accHolder.btnPinAccount.setVisibility(View.VISIBLE);
                 accHolder.btnPinAccount.setImageResource(R.drawable.ic_pin); // Use same icon, just tint different? Wait, maybe just keep icon.
-                accHolder.btnPinAccount.setImageTintList(createIconTintSelector(
+                accHolder.btnPinAccount.setImageTintList(ResponsiveUI.createIconTintSelector(
                         account.isPinned() ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : getColor(R.color.text_tertiary),
                         ThemeManager.getSecondaryAccentColor(MainActivity.this)
                 ));
@@ -2401,10 +2398,10 @@ public class MainActivity extends AppCompatActivity {
                 int listCount = group.getAccounts().size();
                 grpHolder.tvAccounts.setText(listCount + (listCount == 1 ? " List" : " Lists"));
                 
-                grpHolder.itemView.setBackground(createCardSelector());
+                grpHolder.itemView.setBackground(ResponsiveUI.createCardSelector(MainActivity.this));
                 
-                grpHolder.btnDeleteGroup.setBackground(createButtonSelector(Color.parseColor("#20EF4444"), 6.0f));
-                grpHolder.btnDeleteGroup.setImageTintList(createIconTintSelector(
+                grpHolder.btnDeleteGroup.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 6.0f));
+                grpHolder.btnDeleteGroup.setImageTintList(ResponsiveUI.createIconTintSelector(
                         getColor(R.color.error_red),
                         Color.parseColor("#FF6B6B")
                 ));
@@ -2954,73 +2951,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    /**
-     * Creates a StateListDrawable for the account item card that instantly switches background on press.
-     * Fill color changes to border_color, border lights up in text_secondary (sky-blue).
-     */
-    private StateListDrawable createCardSelector() {
-        Drawable normal = ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgSecondaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.0f,
-                8.0f
-        );
-        Drawable pressed = ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBorderColor(MainActivity.this), // Fill with slate steel-blue
-                ThemeManager.getSecondaryAccentColor(MainActivity.this), // Sky-blue border
-                1.5f,
-                8.0f
-        );
-        StateListDrawable selector = new StateListDrawable();
-        selector.addState(new int[]{android.R.attr.state_pressed}, pressed);
-        selector.addState(new int[]{}, normal);
-        return selector;
-    }
-
-    /**
-     * Creates a StateListDrawable for option buttons with instant fill color changes on press.
-     */
-    private StateListDrawable createButtonSelector(int pressedColor, float cornerRadiusDp) {
-        Drawable normal = ResponsiveUI.createRoundedBg(
-                this,
-                Color.TRANSPARENT,
-                0,
-                0,
-                cornerRadiusDp
-        );
-        Drawable pressed = ResponsiveUI.createRoundedBg(
-                this,
-                pressedColor,
-                0,
-                0,
-                cornerRadiusDp
-        );
-        StateListDrawable selector = new StateListDrawable();
-        selector.addState(new int[]{android.R.attr.state_pressed}, pressed);
-        selector.addState(new int[]{}, normal);
-        return selector;
-    }
-
-    /**
-     * Creates a ColorStateList for icon tinting based on press state.
-     */
-    private ColorStateList createIconTintSelector(int normalColor, int pressedColor) {
-        int[][] states = new int[][] {
-            new int[] { android.R.attr.state_pressed },
-            new int[] {}
-        };
-        int[] colors = new int[] {
-            pressedColor,
-            normalColor
-        };
-        return new ColorStateList(states, colors);
-    }
-
-    /**
-     * Custom premium touch listener that animates scaling and pressed states to give physical click feedback.
-     */
 
     /** Opens a dialog to set a date range filter on the records list. */
     private void showDateRangeFilterDialog() {
@@ -4134,9 +4064,9 @@ public class MainActivity extends AppCompatActivity {
 
         dialogRoot.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.5f, 12f));
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
-        btnCancel.setBackground(createButtonSelector(Color.parseColor("#20EF4444"), 4.0f));
+        btnCancel.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(getColor(R.color.error_red));
-        btnApply.setBackground(createButtonSelector(ThemeManager.getPrimaryAccentColor(MainActivity.this), 4.0f));
+        btnApply.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, ThemeManager.getPrimaryAccentColor(MainActivity.this), 4.0f));
         btnApply.setTextColor(getColor(R.color.text_primary));
 
         ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
@@ -4172,9 +4102,9 @@ public class MainActivity extends AppCompatActivity {
 
         dialogRoot.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.5f, 12f));
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(MainActivity.this), ThemeManager.getBorderColor(MainActivity.this), 1.0f, 6f));
-        btnCancel.setBackground(createButtonSelector(Color.parseColor("#20EF4444"), 4.0f));
+        btnCancel.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(getColor(R.color.text_primary));
-        btnDelete.setBackground(createButtonSelector(Color.parseColor("#20EF4444"), 4.0f));
+        btnDelete.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#20EF4444"), 4.0f));
         btnDelete.setTextColor(getColor(R.color.error_red));
 
         StringBuilder details = new StringBuilder();
@@ -5040,7 +4970,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 LinearLayout chipContainer = new LinearLayout(this);
                 chipContainer.setOrientation(LinearLayout.HORIZONTAL);
-                chipContainer.setBackground(createButtonSelector(ThemeManager.getBgSecondaryColor(this), 8.0f));
+                chipContainer.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, ThemeManager.getBgSecondaryColor(this), 8.0f));
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(0, 0, 16, 0);
                 chipContainer.setLayoutParams(lp);

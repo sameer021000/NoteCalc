@@ -1,5 +1,8 @@
 package com.example.notecalc;
 
+import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.Drawable;
+import android.content.res.ColorStateList;
 import android.view.MotionEvent;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -201,4 +204,58 @@ public class ResponsiveUI {
         });
     }
 
+
+public static StateListDrawable createCardSelector(android.content.Context context) {
+        Drawable normal = ResponsiveUI.createRoundedBg(
+                context,
+                ThemeManager.getBgSecondaryColor(context),
+                ThemeManager.getBorderColor(context),
+                1.0f,
+                8.0f
+        );
+        Drawable pressed = ResponsiveUI.createRoundedBg(
+                context,
+                ThemeManager.getBorderColor(context), // Fill with slate steel-blue
+                ThemeManager.getSecondaryAccentColor(context), // Sky-blue border
+                1.5f,
+                8.0f
+        );
+        StateListDrawable selector = new StateListDrawable();
+        selector.addState(new int[]{android.R.attr.state_pressed}, pressed);
+        selector.addState(new int[]{}, normal);
+        return selector;
+    }
+
+public static StateListDrawable createButtonSelector(android.content.Context context, int pressedColor, float cornerRadiusDp) {
+        Drawable normal = ResponsiveUI.createRoundedBg(
+                context,
+                android.graphics.Color.TRANSPARENT,
+                0,
+                0,
+                cornerRadiusDp
+        );
+        Drawable pressed = ResponsiveUI.createRoundedBg(
+                context,
+                pressedColor,
+                0,
+                0,
+                cornerRadiusDp
+        );
+        StateListDrawable selector = new StateListDrawable();
+        selector.addState(new int[]{android.R.attr.state_pressed}, pressed);
+        selector.addState(new int[]{}, normal);
+        return selector;
+    }
+
+public static ColorStateList createIconTintSelector(int normalColor, int pressedColor) {
+        int[][] states = new int[][] {
+            new int[] { android.R.attr.state_pressed },
+            new int[] {}
+        };
+        int[] colors = new int[] {
+            pressedColor,
+            normalColor
+        };
+        return new ColorStateList(states, colors);
+    }
 }
