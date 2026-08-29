@@ -978,7 +978,7 @@ public class MainActivity extends AppCompatActivity {
         tempRecords = new ArrayList<>();
         tempBudgetRecords = new ArrayList<>();
         isBudgetMode = false;
-        selectedRecordDate = getCurrentDateString();
+        selectedRecordDate = AppUtils.getCurrentDateString();
         editingRecordIndex = -1;
 
         // Find views
@@ -1693,8 +1693,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Re-sequentialize to close any gaps caused by deletions
-            resequentializeRecords(tempRecords);
-            resequentializeRecords(tempBudgetRecords);
+            AppUtils.resequentializeRecords(tempRecords);
+            AppUtils.resequentializeRecords(tempBudgetRecords);
 
             // Save record values
             if (currentEditingAccount == null) {
@@ -1934,7 +1934,7 @@ public class MainActivity extends AppCompatActivity {
                 holder.revertDateTask = null;
             }
             holder.isShowingDay = false;
-            holder.tvDate.setText(formatDateCompact(record.getDate()));
+            holder.tvDate.setText(AppUtils.formatDateCompact(record.getDate()));
             
             holder.tvDate.setOnClickListener(v -> {
                 if (holder.isShowingDay) {
@@ -1943,7 +1943,7 @@ public class MainActivity extends AppCompatActivity {
                         holder.revertDateTask = null;
                     }
                     holder.isShowingDay = false;
-                    holder.tvDate.setText(formatDateCompact(record.getDate()));
+                    holder.tvDate.setText(AppUtils.formatDateCompact(record.getDate()));
                 } else {
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -1958,7 +1958,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             holder.revertDateTask = () -> {
                                 holder.isShowingDay = false;
-                                holder.tvDate.setText(formatDateCompact(record.getDate()));
+                                holder.tvDate.setText(AppUtils.formatDateCompact(record.getDate()));
                                 holder.revertDateTask = null;
                             };
                             holder.tvDate.postDelayed(holder.revertDateTask, 5000);
@@ -2586,7 +2586,7 @@ public class MainActivity extends AppCompatActivity {
             // Build a simple text row for each selected item
             TextView rowView = new TextView(this);
             String lineText = "• " + r.getDescription()
-                    + "   " + formatDateCompact(r.getDate())
+                    + "   " + AppUtils.formatDateCompact(r.getDate())
                     + "   " + String.format(Locale.getDefault(), "%.2f", r.getAmount());
             rowView.setText(lineText);
             rowView.setTextColor(getColor(R.color.text_primary));
@@ -2802,7 +2802,7 @@ public class MainActivity extends AppCompatActivity {
         tvAmount.setText(String.format(Locale.getDefault(), "%.2f", account.calculateTotal()));
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String accountDateFormatted = sdf.format(new Date(account.getLastModified()));
-        tvDate.setText(accountDateFormatted + " (" + formatDateCompact(accountDateFormatted) + ")");
+        tvDate.setText(accountDateFormatted + " (" + AppUtils.formatDateCompact(accountDateFormatted) + ")");
 
         // Apply premium styling
         dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
@@ -2899,7 +2899,7 @@ public class MainActivity extends AppCompatActivity {
     @android.annotation.SuppressLint("SetTextI18n")
     private void cancelEditRecordMode() {
         editingRecordIndex = -1;
-        selectedRecordDate = getCurrentDateString();
+        selectedRecordDate = AppUtils.getCurrentDateString();
 
         editDescField.setText("");
         editAmountField.setText("");
@@ -3157,19 +3157,7 @@ public class MainActivity extends AppCompatActivity {
         snackbar.show();
     }
 
-    /**
-     * Launches date picker dialog and updates state on selection.
-     */
-    private String getCurrentDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        return sdf.format(new Date());
-    }
 
-    /**
-     * Generates a multi-page PDF document for the given account and opens it with an external viewer.
-     * Supports word-wrapping for long titles and automatic pagination for all record rows.
-     */
-    
     private android.app.Dialog showProgressDialog() {
         android.app.Dialog dialog = new android.app.Dialog(this);
         dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
@@ -3580,7 +3568,7 @@ public class MainActivity extends AppCompatActivity {
         String titleText = account.getTitle();
         float titleLineHeight = 28f;
         float maxTitleWidth = contentWidth - 15f;
-        List<String> titleLines = wrapText(titleText, titlePaint, maxTitleWidth);
+        List<String> titleLines = AppUtils.wrapText(titleText, titlePaint, maxTitleWidth);
         for (String line : titleLines) {
             canvas.drawText(line, margin, y + 22f, titlePaint);
             y += titleLineHeight;
@@ -3739,7 +3727,7 @@ public class MainActivity extends AppCompatActivity {
                 currentY += 12f;
             }
 
-            canvas.drawText(formatDateCompact(rec.getDate()), margin + colSno + colDesc + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(AppUtils.formatDateCompact(rec.getDate()), margin + colSno + colDesc + 4, y + 15f, cellMutedPaint);
             String timeStr = rec.getTimestampMillis() > 0 ? timeSdf.format(new Date(rec.getTimestampMillis())) : "-";
             canvas.drawText(timeStr, margin + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
 
@@ -3975,76 +3963,13 @@ public class MainActivity extends AppCompatActivity {
         pageTracker[0] = pageNum;
     }
 
-    private List<String> wrapText(String text, Paint paint, float maxWidth) {
-        List<String> lines = new ArrayList<>();
-        if (text == null || text.isEmpty()) {
-            lines.add("");
-            return lines;
-        }
-
-        int start = 0;
-        int length = text.length();
-
-        while (start < length) {
-            // Skip leading spaces for the current line
-            while (start < length && text.charAt(start) == ' ') {
-                start++;
-            }
-            if (start >= length) {
-                break;
-            }
-
-            int count = paint.breakText(text, start, length, true, maxWidth, null);
-            if (count <= 0) {
-                count = 1;
-            }
-
-            if (start + count >= length) {
-                // The rest of the string fits
-                lines.add(text.substring(start));
-                break;
-            }
-
-            int end = start + count;
-            int lastSpace = text.lastIndexOf(' ', end);
-
-            if (lastSpace > start) {
-                // Break at the last space that fits
-                lines.add(text.substring(start, lastSpace));
-                start = lastSpace + 1;
-            } else {
-                // No space found, forced character break
-                lines.add(text.substring(start, end));
-                start = end;
-            }
-        }
-
-        if (lines.isEmpty()) {
-            lines.add("");
-        }
-        return lines;
-    }
+    
 
     /**
      * Converts a date string from dd-MM-yyyy to compact DDMonthNameYY format.
      * Example: "24-06-2026" -> "24Jun26"
      */
-    private String formatDateCompact(String ddMMYYYY) {
-        try {
-            String[] parts = ddMMYYYY.split("-");
-            if (parts.length != 3) return ddMMYYYY;
-            String day = parts[0];
-            int monthNum = Integer.parseInt(parts[1]);
-            String year = parts[2];
-            String yy = year.length() >= 2 ? year.substring(year.length() - 2) : year;
-            String[] monthAbbr = {"Jan","Feb","Mar","Apr","May","Jun",
-                                   "Jul","Aug","Sep","Oct","Nov","Dec"};
-            if (monthNum < 1 || monthNum > 12) return ddMMYYYY;
-            return day + monthAbbr[monthNum - 1] + yy;
-        } catch (Exception e) {
-            return ddMMYYYY;
-        }
-    }
+    
 
     private void showCreateGroupDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
@@ -4134,14 +4059,7 @@ public class MainActivity extends AppCompatActivity {
         return isBudgetMode ? tempBudgetRecords : tempRecords;
     }
 
-    private void resequentializeRecords(List<Record> records) {
-        if (records == null || records.isEmpty()) return;
-        List<Record> copy = new ArrayList<>(records);
-        copy.sort(java.util.Comparator.comparingInt(Record::getOriginalIndex));
-        for (int i = 0; i < copy.size(); i++) {
-            copy.get(i).setOriginalIndex(i);
-        }
-    }
+    
 
     private android.view.View settingsView;
 
@@ -4580,7 +4498,7 @@ public class MainActivity extends AppCompatActivity {
         
         if (isCut) {
             getActiveRecords().removeAll(selectedRecords);
-            resequentializeRecords(getActiveRecords());
+            AppUtils.resequentializeRecords(getActiveRecords());
             if (recordsAdapter != null) {
                 recordsAdapter.setFilter(currentRecordSearchQuery);
             }
@@ -4775,7 +4693,7 @@ public class MainActivity extends AppCompatActivity {
         String titleText = account.getTitle() + " (Selected)";
         float titleLineHeight = 28f;
         float maxTitleWidth = contentWidth - 15f;
-        java.util.List<String> titleLines = wrapText(titleText, titlePaint, maxTitleWidth);
+        java.util.List<String> titleLines = AppUtils.wrapText(titleText, titlePaint, maxTitleWidth);
         for (String line : titleLines) {
             canvas.drawText(line, margin, y + 22f, titlePaint);
             y += titleLineHeight;
@@ -4897,7 +4815,7 @@ public class MainActivity extends AppCompatActivity {
                 currentY += 12f;
             }
 
-            canvas.drawText(formatDateCompact(rec.getDate()), margin + colSno + colDesc + 4, y + 15f, cellMutedPaint);
+            canvas.drawText(AppUtils.formatDateCompact(rec.getDate()), margin + colSno + colDesc + 4, y + 15f, cellMutedPaint);
             String timeStr = rec.getTimestampMillis() > 0 ? timeSdf.format(new java.util.Date(rec.getTimestampMillis())) : "-";
             canvas.drawText(timeStr, margin + colSno + colDesc + colDate + 4, y + 15f, cellMutedPaint);
 
