@@ -1,6 +1,5 @@
 package com.example.notecalc;
 
-import android.app.DatePickerDialog;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -640,77 +639,6 @@ public class MainActivity extends AppCompatActivity {
         
         dialog.show();
     }
-
-    @android.annotation.SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
-
-    private void showTipsDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        android.view.View view = getLayoutInflater().inflate(R.layout.layout_dialog_tips, null);
-        builder.setView(view);
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        // Setup expandable sections
-        int[] headerIds = {R.id.header_section_1, R.id.header_section_2, R.id.header_section_3, R.id.header_section_4, R.id.header_section_5};
-        int[] contentIds = {R.id.content_section_1, R.id.content_section_2, R.id.content_section_3, R.id.content_section_4, R.id.content_section_5};
-        int[] chevronIds = {R.id.tv_chevron_1, R.id.tv_chevron_2, R.id.tv_chevron_3, R.id.tv_chevron_4, R.id.tv_chevron_5};
-
-        for (int i = 0; i < 5; i++) {
-            android.view.View header = view.findViewById(headerIds[i]);
-            android.view.View content = view.findViewById(contentIds[i]);
-            android.widget.TextView chevron = view.findViewById(chevronIds[i]);
-            
-            if (header != null && content != null && chevron != null) {
-                // Apply curved bordered background to header
-                header.setBackground(ResponsiveUI.createRoundedBg(
-                        this,
-                        ThemeManager.getBgSecondaryColor(this),
-                        ThemeManager.getBorderColor(this),
-                        1.0f,
-                        10.0f
-                ));
-                
-                // Add some margin below the header so the border isn't cramped
-                android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) header.getLayoutParams();
-                params.bottomMargin = 24;
-                header.setLayoutParams(params);
-
-                header.setOnClickListener(v -> {
-                    if (content.getVisibility() == android.view.View.VISIBLE) {
-                        content.setVisibility(android.view.View.GONE);
-                        chevron.setText("▼"); // down chevron
-                    } else {
-                        content.setVisibility(android.view.View.VISIBLE);
-                        chevron.setText("▲"); // up chevron
-                    }
-                });
-            }
-        }
-        
-        // Round the dialog box corners
-        view.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(this),
-                android.graphics.Color.TRANSPARENT,
-                0f,
-                16f
-        ));
-        
-        // Round the Got it! button corners
-        android.view.View btnClose = view.findViewById(R.id.btn_tips_close);
-        btnClose.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getSecondaryAccentColor(this),
-                android.graphics.Color.TRANSPARENT,
-                0f,
-                12f
-        ));
-
-        ResponsiveUI.setupClickable(btnClose, true, dialog::dismiss);
-        dialog.show();
-    }
     @android.annotation.SuppressLint("ClickableViewAccessibility")
     private void showDashboard() {
         if (currentSnackbar != null) {
@@ -734,7 +662,7 @@ public class MainActivity extends AppCompatActivity {
         });
         
         View btnTips = dashboardView.findViewById(R.id.btn_tips);
-        if(btnTips != null) btnTips.setOnClickListener(v -> showTipsDialog());
+        if(btnTips != null) btnTips.setOnClickListener(v -> DialogHelper.showTipsDialog(this));
         
         View btnCreateGroup = dashboardView.findViewById(R.id.btn_create_group);
         View cardEmptyState = dashboardView.findViewById(R.id.card_empty_state);
@@ -1703,7 +1631,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Date picker action
-        ResponsiveUI.setupClickable(btnDate, () -> showDatePicker(btnDate));
+        ResponsiveUI.setupClickable(btnDate, () -> DialogHelper.showDatePicker(this, selectedRecordDate, btnDate, newDate -> selectedRecordDate = newDate));
 
         // Cancel edit action
         ResponsiveUI.setupClickable(btnCancelEdit, this::cancelEditRecordMode);
@@ -3312,34 +3240,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Launches date picker dialog and updates state on selection.
      */
-    private void showDatePicker(TextView dateTextWidget) {
-        Calendar cal = Calendar.getInstance();
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-            Date date = sdf.parse(selectedRecordDate);
-            if (date != null) {
-                cal.setTime(date);
-            }
-        } catch (Exception ignored) {}
-
-        DatePickerDialog picker = new DatePickerDialog(
-                this,
-                (view1, year, month, dayOfMonth) -> {
-                    Calendar selected = Calendar.getInstance();
-                    selected.set(Calendar.YEAR, year);
-                    selected.set(Calendar.MONTH, month);
-                    selected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                    selectedRecordDate = sdf.format(selected.getTime());
-                    dateTextWidget.setText(selectedRecordDate);
-                },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-        );
-        picker.show();
-    }
-
     private String getCurrentDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         return sdf.format(new Date());
