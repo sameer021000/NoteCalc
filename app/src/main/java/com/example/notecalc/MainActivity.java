@@ -46,6 +46,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import com.example.notecalc.pdf.PdfSortOrder;
+import com.example.notecalc.pdf.PdfSortCallback;
 
 public class MainActivity extends AppCompatActivity {
     private final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
@@ -56,14 +58,6 @@ public class MainActivity extends AppCompatActivity {
     private android.widget.HorizontalScrollView attachmentsScroll;
     private android.widget.TextView btnAttachFile;
 
-    public enum PdfSortOrder {
-        SNO, DESCRIPTION, DATE, AMOUNT
-    }
-
-    public interface PdfSortCallback {
-        void onSortSelected(PdfSortOrder order);
-    }
-    
     private void showPdfSortDialog(PdfSortCallback callback) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.CustomDialogTheme);
         android.view.View view = getLayoutInflater().inflate(R.layout.layout_dialog_pdf_sort, null);
