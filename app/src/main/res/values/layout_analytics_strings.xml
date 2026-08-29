@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="analytics_btn_back">Back</string>
-    <string name="analytics_title">Analytics</string>
+    <string name="analytics_title">%1$s Analytics</string>
+    <string name="analytics_high_day">%1$s (%2$s)</string>
     <string name="analytics_custom">Custom</string>
     <string name="analytics_date_range_placeholder">Jan 1 - Jan 7</string>
     <string name="analytics_smart_insights">Smart Insights</string>

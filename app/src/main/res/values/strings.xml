@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">NoteCalc</string>
-    
+
+    <!-- EditorUIHelper.java Strings -->
+    <string name="total_of_selection">TOTAL OF SELECTION</string>
+    <string name="records_count">Records : %1$d</string>
 
     <!-- MainActivity.java Strings -->
     <string name="auto_no_categories_availa_1">No categories available to filter.</string>
@@ -46,8 +49,4 @@
     <string name="auto_restore_backup_38">Restore Backup</string>
     <string name="auto_are_you_sure_this_wi_39">Are you sure? This will completely overwrite your current data.</string>
     <string name="msg_generating_pdf">Generating PDF...</string>
-    
-    <!-- EditorUIHelper.java Strings -->
-    <string name="total_of_selection">TOTAL OF SELECTION</string>
-    <string name="records_count">Records : %1$d</string>
 </resources>
