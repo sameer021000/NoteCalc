@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private android.widget.HorizontalScrollView attachmentsScroll;
     private android.widget.TextView btnAttachFile;
 
-    private void showPdfSortDialog(PdfSortCallback callback) {
+    void showPdfSortDialog(PdfSortCallback callback) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.CustomDialogTheme);
         android.view.View view = getLayoutInflater().inflate(R.layout.layout_dialog_pdf_sort, null);
         builder.setView(view);
@@ -716,7 +716,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void refreshDashboardList() {
+    void refreshDashboardList() {
         if (accountsAdapter == null) return;
         
         List<Object> combinedGroups = new ArrayList<>();
@@ -1233,7 +1233,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (btnBulkActionsMenu != null) {
             btnBulkActionsMenu.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
-            ResponsiveUI.setupClickable(btnBulkActionsMenu, true, () -> showBulkActionsMenu(btnBulkActionsMenu));
+            ResponsiveUI.setupClickable(btnBulkActionsMenu, true, () -> MenuHelper.showBulkActionsMenu(MainActivity.this, btnBulkActionsMenu));
         }
 
         // Assign header fields and reset sort state
@@ -2162,7 +2162,7 @@ public class MainActivity extends AppCompatActivity {
                 ResponsiveUI.setupClickable(accHolder.itemView, false, () -> {
                     currentViewGroup = accountParentGroup;
                     openEditor(account);
-                }, () -> showAccountPopupMenu(accHolder.itemView, account));
+                }, () -> MenuHelper.showAccountPopupMenu(MainActivity.this, accHolder.itemView, account));
 
                 if (accHolder.btnMoveAccount != null) {
                     if (accountParentGroup != null) {
@@ -2291,7 +2291,7 @@ public class MainActivity extends AppCompatActivity {
                 ResponsiveUI.setupClickable(grpHolder.itemView, false, () -> {
                     currentViewGroup = group;
                     showDashboard(); // Refresh dashboard into group view
-                }, () -> showGroupPopupMenu(grpHolder.itemView, group));
+                }, () -> MenuHelper.showGroupPopupMenu(MainActivity.this, grpHolder.itemView, group));
                 
                 ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> showDeleteGroupConfirmation(group));
             }
@@ -2399,7 +2399,7 @@ public class MainActivity extends AppCompatActivity {
      * Shows a confirmation dialog listing the selected records before performing bulk delete.
      */
     @android.annotation.SuppressLint("SetTextI18n")
-    private void showDeleteMultipleConfirmationDialog(List<Record> selectedRecords) {
+    void showDeleteMultipleConfirmationDialog(List<Record> selectedRecords) {
         if (selectedRecords.size() <= 2) {
             for (Record r : selectedRecords) {
                 int idx = getActiveRecords().indexOf(r);
@@ -2546,120 +2546,15 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    @android.annotation.SuppressLint({"SetTextI18n", "InflateParams"})
-    private void showAccountPopupMenu(View anchor, Account account) {
-        View popupView = getLayoutInflater().inflate(R.layout.layout_popup_menu, null);
-        
-        android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
-                popupView,
-                (int) (180 * getResources().getDisplayMetrics().density),
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
-                true
-        );
 
-        popupWindow.setElevation(8.0f);
-        
-        View btnDownload = popupView.findViewById(R.id.btn_popup_download);
-        View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
-        
-        ResponsiveUI.setupClickable(btnDownload, false, () -> {
-            popupWindow.dismiss();
-            showPdfSortDialog(order -> generateAndOpenPdf(account, order));
-        });
-        
-        View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
-        TextView textArchive = popupView.findViewById(R.id.text_popup_archive);
-        if (textArchive != null) {
-            textArchive.setText(account.isArchived() ? "Un-Archive" : "Archive");
-        }
-        
-        ResponsiveUI.setupClickable(btnArchive, false, () -> {
-            popupWindow.dismiss();
-            account.setArchived(!account.isArchived());
-            StorageHelper.saveAppStorage(MainActivity.this, appStorage);
-            refreshDashboardList();
-        });
+    
 
-        ResponsiveUI.setupClickable(btnDelete, false, () -> {
-            popupWindow.dismiss();
-            showDeleteAccountConfirmationDialog(account);
-        });
-        
-        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int popupHeight = popupView.getMeasuredHeight();
-        
-        int[] location = new int[2];
-        anchor.getLocationOnScreen(location);
-        int anchorY = location[1];
-        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-        
-        if (anchorY + popupHeight > screenHeight - 150) {
-            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() - popupHeight);
-        } else {
-            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() / 2);
-        }
-    }
 
-    @android.annotation.SuppressLint({"SetTextI18n", "InflateParams"})
-    private void showGroupPopupMenu(View anchor, AccountGroup group) {
-        View popupView = getLayoutInflater().inflate(R.layout.layout_popup_menu, null);
-        
-        android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
-                popupView,
-                (int) (180 * getResources().getDisplayMetrics().density),
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
-                true
-        );
+    
 
-        popupWindow.setElevation(8.0f);
-        
-        View btnDownload = popupView.findViewById(R.id.btn_popup_download);
-        View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
-        
-        ResponsiveUI.setupClickable(btnDownload, false, () -> {
-            popupWindow.dismiss();
-            showPdfSortDialog(order -> generateAndOpenGroupPdf(group, order));
-        });
-        
-        View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
-        TextView textArchive = popupView.findViewById(R.id.text_popup_archive);
-        if (textArchive != null) {
-            textArchive.setText(group.isArchived() ? "Un-Archive" : "Archive");
-        }
-        
-        ResponsiveUI.setupClickable(btnArchive, false, () -> {
-            popupWindow.dismiss();
-            group.setArchived(!group.isArchived());
-            // Also archive/un-archive all lists within this group
-            for (Account acc : group.getAccounts()) {
-                acc.setArchived(group.isArchived());
-            }
-            StorageHelper.saveAppStorage(MainActivity.this, appStorage);
-            refreshDashboardList();
-        });
-
-        ResponsiveUI.setupClickable(btnDelete, false, () -> {
-            popupWindow.dismiss();
-            showDeleteGroupConfirmation(group);
-        });
-        
-        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int popupHeight = popupView.getMeasuredHeight();
-        
-        int[] location = new int[2];
-        anchor.getLocationOnScreen(location);
-        int anchorY = location[1];
-        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-        
-        if (anchorY + popupHeight > screenHeight - 150) {
-            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() - popupHeight);
-        } else {
-            popupWindow.showAsDropDown(anchor, anchor.getWidth() / 2, -anchor.getHeight() / 2);
-        }
-    }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    private void showDeleteAccountConfirmationDialog(final Account account) {
+    void showDeleteAccountConfirmationDialog(final Account account) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.layout_delete_account_dialog, null);
         builder.setView(dialogView);
@@ -3019,7 +2914,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void generateAndOpenGroupPdf(AccountGroup group, PdfSortOrder sortOrder) {
+    void generateAndOpenGroupPdf(AccountGroup group, PdfSortOrder sortOrder) {
         android.app.Dialog progressDialog = showProgressDialog();
         
         new Thread(() -> {
@@ -3097,7 +2992,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void generateAndOpenPdf(Account account, PdfSortOrder sortOrder) {
+    void generateAndOpenPdf(Account account, PdfSortOrder sortOrder) {
         android.app.Dialog progressDialog = showProgressDialog();
         
         new Thread(() -> {
@@ -3752,7 +3647,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showDeleteGroupConfirmation(AccountGroup group) {
+    void showDeleteGroupConfirmation(AccountGroup group) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_confirm_delete_group, null);
         builder.setView(dialogView);
@@ -3804,104 +3699,10 @@ public class MainActivity extends AppCompatActivity {
 
     
 
-    @android.annotation.SuppressLint("InflateParams")
-    private void showBulkActionsMenu(View anchor) {
-        View popupView = getLayoutInflater().inflate(R.layout.layout_bulk_actions_menu, null);
-        
-        android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
-                popupView,
-                (int) (220 * getResources().getDisplayMetrics().density),
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
-                true
-        );
-        popupWindow.setElevation(8.0f);
-        
-        View btnFilter = popupView.findViewById(R.id.btn_popup_filter);
-        View btnExport = popupView.findViewById(R.id.btn_popup_export_pdf);
-        View btnCut = popupView.findViewById(R.id.btn_popup_cut);
-        View btnCopy = popupView.findViewById(R.id.btn_popup_copy);
-        View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
-        android.widget.ImageView filterIcon = popupView.findViewById(R.id.img_popup_filter_icon);
-        if (filterIcon != null && recordsAdapter != null) {
-            filterIcon.setColorFilter(null); // Clear any color filter
-            if (recordsAdapter.filterCategories.isEmpty()) {
-                android.util.TypedValue typedValue = new android.util.TypedValue();
-                getTheme().resolveAttribute(R.attr.colorAccentPrimary, typedValue, true);
-                filterIcon.setImageTintList(android.content.res.ColorStateList.valueOf(typedValue.data));
-            } else {
-                filterIcon.setImageTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getSecondaryAccentColor(this)));
-            }
-        }
-        
-        List<Record> selectedRecords = new ArrayList<>();
-        for (Record r : getActiveRecords()) if (r.isSelected()) selectedRecords.add(r);
-        boolean hasSelection = !selectedRecords.isEmpty();
-        
-        if (btnExport != null) {
-            btnExport.setAlpha(hasSelection ? 1.0f : 0.4f);
-            btnExport.setEnabled(hasSelection);
-        }
-        btnCut.setAlpha(hasSelection ? 1.0f : 0.4f);
-        btnCut.setEnabled(hasSelection);
-        btnCopy.setAlpha(hasSelection ? 1.0f : 0.4f);
-        btnCopy.setEnabled(hasSelection);
-        btnDelete.setAlpha(hasSelection ? 1.0f : 0.4f);
-        btnDelete.setEnabled(hasSelection);
-        
-        if (currentEditingAccount != null && currentEditingAccount.isArchived()) {
-            btnCut.setVisibility(View.GONE);
-            btnCopy.setVisibility(View.GONE);
-            btnDelete.setVisibility(View.GONE);
-            View sepCut = popupView.findViewById(R.id.sep_cut);
-            View sepCopy = popupView.findViewById(R.id.sep_copy);
-            View sepDelete = popupView.findViewById(R.id.sep_delete);
-            if (sepCut != null) sepCut.setVisibility(View.GONE);
-            if (sepCopy != null) sepCopy.setVisibility(View.GONE);
-            if (sepDelete != null) sepDelete.setVisibility(View.GONE);
-        }
-        
-        ResponsiveUI.setupClickable(btnFilter, false, () -> {
-            popupWindow.dismiss();
-            FilterHelper.showCategoryFilterDialog(MainActivity.this, currentEditingAccount, (ImageView) anchor);
-        });
-        
-        if (hasSelection) {
-            if (btnExport != null) {
-                ResponsiveUI.setupClickable(btnExport, false, () -> {
-                    popupWindow.dismiss();
-                    showPdfSortDialog(order -> generateAndOpenSelectedPdf(selectedRecords, order));
-                });
-            }
-            ResponsiveUI.setupClickable(btnCut, false, () -> {
-                popupWindow.dismiss();
-                TransferHelper.showTransferDialog(MainActivity.this, selectedRecords, true);
-            });
-            ResponsiveUI.setupClickable(btnCopy, false, () -> {
-                popupWindow.dismiss();
-                TransferHelper.showTransferDialog(MainActivity.this, selectedRecords, false);
-            });
-            ResponsiveUI.setupClickable(btnDelete, false, () -> {
-                popupWindow.dismiss();
-                showDeleteMultipleConfirmationDialog(selectedRecords);
-            });
-        }
-        
-        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int popupHeight = popupView.getMeasuredHeight();
-        
-        int[] location = new int[2];
-        anchor.getLocationOnScreen(location);
-        int anchorY = location[1];
-        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-        
-        if (anchorY + popupHeight > screenHeight - 150) {
-            popupWindow.showAsDropDown(anchor, 0, -anchor.getHeight() - popupHeight);
-        } else {
-            popupWindow.showAsDropDown(anchor, 0, 0);
-        }
-    }
 
-    @android.annotation.SuppressLint("SetTextI18n")
+    
+
+
     
 
     
@@ -3909,7 +3710,7 @@ public class MainActivity extends AppCompatActivity {
 
     
 
-    private void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
+    void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
         
         android.app.Dialog progressDialog = showProgressDialog();
