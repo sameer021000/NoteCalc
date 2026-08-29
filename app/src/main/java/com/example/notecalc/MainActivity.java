@@ -104,14 +104,14 @@ public class MainActivity extends AppCompatActivity {
     androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
 
     FrameLayout mainContainer;
-    private AppStorage appStorage;
+    AppStorage appStorage;
     private AccountGroup currentViewGroup = null; // null means we are in the Dashboard
-    private Account currentEditingAccount;
+    Account currentEditingAccount;
     
     // Editor state
     private List<Record> tempRecords;
     private List<Record> tempBudgetRecords;
-    private boolean isBudgetMode = false; // false = Expenses, true = Budget
+    boolean isBudgetMode = false; // false = Expenses, true = Budget
     
     private String originalTitle = "";
     private String selectedRecordDate = "";
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView btnAddRecordField;
     private TextView btnCancelEditField;
     private TextView labelAddRecordField;
-        private RecordsAdapter recordsAdapter;
+        RecordsAdapter recordsAdapter;
     private AccountsAdapter accountsAdapter;
     private AccountsAdapter groupsAdapter;
     private String dashboardSearchQuery = "";
@@ -159,14 +159,14 @@ public class MainActivity extends AppCompatActivity {
     private boolean archivedGroupSortAscending = true;
 
     // Editor record search query (persists while in editor, reset on openEditor)
-    private String currentRecordSearchQuery = "";
+    String currentRecordSearchQuery = "";
 
     // Fields for collapsible form, remarks, empty state, and bulk delete
     private EditText editRemarksField;
     private android.widget.AutoCompleteTextView editCategoryField;
     private View formInputsContainer;
     private TextView btnToggleForm;
-    private CheckBox cbSelectAllHeader;
+    CheckBox cbSelectAllHeader;
     private ImageView btnBulkActionsMenu;
     private View editorEmptyState;
     private View rowSearchAndBulk;
@@ -1842,7 +1842,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @android.annotation.SuppressLint("NotifyDataSetChanged")
-    private class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordViewHolder> {
+    class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordViewHolder> {
 
         private boolean isSelectionMode = false;
 
@@ -1854,7 +1854,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Filtered view of tempRecords, rebuilt on every setFilter() call
-        private final List<Record> displayRecords = new ArrayList<>();
+        final List<Record> displayRecords = new ArrayList<>();
         public java.util.Set<String> filterCategories = new java.util.HashSet<>();
 
         public void setFilterCategories(java.util.Set<String> cats) {
@@ -2495,7 +2495,7 @@ public class MainActivity extends AppCompatActivity {
      * Shows or hides the "Delete Selected" button based on whether any records are selected.
      */
     @android.annotation.SuppressLint("SetTextI18n")
-    private void updateBulkActionsState() {
+    void updateBulkActionsState() {
         if (btnBulkActionsMenu == null) return;
         
         int filterCount = recordsAdapter != null ? recordsAdapter.displayRecords.size() : 0;
@@ -4058,7 +4058,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private List<Record> getActiveRecords() {
+    List<Record> getActiveRecords() {
         return isBudgetMode ? tempBudgetRecords : tempRecords;
     }
 
@@ -4134,11 +4134,11 @@ public class MainActivity extends AppCompatActivity {
             }
             ResponsiveUI.setupClickable(btnCut, false, () -> {
                 popupWindow.dismiss();
-                showTransferDialog(selectedRecords, true);
+                TransferHelper.showTransferDialog(MainActivity.this, selectedRecords, true);
             });
             ResponsiveUI.setupClickable(btnCopy, false, () -> {
                 popupWindow.dismiss();
-                showTransferDialog(selectedRecords, false);
+                TransferHelper.showTransferDialog(MainActivity.this, selectedRecords, false);
             });
             ResponsiveUI.setupClickable(btnDelete, false, () -> {
                 popupWindow.dismiss();
@@ -4162,266 +4162,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    private void showTransferDialog(List<Record> selectedRecords, boolean isCut) {
-        List<Account> targetAccounts = new ArrayList<>();
-        for (AccountGroup g : appStorage.groups) targetAccounts.addAll(g.getAccounts());
-        targetAccounts.addAll(appStorage.standaloneAccounts);
-        
-        List<String> accountNames = new ArrayList<>();
-        for (Account a : targetAccounts) {
-            if (a != currentEditingAccount && !a.isArchived()) {
-                accountNames.add(a.getTitle());
-            }
-        }
-        accountNames.sort(String.CASE_INSENSITIVE_ORDER);
-        List<String> names = new ArrayList<>();
-        names.add("Create New List");
-        names.addAll(accountNames);
-        
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_transfer, null);
-        builder.setView(dialogView);
-        
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-        
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        if (dialogRoot != null) {
-            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
-                    this,
-                    ThemeManager.getBgSecondaryColor(this),
-                    ThemeManager.getBorderColor(this),
-                    1.5f,
-                    12f
-            ));
-        }
-        
-        TextView title = dialogView.findViewById(R.id.dialog_title);
-        title.setText(isCut ? "Cut to..." : "Copy to...");
-        
-        android.widget.LinearLayout container = dialogView.findViewById(R.id.transfer_list_container);
-        
-        for (int i = 0; i < names.size(); i++) {
-            final int index = i;
-            TextView item = new TextView(this);
-            item.setText(names.get(i));
-            item.setTextSize(16f);
-            int padding = (int) (16 * getResources().getDisplayMetrics().density);
-            item.setPadding(padding, padding, padding, padding);
-            
-            if (i == 0) {
-                item.setTextColor(ThemeManager.getPrimaryAccentColor(this));
-                item.setTypeface(null, android.graphics.Typeface.BOLD);
-                item.setText("+  " + names.get(i));
-                item.setBackground(ResponsiveUI.createRippleRoundedBg(
-                        this,
-                        ThemeManager.getBgPrimaryColor(this),
-                        ThemeManager.getPrimaryAccentColor(this),
-                        1.5f,
-                        6f
-                ));
-            } else {
-                item.setTextColor(getResources().getColor(R.color.text_primary, getTheme()));
-                item.setBackground(ResponsiveUI.createRippleRoundedBg(
-                        this,
-                        ThemeManager.getBgPrimaryColor(this),
-                        ThemeManager.getBorderColor(this),
-                        1.0f,
-                        6f
-                ));
-            }
-            
-            android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.bottomMargin = (int) (8 * getResources().getDisplayMetrics().density);
-            item.setLayoutParams(params);
-            
-            ResponsiveUI.setupClickable(item, true, () -> {
-                dialog.dismiss();
-                if (index == 0) { // Create New List
-                    showNewListTitleDialog(selectedRecords, isCut);
-                } else {
-                    Account target = null;
-                    String selectedName = names.get(index);
-                    for (Account a : targetAccounts) {
-                        if (a.getTitle().equals(selectedName)) {
-                            target = a;
-                            break;
-                        }
-                    }
-                    if (target != null) {
-                        executeTransfer(selectedRecords, target, isCut);
-                    }
-                }
-            });
-            container.addView(item);
-        }
-        
-        View btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(this),
-                ThemeManager.getBorderColor(this),
-                1.0f,
-                6f
-        ));
-        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
-        
-        dialog.show();
-    }
+    
 
-    private void showNewListTitleDialog(List<Record> selectedRecords, boolean isCut) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_new_list, null);
-        builder.setView(dialogView);
-        
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-        
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        if (dialogRoot != null) {
-            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
-                    this,
-                    ThemeManager.getBgSecondaryColor(this),
-                    ThemeManager.getBorderColor(this),
-                    1.5f,
-                    12f
-            ));
-        }
-        
-        final android.widget.EditText input = dialogView.findViewById(R.id.edit_new_list_title);
-        input.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(this),
-                ThemeManager.getBorderColor(this),
-                1.0f,
-                6f
-        ));
-        
-        View btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
-                this,
-                ThemeManager.getBgPrimaryColor(this),
-                ThemeManager.getBorderColor(this),
-                1.0f,
-                6f
-        ));
-        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
-        
-        View btnCreate = dialogView.findViewById(R.id.btn_dialog_create);
-        btnCreate.setBackground(ResponsiveUI.createRippleRoundedBg(
-                this,
-                ThemeManager.getPrimaryAccentColor(this),
-                0,
-                0f,
-                6f
-        ));
-        ResponsiveUI.setupClickable(btnCreate, true, () -> {
-            String title = input.getText().toString().trim();
-            if (title.isEmpty()) {
-                android.widget.Toast.makeText(this, "Title cannot be empty", android.widget.Toast.LENGTH_SHORT).show();
-                return;
-            }
-            // Check if title exists
-            for (AccountGroup g : appStorage.groups) {
-                for (Account a : g.getAccounts()) {
-                    if (a.getTitle().equalsIgnoreCase(title)) {
-                        android.widget.Toast.makeText(this, "List with this title already exists", android.widget.Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-            }
-            for (Account a : appStorage.standaloneAccounts) {
-                if (a.getTitle().equalsIgnoreCase(title)) {
-                    android.widget.Toast.makeText(this, "List with this title already exists", android.widget.Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-            
-            dialog.dismiss();
-            Account newAccount = new Account(title);
-            appStorage.standaloneAccounts.add(0, newAccount);
-            executeTransfer(selectedRecords, newAccount, isCut);
-            showDashboard();
-        });
-        
-        dialog.show();
-    }
+    
 
-    @android.annotation.SuppressLint("NotifyDataSetChanged")
-    private void executeTransfer(List<Record> selectedRecords, Account targetAccount, boolean isCut) {
-        java.util.List<Record> targetList = isBudgetMode ? targetAccount.getBudgetRecords() : targetAccount.getRecords();
-        int maxIndex = -1;
-        for (Record rec : targetList) {
-            if (rec.getOriginalIndex() > maxIndex) {
-                maxIndex = rec.getOriginalIndex();
-            }
-        }
-        
-        for (Record r : selectedRecords) {
-            Record copy = new Record(r.getDescription(), r.getAmount(), r.getDate());
-            copy.setRemarks(r.getRemarks());
-            copy.setCategory(r.getCategory());
-            copy.setTimestampMillis(r.getTimestampMillis());
-            if (r.getAttachments() != null) {
-                copy.getAttachments().addAll(r.getAttachments());
-            }
-            maxIndex++;
-            copy.setOriginalIndex(maxIndex);
-            
-            if (isBudgetMode) {
-                targetAccount.getBudgetRecords().add(copy);
-            } else {
-                targetAccount.getRecords().add(copy);
-            }
-            
-            if (isCut) {
-                if (isBudgetMode) {
-                    currentEditingAccount.getBudgetRecords().remove(r);
-                } else {
-                    currentEditingAccount.getRecords().remove(r);
-                }
-            }
-        }
-        
-        StorageHelper.saveAppStorage(this, appStorage);
-        
-        if (isCut) {
-            getActiveRecords().removeAll(selectedRecords);
-            AppUtils.resequentializeRecords(getActiveRecords());
-            if (recordsAdapter != null) {
-                recordsAdapter.setFilter(currentRecordSearchQuery);
-            }
-        }
-        
-        for (Record r : getActiveRecords()) r.setSelected(false);
-        if (cbSelectAllHeader != null) {
-            cbSelectAllHeader.setOnCheckedChangeListener(null);
-            cbSelectAllHeader.setChecked(false);
-            cbSelectAllHeader.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (recordsAdapter != null) {
-                    for (Record rec : recordsAdapter.displayRecords) {
-                        rec.setSelected(isChecked);
-                    }
-                    recordsAdapter.notifyDataSetChanged();
-                    updateBulkActionsState();
-                }
-            });
-        }
-        if (recordsAdapter != null) {
-            recordsAdapter.notifyDataSetChanged();
-        }
-        updateBulkActionsState();
-        
-        String action = isCut ? "Cut" : "Copied";
-        android.widget.Toast.makeText(this, action + " " + selectedRecords.size() + " records to " + targetAccount.getTitle(), android.widget.Toast.LENGTH_SHORT).show();
-    }
+
+    
 
     private void generateAndOpenSelectedPdf(java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
