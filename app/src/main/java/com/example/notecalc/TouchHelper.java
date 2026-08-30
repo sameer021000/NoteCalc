@@ -70,7 +70,7 @@ public class TouchHelper {
                 activity.updateBulkActionsState();
                 activity.updateHeaderLabels();
                 
-                activity.showUndoSnackbar("Record deleted", () -> {
+                SnackbarHelper.showUndoSnackbar(activity, "Record deleted", () -> {
                     activity.getActiveRecords().add(trueIndex, deletedRecord);
                     activity.recordsAdapter.refreshDisplay();
                     activity.updateBulkActionsState();

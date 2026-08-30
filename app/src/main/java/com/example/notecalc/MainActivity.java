@@ -1252,51 +1252,6 @@ public class MainActivity extends AppCompatActivity {
         thAmountField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : ThemeManager.getSecondaryAccentColor(MainActivity.this));
     }
 
-    /**
-     * Shows a Snackbar with an Undo action. 
-     * @param message The text to display.
-     * @param onUndo Action to perform if Undo is clicked.
-     * @param onCommit Action to perform if the Snackbar is dismissed without undo.
-     */
-    @SuppressWarnings("SameParameterValue")
-    void showUndoSnackbar(String message, final Runnable onUndo, final Runnable onCommit) {
-        if (currentSnackbar != null) {
-            currentSnackbar.dismiss();
-            currentSnackbar = null;
-        }
-        
-        View targetView = findViewById(android.R.id.content);
-        if (targetView == null) targetView = mainContainer;
-        
-        com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(targetView, message, com.google.android.material.snackbar.Snackbar.LENGTH_LONG);
-        snackbar.setDuration(5000); // 5 seconds
-        
-        snackbar.setAction("UNDO", v -> {
-            if (onUndo != null) onUndo.run();
-        });
-        
-        snackbar.setActionTextColor(getColor(R.color.error_red)); 
-        snackbar.setTextColor(getColor(R.color.text_primary));
-        snackbar.setBackgroundTint(ThemeManager.getBgTertiaryColor(MainActivity.this));
-        
-        View sbView = snackbar.getView();
-        sbView.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgTertiaryColor(MainActivity.this), 0, 0, 8f));
-        
-        snackbar.addCallback(new com.google.android.material.snackbar.Snackbar.Callback() {
-            @Override
-            public void onDismissed(com.google.android.material.snackbar.Snackbar transientBottomBar, int event) {
-                if (currentSnackbar == transientBottomBar) {
-                    currentSnackbar = null;
-                }
-                if (event != DISMISS_EVENT_ACTION) {
-                    if (onCommit != null) onCommit.run();
-                }
-            }
-        });
-        
-        currentSnackbar = snackbar;
-        snackbar.show();
-    }
 
     void generateAndOpenAllPdf() {
         android.app.Dialog progressDialog = DialogHelper.showProgressDialog(MainActivity.this);
