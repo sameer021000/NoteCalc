@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.notecalc.ncagent.*;
 import android.widget.CheckBox;
-import android.widget.ScrollView;
 import java.util.List;
 import java.util.ArrayList;
 import androidx.appcompat.app.AppCompatActivity;
@@ -253,210 +252,9 @@ public class MainActivity extends AppCompatActivity {
     
 
     
-    private final NCAgent ncAgent = new NCAgent();
+    final NCAgent ncAgent = new NCAgent();
 
-    @android.annotation.SuppressLint("SetTextI18n")
-    private void showNCAgentBottomSheet() {
-        android.app.Dialog dialog = new android.app.Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
-        
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setGravity(android.view.Gravity.BOTTOM);
-        root.setBackgroundColor(0x80000000); // dim background
-        
-        LinearLayout sheet = new LinearLayout(this);
-        sheet.setOrientation(LinearLayout.VERTICAL);
-        sheet.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgPrimaryColor(this), ThemeManager.getBgPrimaryColor(this), 0f, 16f));
-        int pad = (int)(16 * getResources().getDisplayMetrics().density);
-        sheet.setPadding(pad, pad, pad, pad);
-        
-        TextView title = new TextView(this);
-        title.setText(getString(R.string.auto_nc_agent_15));
-        title.setTextSize(20);
-        title.setTextColor(getColor(R.color.text_primary));
-        title.setTypeface(null, android.graphics.Typeface.BOLD);
-        title.setPadding(0, 0, 0, pad);
-        sheet.addView(title);
-        
-        EditText input = new EditText(this);
-        input.setHint(getString(R.string.auto_e_g_bought_2_coffees_31));
-        input.setTextColor(getColor(R.color.text_primary));
-        input.setHintTextColor(getColor(R.color.text_secondary));
-        input.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8f));
-        input.setPadding(pad, pad, pad, pad);
-        input.setLines(4);
-        input.setGravity(android.view.Gravity.TOP | android.view.Gravity.START);
-        sheet.addView(input);
-        
-        android.widget.Button btnAnalyze = new android.widget.Button(this);
-        btnAnalyze.setText(getString(R.string.auto_analyze_16));
-        btnAnalyze.setTextColor(getColor(R.color.text_on_accent));
-        btnAnalyze.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(this), ThemeManager.getPrimaryAccentColor(this), 0f, 8f));
-        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        btnParams.setMargins(0, pad, 0, 0);
-        sheet.addView(btnAnalyze, btnParams);
-        
-        ScrollView previewScroll = new ScrollView(this);
-        LinearLayout previewContainer = new LinearLayout(this);
-        previewContainer.setOrientation(LinearLayout.VERTICAL);
-        previewScroll.addView(previewContainer);
-        previewScroll.setVisibility(View.GONE);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
-        scrollParams.setMargins(0, pad, 0, 0);
-        sheet.addView(previewScroll, scrollParams);
-        
-        LinearLayout actionButtons = new LinearLayout(this);
-        actionButtons.setOrientation(LinearLayout.HORIZONTAL);
-        actionButtons.setVisibility(View.GONE);
-        
-        android.widget.Button btnCancel = new android.widget.Button(this);
-        btnCancel.setText(getString(R.string.auto_cancel_17));
-        btnCancel.setTextColor(getColor(R.color.text_primary));
-        btnCancel.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-        
-        android.widget.Button btnConfirm = new android.widget.Button(this);
-        btnConfirm.setText(getString(R.string.auto_confirm_18));
-        btnConfirm.setTextColor(ThemeManager.getPrimaryAccentColor(this));
-        btnConfirm.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-        
-        actionButtons.addView(btnCancel, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-        actionButtons.addView(btnConfirm, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-        sheet.addView(actionButtons, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        
-        root.addView(sheet, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        
-        root.setOnClickListener(v -> dialog.dismiss());
-        sheet.setOnClickListener(v -> {}); // prevent dismiss when clicking sheet
-        
-        dialog.setContentView(root);
-        
-        // State variables to hold parsed actions
-        List<NCAction> parsedActions = new ArrayList<>();
-        
-        btnAnalyze.setOnClickListener(v -> {
-            String text = input.getText().toString();
-            if (text.trim().isEmpty()) return;
-            
-            parsedActions.clear();
-            parsedActions.addAll(ncAgent.process(text, getActiveRecords()));
-            
-            // Build Preview UI
-            previewContainer.removeAllViews();
-            input.setVisibility(View.GONE);
-            btnAnalyze.setVisibility(View.GONE);
-            previewScroll.setVisibility(View.VISIBLE);
-            actionButtons.setVisibility(View.VISIBLE);
-            
-            for (NCAction action : parsedActions) {
-                LinearLayout card = new LinearLayout(this);
-                card.setOrientation(LinearLayout.VERTICAL);
-                card.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getBgSecondaryColor(this), ThemeManager.getBorderColor(this), 1.0f, 8f));
-                card.setPadding(pad, pad, pad, pad);
-                LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                cardParams.setMargins(0, 0, 0, pad);
-                previewContainer.addView(card, cardParams);
-                
-                TextView intentView = new TextView(this);
-                intentView.setText("[" + action.getIntent().name() + "]");
-                intentView.setTypeface(null, android.graphics.Typeface.BOLD);
-                
-                if (action.getIntent() == NCAgentIntent.ADD) intentView.setTextColor(getColor(R.color.accent_green_primary));
-                else if (action.getIntent() == NCAgentIntent.UPDATE) intentView.setTextColor(getColor(R.color.accent_blue_primary));
-                else if (action.getIntent() == NCAgentIntent.DELETE) intentView.setTextColor(getColor(R.color.error_red));
-                else intentView.setTextColor(getColor(R.color.text_tertiary));
-                card.addView(intentView);
-                
-                if (!action.isValid()) {
-                    TextView errView = new TextView(this);
-                    errView.setText("Error: " + action.getErrorMessage());
-                    errView.setTextColor(getColor(R.color.error_red));
-                    card.addView(errView);
-                } else if (action.isNeedsDisambiguation()) {
-                    TextView disambigText = new TextView(this);
-                    disambigText.setText("Multiple matches found. Select which to " + action.getIntent().name().toLowerCase() + ":");
-                    disambigText.setTextColor(getColor(R.color.text_primary));
-                    card.addView(disambigText);
-                    
-                    for (Record matched : action.getDisambiguationCandidates()) {
-                        CheckBox cb = new CheckBox(this);
-                        cb.setText(matched.getDescription() + " (?" + matched.getAmount() + ") - " + matched.getDate());
-                        cb.setTextColor(getColor(R.color.text_primary));
-                        // Save the checkbox view in a tag to retrieve its state on Confirm
-                        cb.setTag(matched);
-                        card.addView(cb);
-                    }
-                } else {
-                    Record rec = action.getValidatedRecord() != null ? action.getValidatedRecord() : action.getTargetRecord();
-                    TextView dataView = new TextView(this);
-                    dataView.setText(rec.getDescription() + "  -  ?" + rec.getAmount() + "  (" + rec.getDate() + ")");
-                    dataView.setTextColor(getColor(R.color.text_primary));
-                    card.addView(dataView);
-                }
-            }
-        });
-        
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-        
-        btnConfirm.setOnClickListener(v -> {
-            int added = 0, updated = 0, deleted = 0;
-            
-            for (int i = 0; i < parsedActions.size(); i++) {
-                NCAction action = parsedActions.get(i);
-                if (!action.isValid()) continue;
-                
-                if (action.isNeedsDisambiguation()) {
-                    // Find the card view
-                    LinearLayout card = (LinearLayout) previewContainer.getChildAt(i);
-                    for (int j = 0; j < card.getChildCount(); j++) {
-                        View child = card.getChildAt(j);
-                        if (child instanceof CheckBox) {
-                            CheckBox cb = (CheckBox) child;
-                            if (cb.isChecked()) {
-                                Record target = (Record) cb.getTag();
-                                if (action.getIntent() == NCAgentIntent.DELETE) {
-                                    getActiveRecords().remove(target);
-                                    deleted++;
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (action.getIntent() == NCAgentIntent.ADD) {
-                        Record validated = action.getValidatedRecord();
-                        validated.setOriginalIndex(getNewOriginalIndex());
-                        getActiveRecords().add(validated);
-                        added++;
-                    } else if (action.getIntent() == NCAgentIntent.UPDATE) {
-                        Record target = action.getTargetRecord();
-                        Record val = action.getValidatedRecord();
-                        target.setDescription(val.getDescription());
-                        target.setAmount(val.getAmount());
-                        target.setDate(val.getDate());
-                        target.setCategory(val.getCategory());
-                        target.setRemarks(val.getRemarks());
-                        updated++;
-                    } else if (action.getIntent() == NCAgentIntent.DELETE) {
-                        getActiveRecords().remove(action.getTargetRecord());
-                        deleted++;
-                    }
-                }
-            }
-            
-            String summary = "";
-            if (added > 0) summary += "Added " + added + " records\n";
-            if (updated > 0) summary += "Updated " + updated + " records\n";
-            if (deleted > 0) summary += "Deleted " + deleted + " records\n";
-            if (!summary.isEmpty()) Toast.makeText(this, summary, Toast.LENGTH_LONG).show();
-            
-            applySorting();
-            StorageHelper.saveAppStorage(MainActivity.this, appStorage);
-            populateRecordsList();
-            dialog.dismiss();
-        });
-        
-        dialog.show();
-    }
-    @android.annotation.SuppressLint("ClickableViewAccessibility")
+    @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
     void showDashboard() {
         if (currentSnackbar != null) {
             currentSnackbar.dismiss();
@@ -992,7 +790,7 @@ public class MainActivity extends AppCompatActivity {
             btnNCAgent.setBackground(ResponsiveUI.createRoundedBg(this, ThemeManager.getPrimaryAccentColor(MainActivity.this), ThemeManager.getPrimaryAccentColor(MainActivity.this), 0f, 100f));
             btnNCAgent.setColorFilter(getColor(R.color.text_on_accent));
             btnNCAgent.setImageResource(android.R.drawable.ic_btn_speak_now); // Unique microphone/voice icon representing natural language
-            btnNCAgent.setOnClickListener(v -> showNCAgentBottomSheet());
+            btnNCAgent.setOnClickListener(v -> NCAgentHelper.showNCAgentBottomSheet(MainActivity.this, ncAgent));
             if (account != null && account.isArchived()) {
                 btnNCAgent.setVisibility(View.GONE);
             }
@@ -1589,7 +1387,7 @@ public class MainActivity extends AppCompatActivity {
         updateBulkActionsState();
     }
 
-    private void applySorting() {
+    void applySorting() {
         if (getActiveRecords() == null || getActiveRecords().isEmpty()) {
             return;
         }
@@ -1657,7 +1455,7 @@ public class MainActivity extends AppCompatActivity {
         updateHeaderLabels();
     }
 
-    private int getNewOriginalIndex() {
+    int getNewOriginalIndex() {
         int maxIndex = -1;
         for (Record r : getActiveRecords()) {
             if (r.getOriginalIndex() > maxIndex) {
