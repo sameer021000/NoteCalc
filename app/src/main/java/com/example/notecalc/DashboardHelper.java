@@ -45,13 +45,13 @@ public class DashboardHelper {
 
         RecyclerView listAccountsContainer = dashboardView.findViewById(R.id.list_accounts);
         listAccountsContainer.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(activity));
-        activity.accountsAdapter = activity.new AccountsAdapter();
+        activity.accountsAdapter = new AccountsAdapter(activity);
         listAccountsContainer.setAdapter(activity.accountsAdapter);
 
         RecyclerView listGroupsContainer = dashboardView.findViewById(R.id.list_groups);
         if (listGroupsContainer != null) {
             listGroupsContainer.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(activity));
-            activity.groupsAdapter = activity.new AccountsAdapter();
+            activity.groupsAdapter = new AccountsAdapter(activity);
             listGroupsContainer.setAdapter(activity.groupsAdapter);
         }
 
