@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
     private int budgetSortColumn = 0;
     private boolean budgetSortAscending = false;
     
-    private int getSortColumn() { return isBudgetMode ? budgetSortColumn : expenseSortColumn; }
-    private boolean getSortAscending() { return isBudgetMode ? budgetSortAscending : expenseSortAscending; }
+    int getSortColumn() { return isBudgetMode ? budgetSortColumn : expenseSortColumn; }
+    boolean getSortAscending() { return isBudgetMode ? budgetSortAscending : expenseSortAscending; }
     private void setSortColumn(int col) { if (isBudgetMode) budgetSortColumn = col; else expenseSortColumn = col; }
     private void setSortAscending(boolean asc) { if (isBudgetMode) budgetSortAscending = asc; else expenseSortAscending = asc; }
 
@@ -797,79 +797,7 @@ public class MainActivity extends AppCompatActivity {
         }
         
         // Setup Swipe-to-Delete and Drag-and-Drop for Records
-        androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback recordSwipeCallback = new androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback(0, androidx.recyclerview.widget.ItemTouchHelper.RIGHT) {
-            private boolean isDragActive = false;
-
-            @Override
-            public int getSwipeDirs(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
-                if (currentEditingAccount != null && currentEditingAccount.isArchived()) return 0;
-                return super.getSwipeDirs(recyclerView, viewHolder);
-            }
-
-            @Override
-            public int getDragDirs(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
-                if (currentEditingAccount != null && currentEditingAccount.isArchived()) return 0;
-                boolean isDefaultSort = getSortColumn() == 0 && getSortAscending();
-                boolean noSearch = currentRecordSearchQuery == null || currentRecordSearchQuery.trim().isEmpty();
-                if (isDefaultSort && noSearch) {
-                    return androidx.recyclerview.widget.ItemTouchHelper.UP | androidx.recyclerview.widget.ItemTouchHelper.DOWN;
-                }
-                return 0; // Disable drag otherwise
-            }
-
-            @Override
-            public boolean onMove(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder, @androidx.annotation.NonNull RecyclerView.ViewHolder target) {
-                int fromPos = viewHolder.getBindingAdapterPosition();
-                int toPos = target.getBindingAdapterPosition();
-                if (fromPos == RecyclerView.NO_POSITION || toPos == RecyclerView.NO_POSITION || recordsAdapter == null) return false;
-                
-                Record fromRecord = recordsAdapter.displayRecords.get(fromPos);
-                Record toRecord = recordsAdapter.displayRecords.get(toPos);
-                
-                // Swap originalIndex to permanently swap their S.Nos
-                int tempIndex = fromRecord.getOriginalIndex();
-                fromRecord.setOriginalIndex(toRecord.getOriginalIndex());
-                toRecord.setOriginalIndex(tempIndex);
-                
-                java.util.Collections.swap(recordsAdapter.displayRecords, fromPos, toPos);
-                recordsAdapter.notifyItemMoved(fromPos, toPos);
-                isDragActive = true;
-                return true;
-            }
-
-            @Override
-            public void clearView(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
-                super.clearView(recyclerView, viewHolder);
-                if (isDragActive) {
-                    isDragActive = false;
-                    applySorting();
-                    populateRecordsList();
-                }
-            }
-
-            @Override
-            public void onSwiped(@androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int pos = viewHolder.getBindingAdapterPosition();
-                if (pos == RecyclerView.NO_POSITION || recordsAdapter == null) return;
-                
-                Record deletedRecord = recordsAdapter.displayRecords.get(pos);
-                int trueIndex = getActiveRecords().indexOf(deletedRecord);
-                
-                // Temporarily remove
-                getActiveRecords().remove(trueIndex);
-                recordsAdapter.refreshDisplay();
-                updateBulkActionsState();
-                updateHeaderLabels();
-                
-                showUndoSnackbar("Record deleted", () -> {
-                    getActiveRecords().add(trueIndex, deletedRecord);
-                    recordsAdapter.refreshDisplay();
-                    updateBulkActionsState();
-                    updateHeaderLabels();
-                }, null);
-            }
-        };
-        new androidx.recyclerview.widget.ItemTouchHelper(recordSwipeCallback).attachToRecyclerView(listRecordsRecyclerView);
+        new androidx.recyclerview.widget.ItemTouchHelper(TouchHelper.getRecordSwipeCallback(this)).attachToRecyclerView(listRecordsRecyclerView);
         textTotalValField = textTotalVal;
         textTotalLabelField = textTotalLabel;
 
@@ -2282,7 +2210,7 @@ public class MainActivity extends AppCompatActivity {
      * @param onCommit Action to perform if the Snackbar is dismissed without undo.
      */
     @SuppressWarnings("SameParameterValue")
-    private void showUndoSnackbar(String message, final Runnable onUndo, final Runnable onCommit) {
+    void showUndoSnackbar(String message, final Runnable onUndo, final Runnable onCommit) {
         if (currentSnackbar != null) {
             currentSnackbar.dismiss();
             currentSnackbar = null;
