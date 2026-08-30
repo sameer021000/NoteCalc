@@ -164,7 +164,7 @@ public static void showDeleteGroupConfirmation(MainActivity activity, AccountGro
         ResponsiveUI.setupClickable(btnDelete, false, () -> {
             activity.appStorage.groups.remove(group);
             StorageHelper.saveAppStorage(activity, activity.appStorage);
-            activity.refreshDashboardList();
+            DashboardHelper.refreshDashboardList(activity);
             dialog.dismiss();
         });
 
@@ -200,7 +200,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
                 AccountGroup group = new AccountGroup(title);
                 activity.appStorage.groups.add(group);
                 StorageHelper.saveAppStorage(activity, activity.appStorage);
-                activity.refreshDashboardList();
+                DashboardHelper.refreshDashboardList(activity);
                 dialog.dismiss();
             }
         });
@@ -511,7 +511,7 @@ public static void showPdfSortDialog(MainActivity activity, PdfSortCallback call
                 activity.appStorage.standaloneAccounts.remove(account);
             }
             StorageHelper.saveAppStorage(activity, activity.appStorage);
-            activity.refreshDashboardList();
+            DashboardHelper.refreshDashboardList(activity);
         });
 
         dialog.show();

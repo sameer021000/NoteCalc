@@ -38,7 +38,7 @@ public class MenuHelper {
             popupWindow.dismiss();
             account.setArchived(!account.isArchived());
             StorageHelper.saveAppStorage(activity, activity.appStorage);
-            activity.refreshDashboardList();
+            DashboardHelper.refreshDashboardList(activity);
         });
 
         ResponsiveUI.setupClickable(btnDelete, false, () -> {
@@ -95,7 +95,7 @@ public class MenuHelper {
                 acc.setArchived(group.isArchived());
             }
             StorageHelper.saveAppStorage(activity, activity.appStorage);
-            activity.refreshDashboardList();
+            DashboardHelper.refreshDashboardList(activity);
         });
 
         ResponsiveUI.setupClickable(btnDelete, false, () -> {

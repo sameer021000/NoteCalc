@@ -192,7 +192,7 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
             Account newAccount = new Account(title);
             activity.appStorage.standaloneAccounts.add(0, newAccount);
             executeTransfer(activity, selectedRecords, newAccount, isCut);
-            activity.showDashboard();
+            DashboardHelper.showDashboard(activity);
         });
         
         dialog.show();

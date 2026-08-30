@@ -112,6 +112,6 @@ public void openSettings() {
 
 private void closeSettings() {
         activity.mainContainer.removeAllViews();
-        activity.showDashboard();
+        DashboardHelper.showDashboard(activity);
     }
 }

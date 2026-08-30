@@ -33,7 +33,7 @@ import java.util.Locale;
 import com.example.notecalc.pdf.PdfSortOrder;
 
 public class MainActivity extends AppCompatActivity {
-    private SettingsHelper settingsHelper;
+    SettingsHelper settingsHelper;
 
     private final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
     private static final int REQUEST_CODE_ATTACH = 1001;
@@ -70,16 +70,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView btnCancelEditField;
     private TextView labelAddRecordField;
         RecordsAdapter recordsAdapter;
-    private AccountsAdapter accountsAdapter;
-    private AccountsAdapter groupsAdapter;
-    private String dashboardSearchQuery = "";
+    AccountsAdapter accountsAdapter;
+    AccountsAdapter groupsAdapter;
+    String dashboardSearchQuery = "";
     private boolean groupSortAscending = true;
-    private TextView btnSortTitle;
-    private TextView btnSortTotal;
-    private TextView btnSortLatest;
+    TextView btnSortTitle;
+    TextView btnSortTotal;
+    TextView btnSortLatest;
+    TextView btnSortGroupTitle;
     private TextView textTotalValField;
     private TextView textTotalLabelField;
-    private com.google.android.material.snackbar.Snackbar currentSnackbar;
+    com.google.android.material.snackbar.Snackbar currentSnackbar;
 
     private TextView thSnoField;
     private TextView thDescField;
@@ -188,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                                 
                                 appStorage = AppStorage.fromJSONObject(new org.json.JSONObject(sb.toString()));
                                 StorageHelper.saveAppStorage(this, appStorage);
-                                showDashboard();
+                                DashboardHelper.showDashboard(MainActivity.this);
                                 android.widget.Toast.makeText(this, "Backup Restored!", android.widget.Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 android.util.Log.e("NoteCalc", "Error restoring JSON", e);
@@ -226,11 +227,11 @@ public class MainActivity extends AppCompatActivity {
                     tempRecords = null;
                     tempBudgetRecords = null;
                     dashboardSearchQuery = "";
-                    showDashboard();
+                    DashboardHelper.showDashboard(MainActivity.this);
                 } else if (currentViewGroup != null) {
                     currentViewGroup = null;
                     dashboardSearchQuery = "";
-                    showDashboard();
+                    DashboardHelper.showDashboard(MainActivity.this);
                 } else {
                     setEnabled(false);
                     getOnBackPressedDispatcher().onBackPressed();
@@ -240,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Open the dashboard screen
-        showDashboard();
+        DashboardHelper.showDashboard(MainActivity.this);
     }
 
     /**
@@ -254,336 +255,38 @@ public class MainActivity extends AppCompatActivity {
     
     final NCAgent ncAgent = new NCAgent();
 
-    @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
-    void showDashboard() {
-        if (currentSnackbar != null) {
-            currentSnackbar.dismiss();
-            currentSnackbar = null;
-        }
-                LayoutInflater inflater = getLayoutInflater();
-                View dashboardView = inflater.inflate(R.layout.layout_dashboard, mainContainer, false);
-
-        // Find views
-        View btnCreateAccount = dashboardView.findViewById(R.id.btn_create_account);
-        
-        View btnSettings = dashboardView.findViewById(R.id.btn_settings);
-        if(btnSettings != null) btnSettings.setOnClickListener(v -> settingsHelper.openSettings());
-        
-        View btnArchive = dashboardView.findViewById(R.id.btn_archive);
-        if(btnArchive != null) btnArchive.setOnClickListener(v -> {
-            ArchiveHelper.isShowingArchive = !ArchiveHelper.isShowingArchive;
-            updateDashboardSortUI();
-            refreshDashboardList();
-        });
-        
-        View btnTips = dashboardView.findViewById(R.id.btn_tips);
-        if(btnTips != null) btnTips.setOnClickListener(v -> DialogHelper.showTipsDialog(this));
-        
-        View btnCreateGroup = dashboardView.findViewById(R.id.btn_create_group);
-        View cardEmptyState = dashboardView.findViewById(R.id.card_empty_state);
-
-        RecyclerView listAccountsContainer = dashboardView.findViewById(R.id.list_accounts);
-        listAccountsContainer.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
-        accountsAdapter = new AccountsAdapter();
-        listAccountsContainer.setAdapter(accountsAdapter);
-
-        RecyclerView listGroupsContainer = dashboardView.findViewById(R.id.list_groups);
-        if (listGroupsContainer != null) {
-            listGroupsContainer.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
-            groupsAdapter = new AccountsAdapter();
-            listGroupsContainer.setAdapter(groupsAdapter);
-        }
-
-        TextView btnSortGroupTitle = dashboardView.findViewById(R.id.btn_sort_group_title);
-        if (btnSortGroupTitle != null) {
-            ResponsiveUI.setupClickable(btnSortGroupTitle, false, () -> {
-                setGroupSortAscending(!getGroupSortAscending());
-                updateDashboardSortUI();
-                refreshDashboardList();
-            });
-        }
-
-        TextView btnSortTitle = dashboardView.findViewById(R.id.btn_sort_title);
-        TextView btnSortTotal = dashboardView.findViewById(R.id.btn_sort_total);
-        TextView btnSortLatest = dashboardView.findViewById(R.id.btn_sort_latest);
-
-        if (btnSortTitle != null) ResponsiveUI.setupClickable(btnSortTitle, false, () -> {
-            if (getDashboardSortColumn() == 0) setDashboardSortAscending(!getDashboardSortAscending());
-            else { setDashboardSortColumn(0); setDashboardSortAscending(true); }
-            StorageHelper.saveAppStorage(this, appStorage);
-            updateDashboardSortUI();
-            refreshDashboardList();
-        });
-        if (btnSortTotal != null) ResponsiveUI.setupClickable(btnSortTotal, false, () -> {
-            if (getDashboardSortColumn() == 1) setDashboardSortAscending(!getDashboardSortAscending());
-            else { setDashboardSortColumn(1); setDashboardSortAscending(false); }
-            StorageHelper.saveAppStorage(this, appStorage);
-            updateDashboardSortUI();
-            refreshDashboardList();
-        });
-        if (btnSortLatest != null) ResponsiveUI.setupClickable(btnSortLatest, false, () -> {
-            if (getDashboardSortColumn() == 2) setDashboardSortAscending(!getDashboardSortAscending());
-            else { setDashboardSortColumn(2); setDashboardSortAscending(false); }
-            StorageHelper.saveAppStorage(this, appStorage);
-            updateDashboardSortUI();
-            refreshDashboardList();
-        });
-
-        this.btnSortTitle = btnSortTitle;
-        this.btnSortTotal = btnSortTotal;
-        this.btnSortLatest = btnSortLatest;
-
-        // Apply responsive styling to the main layout elements
-        ResponsiveUI.applyResponsiveness(dashboardView);
-
-        // Dynamic background borders & colors styling
-        if (btnCreateAccount != null) {
-            btnCreateAccount.setBackground(ResponsiveUI.createRoundedBg(
-                    this,
-                    ThemeManager.getBgSecondaryColor(MainActivity.this),
-                    ThemeManager.getBorderColor(MainActivity.this),
-                    1.0f,
-                    8.0f
-            ));
-        }
-        if (btnCreateGroup != null) {
-            btnCreateGroup.setBackground(ResponsiveUI.createRoundedBg(
-                    this,
-                    ThemeManager.getBgSecondaryColor(MainActivity.this),
-                    ThemeManager.getBorderColor(MainActivity.this),
-                    1.0f,
-                    8.0f
-            ));
-        }
-
-        cardEmptyState.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgSecondaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.5f,
-                12f
-        ));
-
-        // Set up click actions
-        ResponsiveUI.setupClickable(btnCreateAccount, () -> openEditor(null));
-        if (btnCreateGroup != null) {
-            ResponsiveUI.setupClickable(btnCreateGroup, () -> DialogHelper.showCreateGroupDialog(MainActivity.this));
-        }
-        ResponsiveUI.setupClickable(cardEmptyState, () -> {
-            if (currentViewGroup != null) {
-                openEditor(null);
-            }
-        });
-        currentEditingAccount = null;
-        
-        TextView textAppTitle = dashboardView.findViewById(R.id.text_app_title);
-        TextView textAppSubtitle = dashboardView.findViewById(R.id.text_app_subtitle);
-        ImageView btnDashboardBack = dashboardView.findViewById(R.id.btn_dashboard_back);
-        
-        if (currentViewGroup != null) {
-            if (textAppTitle != null) textAppTitle.setText(currentViewGroup.getTitle());
-            if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.GONE);
-            if (btnCreateGroup != null) btnCreateGroup.setVisibility(View.GONE);
-            if (btnDashboardBack != null) {
-                btnDashboardBack.setVisibility(View.VISIBLE);
-                ResponsiveUI.setupClickable(btnDashboardBack, false, () -> {
-                    currentViewGroup = null;
-                    showDashboard();
-                });
-            }
-        } else {
-            if (textAppTitle != null) textAppTitle.setText(getString(R.string.app_name));
-            if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.VISIBLE);
-            if (btnCreateGroup != null) btnCreateGroup.setVisibility(View.VISIBLE);
-            if (btnDashboardBack != null) btnDashboardBack.setVisibility(View.GONE);
-        }
-
-        EditText editDashboardSearch = dashboardView.findViewById(R.id.edit_dashboard_search);
-        editDashboardSearch.setBackground(ResponsiveUI.createRoundedBg(
-                this,
-                ThemeManager.getBgSecondaryColor(MainActivity.this),
-                ThemeManager.getBorderColor(MainActivity.this),
-                1.0f,
-                8.0f
-        ));
-
-        editDashboardSearch.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (editDashboardSearch.getCompoundDrawablesRelative()[2] != null) {
-                    if (event.getRawX() >= (editDashboardSearch.getRight() - editDashboardSearch.getCompoundDrawablesRelative()[2].getBounds().width() - editDashboardSearch.getPaddingRight())) {
-                        editDashboardSearch.setText("");
-                        return true;
-                    }
-                }
-                v.performClick();
-            }
-            return false;
-        });
-
-
-
-        // Search bar watcher
-        editDashboardSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                dashboardSearchQuery = s.toString();
-                refreshDashboardList();
-            }
-        });
-
-        // Mount to main container first so findViewById works in refreshDashboardList
-        mainContainer.removeAllViews();
-        mainContainer.addView(dashboardView);
-
-        // Populate accounts list
-        refreshDashboardList();
-    }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    private void updateDashboardSortUI() {
-        if (btnSortTitle != null) {
-            btnSortTitle.setTextColor(getDashboardSortColumn() == 0 ? ThemeManager.getSecondaryAccentColor(MainActivity.this) : getColor(R.color.text_tertiary));
-            btnSortTitle.setText(getDashboardSortColumn() == 0 ? "Title " + (getDashboardSortAscending() ? "▲" : "▼") : "Title");
-        }
-        if (btnSortTotal != null) {
-            btnSortTotal.setTextColor(getDashboardSortColumn() == 1 ? ThemeManager.getSecondaryAccentColor(MainActivity.this) : getColor(R.color.text_tertiary));
-            btnSortTotal.setText(getDashboardSortColumn() == 1 ? "Total " + (getDashboardSortAscending() ? "▲" : "▼") : "Total");
-        }
-        if (btnSortLatest != null) {
-            btnSortLatest.setTextColor(getDashboardSortColumn() == 2 ? ThemeManager.getSecondaryAccentColor(MainActivity.this) : getColor(R.color.text_tertiary));
-            btnSortLatest.setText(getDashboardSortColumn() == 2 ? "Latest " + (getDashboardSortAscending() ? "▲" : "▼") : "Latest");
-        }
-
-        TextView btnSortGroupTitle = findViewById(R.id.btn_sort_group_title);
-        if (btnSortGroupTitle != null) {
-            btnSortGroupTitle.setText("Title " + (getGroupSortAscending() ? "▲" : "▼"));
-        }
-    }
-
-    void refreshDashboardList() {
-        if (accountsAdapter == null) return;
-        
-        List<Object> combinedGroups = new ArrayList<>();
-        List<Object> combinedAccounts = new ArrayList<>();
-
-        TextView textAppTitle = findViewById(R.id.text_app_title);
-        TextView textAppSubtitle = findViewById(R.id.text_app_subtitle);
-        if (textAppTitle != null) textAppTitle.setText(ArchiveHelper.isShowingArchive ? "Archive" : getString(R.string.app_name));
-        if (textAppSubtitle != null) textAppSubtitle.setText(ArchiveHelper.isShowingArchive ? "Read-only history" : getString(R.string.app_subtitle));
-
-        View btnCreateAccount = findViewById(R.id.btn_create_account);
-        View btnCreateGroup = findViewById(R.id.btn_create_group);
-        android.widget.ImageView btnArchive = findViewById(R.id.btn_archive);
-        if (btnCreateAccount != null) btnCreateAccount.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
-        if (btnCreateGroup != null) btnCreateGroup.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
-        if (btnArchive != null) btnArchive.setImageResource(ArchiveHelper.isShowingArchive ? R.drawable.ic_archive : R.drawable.ic_archive_outline);
-
-        if (currentViewGroup != null) {
-            combinedAccounts.addAll(applyDashboardSort(ArchiveHelper.getVisibleAccounts(currentViewGroup.getAccounts())));
-        } else {
-            List<AccountGroup> sortedGroups = new ArrayList<>(ArchiveHelper.getVisibleGroups(appStorage.groups));
-            sortedGroups.sort((a, b) -> {
-                if (a.isPinned() != b.isPinned()) return a.isPinned() ? -1 : 1;
-                int titleCompare = a.getTitle().compareToIgnoreCase(b.getTitle());
-                return getGroupSortAscending() ? titleCompare : -titleCompare;
-            });
-            combinedGroups.addAll(sortedGroups);
-            combinedAccounts.addAll(applyDashboardSort(ArchiveHelper.getVisibleAccounts(appStorage.standaloneAccounts)));
-        }
-        
-        String query = dashboardSearchQuery.trim().toLowerCase(Locale.getDefault());
-        accountsAdapter.setFilter(combinedAccounts, query);
-        if (groupsAdapter != null) groupsAdapter.setFilter(combinedGroups, query);
-        
-        View cardEmptyState = findViewById(R.id.card_empty_state);
-        View contentContainer = findViewById(R.id.dashboard_content_container);
-        View sectionGroups = findViewById(R.id.section_groups);
-        View sectionAccounts = findViewById(R.id.section_accounts);
-        EditText editDashboardSearch = findViewById(R.id.edit_dashboard_search);
-        
-        if (cardEmptyState == null) return;
-
-        boolean hasGroups = groupsAdapter != null && groupsAdapter.getItemCount() > 0;
-        boolean hasAccounts = accountsAdapter.getItemCount() > 0;
-        boolean isListEmpty = appStorage.groups.isEmpty() && appStorage.standaloneAccounts.isEmpty();
-
-        if (isListEmpty) {
-            cardEmptyState.setVisibility(View.VISIBLE);
-            contentContainer.setVisibility(View.GONE);
-            editDashboardSearch.setVisibility(View.GONE);
-        } else if (!hasGroups && !hasAccounts) {
-            cardEmptyState.setVisibility(View.VISIBLE);
-            contentContainer.setVisibility(View.GONE);
-            editDashboardSearch.setVisibility(View.VISIBLE);
-        } else {
-            cardEmptyState.setVisibility(View.GONE);
-            contentContainer.setVisibility(View.VISIBLE);
-            editDashboardSearch.setVisibility(View.VISIBLE);
-            
-            sectionGroups.setVisibility(hasGroups ? View.VISIBLE : View.GONE);
-            sectionAccounts.setVisibility(hasAccounts ? View.VISIBLE : View.GONE);
-            
-            updateDashboardSortUI();
-        }
-    }
-
-    /**
-     * Returns a sorted copy of the accounts list based on current dashboardSortMode and dashboardSortAscending.
-     * Pinned accounts are always placed at the top first.
-     */
-    private List<Account> applyDashboardSort(List<Account> source) {
-        List<Account> sorted = new ArrayList<>(source);
-        
-        int mode = getDashboardSortColumn();
-        boolean asc = getDashboardSortAscending();
-        
-        sorted.sort((a, b) -> {
-            // First check pin status
-            if (a.isPinned() != b.isPinned()) {
-                return a.isPinned() ? -1 : 1;
-            }
-            
-            int result;
-            if (mode == 0) { // Title
-                result = a.getTitle().compareToIgnoreCase(b.getTitle());
-            } else if (mode == 1) { // Total amount
-                result = Double.compare(a.calculateTotal(), b.calculateTotal());
-            } else { // Latest modified
-                result = Long.compare(a.getLastModified(), b.getLastModified());
-            }
-            return asc ? result : -result;
-        });
-        return sorted;
-    }
 
 
 
-    private int getDashboardSortColumn() {
+
+
+
+    int getDashboardSortColumn() {
         if (currentViewGroup != null) return currentViewGroup.getSortMode();
         return ArchiveHelper.isShowingArchive ? archivedDashboardSortMode : dashboardSortMode;
     }
-    private void setDashboardSortColumn(int mode) {
+    void setDashboardSortColumn(int mode) {
         if (currentViewGroup != null) currentViewGroup.setSortMode(mode);
         else if (ArchiveHelper.isShowingArchive) archivedDashboardSortMode = mode;
         else dashboardSortMode = mode;
     }
-    private boolean getDashboardSortAscending() {
+    boolean getDashboardSortAscending() {
         if (currentViewGroup != null) return currentViewGroup.isSortAscending();
         return ArchiveHelper.isShowingArchive ? archivedDashboardSortAscending : dashboardSortAscending;
     }
-    private void setDashboardSortAscending(boolean asc) {
+    void setDashboardSortAscending(boolean asc) {
         if (currentViewGroup != null) currentViewGroup.setSortAscending(asc);
         else if (ArchiveHelper.isShowingArchive) archivedDashboardSortAscending = asc;
         else dashboardSortAscending = asc;
     }
     
-    private boolean getGroupSortAscending() {
+    boolean getGroupSortAscending() {
         return ArchiveHelper.isShowingArchive ? archivedGroupSortAscending : groupSortAscending;
     }
     
-    private void setGroupSortAscending(boolean asc) {
+    void setGroupSortAscending(boolean asc) {
         if (ArchiveHelper.isShowingArchive) archivedGroupSortAscending = asc;
         else groupSortAscending = asc;
     }
@@ -594,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
      * @param account The account to edit. If null, a new account is initialized.
      */
     @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility", "NotifyDataSetChanged"})
-    private void openEditor(Account account) {
+    void openEditor(Account account) {
         if (currentSnackbar != null) {
             currentSnackbar.dismiss();
             currentSnackbar = null;
@@ -1170,7 +873,7 @@ public class MainActivity extends AppCompatActivity {
             dashboardSearchQuery = "";
             if (tempRecords != null) for (Record r : tempRecords) r.setSelected(false);
             if (tempBudgetRecords != null) for (Record r : tempBudgetRecords) r.setSelected(false);
-            showDashboard();
+            DashboardHelper.showDashboard(MainActivity.this);
         });
 
         // Date picker action
@@ -1279,7 +982,7 @@ public class MainActivity extends AppCompatActivity {
             currentEditingAccount = null;
             tempRecords = null;
             tempBudgetRecords = null;
-            showDashboard();
+            DashboardHelper.showDashboard(MainActivity.this);
         });
 
         // Initial populate of record lists
@@ -1726,7 +1429,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
-    private class AccountsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    class AccountsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private static final int TYPE_ACCOUNT = 0;
         private static final int TYPE_GROUP = 1;
 
@@ -1855,7 +1558,7 @@ public class MainActivity extends AppCompatActivity {
                             accountParentGroup.getAccounts().remove(account);
                             appStorage.standaloneAccounts.add(account);
                             StorageHelper.saveAppStorage(MainActivity.this, appStorage);
-                            refreshDashboardList();
+                            DashboardHelper.refreshDashboardList(MainActivity.this);
                             Toast.makeText(MainActivity.this, getString(R.string.auto_moved_to_dashboard_8), Toast.LENGTH_SHORT).show();
                         } else {
                             // Move into a group
@@ -1907,7 +1610,7 @@ public class MainActivity extends AppCompatActivity {
                                     selectedGroup.getAccounts().add(account);
                                     selectedGroup.updateLastModified();
                                     StorageHelper.saveAppStorage(MainActivity.this, appStorage);
-                                    refreshDashboardList();
+                                    DashboardHelper.refreshDashboardList(MainActivity.this);
                                     Toast.makeText(MainActivity.this, "Moved to " + selectedGroup.getTitle(), Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                 });
@@ -1935,7 +1638,7 @@ public class MainActivity extends AppCompatActivity {
                 ResponsiveUI.setupClickable(accHolder.btnPinAccount, false, () -> {
                     account.setPinned(!account.isPinned());
                     StorageHelper.saveAppStorage(MainActivity.this, appStorage);
-                    refreshDashboardList();
+                    DashboardHelper.refreshDashboardList(MainActivity.this);
                 });
             } else if (holder instanceof GroupViewHolder) {
                 GroupViewHolder grpHolder = (GroupViewHolder) holder;
@@ -1964,7 +1667,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 ResponsiveUI.setupClickable(grpHolder.itemView, false, () -> {
                     currentViewGroup = group;
-                    showDashboard(); // Refresh dashboard into group view
+                    DashboardHelper.showDashboard(MainActivity.this); // Refresh dashboard into group view
                 }, () -> MenuHelper.showGroupPopupMenu(MainActivity.this, grpHolder.itemView, group));
                 
                 ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> DialogHelper.showDeleteGroupConfirmation(MainActivity.this, group));
