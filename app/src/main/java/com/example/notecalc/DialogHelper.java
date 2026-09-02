@@ -222,7 +222,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
             }
             activity.getActiveRecords().removeAll(selectedRecords);
             activity.populateRecordsList();
-            activity.updateBulkActionsState();
+            BulkActionsHelper.updateBulkActionsState(activity);
             activity.updateHeaderLabels();
             return;
         }
@@ -348,7 +348,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
             }
             activity.getActiveRecords().removeAll(selectedRecords);
             activity.populateRecordsList();
-            activity.updateBulkActionsState();
+            BulkActionsHelper.updateBulkActionsState(activity);
             activity.updateHeaderLabels();
         });
 

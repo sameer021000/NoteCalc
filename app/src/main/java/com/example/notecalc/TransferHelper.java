@@ -253,14 +253,14 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
                         rec.setSelected(isChecked);
                     }
                     activity.recordsAdapter.notifyDataSetChanged();
-                    activity.updateBulkActionsState();
+                    BulkActionsHelper.updateBulkActionsState(activity);
                 }
             });
         }
         if (activity.recordsAdapter != null) {
             activity.recordsAdapter.notifyDataSetChanged();
         }
-        activity.updateBulkActionsState();
+        BulkActionsHelper.updateBulkActionsState(activity);
         
         String action = isCut ? "Cut" : "Copied";
         android.widget.Toast.makeText(activity, action + " " + selectedRecords.size() + " records to " + targetAccount.getTitle(), android.widget.Toast.LENGTH_SHORT).show();

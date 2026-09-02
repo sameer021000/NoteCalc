@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
     TextView btnSortTotal;
     TextView btnSortLatest;
     TextView btnSortGroupTitle;
-    private TextView textTotalValField;
-    private TextView textTotalLabelField;
+    TextView textTotalValField;
+    TextView textTotalLabelField;
     com.google.android.material.snackbar.Snackbar currentSnackbar;
 
     private TextView thSnoField;
@@ -110,15 +110,15 @@ public class MainActivity extends AppCompatActivity {
     private View formInputsContainer;
     private TextView btnToggleForm;
     CheckBox cbSelectAllHeader;
-    private ImageView btnBulkActionsMenu;
+    ImageView btnBulkActionsMenu;
     private View editorEmptyState;
     private View rowSearchAndBulk;
     private View tableHeaderField;
     private boolean isFormInputsCollapsed = false;
 
     // Bulk action container and selected total display
-    private View containerBulkActions;
-    private TextView textSelectedTotal;
+    View containerBulkActions;
+    TextView textSelectedTotal;
 
     // Date range filter state (dd-MM-yyyy strings, null = no filter)
     private String expenseFilterDateFrom = null;
@@ -586,7 +586,7 @@ public class MainActivity extends AppCompatActivity {
                     r.setSelected(isChecked);
                 }
                 recordsAdapter.notifyDataSetChanged();
-                updateBulkActionsState();
+                BulkActionsHelper.updateBulkActionsState(MainActivity.this);
             }
         });
 
@@ -996,8 +996,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Sync select-all header checkbox after any list change
-        updateSelectAllHeaderState();
-        updateBulkActionsState();
+        BulkActionsHelper.updateSelectAllHeaderState(MainActivity.this);
+        BulkActionsHelper.updateBulkActionsState(MainActivity.this);
     }
 
     void applySorting() {
@@ -1083,28 +1083,6 @@ public class MainActivity extends AppCompatActivity {
      * States: unchecked (none selected), checked (all selected), indeterminate (partial).
      */
     @android.annotation.SuppressLint("SetTextI18n")
-    void updateSelectAllHeaderState() {
-        if (cbSelectAllHeader == null || recordsAdapter == null) return;
-        List<Record> displayed = recordsAdapter.displayRecords;
-        if (displayed.isEmpty()) {
-            cbSelectAllHeader.setOnCheckedChangeListener(null);
-            cbSelectAllHeader.setChecked(false);
-            return;
-        }
-        int selectedCount = 0;
-        for (Record r : displayed) {
-            if (r.isSelected()) selectedCount++;
-        }
-        cbSelectAllHeader.setOnCheckedChangeListener(null);
-        cbSelectAllHeader.setChecked(selectedCount == displayed.size());
-        cbSelectAllHeader.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            for (Record r : recordsAdapter.displayRecords) {
-                r.setSelected(isChecked);
-            }
-            recordsAdapter.notifyItemRangeChanged(0, recordsAdapter.getItemCount());
-            updateBulkActionsState();
-        });
-    }
 
     boolean isFilterActive() {
         if (recordsAdapter != null && !recordsAdapter.filterCategories.isEmpty()) return true;
@@ -1112,35 +1090,6 @@ public class MainActivity extends AppCompatActivity {
         if (getFilterDateFrom() != null || getFilterDateTo() != null) return true;
         return getFilterAmountFrom() != null || getFilterAmountTo() != null;
     }
-
-    /**
-     * Shows or hides the "Delete Selected" button based on whether any records are selected.
-     */
-
-    void updateBulkActionsState() {
-        if (btnBulkActionsMenu == null) return;
-        
-        int filterCount = recordsAdapter != null ? recordsAdapter.displayRecords.size() : 0;
-        
-        boolean anySelected = EditorUIHelper.updateTotalsAndBulkActions(
-                getActiveRecords(),
-                filterCount,
-                isFilterActive(),
-                containerBulkActions,
-                textSelectedTotal,
-                textTotalValField,
-                textTotalLabelField,
-                cbSelectAllHeader
-        );
-
-        if (recordsAdapter != null) {
-            recordsAdapter.setSelectionMode(anySelected);
-        }
-    }
-
-    /**
-     * Shows a confirmation dialog listing the selected records before performing bulk delete.
-     */
 
     void enterEditRecordMode(int index, Record record) {
         editingRecordIndex = index;

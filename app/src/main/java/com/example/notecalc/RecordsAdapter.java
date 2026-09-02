@@ -81,7 +81,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                 displayRecords.add(r);
             }
             notifyDataSetChanged();
-            activity.updateBulkActionsState();
+            BulkActionsHelper.updateBulkActionsState(activity);
         }
 
         /** Call this whenever tempRecords changes (add/edit/delete/sort) to refresh display. */
@@ -277,8 +277,8 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                 holder.cbSelect.setChecked(record.isSelected());
                 holder.cbSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     record.setSelected(isChecked);
-                    activity.updateSelectAllHeaderState();
-                    activity.updateBulkActionsState();
+                    BulkActionsHelper.updateSelectAllHeaderState(activity);
+                    BulkActionsHelper.updateBulkActionsState(activity);
                 });
             }
 
@@ -308,8 +308,8 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
             }, () -> {
                 if (!record.isSelected()) {
                     record.setSelected(true);
-                    activity.updateSelectAllHeaderState();
-                    activity.updateBulkActionsState();
+                    BulkActionsHelper.updateSelectAllHeaderState(activity);
+                    BulkActionsHelper.updateBulkActionsState(activity);
                 }
             });
         }

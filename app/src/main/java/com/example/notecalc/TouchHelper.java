@@ -67,13 +67,13 @@ public class TouchHelper {
                 // Temporarily remove
                 activity.getActiveRecords().remove(trueIndex);
                 activity.recordsAdapter.refreshDisplay();
-                activity.updateBulkActionsState();
+                BulkActionsHelper.updateBulkActionsState(activity);
                 activity.updateHeaderLabels();
                 
                 SnackbarHelper.showUndoSnackbar(activity, "Record deleted", () -> {
                     activity.getActiveRecords().add(trueIndex, deletedRecord);
                     activity.recordsAdapter.refreshDisplay();
-                    activity.updateBulkActionsState();
+                    BulkActionsHelper.updateBulkActionsState(activity);
                     activity.updateHeaderLabels();
                 }, null);
             }
