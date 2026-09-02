@@ -214,7 +214,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
                 int idx = activity.getActiveRecords().indexOf(r);
                 if (idx != -1) {
                     if (activity.editingRecordIndex == idx) {
-                        activity.cancelEditRecordMode();
+                        EditorModeHelper.cancelEditRecordMode(activity);
                     } else if (activity.editingRecordIndex > idx) {
                         activity.editingRecordIndex--;
                     }
@@ -340,7 +340,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
                 int idx = activity.getActiveRecords().indexOf(r);
                 if (idx != -1) {
                     if (activity.editingRecordIndex == idx) {
-                        activity.cancelEditRecordMode();
+                        EditorModeHelper.cancelEditRecordMode(activity);
                     } else if (activity.editingRecordIndex > idx) {
                         activity.editingRecordIndex--;
                     }

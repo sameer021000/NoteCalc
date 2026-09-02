@@ -304,7 +304,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
 
             ResponsiveUI.setupClickable(holder.itemView, true, () -> {
                 if (activity.currentEditingAccount != null && activity.currentEditingAccount.isArchived()) return;
-                activity.enterEditRecordMode(trueIndex, record);
+                EditorModeHelper.enterEditRecordMode(activity, trueIndex, record);
             }, () -> {
                 if (!record.isSelected()) {
                     record.setSelected(true);

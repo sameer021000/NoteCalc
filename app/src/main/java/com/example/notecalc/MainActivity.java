@@ -34,7 +34,7 @@ import com.example.notecalc.pdf.PdfSortOrder;
 public class MainActivity extends AppCompatActivity {
     SettingsHelper settingsHelper;
 
-    private final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
+    final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
     private static final int REQUEST_CODE_ATTACH = 1001;
     private static final int REQUEST_CODE_CAMERA = 1002;
     private String currentPhotoPath = null;
@@ -56,15 +56,15 @@ public class MainActivity extends AppCompatActivity {
     boolean isBudgetMode = false; // false = Expenses, true = Budget
     
     private String originalTitle = "";
-    private String selectedRecordDate = "";
+    String selectedRecordDate = "";
 
     int editingRecordIndex = -1;
-    private EditText editDescField;
-    private EditText editAmountField;
-    private TextView btnRecordDateField;
-    private TextView btnAddRecordField;
-    private TextView btnCancelEditField;
-    private TextView labelAddRecordField;
+    EditText editDescField;
+    EditText editAmountField;
+    TextView btnRecordDateField;
+    TextView btnAddRecordField;
+    TextView btnCancelEditField;
+    TextView labelAddRecordField;
     RecordsAdapter recordsAdapter;
     AccountsAdapter accountsAdapter;
     AccountsAdapter groupsAdapter;
@@ -105,16 +105,16 @@ public class MainActivity extends AppCompatActivity {
     String currentRecordSearchQuery = "";
 
     // Fields for collapsible form, remarks, empty state, and bulk delete
-    private EditText editRemarksField;
-    private android.widget.AutoCompleteTextView editCategoryField;
-    private View formInputsContainer;
-    private TextView btnToggleForm;
+    EditText editRemarksField;
+    android.widget.AutoCompleteTextView editCategoryField;
+    View formInputsContainer;
+    TextView btnToggleForm;
     CheckBox cbSelectAllHeader;
     ImageView btnBulkActionsMenu;
     private View editorEmptyState;
     private View rowSearchAndBulk;
     private View tableHeaderField;
-    private boolean isFormInputsCollapsed = false;
+    boolean isFormInputsCollapsed = false;
 
     // Bulk action container and selected total display
     View containerBulkActions;
@@ -698,14 +698,14 @@ public class MainActivity extends AppCompatActivity {
         if (btnModeExpenses != null) ResponsiveUI.setupClickable(btnModeExpenses, false, () -> {
             if (isBudgetMode) {
                 isBudgetMode = false;
-                cancelEditRecordMode();
+                EditorModeHelper.cancelEditRecordMode(MainActivity.this);
                 updateModeToggleUI.run();
             }
         });
         if (btnModeBudget != null) ResponsiveUI.setupClickable(btnModeBudget, false, () -> {
             if (!isBudgetMode) {
                 isBudgetMode = true;
-                cancelEditRecordMode();
+                EditorModeHelper.cancelEditRecordMode(MainActivity.this);
                 updateModeToggleUI.run();
             }
         });
@@ -862,7 +862,7 @@ public class MainActivity extends AppCompatActivity {
         ResponsiveUI.setupClickable(btnDate, () -> DialogHelper.showDatePicker(this, selectedRecordDate, btnDate, newDate -> selectedRecordDate = newDate));
 
         // Cancel edit action
-        ResponsiveUI.setupClickable(btnCancelEdit, this::cancelEditRecordMode);
+        ResponsiveUI.setupClickable(btnCancelEdit, () -> EditorModeHelper.cancelEditRecordMode(MainActivity.this));
 
         // Add/Update item action
         ResponsiveUI.setupClickable(btnAdd, () -> {
@@ -899,7 +899,7 @@ public class MainActivity extends AppCompatActivity {
                 record.setAttachments(new java.util.ArrayList<>(tempAttachments));
                 record.setTimestampMillis(System.currentTimeMillis());
                 EditorSortHelper.applySorting(MainActivity.this);
-                cancelEditRecordMode();
+                EditorModeHelper.cancelEditRecordMode(MainActivity.this);
             } else {
                 // Add mode
                 Record newRecord = new Record(desc, amount, selectedRecordDate);
@@ -1024,73 +1024,6 @@ public class MainActivity extends AppCompatActivity {
         if (currentRecordSearchQuery != null && !currentRecordSearchQuery.trim().isEmpty()) return true;
         if (getFilterDateFrom() != null || getFilterDateTo() != null) return true;
         return getFilterAmountFrom() != null || getFilterAmountTo() != null;
-    }
-
-    void enterEditRecordMode(int index, Record record) {
-        editingRecordIndex = index;
-        selectedRecordDate = record.getDate();
-
-        editDescField.setText(record.getDescription());
-        editAmountField.setText(String.format(Locale.getDefault(), "%.2f", record.getAmount()));
-        editRemarksField.setText(record.getRemarks());
-        btnRecordDateField.setText(selectedRecordDate);
-        if (editCategoryField != null) editCategoryField.setText(record.getCategory() == null ? "" : record.getCategory());
-
-        // Load attachments
-        tempAttachments.clear();
-        if (record.getAttachments() != null) tempAttachments.addAll(record.getAttachments());
-        renderEditorAttachments();
-
-        // Auto-expand form
-        if (formInputsContainer != null && btnToggleForm != null) {
-            isFormInputsCollapsed = false;
-            formInputsContainer.setVisibility(android.view.View.VISIBLE);
-            btnToggleForm.setText(getString(R.string.auto_minimize_21));
-        }
-
-        if (isBudgetMode) {
-            labelAddRecordField.setText(getString(R.string.auto_edit_budget_22));
-            btnAddRecordField.setText(getString(R.string.auto_edit_budget_23));
-            editDescField.setHint(getString(R.string.auto_description_32));
-            editRemarksField.setHint(getString(R.string.auto_remarks_optional_33));
-        } else {
-            labelAddRecordField.setText(R.string.label_edit_record);
-            btnAddRecordField.setText(R.string.btn_edit_record);
-            editDescField.setHint(R.string.hint_record_desc);
-            editRemarksField.setHint(getString(R.string.auto_remarks_e_g_bought_a_34));
-        }
-        btnCancelEditField.setVisibility(View.VISIBLE);
-        populateRecordsList();
-    }
-
-    @android.annotation.SuppressLint("SetTextI18n")
-    void cancelEditRecordMode() {
-        editingRecordIndex = -1;
-        selectedRecordDate = AppUtils.getCurrentDateString();
-
-        editDescField.setText("");
-        editAmountField.setText("");
-        editRemarksField.setText("");
-        btnRecordDateField.setText(selectedRecordDate);
-        
-        tempAttachments.clear();
-        renderEditorAttachments();
-
-        if (isBudgetMode) {
-            labelAddRecordField.setText(getString(R.string.auto_add_budget_24));
-            btnAddRecordField.setText(getString(R.string.auto_add_budget_25));
-            editDescField.setHint(getString(R.string.auto_description_35));
-            editRemarksField.setHint(getString(R.string.auto_remarks_optional_36));
-        } else {
-            labelAddRecordField.setText(R.string.label_add_record);
-            btnAddRecordField.setText(R.string.btn_add_record);
-            editDescField.setHint(R.string.hint_record_desc);
-            editRemarksField.setHint(getString(R.string.auto_remarks_e_g_bought_a_37));
-        }
-
-        btnCancelEditField.setVisibility(View.GONE);
-
-        populateRecordsList();
     }
 
     /**
@@ -2240,7 +2173,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    private void renderEditorAttachments() {
+    void renderEditorAttachments() {
         if (attachmentsContainer == null || attachmentsScroll == null) return;
         attachmentsContainer.removeAllViews();
         if (tempAttachments.isEmpty()) {
