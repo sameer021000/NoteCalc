@@ -206,7 +206,7 @@ public class NCAgentHelper {
             if (deleted > 0) summary += "Deleted " + deleted + " records\n";
             if (!summary.isEmpty()) Toast.makeText(activity, summary, Toast.LENGTH_LONG).show();
             
-            activity.applySorting();
+            EditorSortHelper.applySorting(activity);
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             activity.populateRecordsList();
             dialog.dismiss();

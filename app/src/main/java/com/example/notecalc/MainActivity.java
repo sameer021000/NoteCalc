@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
     TextView textTotalLabelField;
     com.google.android.material.snackbar.Snackbar currentSnackbar;
 
-    private TextView thSnoField;
-    private TextView thDescField;
-    private TextView thDateField;
-    private TextView thAmountField;
+    TextView thSnoField;
+    TextView thDescField;
+    TextView thDateField;
+    TextView thAmountField;
 
     private int expenseSortColumn = 0;
     private boolean expenseSortAscending = false;
@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
     
     int getSortColumn() { return isBudgetMode ? budgetSortColumn : expenseSortColumn; }
     boolean getSortAscending() { return isBudgetMode ? budgetSortAscending : expenseSortAscending; }
-    private void setSortColumn(int col) { if (isBudgetMode) budgetSortColumn = col; else expenseSortColumn = col; }
-    private void setSortAscending(boolean asc) { if (isBudgetMode) budgetSortAscending = asc; else expenseSortAscending = asc; }
+    void setSortColumn(int col) { if (isBudgetMode) budgetSortColumn = col; else expenseSortColumn = col; }
+    void setSortAscending(boolean asc) { if (isBudgetMode) budgetSortAscending = asc; else expenseSortAscending = asc; }
 
     // Dashboard sort state: 0 = Title, 1 = Total Spending, 2 = Latest Modified
     private int dashboardSortMode = 0;
@@ -612,24 +612,24 @@ public class MainActivity extends AppCompatActivity {
         thDateField.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
         thAmountField.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, Color.parseColor("#15FFFFFF"), 4.0f));
 
-        ResponsiveUI.setupClickable(thSnoField, false, () -> onHeaderClicked(0));
-        ResponsiveUI.setupClickable(thDescField, false, () -> onHeaderClicked(1));
+        ResponsiveUI.setupClickable(thSnoField, false, () -> EditorSortHelper.onHeaderClicked(MainActivity.this, 0));
+        ResponsiveUI.setupClickable(thDescField, false, () -> EditorSortHelper.onHeaderClicked(MainActivity.this, 1));
 
         // Date header: click = sort, long-press (1s) = date range filter
-        thDateField.setOnClickListener(v -> onHeaderClicked(2));
+        thDateField.setOnClickListener(v -> EditorSortHelper.onHeaderClicked(MainActivity.this, 2));
         thDateField.setOnLongClickListener(v -> {
             FilterHelper.showDateRangeFilterDialog(MainActivity.this);
             return true;
         });
 
         // Amount header: click = sort, long-press (1s) = amount range filter
-        thAmountField.setOnClickListener(v -> onHeaderClicked(3));
+        thAmountField.setOnClickListener(v -> EditorSortHelper.onHeaderClicked(MainActivity.this, 3));
         thAmountField.setOnLongClickListener(v -> {
             FilterHelper.showAmountRangeFilterDialog(MainActivity.this);
             return true;
         });
 
-        updateHeaderLabels();
+        EditorSortHelper.updateHeaderLabels(MainActivity.this);
 
         // Pre-populate if editing existing account
         if (account != null) {
@@ -674,11 +674,11 @@ public class MainActivity extends AppCompatActivity {
                 btnModeBudget.setBackgroundColor(isBudgetMode ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : ThemeManager.getBgSecondaryColor(MainActivity.this));
                 btnModeBudget.setTextColor(getColor(isBudgetMode ? R.color.text_on_accent : R.color.text_tertiary));
             }
-            applySorting();
+            EditorSortHelper.applySorting(MainActivity.this);
               recordsAdapter.setFilter(currentRecordSearchQuery);
-            updateHeaderLabels();
-            updateDateHeaderIndicator();
-            updateAmountHeaderIndicator();
+            EditorSortHelper.updateHeaderLabels(MainActivity.this);
+            EditorSortHelper.updateDateHeaderIndicator(MainActivity.this);
+            EditorSortHelper.updateAmountHeaderIndicator(MainActivity.this);
             
             if (textRemainingPurse != null) {
                 if (tempBudgetRecords.isEmpty() && !isBudgetMode) {
@@ -710,7 +710,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         updateModeToggleUI.run();
-        applySorting();
+        EditorSortHelper.applySorting(MainActivity.this);
         populateRecordsList();
 
         // Apply responsive dimensions
@@ -898,7 +898,7 @@ public class MainActivity extends AppCompatActivity {
                 record.setCategory(category);
                 record.setAttachments(new java.util.ArrayList<>(tempAttachments));
                 record.setTimestampMillis(System.currentTimeMillis());
-                applySorting();
+                EditorSortHelper.applySorting(MainActivity.this);
                 cancelEditRecordMode();
             } else {
                 // Add mode
@@ -914,7 +914,7 @@ public class MainActivity extends AppCompatActivity {
                 editAmount.setText("");
                 editRemarksField.setText("");
                 if (editCategoryField != null) editCategoryField.setText("");
-                applySorting();
+                EditorSortHelper.applySorting(MainActivity.this);
                 populateRecordsList();
             }
         });
@@ -1000,73 +1000,8 @@ public class MainActivity extends AppCompatActivity {
         BulkActionsHelper.updateBulkActionsState(MainActivity.this);
     }
 
-    void applySorting() {
-        if (getActiveRecords() == null || getActiveRecords().isEmpty()) {
-            return;
-        }
-
-        getActiveRecords().sort(new java.util.Comparator<>() {
-            private final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
-            @Override
-            public int compare(Record r1, Record r2) {
-                int c = 0;
-                switch (getSortColumn()) {
-                    case 0: // S.No
-                        c = Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
-                        break;
-                    case 1: // Description
-                        c = r1.getDescription().compareToIgnoreCase(r2.getDescription());
-                        break;
-                    case 2: // Date
-                        try {
-                            Date d1 = sdf.parse(r1.getDate());
-                            Date d2 = sdf.parse(r2.getDate());
-                            if (d1 != null && d2 != null) {
-                                c = d1.compareTo(d2);
-                                if (c == 0) {
-                                    c = Long.compare(r1.getTimestampMillis(), r2.getTimestampMillis());
-                                }
-                            }
-                        } catch (Exception ignored) {}
-                        break;
-                    case 3: // Amount
-                        c = Double.compare(r1.getAmount(), r2.getAmount());
-                        break;
-                }
-                return getSortAscending() ? c : -c;
-            }
-        });
-    }
-
     @android.annotation.SuppressLint("SetTextI18n")
-    void updateHeaderLabels() {
-        if (thSnoField != null) {
-            thSnoField.setText(getString(R.string.th_sno) + (getSortColumn() == 0 ? (getSortAscending() ? "  ▲" : "  ▼") : ""));
-        }
-        if (thDescField != null) {
-            thDescField.setText(getString(R.string.th_desc) + (getSortColumn() == 1 ? (getSortAscending() ? "  ▲" : "  ▼") : ""));
-        }
-        if (thDateField != null) {
-            thDateField.setText(getString(R.string.th_date) + (getSortColumn() == 2 ? (getSortAscending() ? "  ▲" : "  ▼") : ""));
-        }
-        if (thAmountField != null) {
-            thAmountField.setText(getString(R.string.th_amount) + (getSortColumn() == 3 ? (getSortAscending() ? "  ▲" : "  ▼") : ""));
-        }
-    }
 
-    private void onHeaderClicked(int col) {
-        if (getSortColumn() == col) {
-            setSortAscending(!getSortAscending());
-        } else {
-            setSortColumn(col);
-            setSortAscending(true);
-        }
-
-        applySorting();
-        populateRecordsList();
-        updateHeaderLabels();
-    }
 
     int getNewOriginalIndex() {
         int maxIndex = -1;
@@ -1182,26 +1117,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
-
-
-    
-
-    /** Visual indicator on Date column header when filter is active. */
-    void updateDateHeaderIndicator() {
-        if (thDateField == null) return;
-        boolean active = (getFilterDateFrom() != null || getFilterDateTo() != null);
-        thDateField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : ThemeManager.getSecondaryAccentColor(MainActivity.this));
-    }
-
-    /** Visual indicator on Amount column header when filter is active. */
-    void updateAmountHeaderIndicator() {
-        if (thAmountField == null) return;
-        boolean active = (getFilterAmountFrom() != null || getFilterAmountTo() != null);
-        thAmountField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(MainActivity.this) : ThemeManager.getSecondaryAccentColor(MainActivity.this));
-    }
-
-
     void generateAndOpenAllPdf() {
         android.app.Dialog progressDialog = DialogHelper.showProgressDialog(MainActivity.this);
         

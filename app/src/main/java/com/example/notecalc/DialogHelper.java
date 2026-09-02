@@ -223,7 +223,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
             activity.getActiveRecords().removeAll(selectedRecords);
             activity.populateRecordsList();
             BulkActionsHelper.updateBulkActionsState(activity);
-            activity.updateHeaderLabels();
+            EditorSortHelper.updateHeaderLabels(activity);
             return;
         }
 
@@ -349,7 +349,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
             activity.getActiveRecords().removeAll(selectedRecords);
             activity.populateRecordsList();
             BulkActionsHelper.updateBulkActionsState(activity);
-            activity.updateHeaderLabels();
+            EditorSortHelper.updateHeaderLabels(activity);
         });
 
         dialog.show();

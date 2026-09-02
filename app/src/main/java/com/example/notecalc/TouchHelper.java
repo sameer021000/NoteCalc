@@ -51,7 +51,7 @@ public class TouchHelper {
                 super.clearView(recyclerView, viewHolder);
                 if (isDragActive) {
                     isDragActive = false;
-                    activity.applySorting();
+                    EditorSortHelper.applySorting(activity);
                     activity.populateRecordsList();
                 }
             }
@@ -68,13 +68,13 @@ public class TouchHelper {
                 activity.getActiveRecords().remove(trueIndex);
                 activity.recordsAdapter.refreshDisplay();
                 BulkActionsHelper.updateBulkActionsState(activity);
-                activity.updateHeaderLabels();
+                EditorSortHelper.updateHeaderLabels(activity);
                 
                 SnackbarHelper.showUndoSnackbar(activity, "Record deleted", () -> {
                     activity.getActiveRecords().add(trueIndex, deletedRecord);
                     activity.recordsAdapter.refreshDisplay();
                     BulkActionsHelper.updateBulkActionsState(activity);
-                    activity.updateHeaderLabels();
+                    EditorSortHelper.updateHeaderLabels(activity);
                 }, null);
             }
         };

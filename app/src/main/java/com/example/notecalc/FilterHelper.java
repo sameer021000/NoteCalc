@@ -205,7 +205,7 @@ public static void showDateRangeFilterDialog(MainActivity activity) {
             activity.setFilterDateFrom(null);
             activity.setFilterDateTo(null);
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
-            activity.updateDateHeaderIndicator();
+            EditorSortHelper.updateDateHeaderIndicator(activity);
             dialog.dismiss();
         });
         ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
@@ -213,7 +213,7 @@ public static void showDateRangeFilterDialog(MainActivity activity) {
             activity.setFilterDateFrom(tempFrom[0]);
             activity.setFilterDateTo(tempTo[0]);
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
-            activity.updateDateHeaderIndicator();
+            EditorSortHelper.updateDateHeaderIndicator(activity);
             dialog.dismiss();
         });
 
@@ -256,7 +256,7 @@ public static void showAmountRangeFilterDialog(MainActivity activity) {
             activity.setFilterAmountFrom(null);
             activity.setFilterAmountTo(null);
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
-            activity.updateAmountHeaderIndicator();
+            EditorSortHelper.updateAmountHeaderIndicator(activity);
             dialog.dismiss();
         });
         ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
@@ -266,7 +266,7 @@ public static void showAmountRangeFilterDialog(MainActivity activity) {
             activity.setFilterAmountFrom(fromStr.isEmpty() ? null : Double.parseDouble(fromStr));
             activity.setFilterAmountTo(toStr.isEmpty() ? null : Double.parseDouble(toStr));
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
-            activity.updateAmountHeaderIndicator();
+            EditorSortHelper.updateAmountHeaderIndicator(activity);
             dialog.dismiss();
         });
 
