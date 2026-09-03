@@ -16,7 +16,7 @@ public class EditorModeHelper {
         // Load attachments
         activity.tempAttachments.clear();
         if (record.getAttachments() != null) activity.tempAttachments.addAll(record.getAttachments());
-        activity.renderEditorAttachments();
+        AttachmentHelper.renderEditorAttachments(activity);
 
         // Auto-expand form
         if (activity.formInputsContainer != null && activity.btnToggleForm != null) {
@@ -51,7 +51,7 @@ public class EditorModeHelper {
         activity.btnRecordDateField.setText(activity.selectedRecordDate);
         
         activity.tempAttachments.clear();
-        activity.renderEditorAttachments();
+        AttachmentHelper.renderEditorAttachments(activity);
 
         if (activity.isBudgetMode) {
             activity.labelAddRecordField.setText(activity.getString(R.string.auto_add_budget_24));

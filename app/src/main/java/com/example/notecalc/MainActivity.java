@@ -35,12 +35,12 @@ public class MainActivity extends AppCompatActivity {
     SettingsHelper settingsHelper;
 
     final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
-    private static final int REQUEST_CODE_ATTACH = 1001;
-    private static final int REQUEST_CODE_CAMERA = 1002;
-    private String currentPhotoPath = null;
-    private android.widget.LinearLayout attachmentsContainer;
-    private android.widget.HorizontalScrollView attachmentsScroll;
-    private android.widget.TextView btnAttachFile;
+    static final int REQUEST_CODE_ATTACH = 1001;
+    static final int REQUEST_CODE_CAMERA = 1002;
+    String currentPhotoPath = null;
+    android.widget.LinearLayout attachmentsContainer;
+    android.widget.HorizontalScrollView attachmentsScroll;
+    android.widget.TextView btnAttachFile;
 
     androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
     androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         attachmentsContainer = editorView.findViewById(R.id.attachments_container);
         
         tempAttachments.clear();
-        renderEditorAttachments();
+        AttachmentHelper.renderEditorAttachments(MainActivity.this);
 
         if (btnAttachFile != null) {
             ResponsiveUI.setupClickable(btnAttachFile, true, () -> {
@@ -2173,126 +2173,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    void renderEditorAttachments() {
-        if (attachmentsContainer == null || attachmentsScroll == null) return;
-        attachmentsContainer.removeAllViews();
-        if (tempAttachments.isEmpty()) {
-            attachmentsScroll.setVisibility(View.GONE);
-            if (btnAttachFile != null) btnAttachFile.setAlpha(1.0f);
-        } else {
-            attachmentsScroll.setVisibility(View.VISIBLE);
-            if (btnAttachFile != null) btnAttachFile.setAlpha(tempAttachments.size() >= 3 ? 0.5f : 1.0f);
-            
-            for (int i = 0; i < tempAttachments.size(); i++) {
-                final int idx = i;
-                String path = tempAttachments.get(i);
-                java.io.File f = new java.io.File(path);
-                String name = f.getName();
-                if (name.length() > 15) name = name.substring(0, 15) + "...";
-                
-                LinearLayout chipContainer = new LinearLayout(this);
-                chipContainer.setOrientation(LinearLayout.HORIZONTAL);
-                chipContainer.setBackground(ResponsiveUI.createButtonSelector(MainActivity.this, ThemeManager.getBgSecondaryColor(this), 8.0f));
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(0, 0, 16, 0);
-                chipContainer.setLayoutParams(lp);
-
-                TextView chip = new TextView(this);
-                chip.setText((path.endsWith(".pdf") || path.endsWith(".doc") || path.endsWith(".docx") ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ") + name);
-                chip.setTextSize(12);
-                chip.setTextColor(getColor(R.color.text_primary));
-                chip.setPadding(20, 10, 10, 10);
-                
-                ResponsiveUI.setupClickable(chip, false, () -> {
-                    try {
-                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", f);
-                        android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                        viewIntent.setDataAndType(uri, getContentResolver().getType(uri));
-                        if (viewIntent.getType() == null) {
-                            if (path.toLowerCase().endsWith(".pdf")) viewIntent.setDataAndType(uri, "application/pdf");
-                            else if (path.toLowerCase().endsWith(".jpg") || path.toLowerCase().endsWith(".png")) viewIntent.setDataAndType(uri, "image/*");
-                            else viewIntent.setDataAndType(uri, "*/*");
-                        }
-                        viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(viewIntent);
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, getString(R.string.auto_cannot_open_file_10), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                TextView closeBtn = new TextView(this);
-                closeBtn.setText(" ✕ ");
-                closeBtn.setTextSize(12);
-                closeBtn.setTextColor(getColor(R.color.error_red));
-                closeBtn.setPadding(10, 10, 20, 10);
-                
-                ResponsiveUI.setupClickable(closeBtn, false, () -> {
-                    tempAttachments.remove(idx);
-                    renderEditorAttachments();
-                });
-                
-                chipContainer.addView(chip);
-                chipContainer.addView(closeBtn);
-                attachmentsContainer.addView(chipContainer);
-            }
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        
-        if (requestCode == REQUEST_CODE_CAMERA) {
-            if (resultCode == RESULT_OK && currentPhotoPath != null) {
-                tempAttachments.add(currentPhotoPath);
-                renderEditorAttachments();
-            } else if (currentPhotoPath != null) {
-                java.io.File f = new java.io.File(currentPhotoPath);
-                if (f.exists() && !f.delete()) android.util.Log.w("NoteCalc", "Failed to delete temp file");
-            }
-            currentPhotoPath = null;
-            return;
-        }
-        
-        if (requestCode == REQUEST_CODE_ATTACH && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            android.net.Uri uri = data.getData();
-            try {
-                java.io.File attachmentsDir = new java.io.File(getFilesDir(), "attachments");
-                if (!attachmentsDir.exists()) attachmentsDir.mkdirs();
-                
-                String originalName = "attachment_" + System.currentTimeMillis();
-                try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        int index = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
-                        if (index != -1) {
-                            String tempName = cursor.getString(index);
-                            if (tempName != null) {
-                                int lastSlash = tempName.lastIndexOf('/');
-                                String nameOnly = (lastSlash != -1) ? tempName.substring(lastSlash + 1) : tempName;
-                                originalName = nameOnly.replaceAll("[/\\\\:*?\"<>|]", "_");
-                            }
-                        }
-                    }
-                }
-                
-                java.io.File destFile = new java.io.File(attachmentsDir, originalName);
-                if (destFile.exists() || destFile.createNewFile()) {
-                    try (java.io.InputStream in = getContentResolver().openInputStream(uri);
-                         java.io.FileOutputStream out = new java.io.FileOutputStream(destFile)) {
-                        if (in == null) throw new java.io.IOException("Failed to open input stream");
-                        byte[] buffer = new byte[1024];
-                        int read;
-                        while ((read = in.read(buffer)) != -1) {
-                            out.write(buffer, 0, read);
-                        }
-                    }
-                    tempAttachments.add(destFile.getAbsolutePath());
-                    renderEditorAttachments();
-                }
-            } catch (Exception e) {
-                android.util.Log.e("NoteCalc", "Failed to attach file", e);
-                Toast.makeText(this, getString(R.string.auto_failed_to_attach_fil_11), Toast.LENGTH_SHORT).show();
-            }
-        }
+        AttachmentHelper.handleActivityResult(MainActivity.this, requestCode, resultCode, data);
     }
 }
