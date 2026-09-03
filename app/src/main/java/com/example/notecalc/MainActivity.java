@@ -210,23 +210,10 @@ public class MainActivity extends AppCompatActivity {
         DashboardHelper.showDashboard(MainActivity.this);
     }
 
-    /**
-     * Renders the Dashboard screen containing the list of saved accounts.
-     */
-
-    @android.annotation.SuppressLint("SetTextI18n")
     final NCAgent ncAgent = new NCAgent();
     void openEditor(Account account) {
         EditorHelper.openEditor(this, account);
     }
-
-    /**
-     * Converts a date string from dd-MM-yyyy to compact DDMonthNameYY format.
-     * Example: "24-06-2026" -> "24Jun26"
-     */
-
-
-    @android.annotation.SuppressLint("SetTextI18n")
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
