@@ -52,7 +52,7 @@ public class TouchHelper {
                 if (isDragActive) {
                     isDragActive = false;
                     EditorSortHelper.applySorting(activity);
-                    activity.populateRecordsList();
+                    EditorUIHelper.populateRecordsList(activity);
                 }
             }
 

@@ -181,7 +181,7 @@ public class NCAgentHelper {
                 } else {
                     if (action.getIntent() == NCAgentIntent.ADD) {
                         Record validated = action.getValidatedRecord();
-                        validated.setOriginalIndex(activity.getNewOriginalIndex());
+                        validated.setOriginalIndex(EditorUIHelper.getNewOriginalIndex(activity));
                         activity.getActiveRecords().add(validated);
                         added++;
                     } else if (action.getIntent() == NCAgentIntent.UPDATE) {
@@ -208,7 +208,7 @@ public class NCAgentHelper {
             
             EditorSortHelper.applySorting(activity);
             StorageHelper.saveAppStorage(activity, activity.appStorage);
-            activity.populateRecordsList();
+            EditorUIHelper.populateRecordsList(activity);
             dialog.dismiss();
         });
         

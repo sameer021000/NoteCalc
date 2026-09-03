@@ -68,7 +68,7 @@ public class EditorSortHelper {
         }
 
         applySorting(activity);
-        activity.populateRecordsList();
+        EditorUIHelper.populateRecordsList(activity);
         updateHeaderLabels(activity);
     }
 

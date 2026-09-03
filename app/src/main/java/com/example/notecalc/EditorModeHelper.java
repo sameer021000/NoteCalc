@@ -37,7 +37,7 @@ public class EditorModeHelper {
             activity.editRemarksField.setHint(activity.getString(R.string.auto_remarks_e_g_bought_a_34));
         }
         activity.btnCancelEditField.setVisibility(View.VISIBLE);
-        activity.populateRecordsList();
+        EditorUIHelper.populateRecordsList(activity);
     }
 
 
@@ -67,7 +67,7 @@ public class EditorModeHelper {
 
         activity.btnCancelEditField.setVisibility(View.GONE);
 
-        activity.populateRecordsList();
+        EditorUIHelper.populateRecordsList(activity);
     }
 
 

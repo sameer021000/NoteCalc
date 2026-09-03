@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Record> tempBudgetRecords;
     boolean isBudgetMode = false; // false = Expenses, true = Budget
     
-    private String originalTitle = "";
+    String originalTitle = "";
     String selectedRecordDate = "";
 
     int editingRecordIndex = -1;
@@ -111,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
     TextView btnToggleForm;
     CheckBox cbSelectAllHeader;
     ImageView btnBulkActionsMenu;
-    private View editorEmptyState;
-    private View rowSearchAndBulk;
-    private View tableHeaderField;
+    View editorEmptyState;
+    View rowSearchAndBulk;
+    View tableHeaderField;
     boolean isFormInputsCollapsed = false;
 
     // Bulk action container and selected total display
@@ -711,7 +711,7 @@ public class MainActivity extends AppCompatActivity {
         });
         updateModeToggleUI.run();
         EditorSortHelper.applySorting(MainActivity.this);
-        populateRecordsList();
+        EditorUIHelper.populateRecordsList(MainActivity.this);
 
         // Apply responsive dimensions
         ResponsiveUI.applyResponsiveness(editorView);
@@ -825,7 +825,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String input = s.toString().trim();
-                if (isDuplicateTitle(input)) {
+                if (EditorUIHelper.isDuplicateTitle(MainActivity.this, input)) {
                     textTitleError.setVisibility(View.VISIBLE);
                     editTitle.setBackground(ResponsiveUI.createRoundedBg(
                             MainActivity.this,
@@ -906,7 +906,7 @@ public class MainActivity extends AppCompatActivity {
                 newRecord.setRemarks(remarks);
                 newRecord.setCategory(category);
                   newRecord.setAttachments(new java.util.ArrayList<>(tempAttachments));
-                newRecord.setOriginalIndex(getNewOriginalIndex());
+                newRecord.setOriginalIndex(EditorUIHelper.getNewOriginalIndex(MainActivity.this));
                 getActiveRecords().add(newRecord);
 
                 // Update UI elements
@@ -915,7 +915,7 @@ public class MainActivity extends AppCompatActivity {
                 editRemarksField.setText("");
                 if (editCategoryField != null) editCategoryField.setText("");
                 EditorSortHelper.applySorting(MainActivity.this);
-                populateRecordsList();
+                EditorUIHelper.populateRecordsList(MainActivity.this);
             }
         });
 
@@ -928,7 +928,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            if (isDuplicateTitle(title)) {
+            if (EditorUIHelper.isDuplicateTitle(MainActivity.this, title)) {
                 Toast.makeText(MainActivity.this, getString(R.string.auto_a_list_with_this_tit_7), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -968,87 +968,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Initial populate of record lists
-        populateRecordsList();
+        EditorUIHelper.populateRecordsList(MainActivity.this);
 
         // Mount to main container
         mainContainer.removeAllViews();
         mainContainer.addView(editorView);
-    }
-
-    /**
-     * Helper to render the records in the table format.
-     */
-    void populateRecordsList() {
-        if (recordsAdapter != null) {
-            recordsAdapter.refreshDisplay();
-        }
-
-        // Toggle empty state and table rows visibility
-        boolean isEmpty = getActiveRecords().isEmpty();
-        if (editorEmptyState != null) {
-            editorEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        }
-        if (rowSearchAndBulk != null) {
-            rowSearchAndBulk.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
-        }
-        if (tableHeaderField != null) {
-            tableHeaderField.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
-        }
-
-        // Sync select-all header checkbox after any list change
-        BulkActionsHelper.updateSelectAllHeaderState(MainActivity.this);
-        BulkActionsHelper.updateBulkActionsState(MainActivity.this);
-    }
-
-    @android.annotation.SuppressLint("SetTextI18n")
-
-
-    int getNewOriginalIndex() {
-        int maxIndex = -1;
-        for (Record r : getActiveRecords()) {
-            if (r.getOriginalIndex() > maxIndex) {
-                maxIndex = r.getOriginalIndex();
-            }
-        }
-        return maxIndex + 1;
-    }
-
-    /**
-     * Syncs the "select all" header checkbox state based on visible displayRecords selection.
-     * States: unchecked (none selected), checked (all selected), indeterminate (partial).
-     */
-    @android.annotation.SuppressLint("SetTextI18n")
-
-    boolean isFilterActive() {
-        if (recordsAdapter != null && !recordsAdapter.filterCategories.isEmpty()) return true;
-        if (currentRecordSearchQuery != null && !currentRecordSearchQuery.trim().isEmpty()) return true;
-        if (getFilterDateFrom() != null || getFilterDateTo() != null) return true;
-        return getFilterAmountFrom() != null || getFilterAmountTo() != null;
-    }
-
-    /**
-     * Evaluates if the entered title already exists in saved accounts.
-     */
-    private boolean isDuplicateTitle(String title) {
-        for (Account acc : appStorage.standaloneAccounts) {
-            if (currentEditingAccount != null && acc.getTitle().equalsIgnoreCase(originalTitle)) {
-                continue;
-            }
-            if (acc.getTitle().equalsIgnoreCase(title.trim())) {
-                return true;
-            }
-        }
-        for (AccountGroup group : appStorage.groups) {
-            for (Account acc : group.getAccounts()) {
-                if (currentEditingAccount != null && acc.getTitle().equalsIgnoreCase(originalTitle)) {
-                    continue;
-                }
-                if (acc.getTitle().equalsIgnoreCase(title.trim())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
     void generateAndOpenAllPdf() {
         android.app.Dialog progressDialog = DialogHelper.showProgressDialog(MainActivity.this);

@@ -221,7 +221,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
                 }
             }
             activity.getActiveRecords().removeAll(selectedRecords);
-            activity.populateRecordsList();
+            EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);
             return;
@@ -347,7 +347,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
                 }
             }
             activity.getActiveRecords().removeAll(selectedRecords);
-            activity.populateRecordsList();
+            EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);
         });

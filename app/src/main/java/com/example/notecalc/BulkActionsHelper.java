@@ -11,7 +11,7 @@ public class BulkActionsHelper {
         boolean anySelected = EditorUIHelper.updateTotalsAndBulkActions(
                 activity.getActiveRecords(),
                 filterCount,
-                activity.isFilterActive(),
+                FilterHelper.isFilterActive(activity),
                 activity.containerBulkActions,
                 activity.textSelectedTotal,
                 activity.textTotalValField,

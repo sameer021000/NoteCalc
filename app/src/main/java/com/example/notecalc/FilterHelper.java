@@ -10,6 +10,21 @@ import java.util.Locale;
 
 
 public class FilterHelper {
+
+
+    /**
+     * Syncs the "select all" header checkbox state based on visible displayRecords selection.
+     * States: unchecked (none selected), checked (all selected), indeterminate (partial).
+     */
+    @android.annotation.SuppressLint("SetTextI18n")
+
+    public static boolean isFilterActive(MainActivity activity) {
+        if (activity.recordsAdapter != null && !activity.recordsAdapter.filterCategories.isEmpty()) return true;
+        if (activity.currentRecordSearchQuery != null && !activity.currentRecordSearchQuery.trim().isEmpty()) return true;
+        if (activity.getFilterDateFrom() != null || activity.getFilterDateTo() != null) return true;
+        return activity.getFilterAmountFrom() != null || activity.getFilterAmountTo() != null;
+    }
+
 @SuppressWarnings({"Convert2Diamond", "ExtractMethodRecommender"})
     public static void showCategoryFilterDialog(MainActivity activity, Account account, android.widget.ImageView btnFilterIcon) {
         java.util.Set<String> uniqueCats = new java.util.HashSet<>();
