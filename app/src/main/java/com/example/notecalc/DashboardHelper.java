@@ -58,7 +58,7 @@ public class DashboardHelper {
         activity.btnSortGroupTitle = dashboardView.findViewById(R.id.btn_sort_group_title);
         if (activity.btnSortGroupTitle != null) {
             ResponsiveUI.setupClickable(activity.btnSortGroupTitle, false, () -> {
-                activity.setGroupSortAscending(!activity.getGroupSortAscending());
+                StateHelper.setGroupSortAscending(activity, !StateHelper.getGroupSortAscending(activity));
                 updateDashboardSortUI(activity);
                 refreshDashboardList(activity);
             });
@@ -69,22 +69,22 @@ public class DashboardHelper {
         activity.btnSortLatest = dashboardView.findViewById(R.id.btn_sort_latest);
 
         if (activity.btnSortTitle != null) ResponsiveUI.setupClickable(activity.btnSortTitle, false, () -> {
-            if (activity.getDashboardSortColumn() == 0) activity.setDashboardSortAscending(!activity.getDashboardSortAscending());
-            else { activity.setDashboardSortColumn(0); activity.setDashboardSortAscending(true); }
+            if (StateHelper.getDashboardSortColumn(activity) == 0) StateHelper.setDashboardSortAscending(activity, !StateHelper.getDashboardSortAscending(activity));
+            else { StateHelper.setDashboardSortColumn(activity, 0); StateHelper.setDashboardSortAscending(activity, true); }
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             updateDashboardSortUI(activity);
             refreshDashboardList(activity);
         });
         if (activity.btnSortTotal != null) ResponsiveUI.setupClickable(activity.btnSortTotal, false, () -> {
-            if (activity.getDashboardSortColumn() == 1) activity.setDashboardSortAscending(!activity.getDashboardSortAscending());
-            else { activity.setDashboardSortColumn(1); activity.setDashboardSortAscending(false); }
+            if (StateHelper.getDashboardSortColumn(activity) == 1) StateHelper.setDashboardSortAscending(activity, !StateHelper.getDashboardSortAscending(activity));
+            else { StateHelper.setDashboardSortColumn(activity, 1); StateHelper.setDashboardSortAscending(activity, false); }
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             updateDashboardSortUI(activity);
             refreshDashboardList(activity);
         });
         if (activity.btnSortLatest != null) ResponsiveUI.setupClickable(activity.btnSortLatest, false, () -> {
-            if (activity.getDashboardSortColumn() == 2) activity.setDashboardSortAscending(!activity.getDashboardSortAscending());
-            else { activity.setDashboardSortColumn(2); activity.setDashboardSortAscending(false); }
+            if (StateHelper.getDashboardSortColumn(activity) == 2) StateHelper.setDashboardSortAscending(activity, !StateHelper.getDashboardSortAscending(activity));
+            else { StateHelper.setDashboardSortColumn(activity, 2); StateHelper.setDashboardSortAscending(activity, false); }
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             updateDashboardSortUI(activity);
             refreshDashboardList(activity);
@@ -201,21 +201,21 @@ public class DashboardHelper {
     @android.annotation.SuppressLint("SetTextI18n")
     public static void updateDashboardSortUI(MainActivity activity) {
         if (activity.btnSortTitle != null) {
-            activity.btnSortTitle.setTextColor(activity.getDashboardSortColumn() == 0 ? ThemeManager.getSecondaryAccentColor(activity) : activity.getColor(R.color.text_tertiary));
-            activity.btnSortTitle.setText(activity.getDashboardSortColumn() == 0 ? "Title " + (activity.getDashboardSortAscending() ? "▲" : "▼") : "Title");
+            activity.btnSortTitle.setTextColor(StateHelper.getDashboardSortColumn(activity) == 0 ? ThemeManager.getSecondaryAccentColor(activity) : activity.getColor(R.color.text_tertiary));
+            activity.btnSortTitle.setText(StateHelper.getDashboardSortColumn(activity) == 0 ? "Title " + (StateHelper.getDashboardSortAscending(activity) ? "▲" : "▼") : "Title");
         }
         if (activity.btnSortTotal != null) {
-            activity.btnSortTotal.setTextColor(activity.getDashboardSortColumn() == 1 ? ThemeManager.getSecondaryAccentColor(activity) : activity.getColor(R.color.text_tertiary));
-            activity.btnSortTotal.setText(activity.getDashboardSortColumn() == 1 ? "Total " + (activity.getDashboardSortAscending() ? "▲" : "▼") : "Total");
+            activity.btnSortTotal.setTextColor(StateHelper.getDashboardSortColumn(activity) == 1 ? ThemeManager.getSecondaryAccentColor(activity) : activity.getColor(R.color.text_tertiary));
+            activity.btnSortTotal.setText(StateHelper.getDashboardSortColumn(activity) == 1 ? "Total " + (StateHelper.getDashboardSortAscending(activity) ? "▲" : "▼") : "Total");
         }
         if (activity.btnSortLatest != null) {
-            activity.btnSortLatest.setTextColor(activity.getDashboardSortColumn() == 2 ? ThemeManager.getSecondaryAccentColor(activity) : activity.getColor(R.color.text_tertiary));
-            activity.btnSortLatest.setText(activity.getDashboardSortColumn() == 2 ? "Latest " + (activity.getDashboardSortAscending() ? "▲" : "▼") : "Latest");
+            activity.btnSortLatest.setTextColor(StateHelper.getDashboardSortColumn(activity) == 2 ? ThemeManager.getSecondaryAccentColor(activity) : activity.getColor(R.color.text_tertiary));
+            activity.btnSortLatest.setText(StateHelper.getDashboardSortColumn(activity) == 2 ? "Latest " + (StateHelper.getDashboardSortAscending(activity) ? "▲" : "▼") : "Latest");
         }
 
         activity.btnSortGroupTitle = activity.findViewById(R.id.btn_sort_group_title);
         if (activity.btnSortGroupTitle != null) {
-            activity.btnSortGroupTitle.setText("Title " + (activity.getGroupSortAscending() ? "▲" : "▼"));
+            activity.btnSortGroupTitle.setText("Title " + (StateHelper.getGroupSortAscending(activity) ? "▲" : "▼"));
         }
     }
 
@@ -245,7 +245,7 @@ public class DashboardHelper {
             sortedGroups.sort((a, b) -> {
                 if (a.isPinned() != b.isPinned()) return a.isPinned() ? -1 : 1;
                 int titleCompare = a.getTitle().compareToIgnoreCase(b.getTitle());
-                return activity.getGroupSortAscending() ? titleCompare : -titleCompare;
+                return StateHelper.getGroupSortAscending(activity) ? titleCompare : -titleCompare;
             });
             combinedGroups.addAll(sortedGroups);
             combinedAccounts.addAll(applyDashboardSort(activity, ArchiveHelper.getVisibleAccounts(activity.appStorage.standaloneAccounts)));
@@ -291,8 +291,8 @@ public class DashboardHelper {
     public static List<Account> applyDashboardSort(MainActivity activity, List<Account> source) {
         List<Account> sorted = new ArrayList<>(source);
         
-        int mode = activity.getDashboardSortColumn();
-        boolean asc = activity.getDashboardSortAscending();
+        int mode = StateHelper.getDashboardSortColumn(activity);
+        boolean asc = StateHelper.getDashboardSortAscending(activity);
         
         sorted.sort((a, b) -> {
             // First check pin status

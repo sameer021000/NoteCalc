@@ -6,17 +6,17 @@ import java.util.Locale;
 
 public class EditorSortHelper {
     public static void applySorting(MainActivity activity) {
-        if (activity.getActiveRecords() == null || activity.getActiveRecords().isEmpty()) {
+        if (StateHelper.getActiveRecords(activity) == null || StateHelper.getActiveRecords(activity).isEmpty()) {
             return;
         }
 
-        activity.getActiveRecords().sort(new java.util.Comparator<>() {
+        StateHelper.getActiveRecords(activity).sort(new java.util.Comparator<>() {
             private final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
             @Override
             public int compare(Record r1, Record r2) {
                 int c = 0;
-                switch (activity.getSortColumn()) {
+                switch (StateHelper.getSortColumn(activity)) {
                     case 0: // S.No
                         c = Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
                         break;
@@ -39,32 +39,32 @@ public class EditorSortHelper {
                         c = Double.compare(r1.getAmount(), r2.getAmount());
                         break;
                 }
-                return activity.getSortAscending() ? c : -c;
+                return StateHelper.getSortAscending(activity) ? c : -c;
             }
         });
     }
 
     public static void updateHeaderLabels(MainActivity activity) {
         if (activity.thSnoField != null) {
-            activity.thSnoField.setText(activity.getString(R.string.th_sno) + (activity.getSortColumn() == 0 ? (activity.getSortAscending() ? "  ▲" : "  ▼") : ""));
+            activity.thSnoField.setText(String.format(Locale.getDefault(), "%s%s", activity.getString(R.string.th_sno), (StateHelper.getSortColumn(activity) == 0 ? (StateHelper.getSortAscending(activity) ? "  ▲" : "  ▼") : "")));
         }
         if (activity.thDescField != null) {
-            activity.thDescField.setText(activity.getString(R.string.th_desc) + (activity.getSortColumn() == 1 ? (activity.getSortAscending() ? "  ▲" : "  ▼") : ""));
+            activity.thDescField.setText(String.format(Locale.getDefault(), "%s%s", activity.getString(R.string.th_desc), (StateHelper.getSortColumn(activity) == 1 ? (StateHelper.getSortAscending(activity) ? "  ▲" : "  ▼") : "")));
         }
         if (activity.thDateField != null) {
-            activity.thDateField.setText(activity.getString(R.string.th_date) + (activity.getSortColumn() == 2 ? (activity.getSortAscending() ? "  ▲" : "  ▼") : ""));
+            activity.thDateField.setText(String.format(Locale.getDefault(), "%s%s", activity.getString(R.string.th_date), (StateHelper.getSortColumn(activity) == 2 ? (StateHelper.getSortAscending(activity) ? "  ▲" : "  ▼") : "")));
         }
         if (activity.thAmountField != null) {
-            activity.thAmountField.setText(activity.getString(R.string.th_amount) + (activity.getSortColumn() == 3 ? (activity.getSortAscending() ? "  ▲" : "  ▼") : ""));
+            activity.thAmountField.setText(String.format(Locale.getDefault(), "%s%s", activity.getString(R.string.th_amount), (StateHelper.getSortColumn(activity) == 3 ? (StateHelper.getSortAscending(activity) ? "  ▲" : "  ▼") : "")));
         }
     }
 
     public static void onHeaderClicked(MainActivity activity, int col) {
-        if (activity.getSortColumn() == col) {
-            activity.setSortAscending(!activity.getSortAscending());
+        if (StateHelper.getSortColumn(activity) == col) {
+            StateHelper.setSortAscending(activity, !StateHelper.getSortAscending(activity));
         } else {
-            activity.setSortColumn(col);
-            activity.setSortAscending(true);
+            StateHelper.setSortColumn(activity, col);
+            StateHelper.setSortAscending(activity, true);
         }
 
         applySorting(activity);
@@ -74,13 +74,13 @@ public class EditorSortHelper {
 
     public static void updateDateHeaderIndicator(MainActivity activity) {
         if (activity.thDateField == null) return;
-        boolean active = (activity.getFilterDateFrom() != null || activity.getFilterDateTo() != null);
+        boolean active = (StateHelper.getFilterDateFrom(activity) != null || StateHelper.getFilterDateTo(activity) != null);
         activity.thDateField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(activity) : ThemeManager.getSecondaryAccentColor(activity));
     }
 
     public static void updateAmountHeaderIndicator(MainActivity activity) {
         if (activity.thAmountField == null) return;
-        boolean active = (activity.getFilterAmountFrom() != null || activity.getFilterAmountTo() != null);
+        boolean active = (StateHelper.getFilterAmountFrom(activity) != null || StateHelper.getFilterAmountTo(activity) != null);
         activity.thAmountField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(activity) : ThemeManager.getSecondaryAccentColor(activity));
     }
 

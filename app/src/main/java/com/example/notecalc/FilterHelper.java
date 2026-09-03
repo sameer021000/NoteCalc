@@ -21,8 +21,8 @@ public class FilterHelper {
     public static boolean isFilterActive(MainActivity activity) {
         if (activity.recordsAdapter != null && !activity.recordsAdapter.filterCategories.isEmpty()) return true;
         if (activity.currentRecordSearchQuery != null && !activity.currentRecordSearchQuery.trim().isEmpty()) return true;
-        if (activity.getFilterDateFrom() != null || activity.getFilterDateTo() != null) return true;
-        return activity.getFilterAmountFrom() != null || activity.getFilterAmountTo() != null;
+        if (StateHelper.getFilterDateFrom(activity) != null || StateHelper.getFilterDateTo(activity) != null) return true;
+        return StateHelper.getFilterAmountFrom(activity) != null || StateHelper.getFilterAmountTo(activity) != null;
     }
 
 @SuppressWarnings({"Convert2Diamond", "ExtractMethodRecommender"})
@@ -176,8 +176,8 @@ public static void showDateRangeFilterDialog(MainActivity activity) {
         btnApply.setTextColor(activity.getColor(R.color.text_primary));
 
         // Track temp selections for activity dialog session
-        final String[] tempFrom = {activity.getFilterDateFrom()};
-        final String[] tempTo = {activity.getFilterDateTo()};
+        final String[] tempFrom = {StateHelper.getFilterDateFrom(activity)};
+        final String[] tempTo = {StateHelper.getFilterDateTo(activity)};
 
         // Populate with current filter values if active
         tvFrom.setText(tempFrom[0] != null ? tempFrom[0] : "Select Date");
@@ -217,16 +217,16 @@ public static void showDateRangeFilterDialog(MainActivity activity) {
         tvTo.setOnClickListener(v -> pickTo.run());
 
         ResponsiveUI.setupClickable(btnClear, true, () -> {
-            activity.setFilterDateFrom(null);
-            activity.setFilterDateTo(null);
+            StateHelper.setFilterDateFrom(activity, null);
+            StateHelper.setFilterDateTo(activity, null);
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             EditorSortHelper.updateDateHeaderIndicator(activity);
             dialog.dismiss();
         });
         ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
         ResponsiveUI.setupClickable(btnApply, true, () -> {
-            activity.setFilterDateFrom(tempFrom[0]);
-            activity.setFilterDateTo(tempTo[0]);
+            StateHelper.setFilterDateFrom(activity, tempFrom[0]);
+            StateHelper.setFilterDateTo(activity, tempTo[0]);
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             EditorSortHelper.updateDateHeaderIndicator(activity);
             dialog.dismiss();
@@ -264,12 +264,12 @@ public static void showAmountRangeFilterDialog(MainActivity activity) {
         btnApply.setTextColor(activity.getColor(R.color.text_primary));
 
         // Populate with current filter values if active
-        if (activity.getFilterAmountFrom() != null) etFrom.setText(String.format(Locale.getDefault(), "%.2f", activity.getFilterAmountFrom()));
-        if (activity.getFilterAmountTo() != null) etTo.setText(String.format(Locale.getDefault(), "%.2f", activity.getFilterAmountTo()));
+        if (StateHelper.getFilterAmountFrom(activity) != null) etFrom.setText(String.format(Locale.getDefault(), "%.2f", StateHelper.getFilterAmountFrom(activity)));
+        if (StateHelper.getFilterAmountTo(activity) != null) etTo.setText(String.format(Locale.getDefault(), "%.2f", StateHelper.getFilterAmountTo(activity)));
 
         ResponsiveUI.setupClickable(btnClear, true, () -> {
-            activity.setFilterAmountFrom(null);
-            activity.setFilterAmountTo(null);
+            StateHelper.setFilterAmountFrom(activity, null);
+            StateHelper.setFilterAmountTo(activity, null);
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             EditorSortHelper.updateAmountHeaderIndicator(activity);
             dialog.dismiss();
@@ -278,8 +278,8 @@ public static void showAmountRangeFilterDialog(MainActivity activity) {
         ResponsiveUI.setupClickable(btnApply, true, () -> {
             String fromStr = etFrom.getText().toString().trim();
             String toStr = etTo.getText().toString().trim();
-            activity.setFilterAmountFrom(fromStr.isEmpty() ? null : Double.parseDouble(fromStr));
-            activity.setFilterAmountTo(toStr.isEmpty() ? null : Double.parseDouble(toStr));
+            StateHelper.setFilterAmountFrom(activity, fromStr.isEmpty() ? null : Double.parseDouble(fromStr));
+            StateHelper.setFilterAmountTo(activity, toStr.isEmpty() ? null : Double.parseDouble(toStr));
             if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             EditorSortHelper.updateAmountHeaderIndicator(activity);
             dialog.dismiss();

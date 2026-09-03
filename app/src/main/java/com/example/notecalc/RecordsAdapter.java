@@ -45,7 +45,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
             displayRecords.clear();
             String q = (query == null ? "" : query.trim().toLowerCase(Locale.getDefault()));
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-            for (Record r : activity.getActiveRecords()) {
+            for (Record r : StateHelper.getActiveRecords(activity)) {
                 // Category filter
                 if (!filterCategories.isEmpty()) {
                     if (!filterCategories.contains(r.getCategory())) continue;
@@ -59,15 +59,15 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                     }
                 }
                 // Date range filter
-                if (activity.getFilterDateFrom() != null || activity.getFilterDateTo() != null) {
+                if (StateHelper.getFilterDateFrom(activity) != null || StateHelper.getFilterDateTo(activity) != null) {
                     try {
                         Date recordDate = sdf.parse(r.getDate());
-                        if (activity.getFilterDateFrom() != null) {
-                            Date from = sdf.parse(activity.getFilterDateFrom());
+                        if (StateHelper.getFilterDateFrom(activity) != null) {
+                            Date from = sdf.parse(StateHelper.getFilterDateFrom(activity));
                             if (recordDate != null && recordDate.before(from)) continue;
                         }
-                        if (activity.getFilterDateTo() != null) {
-                            Date to = sdf.parse(activity.getFilterDateTo());
+                        if (StateHelper.getFilterDateTo(activity) != null) {
+                            Date to = sdf.parse(StateHelper.getFilterDateTo(activity));
                             if (recordDate != null && recordDate.after(to)) continue;
                         }
                     } catch (ParseException e) {
@@ -75,8 +75,8 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                     }
                 }
                 // Amount range filter
-                if (activity.getFilterAmountFrom() != null && r.getAmount() < activity.getFilterAmountFrom()) continue;
-                if (activity.getFilterAmountTo() != null && r.getAmount() > activity.getFilterAmountTo()) continue;
+                if (StateHelper.getFilterAmountFrom(activity) != null && r.getAmount() < StateHelper.getFilterAmountFrom(activity)) continue;
+                if (StateHelper.getFilterAmountTo(activity) != null && r.getAmount() > StateHelper.getFilterAmountTo(activity)) continue;
 
                 displayRecords.add(r);
             }
@@ -103,7 +103,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
         public void onBindViewHolder(@androidx.annotation.NonNull RecordViewHolder holder, int position) {
             Record record = displayRecords.get(position);
             // Find the true index in tempRecords (or budget records) so that edit/delete work correctly
-            int trueIndex = activity.getActiveRecords().indexOf(record);
+            int trueIndex = StateHelper.getActiveRecords(activity).indexOf(record);
 
             holder.tvSno.setText(String.valueOf(record.getOriginalIndex() + 1));
             holder.tvDesc.setText(record.getDescription());

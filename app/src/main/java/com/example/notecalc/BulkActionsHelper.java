@@ -9,7 +9,7 @@ public class BulkActionsHelper {
         int filterCount = activity.recordsAdapter != null ? activity.recordsAdapter.displayRecords.size() : 0;
         
         boolean anySelected = EditorUIHelper.updateTotalsAndBulkActions(
-                activity.getActiveRecords(),
+                StateHelper.getActiveRecords(activity),
                 filterCount,
                 FilterHelper.isFilterActive(activity),
                 activity.containerBulkActions,

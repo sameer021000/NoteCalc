@@ -211,7 +211,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
     public static void showDeleteMultipleConfirmationDialog(MainActivity activity, List<Record> selectedRecords) {
         if (selectedRecords.size() <= 2) {
             for (Record r : selectedRecords) {
-                int idx = activity.getActiveRecords().indexOf(r);
+                int idx = StateHelper.getActiveRecords(activity).indexOf(r);
                 if (idx != -1) {
                     if (activity.editingRecordIndex == idx) {
                         EditorModeHelper.cancelEditRecordMode(activity);
@@ -220,7 +220,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
                     }
                 }
             }
-            activity.getActiveRecords().removeAll(selectedRecords);
+            StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);
@@ -337,7 +337,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
             dialog.dismiss();
             // Deselect and adjust activity.editingRecordIndex before removal
             for (Record r : selectedRecords) {
-                int idx = activity.getActiveRecords().indexOf(r);
+                int idx = StateHelper.getActiveRecords(activity).indexOf(r);
                 if (idx != -1) {
                     if (activity.editingRecordIndex == idx) {
                         EditorModeHelper.cancelEditRecordMode(activity);
@@ -346,7 +346,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
                     }
                 }
             }
-            activity.getActiveRecords().removeAll(selectedRecords);
+            StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);

@@ -147,7 +147,7 @@ public class MenuHelper {
         }
         
         List<Record> selectedRecords = new ArrayList<>();
-        for (Record r : activity.getActiveRecords()) if (r.isSelected()) selectedRecords.add(r);
+        for (Record r : StateHelper.getActiveRecords(activity)) if (r.isSelected()) selectedRecords.add(r);
         boolean hasSelection = !selectedRecords.isEmpty();
         
         if (btnExport != null) {

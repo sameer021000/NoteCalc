@@ -96,7 +96,7 @@ public class NCAgentHelper {
             if (text.trim().isEmpty()) return;
             
             parsedActions.clear();
-            parsedActions.addAll(ncAgent.process(text, activity.getActiveRecords()));
+            parsedActions.addAll(ncAgent.process(text, StateHelper.getActiveRecords(activity)));
             
             // Build Preview UI
             previewContainer.removeAllViews();
@@ -172,7 +172,7 @@ public class NCAgentHelper {
                             if (cb.isChecked()) {
                                 Record target = (Record) cb.getTag();
                                 if (action.getIntent() == NCAgentIntent.DELETE) {
-                                    activity.getActiveRecords().remove(target);
+                                    StateHelper.getActiveRecords(activity).remove(target);
                                     deleted++;
                                 }
                             }
@@ -182,7 +182,7 @@ public class NCAgentHelper {
                     if (action.getIntent() == NCAgentIntent.ADD) {
                         Record validated = action.getValidatedRecord();
                         validated.setOriginalIndex(EditorUIHelper.getNewOriginalIndex(activity));
-                        activity.getActiveRecords().add(validated);
+                        StateHelper.getActiveRecords(activity).add(validated);
                         added++;
                     } else if (action.getIntent() == NCAgentIntent.UPDATE) {
                         Record target = action.getTargetRecord();
@@ -194,7 +194,7 @@ public class NCAgentHelper {
                         target.setRemarks(val.getRemarks());
                         updated++;
                     } else if (action.getIntent() == NCAgentIntent.DELETE) {
-                        activity.getActiveRecords().remove(action.getTargetRecord());
+                        StateHelper.getActiveRecords(activity).remove(action.getTargetRecord());
                         deleted++;
                     }
                 }

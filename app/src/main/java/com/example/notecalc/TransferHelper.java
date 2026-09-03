@@ -236,14 +236,14 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
         StorageHelper.saveAppStorage(activity, activity.appStorage);
         
         if (isCut) {
-            activity.getActiveRecords().removeAll(selectedRecords);
-            AppUtils.resequentializeRecords(activity.getActiveRecords());
+            StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
+            AppUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
             if (activity.recordsAdapter != null) {
                 activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             }
         }
         
-        for (Record r : activity.getActiveRecords()) r.setSelected(false);
+        for (Record r : StateHelper.getActiveRecords(activity)) r.setSelected(false);
         if (activity.cbSelectAllHeader != null) {
             activity.cbSelectAllHeader.setOnCheckedChangeListener(null);
             activity.cbSelectAllHeader.setChecked(false);

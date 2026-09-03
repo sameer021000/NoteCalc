@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     Account currentEditingAccount;
     
     // Editor state
-    private List<Record> tempRecords;
-    private List<Record> tempBudgetRecords;
+    List<Record> tempRecords;
+    List<Record> tempBudgetRecords;
     boolean isBudgetMode = false; // false = Expenses, true = Budget
     
     String originalTitle = "";
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     AccountsAdapter accountsAdapter;
     AccountsAdapter groupsAdapter;
     String dashboardSearchQuery = "";
-    private boolean groupSortAscending = true;
+    boolean groupSortAscending = true;
     TextView btnSortTitle;
     TextView btnSortTotal;
     TextView btnSortLatest;
@@ -77,23 +77,19 @@ public class MainActivity extends AppCompatActivity {
     TextView thDateField;
     TextView thAmountField;
 
-    private int expenseSortColumn = 0;
-    private boolean expenseSortAscending = false;
-    private int budgetSortColumn = 0;
-    private boolean budgetSortAscending = false;
+    int expenseSortColumn = 0;
+    boolean expenseSortAscending = false;
+    int budgetSortColumn = 0;
+    boolean budgetSortAscending = false;
     
-    int getSortColumn() { return isBudgetMode ? budgetSortColumn : expenseSortColumn; }
-    boolean getSortAscending() { return isBudgetMode ? budgetSortAscending : expenseSortAscending; }
-    void setSortColumn(int col) { if (isBudgetMode) budgetSortColumn = col; else expenseSortColumn = col; }
-    void setSortAscending(boolean asc) { if (isBudgetMode) budgetSortAscending = asc; else expenseSortAscending = asc; }
 
     // Dashboard sort state: 0 = Title, 1 = Total Spending, 2 = Latest Modified
-    private int dashboardSortMode = 0;
-    private boolean dashboardSortAscending = true;
+    int dashboardSortMode = 0;
+    boolean dashboardSortAscending = true;
     
-    private int archivedDashboardSortMode = 0;
-    private boolean archivedDashboardSortAscending = true;
-    private boolean archivedGroupSortAscending = true;
+    int archivedDashboardSortMode = 0;
+    boolean archivedDashboardSortAscending = true;
+    boolean archivedGroupSortAscending = true;
 
     // Editor record search query (persists while in editor, reset on openEditor)
     String currentRecordSearchQuery = "";
@@ -115,24 +111,16 @@ public class MainActivity extends AppCompatActivity {
     TextView textSelectedTotal;
 
     // Date range filter state (dd-MM-yyyy strings, null = no filter)
-    private String expenseFilterDateFrom = null;
-    private String expenseFilterDateTo = null;
-    private Double expenseFilterAmountFrom = null;
-    private Double expenseFilterAmountTo = null;
+    String expenseFilterDateFrom = null;
+    String expenseFilterDateTo = null;
+    Double expenseFilterAmountFrom = null;
+    Double expenseFilterAmountTo = null;
 
-    private String budgetFilterDateFrom = null;
-    private String budgetFilterDateTo = null;
-    private Double budgetFilterAmountFrom = null;
-    private Double budgetFilterAmountTo = null;
+    String budgetFilterDateFrom = null;
+    String budgetFilterDateTo = null;
+    Double budgetFilterAmountFrom = null;
+    Double budgetFilterAmountTo = null;
 
-    String getFilterDateFrom() { return isBudgetMode ? budgetFilterDateFrom : expenseFilterDateFrom; }
-    void setFilterDateFrom(String val) { if (isBudgetMode) budgetFilterDateFrom = val; else expenseFilterDateFrom = val; }
-    String getFilterDateTo() { return isBudgetMode ? budgetFilterDateTo : expenseFilterDateTo; }
-    void setFilterDateTo(String val) { if (isBudgetMode) budgetFilterDateTo = val; else expenseFilterDateTo = val; }
-    Double getFilterAmountFrom() { return isBudgetMode ? budgetFilterAmountFrom : expenseFilterAmountFrom; }
-    void setFilterAmountFrom(Double val) { if (isBudgetMode) budgetFilterAmountFrom = val; else expenseFilterAmountFrom = val; }
-    Double getFilterAmountTo() { return isBudgetMode ? budgetFilterAmountTo : expenseFilterAmountTo; }
-    void setFilterAmountTo(Double val) { if (isBudgetMode) budgetFilterAmountTo = val; else expenseFilterAmountTo = val; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,34 +228,6 @@ public class MainActivity extends AppCompatActivity {
 
     @android.annotation.SuppressLint("SetTextI18n")
     final NCAgent ncAgent = new NCAgent();
-    @android.annotation.SuppressLint("SetTextI18n")
-    int getDashboardSortColumn() {
-        if (currentViewGroup != null) return currentViewGroup.getSortMode();
-        return ArchiveHelper.isShowingArchive ? archivedDashboardSortMode : dashboardSortMode;
-    }
-    void setDashboardSortColumn(int mode) {
-        if (currentViewGroup != null) currentViewGroup.setSortMode(mode);
-        else if (ArchiveHelper.isShowingArchive) archivedDashboardSortMode = mode;
-        else dashboardSortMode = mode;
-    }
-    boolean getDashboardSortAscending() {
-        if (currentViewGroup != null) return currentViewGroup.isSortAscending();
-        return ArchiveHelper.isShowingArchive ? archivedDashboardSortAscending : dashboardSortAscending;
-    }
-    void setDashboardSortAscending(boolean asc) {
-        if (currentViewGroup != null) currentViewGroup.setSortAscending(asc);
-        else if (ArchiveHelper.isShowingArchive) archivedDashboardSortAscending = asc;
-        else dashboardSortAscending = asc;
-    }
-    
-    boolean getGroupSortAscending() {
-        return ArchiveHelper.isShowingArchive ? archivedGroupSortAscending : groupSortAscending;
-    }
-    
-    void setGroupSortAscending(boolean asc) {
-        if (ArchiveHelper.isShowingArchive) archivedGroupSortAscending = asc;
-        else groupSortAscending = asc;
-    }
 
     /**
      * Renders the Account Editor screen.
@@ -884,7 +844,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (editingRecordIndex != -1) {
                 // Update mode
-                Record record = getActiveRecords().get(editingRecordIndex);
+                Record record = StateHelper.getActiveRecords(MainActivity.this).get(editingRecordIndex);
                 record.setDescription(desc);
                 record.setAmount(amount);
                 record.setDate(selectedRecordDate);
@@ -901,7 +861,7 @@ public class MainActivity extends AppCompatActivity {
                 newRecord.setCategory(category);
                   newRecord.setAttachments(new java.util.ArrayList<>(tempAttachments));
                 newRecord.setOriginalIndex(EditorUIHelper.getNewOriginalIndex(MainActivity.this));
-                getActiveRecords().add(newRecord);
+                StateHelper.getActiveRecords(MainActivity.this).add(newRecord);
 
                 // Update UI elements
                 editDesc.setText("");
@@ -974,9 +934,6 @@ public class MainActivity extends AppCompatActivity {
      * Example: "24-06-2026" -> "24Jun26"
      */
 
-    List<Record> getActiveRecords() {
-        return isBudgetMode ? tempBudgetRecords : tempRecords;
-    }
 
     @android.annotation.SuppressLint("SetTextI18n")
 

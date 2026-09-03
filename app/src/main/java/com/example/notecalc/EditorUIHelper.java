@@ -18,7 +18,7 @@ public class EditorUIHelper {
         }
 
         // Toggle empty state and table rows visibility
-        boolean isEmpty = activity.getActiveRecords().isEmpty();
+        boolean isEmpty = StateHelper.getActiveRecords(activity).isEmpty();
         if (activity.editorEmptyState != null) {
             activity.editorEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         }
@@ -40,7 +40,7 @@ public class EditorUIHelper {
 
     public static int getNewOriginalIndex(MainActivity activity) {
         int maxIndex = -1;
-        for (Record r : activity.getActiveRecords()) {
+        for (Record r : StateHelper.getActiveRecords(activity)) {
             if (r.getOriginalIndex() > maxIndex) {
                 maxIndex = r.getOriginalIndex();
             }

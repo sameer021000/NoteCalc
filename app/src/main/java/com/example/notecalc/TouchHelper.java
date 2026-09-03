@@ -18,7 +18,7 @@ public class TouchHelper {
             @Override
             public int getDragDirs(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
                 if (activity.currentEditingAccount != null && activity.currentEditingAccount.isArchived()) return 0;
-                boolean isDefaultSort = activity.getSortColumn() == 0 && activity.getSortAscending();
+                boolean isDefaultSort = StateHelper.getSortColumn(activity) == 0 && StateHelper.getSortAscending(activity);
                 boolean noSearch = activity.currentRecordSearchQuery == null || activity.currentRecordSearchQuery.trim().isEmpty();
                 if (isDefaultSort && noSearch) {
                     return androidx.recyclerview.widget.ItemTouchHelper.UP | androidx.recyclerview.widget.ItemTouchHelper.DOWN;
@@ -62,16 +62,16 @@ public class TouchHelper {
                 if (pos == RecyclerView.NO_POSITION || activity.recordsAdapter == null) return;
                 
                 Record deletedRecord = activity.recordsAdapter.displayRecords.get(pos);
-                int trueIndex = activity.getActiveRecords().indexOf(deletedRecord);
+                int trueIndex = StateHelper.getActiveRecords(activity).indexOf(deletedRecord);
                 
                 // Temporarily remove
-                activity.getActiveRecords().remove(trueIndex);
+                StateHelper.getActiveRecords(activity).remove(trueIndex);
                 activity.recordsAdapter.refreshDisplay();
                 BulkActionsHelper.updateBulkActionsState(activity);
                 EditorSortHelper.updateHeaderLabels(activity);
                 
                 SnackbarHelper.showUndoSnackbar(activity, "Record deleted", () -> {
-                    activity.getActiveRecords().add(trueIndex, deletedRecord);
+                    StateHelper.getActiveRecords(activity).add(trueIndex, deletedRecord);
                     activity.recordsAdapter.refreshDisplay();
                     BulkActionsHelper.updateBulkActionsState(activity);
                     EditorSortHelper.updateHeaderLabels(activity);
