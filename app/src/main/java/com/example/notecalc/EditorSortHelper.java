@@ -17,13 +17,13 @@ public class EditorSortHelper {
             public int compare(Record r1, Record r2) {
                 int c = 0;
                 switch (StateHelper.getSortColumn(activity)) {
-                    case 0: // S.No
+                    case 0:
                         c = Integer.compare(r1.getOriginalIndex(), r2.getOriginalIndex());
                         break;
-                    case 1: // Description
+                    case 1:
                         c = r1.getDescription().compareToIgnoreCase(r2.getDescription());
                         break;
-                    case 2: // Date
+                    case 2:
                         try {
                             Date d1 = sdf.parse(r1.getDate());
                             Date d2 = sdf.parse(r2.getDate());
@@ -35,7 +35,7 @@ public class EditorSortHelper {
                             }
                         } catch (Exception ignored) {}
                         break;
-                    case 3: // Amount
+                    case 3:
                         c = Double.compare(r1.getAmount(), r2.getAmount());
                         break;
                 }
