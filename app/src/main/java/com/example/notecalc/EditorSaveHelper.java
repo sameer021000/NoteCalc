@@ -1,7 +1,6 @@
 package com.example.notecalc;
 
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class EditorSaveHelper {
     public static void setupSaveActions(MainActivity activity, EditText editTitle, EditText editDesc, EditText editAmount, android.widget.TextView btnAdd, android.widget.TextView btnSave) {
@@ -11,22 +10,8 @@ public class EditorSaveHelper {
             String remarks = activity.editRemarksField != null ? activity.editRemarksField.getText().toString().trim() : "";
             String category = activity.editCategoryField != null ? activity.editCategoryField.getText().toString().trim() : "";
 
-            if (desc.isEmpty()) {
-                Toast.makeText(activity, activity.getString(R.string.auto_please_enter_a_descr_3), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            double amount;
-            try {
-                amount = Double.parseDouble(amountStr);
-                if (amount <= 0) {
-                    Toast.makeText(activity, activity.getString(R.string.auto_amount_must_be_posit_4), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                Toast.makeText(activity, activity.getString(R.string.auto_please_enter_a_valid_5), Toast.LENGTH_SHORT).show();
-                return;
-            }
+            Double amount = EditorValidationHelper.validateRecordInput(activity, desc, amountStr);
+            if (amount == null) return;
 
             if (activity.editingRecordIndex != -1) {
                 Record record = StateHelper.getActiveRecords(activity).get(activity.editingRecordIndex);
@@ -59,15 +44,7 @@ public class EditorSaveHelper {
         ResponsiveUI.setupClickable(btnSave, () -> {
             String title = editTitle.getText().toString().trim();
 
-            if (title.isEmpty()) {
-                Toast.makeText(activity, activity.getString(R.string.auto_list_title_cannot_be_6), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (EditorUIHelper.isDuplicateTitle(activity, title)) {
-                Toast.makeText(activity, activity.getString(R.string.auto_a_list_with_this_tit_7), Toast.LENGTH_SHORT).show();
-                return;
-            }
+            if (!EditorValidationHelper.validateAccountTitle(activity, title)) return;
 
             AppUtils.resequentializeRecords(activity.tempRecords);
             AppUtils.resequentializeRecords(activity.tempBudgetRecords);
