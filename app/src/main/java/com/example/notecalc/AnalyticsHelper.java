@@ -16,11 +16,9 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class AnalyticsHelper {
-
     public static void showAnalytics(Context context, Account account, ViewGroup mainContainer, Runnable onBackClicked) {
         View analyticsRoot = LayoutInflater.from(context).inflate(R.layout.layout_analytics, mainContainer, false);
         mainContainer.removeAllViews();
@@ -57,7 +55,6 @@ public class AnalyticsHelper {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
         
-        // Initial load
         updateAnalyticsData(context, account, 0, chart, tvTotalSpent, tvHighestTxn, tvDailyAvg, tvHighestDay, tvBudgetPercent, tvDateRange);
     }
 
@@ -82,95 +79,26 @@ public class AnalyticsHelper {
     }
 
     private static void updateAnalyticsData(Context context, Account account, int timeMode, BarChart chart, TextView tvTotal, TextView tvHighTxn, TextView tvDailyAvg, TextView tvHighDay, TextView tvBudgetPct, TextView tvDateRange) {
-        List<Record> allRecords = account.getRecords();
-        List<Record> filtered = new ArrayList<>();
+        AnalyticsResult result = AnalyticsEngine.calculate(account, timeMode);
         
-        long now = System.currentTimeMillis();
-        long startTime = 0;
-        
-        if (timeMode == 1) { // Last 7 Days
-            startTime = now - (7L * 24 * 60 * 60 * 1000);
-            tvDateRange.setText(context.getString(R.string.auto_last_7_days_26));
-        } else if (timeMode == 2) { // Last 30 Days
-            startTime = now - (30L * 24 * 60 * 60 * 1000);
-            tvDateRange.setText(context.getString(R.string.auto_last_30_days_27));
-        } else {
-            tvDateRange.setText(context.getString(R.string.auto_all_time_28));
-        }
-
-        double totalAmount = 0;
-        double highestTxn = 0;
-        
-        java.util.TreeMap<Long, Double> dailyTotals = new java.util.TreeMap<>();
-
-        for (Record r : allRecords) {
-            long rTs = 0;
-            try {
-                java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-                java.util.Date parsedDate = format.parse(r.getDate());
-                if (parsedDate != null) rTs = parsedDate.getTime();
-            } catch(Exception ex) {
-                android.util.Log.e("NoteCalc", "Error parsing date", ex);
-            }
-
-            if (rTs >= startTime) {
-                filtered.add(r);
-                double amt = r.getAmount();
-                totalAmount += amt;
-                if (amt > highestTxn) highestTxn = amt;
-                
-                Calendar c = Calendar.getInstance();
-                if (rTs > 0) {
-                    c.setTimeInMillis(rTs);
-                } else {
-                    c.setTimeInMillis(System.currentTimeMillis());
-                }
-                c.set(Calendar.HOUR_OF_DAY, 0);
-                c.set(Calendar.MINUTE, 0);
-                c.set(Calendar.SECOND, 0);
-                c.set(Calendar.MILLISECOND, 0);
-                long dayStart = c.getTimeInMillis();
-                
-                Double currentDayTotal = dailyTotals.get(dayStart);
-                double totalSoFar = (currentDayTotal != null) ? currentDayTotal : 0.0;
-                dailyTotals.put(dayStart, totalSoFar + amt);
-            }
-        }
-
-        long highDayTs = 0;
-        double highDayAmt = 0;
-        for (java.util.Map.Entry<Long, Double> entry : dailyTotals.entrySet()) {
-            if (entry.getValue() > highDayAmt) {
-                highDayAmt = entry.getValue();
-                highDayTs = entry.getKey();
-            }
-        }
-
-        int days = dailyTotals.size();
-        double dailyAvg = days > 0 ? (totalAmount / days) : 0;
+        tvDateRange.setText(context.getString(result.dateRangeStringResId));
 
         java.text.NumberFormat nf = java.text.NumberFormat.getCurrencyInstance();
-        tvTotal.setText(nf.format(totalAmount));
-        tvHighTxn.setText(nf.format(highestTxn));
-        tvDailyAvg.setText(nf.format(dailyAvg));
+        tvTotal.setText(nf.format(result.totalAmount));
+        tvHighTxn.setText(nf.format(result.highestTxn));
+        tvDailyAvg.setText(nf.format(result.dailyAvg));
         
-        if (highDayTs > 0) {
+        if (result.highDayTs > 0) {
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault());
-            tvHighDay.setText(context.getString(R.string.analytics_high_day, sdf.format(new java.util.Date(highDayTs)), nf.format(highDayAmt)));
+            tvHighDay.setText(context.getString(R.string.analytics_high_day, sdf.format(new java.util.Date(result.highDayTs)), nf.format(result.highDayAmt)));
         } else {
             tvHighDay.setText(context.getString(R.string.auto_none_29));
         }
         
-        if (account.hasBudget()) {
+        if (result.budgetPct != -1.0) {
             tvBudgetPct.setVisibility(View.VISIBLE);
-            double budget = account.calculateTotalBudget();
-            if (budget > 0) {
-                double expenses = 0;
-                for (Record r : filtered) {
-                    expenses += r.getAmount();
-                }
-                double pct = (expenses / budget) * 100.0;
-                tvBudgetPct.setText(String.format(java.util.Locale.getDefault(), "%.1f%% of budget spent", pct));
+            if (result.budgetPct > 0) {
+                tvBudgetPct.setText(String.format(java.util.Locale.getDefault(), "%.1f%% of budget spent", result.budgetPct));
             } else {
                 tvBudgetPct.setText(context.getString(R.string.auto_0_of_budget_spent_30));
             }
@@ -183,7 +111,7 @@ public class AnalyticsHelper {
         int i = 0;
         java.text.SimpleDateFormat sdfShort = new java.text.SimpleDateFormat("MMM dd", java.util.Locale.getDefault());
         
-        for (java.util.Map.Entry<Long, Double> entry : dailyTotals.entrySet()) {
+        for (java.util.Map.Entry<Long, Double> entry : result.dailyTotals.entrySet()) {
             entries.add(new BarEntry(i, entry.getValue().floatValue()));
             labels.add(sdfShort.format(new java.util.Date(entry.getKey())));
             i++;
