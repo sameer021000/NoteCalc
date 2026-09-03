@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import android.widget.Toast;
-import android.widget.LinearLayout;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import android.graphics.Color;
-
 
     @android.annotation.SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     public class AccountsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -105,8 +103,6 @@ import android.graphics.Color;
 
                 accHolder.itemView.setBackground(ResponsiveUI.createCardSelector(activity));
 
-
-
                 accHolder.btnPinAccount.setImageResource(account.isPinned() ? R.drawable.ic_pin_filled : R.drawable.ic_pin);
                 accHolder.btnPinAccount.setImageTintList(ResponsiveUI.createIconTintSelector(
                         account.isPinned() ? ThemeManager.getSecondaryAccentColor(activity) : activity.getColor(R.color.text_tertiary),
@@ -134,14 +130,12 @@ import android.graphics.Color;
                     ));
                     ResponsiveUI.setupClickable(accHolder.btnMoveAccount, false, () -> {
                         if (accountParentGroup != null) {
-                            // Move out of group (back to standalone)
                             accountParentGroup.getAccounts().remove(account);
                             activity.appStorage.standaloneAccounts.add(account);
                             StorageHelper.saveAppStorage(activity, activity.appStorage);
                             DashboardHelper.refreshDashboardList(activity);
                             Toast.makeText(activity, activity.getString(R.string.auto_moved_to_dashboard_8), Toast.LENGTH_SHORT).show();
                         } else {
-                            // Move into a group
                             if (activity.appStorage.groups.isEmpty()) {
                                 Toast.makeText(activity, activity.getString(R.string.auto_no_groups_available__9), Toast.LENGTH_SHORT).show();
                                 return;
@@ -149,68 +143,12 @@ import android.graphics.Color;
                             
 
                             
-                            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-                            View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_move_group, null);
-                            builder.setView(dialogView);
-                            
-                            final androidx.appcompat.app.AlertDialog dialog = builder.create();
-                            if (dialog.getWindow() != null) {
-                                dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            }
-                            
-                            View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-                            LinearLayout detailsContainer = dialogView.findViewById(R.id.details_container);
-                            TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
-                            
-                            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
-                            detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
-                            btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
-                            btnCancel.setTextColor(activity.getColor(R.color.error_red));
-                            
-                            List<AccountGroup> targetGroups = new ArrayList<>();
-                            for (AccountGroup g : activity.appStorage.groups) {
-                                if (g.isArchived() == account.isArchived()) targetGroups.add(g);
-                            }
-                            
-                            if (targetGroups.isEmpty()) {
-                                Toast.makeText(activity, activity.getString(R.string.auto_no_groups_available__9), Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-                            
-                            for (int i = 0; i < targetGroups.size(); i++) {
-                                final AccountGroup selectedGroup = targetGroups.get(i);
-                                TextView tvGroup = new TextView(activity);
-                                tvGroup.setText(selectedGroup.getTitle());
-                                tvGroup.setTextColor(activity.getColor(R.color.text_primary));
-                                tvGroup.setTextSize(16f);
-                                tvGroup.setPadding(32, 24, 32, 24);
-                                tvGroup.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
-                                ResponsiveUI.setupClickable(tvGroup, false, () -> {
-                                    activity.appStorage.standaloneAccounts.remove(account);
-                                    selectedGroup.getAccounts().add(account);
-                                    selectedGroup.updateLastModified();
-                                    StorageHelper.saveAppStorage(activity, activity.appStorage);
-                                    DashboardHelper.refreshDashboardList(activity);
-                                    Toast.makeText(activity, "Moved to " + selectedGroup.getTitle(), Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                });
-                                detailsContainer.addView(tvGroup);
-                                
-                                if (i < targetGroups.size() - 1) {
-                                    View divider = new View(activity);
-                                    divider.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1));
-                                    divider.setBackgroundColor(ThemeManager.getBorderColor(activity));
-                                    detailsContainer.addView(divider);
-                                }
-                            }
-                            
-                            ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
-                            dialog.show();
+                            DialogHelper.showMoveAccountDialog(activity, account);
                         }
                     });
                 }
                 accHolder.btnPinAccount.setVisibility(View.VISIBLE);
-                accHolder.btnPinAccount.setImageResource(R.drawable.ic_pin); // Use same icon, just tint different? Wait, maybe just keep icon.
+                accHolder.btnPinAccount.setImageResource(R.drawable.ic_pin);
                 accHolder.btnPinAccount.setImageTintList(ResponsiveUI.createIconTintSelector(
                         account.isPinned() ? ThemeManager.getPrimaryAccentColor(activity) : activity.getColor(R.color.text_tertiary),
                         ThemeManager.getSecondaryAccentColor(activity)
@@ -247,7 +185,7 @@ import android.graphics.Color;
                 
                 ResponsiveUI.setupClickable(grpHolder.itemView, false, () -> {
                     activity.currentViewGroup = group;
-                    DashboardHelper.showDashboard(activity); // Refresh dashboard into group view
+                    DashboardHelper.showDashboard(activity);
                 }, () -> MenuHelper.showGroupPopupMenu(activity, grpHolder.itemView, group));
                 
                 ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> DialogHelper.showDeleteGroupConfirmation(activity, group));
@@ -302,4 +240,3 @@ import android.graphics.Color;
             }
         }
     }
-

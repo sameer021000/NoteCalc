@@ -10,6 +10,8 @@ import com.example.notecalc.pdf.PdfSortOrder;
 import com.example.notecalc.pdf.PdfSortCallback;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+import java.util.ArrayList;
 import android.app.DatePickerDialog;
 import androidx.appcompat.app.AlertDialog;
 import java.util.Calendar;
@@ -515,5 +517,66 @@ public static void showPdfSortDialog(MainActivity activity, PdfSortCallback call
         });
 
         dialog.show();
+    }
+
+    public static void showMoveAccountDialog(MainActivity activity, Account account) {
+                            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
+                            View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_move_group, null);
+                            builder.setView(dialogView);
+                            
+                            final androidx.appcompat.app.AlertDialog dialog = builder.create();
+                            if (dialog.getWindow() != null) {
+                                dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            }
+                            
+                            View dialogRoot = dialogView.findViewById(R.id.dialog_root);
+                            LinearLayout detailsContainer = dialogView.findViewById(R.id.details_container);
+                            TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
+                            
+                            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
+                            detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
+                            btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
+                            btnCancel.setTextColor(activity.getColor(R.color.error_red));
+                            
+                            List<AccountGroup> targetGroups = new ArrayList<>();
+                            for (AccountGroup g : activity.appStorage.groups) {
+                                if (g.isArchived() == account.isArchived()) targetGroups.add(g);
+                            }
+                            
+                            if (targetGroups.isEmpty()) {
+                                Toast.makeText(activity, activity.getString(R.string.auto_no_groups_available__9), Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                            
+                            for (int i = 0; i < targetGroups.size(); i++) {
+                                final AccountGroup selectedGroup = targetGroups.get(i);
+                                TextView tvGroup = new TextView(activity);
+                                tvGroup.setText(selectedGroup.getTitle());
+                                tvGroup.setTextColor(activity.getColor(R.color.text_primary));
+                                tvGroup.setTextSize(16f);
+                                tvGroup.setPadding(32, 24, 32, 24);
+                                tvGroup.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
+                                ResponsiveUI.setupClickable(tvGroup, false, () -> {
+                                    activity.appStorage.standaloneAccounts.remove(account);
+                                    selectedGroup.getAccounts().add(account);
+                                    selectedGroup.updateLastModified();
+                                    StorageHelper.saveAppStorage(activity, activity.appStorage);
+                                    DashboardHelper.refreshDashboardList(activity);
+                                    Toast.makeText(activity, "Moved to " + selectedGroup.getTitle(), Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                });
+                                detailsContainer.addView(tvGroup);
+                                
+                                if (i < targetGroups.size() - 1) {
+                                    View divider = new View(activity);
+                                    divider.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1));
+                                    divider.setBackgroundColor(ThemeManager.getBorderColor(activity));
+                                    detailsContainer.addView(divider);
+                                }
+                            }
+                            
+                            ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
+                            dialog.show();
+
     }
 }
