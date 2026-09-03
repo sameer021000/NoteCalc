@@ -13,12 +13,12 @@ public class EditorModeHelper {
         activity.btnRecordDateField.setText(activity.selectedRecordDate);
         if (activity.editCategoryField != null) activity.editCategoryField.setText(record.getCategory() == null ? "" : record.getCategory());
 
-        // Load attachments
+
         activity.tempAttachments.clear();
         if (record.getAttachments() != null) activity.tempAttachments.addAll(record.getAttachments());
         AttachmentHelper.renderEditorAttachments(activity);
 
-        // Auto-expand form
+
         if (activity.formInputsContainer != null && activity.btnToggleForm != null) {
             activity.isFormInputsCollapsed = false;
             activity.formInputsContainer.setVisibility(android.view.View.VISIBLE);
