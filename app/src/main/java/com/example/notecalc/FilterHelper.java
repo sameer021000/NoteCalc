@@ -11,11 +11,6 @@ import java.util.Locale;
 
 public class FilterHelper {
 
-
-    /**
-     * Syncs the "select all" header checkbox state based on visible displayRecords selection.
-     * States: unchecked (none selected), checked (all selected), indeterminate (partial).
-     */
     @android.annotation.SuppressLint("SetTextI18n")
 
     public static boolean isFilterActive(MainActivity activity) {
@@ -25,7 +20,7 @@ public class FilterHelper {
         return StateHelper.getFilterAmountFrom(activity) != null || StateHelper.getFilterAmountTo(activity) != null;
     }
 
-@SuppressWarnings({"Convert2Diamond", "ExtractMethodRecommender"})
+    @SuppressWarnings({"Convert2Diamond", "ExtractMethodRecommender"})
     public static void showCategoryFilterDialog(MainActivity activity, Account account, android.widget.ImageView btnFilterIcon) {
         java.util.Set<String> uniqueCats = new java.util.HashSet<>();
         for (Record r : account.getRecords()) {
@@ -116,7 +111,7 @@ public class FilterHelper {
         
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 16.0f));
-            // Set max height if needed
+
             dialog.getWindow().setLayout((int)(300 * activity.getResources().getDisplayMetrics().density), android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         
@@ -165,7 +160,7 @@ public static void showDateRangeFilterDialog(MainActivity activity) {
         TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
         TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
 
-        // Style dialog
+
         dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         tvFrom.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 4f));
@@ -175,15 +170,15 @@ public static void showDateRangeFilterDialog(MainActivity activity) {
         btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), ThemeManager.getPrimaryAccentColor(activity), 0f, 4f));
         btnApply.setTextColor(activity.getColor(R.color.text_primary));
 
-        // Track temp selections for activity dialog session
+
         final String[] tempFrom = {StateHelper.getFilterDateFrom(activity)};
         final String[] tempTo = {StateHelper.getFilterDateTo(activity)};
 
-        // Populate with current filter values if active
+
         tvFrom.setText(tempFrom[0] != null ? tempFrom[0] : "Select Date");
         tvTo.setText(tempTo[0] != null ? tempTo[0] : "Select Date");
 
-        // Helper to pick a date and update a TextView
+
         Runnable pickFrom = () -> {
             Calendar cal = Calendar.getInstance();
             if (tempFrom[0] != null) {
@@ -253,7 +248,7 @@ public static void showAmountRangeFilterDialog(MainActivity activity) {
         TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
         TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
 
-        // Style dialog
+
         dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         etFrom.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 4f));
@@ -263,7 +258,7 @@ public static void showAmountRangeFilterDialog(MainActivity activity) {
         btnApply.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), ThemeManager.getPrimaryAccentColor(activity), 0f, 4f));
         btnApply.setTextColor(activity.getColor(R.color.text_primary));
 
-        // Populate with current filter values if active
+
         if (StateHelper.getFilterAmountFrom(activity) != null) etFrom.setText(String.format(Locale.getDefault(), "%.2f", StateHelper.getFilterAmountFrom(activity)));
         if (StateHelper.getFilterAmountTo(activity) != null) etTo.setText(String.format(Locale.getDefault(), "%.2f", StateHelper.getFilterAmountTo(activity)));
 
