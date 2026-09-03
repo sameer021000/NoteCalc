@@ -9,22 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.widget.ImageView;
 import android.text.TextWatcher;
 import android.text.Editable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class DashboardHelper {
-
-        @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
+    @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
     public static void showDashboard(MainActivity activity) {
         if (activity.currentSnackbar != null) {
             activity.currentSnackbar.dismiss();
             activity.currentSnackbar = null;
         }
-                LayoutInflater inflater = activity.getLayoutInflater();
-                View dashboardView = inflater.inflate(R.layout.layout_dashboard, activity.mainContainer, false);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dashboardView = inflater.inflate(R.layout.layout_dashboard, activity.mainContainer, false);
 
-        // Find views
         View btnCreateAccount = dashboardView.findViewById(R.id.btn_create_account);
         
         View btnSettings = dashboardView.findViewById(R.id.btn_settings);
@@ -89,10 +85,9 @@ public class DashboardHelper {
             updateDashboardSortUI(activity);
             refreshDashboardList(activity);
         });
-        // Apply responsive styling to the main layout elements
+
         ResponsiveUI.applyResponsiveness(dashboardView);
 
-        // Dynamic background borders & colors styling
         if (btnCreateAccount != null) {
             btnCreateAccount.setBackground(ResponsiveUI.createRoundedBg(
                     activity,
@@ -120,7 +115,6 @@ public class DashboardHelper {
                 12f
         ));
 
-        // Set up click actions
         ResponsiveUI.setupClickable(btnCreateAccount, () -> activity.openEditor(null));
         if (btnCreateGroup != null) {
             ResponsiveUI.setupClickable(btnCreateGroup, () -> DialogHelper.showCreateGroupDialog(activity));
@@ -176,9 +170,6 @@ public class DashboardHelper {
             return false;
         });
 
-
-
-        // Search bar watcher
         editDashboardSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
@@ -188,15 +179,11 @@ public class DashboardHelper {
                 refreshDashboardList(activity);
             }
         });
-
-        // Mount to main container first so findViewById works in refreshDashboardList
         activity.mainContainer.removeAllViews();
         activity.mainContainer.addView(dashboardView);
 
-        // Populate accounts list
         refreshDashboardList(activity);
     }
-
 
     @android.annotation.SuppressLint("SetTextI18n")
     public static void updateDashboardSortUI(MainActivity activity) {
@@ -219,12 +206,16 @@ public class DashboardHelper {
         }
     }
 
-
     public static void refreshDashboardList(MainActivity activity) {
         if (activity.accountsAdapter == null) return;
         
-        List<Object> combinedGroups = new ArrayList<>();
-        List<Object> combinedAccounts = new ArrayList<>();
+        DashboardResult result = DashboardEngine.process(
+                activity.appStorage,
+                activity.currentViewGroup,
+                StateHelper.getDashboardSortColumn(activity),
+                StateHelper.getDashboardSortAscending(activity),
+                StateHelper.getGroupSortAscending(activity)
+        );
 
         TextView textAppTitle = activity.findViewById(R.id.text_app_title);
         TextView textAppSubtitle = activity.findViewById(R.id.text_app_subtitle);
@@ -237,23 +228,10 @@ public class DashboardHelper {
         if (btnCreateAccount != null) btnCreateAccount.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
         if (btnCreateGroup != null) btnCreateGroup.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
         if (btnArchive != null) btnArchive.setImageResource(ArchiveHelper.isShowingArchive ? R.drawable.ic_archive : R.drawable.ic_archive_outline);
-
-        if (activity.currentViewGroup != null) {
-            combinedAccounts.addAll(applyDashboardSort(activity, ArchiveHelper.getVisibleAccounts(activity.currentViewGroup.getAccounts())));
-        } else {
-            List<AccountGroup> sortedGroups = new ArrayList<>(ArchiveHelper.getVisibleGroups(activity.appStorage.groups));
-            sortedGroups.sort((a, b) -> {
-                if (a.isPinned() != b.isPinned()) return a.isPinned() ? -1 : 1;
-                int titleCompare = a.getTitle().compareToIgnoreCase(b.getTitle());
-                return StateHelper.getGroupSortAscending(activity) ? titleCompare : -titleCompare;
-            });
-            combinedGroups.addAll(sortedGroups);
-            combinedAccounts.addAll(applyDashboardSort(activity, ArchiveHelper.getVisibleAccounts(activity.appStorage.standaloneAccounts)));
-        }
         
         String query = activity.dashboardSearchQuery.trim().toLowerCase(Locale.getDefault());
-        activity.accountsAdapter.setFilter(combinedAccounts, query);
-        if (activity.groupsAdapter != null) activity.groupsAdapter.setFilter(combinedGroups, query);
+        activity.accountsAdapter.setFilter(result.processedAccounts, query);
+        if (activity.groupsAdapter != null) activity.groupsAdapter.setFilter(result.processedGroups, query);
         
         View cardEmptyState = activity.findViewById(R.id.card_empty_state);
         View contentContainer = activity.findViewById(R.id.dashboard_content_container);
@@ -265,9 +243,8 @@ public class DashboardHelper {
 
         boolean hasGroups = activity.groupsAdapter != null && activity.groupsAdapter.getItemCount() > 0;
         boolean hasAccounts = activity.accountsAdapter.getItemCount() > 0;
-        boolean isListEmpty = activity.appStorage.groups.isEmpty() && activity.appStorage.standaloneAccounts.isEmpty();
 
-        if (isListEmpty) {
+        if (result.isListEmpty) {
             cardEmptyState.setVisibility(View.VISIBLE);
             contentContainer.setVisibility(View.GONE);
             editDashboardSearch.setVisibility(View.GONE);
@@ -286,31 +263,4 @@ public class DashboardHelper {
             updateDashboardSortUI(activity);
         }
     }
-
-
-    public static List<Account> applyDashboardSort(MainActivity activity, List<Account> source) {
-        List<Account> sorted = new ArrayList<>(source);
-        
-        int mode = StateHelper.getDashboardSortColumn(activity);
-        boolean asc = StateHelper.getDashboardSortAscending(activity);
-        
-        sorted.sort((a, b) -> {
-            // First check pin status
-            if (a.isPinned() != b.isPinned()) {
-                return a.isPinned() ? -1 : 1;
-            }
-            
-            int result;
-            if (mode == 0) { // Title
-                result = a.getTitle().compareToIgnoreCase(b.getTitle());
-            } else if (mode == 1) { // Total amount
-                result = Double.compare(a.calculateTotal(), b.calculateTotal());
-            } else { // Latest modified
-                result = Long.compare(a.getLastModified(), b.getLastModified());
-            }
-            return asc ? result : -result;
-        });
-        return sorted;
-    }
-
 }
