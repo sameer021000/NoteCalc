@@ -11,11 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class EditorHelper {
 
-    /**
-     * Renders the Account Editor screen.
-     *
-     * @param account The account to edit. If null, a new account is initialized.
-     */
+
     @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility", "NotifyDataSetChanged"})
     public static void openEditor(MainActivity activity, Account account) {
         if (activity.currentSnackbar != null) {
@@ -34,15 +30,7 @@ public class EditorHelper {
 
         ImageView btnBack = editorView.findViewById(R.id.btn_back);
         ImageView btnAnalytics = editorView.findViewById(R.id.btn_analytics);
-        if (btnAnalytics != null) {
-            ResponsiveUI.setupClickable(btnAnalytics, true, () -> {
-                if (activity.currentEditingAccount == null || (activity.currentEditingAccount.getRecords().isEmpty() && activity.currentEditingAccount.getBudgetRecords().isEmpty())) {
-                    android.widget.Toast.makeText(activity, "Add some records to view analytics", android.widget.Toast.LENGTH_SHORT).show();
-                } else {
-                    AnalyticsHelper.showAnalytics(activity, activity.currentEditingAccount, activity.mainContainer, () -> openEditor(activity, activity.currentEditingAccount));
-                }
-            });
-        }
+        AnalyticsHelper.setupAnalyticsButton(activity, btnAnalytics);
 
         EditText editTitle = editorView.findViewById(R.id.edit_account_title);
         TextView textTitleError = editorView.findViewById(R.id.text_title_error);
@@ -83,16 +71,8 @@ public class EditorHelper {
         activity.recordsAdapter = new RecordsAdapter(activity);
         listRecordsRecyclerView.setAdapter(activity.recordsAdapter);
 
-        android.widget.ImageView btnNCAgent = editorView.findViewById(R.id.btn_nc_agent);
-        if (btnNCAgent != null) {
-            btnNCAgent.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), ThemeManager.getPrimaryAccentColor(activity), 0f, 100f));
-            btnNCAgent.setColorFilter(activity.getColor(R.color.text_on_accent));
-            btnNCAgent.setImageResource(android.R.drawable.ic_btn_speak_now); // Unique microphone/voice icon representing natural language
-            btnNCAgent.setOnClickListener(v -> NCAgentHelper.showNCAgentBottomSheet(activity, activity.ncAgent));
-            if (account != null && account.isArchived()) {
-                btnNCAgent.setVisibility(View.GONE);
-            }
-        }
+        ImageView btnNCAgent = editorView.findViewById(R.id.btn_nc_agent);
+        NCAgentHelper.setupNCAgentButton(activity, btnNCAgent, account);
         
         new androidx.recyclerview.widget.ItemTouchHelper(TouchHelper.getRecordSwipeCallback(activity)).attachToRecyclerView(listRecordsRecyclerView);
         activity.textTotalValField = textTotalVal;
@@ -169,16 +149,9 @@ public class EditorHelper {
 
         EditorUIHelper.setupTitleWatcher(activity, editTitle, textTitleError);
 
-        ResponsiveUI.setupClickable(btnBack, false, () -> {
-            activity.dashboardSearchQuery = "";
-            if (activity.tempRecords != null) for (Record r : activity.tempRecords) r.setSelected(false);
-            if (activity.tempBudgetRecords != null) for (Record r : activity.tempBudgetRecords) r.setSelected(false);
-            DashboardHelper.showDashboard(activity);
-        });
+        DashboardHelper.setupBackButton(activity, btnBack);
 
-        ResponsiveUI.setupClickable(btnDate, () -> DialogHelper.showDatePicker(activity, activity.selectedRecordDate, btnDate, newDate -> activity.selectedRecordDate = newDate));
-
-        ResponsiveUI.setupClickable(btnCancelEdit, () -> EditorModeHelper.cancelEditRecordMode(activity));
+        EditorUIHelper.setupFormListeners(activity, btnDate, btnCancelEdit);
 
         EditorSaveHelper.setupSaveActions(activity, editTitle, editDesc, editAmount, btnAdd, btnSave);
 

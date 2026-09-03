@@ -58,6 +58,18 @@ public class AnalyticsHelper {
         updateAnalyticsData(context, account, 0, chart, tvTotalSpent, tvHighestTxn, tvDailyAvg, tvHighestDay, tvBudgetPercent, tvDateRange);
     }
 
+    public static void setupAnalyticsButton(MainActivity activity, android.widget.ImageView btnAnalytics) {
+        if (btnAnalytics != null) {
+            ResponsiveUI.setupClickable(btnAnalytics, true, () -> {
+                if (activity.currentEditingAccount == null || (activity.currentEditingAccount.getRecords().isEmpty() && activity.currentEditingAccount.getBudgetRecords().isEmpty())) {
+                    android.widget.Toast.makeText(activity, "Add some records to view analytics", android.widget.Toast.LENGTH_SHORT).show();
+                } else {
+                    showAnalytics(activity, activity.currentEditingAccount, activity.mainContainer, () -> EditorHelper.openEditor(activity, activity.currentEditingAccount));
+                }
+            });
+        }
+    }
+
     private static void setupChartAppearance(Context context, BarChart chart) {
         chart.getDescription().setEnabled(false);
         chart.setDrawGridBackground(false);

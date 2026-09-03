@@ -13,7 +13,7 @@ import com.example.notecalc.ncagent.*;
 
 public class NCAgentHelper {
 
-        @android.annotation.SuppressLint("SetTextI18n")
+    @android.annotation.SuppressLint("SetTextI18n")
     public static void showNCAgentBottomSheet(MainActivity activity, NCAgent ncAgent) {
         android.app.Dialog dialog = new android.app.Dialog(activity, android.R.style.Theme_Translucent_NoTitleBar);
         
@@ -213,6 +213,18 @@ public class NCAgentHelper {
         });
         
         dialog.show();
+    }
+
+    public static void setupNCAgentButton(MainActivity activity, android.widget.ImageView btnNCAgent, Account account) {
+        if (btnNCAgent != null) {
+            btnNCAgent.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), ThemeManager.getPrimaryAccentColor(activity), 0f, 100f));
+            btnNCAgent.setColorFilter(activity.getColor(R.color.text_on_accent));
+            btnNCAgent.setImageResource(android.R.drawable.ic_btn_speak_now);
+            btnNCAgent.setOnClickListener(v -> showNCAgentBottomSheet(activity, activity.ncAgent));
+            if (account != null && account.isArchived()) {
+                btnNCAgent.setVisibility(android.view.View.GONE);
+            }
+        }
     }
 
 }
