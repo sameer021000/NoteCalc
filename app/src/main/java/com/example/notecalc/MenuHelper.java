@@ -25,7 +25,7 @@ public class MenuHelper {
         
         ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
-            DialogHelper.showPdfSortDialog(activity, order -> activity.generateAndOpenPdf(account, order));
+            DialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenPdf(activity, account, order));
         });
         
         View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
@@ -78,7 +78,7 @@ public class MenuHelper {
         
         ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
-            DialogHelper.showPdfSortDialog(activity, order -> activity.generateAndOpenGroupPdf(group, order));
+            DialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenGroupPdf(activity, group, order));
         });
         
         View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
@@ -182,7 +182,7 @@ public class MenuHelper {
             if (btnExport != null) {
                 ResponsiveUI.setupClickable(btnExport, false, () -> {
                     popupWindow.dismiss();
-                    DialogHelper.showPdfSortDialog(activity, order -> activity.generateAndOpenSelectedPdf(selectedRecords, order));
+                    DialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenSelectedPdf(activity, selectedRecords, order));
                 });
             }
             ResponsiveUI.setupClickable(btnCut, false, () -> {

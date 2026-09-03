@@ -94,7 +94,7 @@ private void initSettings() {
 
         android.widget.TextView btnExportPdf = settingsView.findViewById(R.id.btn_export_pdf_all);
         btnExportPdf.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getSecondaryAccentColor(activity), 0, 0f, 12f));
-        ResponsiveUI.setupClickable(btnExportPdf, true, activity::generateAndOpenAllPdf);
+        ResponsiveUI.setupClickable(btnExportPdf, true, () -> PdfHelper.generateAndOpenAllPdf(activity));
 
         // Format version container
         android.view.View versionContainer = settingsView.findViewById(R.id.version_container);
