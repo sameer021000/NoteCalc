@@ -8,15 +8,12 @@ import java.util.Locale;
 
 public class EditorUIHelper {
 
-    /**
-     * Helper to render the records in the table format.
-     */
     public static void populateRecordsList(MainActivity activity) {
         if (activity.recordsAdapter != null) {
             activity.recordsAdapter.refreshDisplay();
         }
 
-        // Toggle empty state and table rows visibility
+
         boolean isEmpty = StateHelper.getActiveRecords(activity).isEmpty();
         if (activity.editorEmptyState != null) {
             activity.editorEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
@@ -28,7 +25,7 @@ public class EditorUIHelper {
             activity.tableHeaderField.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         }
 
-        // Sync select-all header checkbox after any list change
+
         BulkActionsHelper.updateSelectAllHeaderState(activity);
         BulkActionsHelper.updateBulkActionsState(activity);
     }
@@ -43,35 +40,8 @@ public class EditorUIHelper {
         return maxIndex + 1;
     }
 
-    /**
-     * Evaluates if the entered title already exists in saved accounts.
-     */
-    public static boolean isDuplicateTitle(MainActivity activity, String title) {
-        for (Account acc : activity.appStorage.standaloneAccounts) {
-            if (activity.currentEditingAccount != null && acc.getTitle().equalsIgnoreCase(activity.originalTitle)) {
-                continue;
-            }
-            if (acc.getTitle().equalsIgnoreCase(title.trim())) {
-                return true;
-            }
-        }
-        for (AccountGroup group : activity.appStorage.groups) {
-            for (Account acc : group.getAccounts()) {
-                if (activity.currentEditingAccount != null && acc.getTitle().equalsIgnoreCase(activity.originalTitle)) {
-                    continue;
-                }
-                if (acc.getTitle().equalsIgnoreCase(title.trim())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
-    /**
-     * Updates the UI state of the editor's totals and bulk action views.
-     * @return true if any records are currently selected, false otherwise.
-     */
+
     public static boolean updateTotalsAndBulkActions(
             List<Record> activeRecords,
             int filteredRecordCount,
@@ -215,7 +185,7 @@ public class EditorUIHelper {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String input = s.toString().trim();
-                if (EditorUIHelper.isDuplicateTitle(activity, input)) {
+                if (EditorValidationHelper.isDuplicateTitle(activity, input)) {
                     textTitleError.setVisibility(View.VISIBLE);
                     editTitle.setBackground(ResponsiveUI.createRoundedBg(
                             activity,
