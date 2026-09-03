@@ -6,13 +6,8 @@ import android.widget.ImageView;
 import android.widget.EditText;
 import android.widget.TextView;
 import java.util.ArrayList;
-import android.view.MotionEvent;
-import android.text.TextWatcher;
-import android.text.Editable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import android.graphics.Color;
-import java.util.Locale;
 
 public class EditorHelper {
 
@@ -21,15 +16,14 @@ public class EditorHelper {
      *
      * @param account The account to edit. If null, a new account is initialized.
      */
-    @SuppressWarnings("deprecation")
     @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility", "NotifyDataSetChanged"})
     public static void openEditor(MainActivity activity, Account account) {
         if (activity.currentSnackbar != null) {
             activity.currentSnackbar.dismiss();
             activity.currentSnackbar = null;
         }
-                LayoutInflater inflater = activity.getLayoutInflater();
-                View editorView = inflater.inflate(R.layout.layout_editor, activity.mainContainer, false);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View editorView = inflater.inflate(R.layout.layout_editor, activity.mainContainer, false);
 
         activity.currentEditingAccount = account;
         activity.tempRecords = new ArrayList<>();
@@ -124,33 +118,7 @@ public class EditorHelper {
         activity.budgetFilterDateTo = null;
         activity.budgetFilterAmountFrom = null;
         activity.budgetFilterAmountTo = null;
-        activity.isFormInputsCollapsed = true;
-
-        Runnable toggleForm = () -> {
-            activity.isFormInputsCollapsed = !activity.isFormInputsCollapsed;
-            activity.formInputsContainer.setVisibility(activity.isFormInputsCollapsed ? View.GONE : View.VISIBLE);
-            activity.btnToggleForm.setText(activity.isFormInputsCollapsed ? "Expand [ + ]" : "Minimize [ - ]");
-        };
-        ResponsiveUI.setupClickable(activity.btnToggleForm, false, toggleForm);
-        
-        android.graphics.drawable.StateListDrawable toggleSelector = new android.graphics.drawable.StateListDrawable();
-        toggleSelector.addState(new int[]{android.R.attr.state_pressed}, new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        toggleSelector.addState(new int[]{}, ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 12.0f));
-        activity.btnToggleForm.setBackground(toggleSelector);
-        
-        int pLR = (int) (12 * activity.getResources().getDisplayMetrics().density);
-        int pTB = (int) (6 * activity.getResources().getDisplayMetrics().density);
-        activity.btnToggleForm.setPadding(pLR, pTB, pLR, pTB);
-
-        if (account == null) {
-            activity.isFormInputsCollapsed = false;
-            activity.formInputsContainer.setVisibility(View.VISIBLE);
-            activity.btnToggleForm.setText(activity.getString(R.string.auto_minimize_19));
-        } else {
-            activity.isFormInputsCollapsed = true;
-            activity.formInputsContainer.setVisibility(View.GONE);
-            activity.btnToggleForm.setText(activity.getString(R.string.auto_expand_20));
-        }
+        EditorUIHelper.setupFormToggle(activity, account);
 
         if (account != null && account.isArchived()) {
             if (formContainer != null) {
@@ -159,84 +127,16 @@ public class EditorHelper {
         }
 
         EditText editRecordsSearch = editorView.findViewById(R.id.edit_records_search);
-        editRecordsSearch.setBackground(ResponsiveUI.createRoundedBg(
-                activity,
-                ThemeManager.getBgSecondaryColor(activity),
-                ThemeManager.getBorderColor(activity),
-                1.0f,
-                8.0f
-        ));
+        EditorUIHelper.setupSearchBar(activity, editRecordsSearch);
 
-        editRecordsSearch.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (editRecordsSearch.getCompoundDrawablesRelative()[2] != null) {
-                    if (event.getRawX() >= (editRecordsSearch.getRight() - editRecordsSearch.getCompoundDrawablesRelative()[2].getBounds().width() - editRecordsSearch.getPaddingRight())) {
-                        editRecordsSearch.setText("");
-                        return true;
-                    }
-                }
-                v.performClick();
-            }
-            return false;
-        });
-        editRecordsSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                activity.currentRecordSearchQuery = s.toString();
-                activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
-            }
-        });
-
-        activity.cbSelectAllHeader.setOnCheckedChangeListener(null);
-        activity.cbSelectAllHeader.setChecked(false);
-        activity.cbSelectAllHeader.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (activity.recordsAdapter != null) {
-                for (Record r : activity.recordsAdapter.displayRecords) {
-                    r.setSelected(isChecked);
-                }
-                activity.recordsAdapter.notifyDataSetChanged();
-                BulkActionsHelper.updateBulkActionsState(activity);
-            }
-        });
-
-        if (activity.btnBulkActionsMenu != null) {
-            activity.btnBulkActionsMenu.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
-            ResponsiveUI.setupClickable(activity.btnBulkActionsMenu, true, () -> MenuHelper.showBulkActionsMenu(activity, activity.btnBulkActionsMenu));
-        }
+        EditorUIHelper.setupBulkActions(activity);
 
         activity.thSnoField = editorView.findViewById(R.id.th_sno);
         activity.thDescField = editorView.findViewById(R.id.th_desc);
         activity.thDateField = editorView.findViewById(R.id.th_date);
         activity.thAmountField = editorView.findViewById(R.id.th_amount);
-
-        activity.expenseSortColumn = 0;
-        activity.expenseSortAscending = false;
-        activity.budgetSortColumn = 0;
-        activity.budgetSortAscending = false;
-
-        activity.thSnoField.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
-        activity.thDescField.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
-        activity.thDateField.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
-        activity.thAmountField.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
-
-        ResponsiveUI.setupClickable(activity.thSnoField, false, () -> EditorSortHelper.onHeaderClicked(activity, 0));
-        ResponsiveUI.setupClickable(activity.thDescField, false, () -> EditorSortHelper.onHeaderClicked(activity, 1));
-
-        activity.thDateField.setOnClickListener(v -> EditorSortHelper.onHeaderClicked(activity, 2));
-        activity.thDateField.setOnLongClickListener(v -> {
-            FilterHelper.showDateRangeFilterDialog(activity);
-            return true;
-        });
-
-        activity.thAmountField.setOnClickListener(v -> EditorSortHelper.onHeaderClicked(activity, 3));
-        activity.thAmountField.setOnLongClickListener(v -> {
-            FilterHelper.showAmountRangeFilterDialog(activity);
-            return true;
-        });
-
-        EditorSortHelper.updateHeaderLabels(activity);
+        
+        EditorSortHelper.setupHeaderSortListeners(activity);
 
         if (account != null) {
             
@@ -248,73 +148,13 @@ public class EditorHelper {
             activity.originalTitle = account.getTitle();
             activity.tempRecords.addAll(account.getRecords());
             
-            boolean needsMigration = false;
-            for (Record r : activity.tempRecords) { if (r.getOriginalIndex() == -1) { needsMigration = true; break; } }
-            if (needsMigration) {
-                for (int i = 0; i < activity.tempRecords.size(); i++) {
-                    activity.tempRecords.get(i).setOriginalIndex(i);
-                }
-            }
-
-            if (account.getBudgetRecords() != null) {
-                activity.tempBudgetRecords.addAll(account.getBudgetRecords());
-                boolean needsBudgetMigration = false;
-                for (Record r : activity.tempBudgetRecords) { if (r.getOriginalIndex() == -1) { needsBudgetMigration = true; break; } }
-                if (needsBudgetMigration) {
-                    for (int i = 0; i < activity.tempBudgetRecords.size(); i++) {
-                        activity.tempBudgetRecords.get(i).setOriginalIndex(i);
-                    }
-                }
-            }
+            EditorUIHelper.migrateLegacyIndices(activity, account);
         } else {
             
             activity.originalTitle = "";
         }
         
-        Runnable updateModeToggleUI = () -> {
-            if (btnModeExpenses != null && btnModeBudget != null) {
-                btnModeExpenses.setBackgroundColor(activity.isBudgetMode ? ThemeManager.getBgSecondaryColor(activity) : ThemeManager.getPrimaryAccentColor(activity));
-                btnModeExpenses.setTextColor(activity.getColor(activity.isBudgetMode ? R.color.text_tertiary : R.color.text_on_accent));
-                
-                btnModeBudget.setBackgroundColor(activity.isBudgetMode ? ThemeManager.getPrimaryAccentColor(activity) : ThemeManager.getBgSecondaryColor(activity));
-                btnModeBudget.setTextColor(activity.getColor(activity.isBudgetMode ? R.color.text_on_accent : R.color.text_tertiary));
-            }
-            EditorSortHelper.applySorting(activity);
-              activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
-            EditorSortHelper.updateHeaderLabels(activity);
-            EditorSortHelper.updateDateHeaderIndicator(activity);
-            EditorSortHelper.updateAmountHeaderIndicator(activity);
-            
-            if (textRemainingPurse != null) {
-                if (activity.tempBudgetRecords.isEmpty() && !activity.isBudgetMode) {
-                    textRemainingPurse.setVisibility(View.GONE);
-                } else {
-                    textRemainingPurse.setVisibility(View.VISIBLE);
-                    double totalBudget = 0;
-                    for (Record r : activity.tempBudgetRecords) totalBudget += r.getAmount();
-                    double totalExpenses = 0;
-                    for (Record r : activity.tempRecords) totalExpenses += r.getAmount();
-                    double remaining = totalBudget - totalExpenses;
-                    textRemainingPurse.setText(String.format(Locale.getDefault(), "Balance : %.2f", remaining));
-                }
-            }
-        };
-        
-        if (btnModeExpenses != null) ResponsiveUI.setupClickable(btnModeExpenses, false, () -> {
-            if (activity.isBudgetMode) {
-                activity.isBudgetMode = false;
-                EditorModeHelper.cancelEditRecordMode(activity);
-                updateModeToggleUI.run();
-            }
-        });
-        if (btnModeBudget != null) ResponsiveUI.setupClickable(btnModeBudget, false, () -> {
-            if (!activity.isBudgetMode) {
-                activity.isBudgetMode = true;
-                EditorModeHelper.cancelEditRecordMode(activity);
-                updateModeToggleUI.run();
-            }
-        });
-        updateModeToggleUI.run();
+        EditorModeHelper.setupModeToggleUI(activity, btnModeExpenses, btnModeBudget, textRemainingPurse);
         EditorSortHelper.applySorting(activity);
         EditorUIHelper.populateRecordsList(activity);
 
@@ -327,37 +167,7 @@ public class EditorHelper {
 
         btnDate.setText(activity.selectedRecordDate);
 
-        editTitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String input = s.toString().trim();
-                if (EditorUIHelper.isDuplicateTitle(activity, input)) {
-                    textTitleError.setVisibility(View.VISIBLE);
-                    editTitle.setBackground(ResponsiveUI.createRoundedBg(
-                            activity,
-                            ThemeManager.getBgSecondaryColor(activity),
-                            activity.getColor(R.color.error_red),
-                            1.5f,
-                            6.0f
-                    ));
-                } else {
-                    textTitleError.setVisibility(View.GONE);
-                    editTitle.setBackground(ResponsiveUI.createRoundedBg(
-                            activity,
-                            ThemeManager.getBgSecondaryColor(activity),
-                            ThemeManager.getBorderColor(activity),
-                            1.0f,
-                            6.0f
-                    ));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+        EditorUIHelper.setupTitleWatcher(activity, editTitle, textTitleError);
 
         ResponsiveUI.setupClickable(btnBack, false, () -> {
             activity.dashboardSearchQuery = "";
@@ -377,5 +187,4 @@ public class EditorHelper {
         activity.mainContainer.removeAllViews();
         activity.mainContainer.addView(editorView);
     }
-
 }

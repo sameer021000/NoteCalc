@@ -40,7 +40,6 @@ public class EditorModeHelper {
         EditorUIHelper.populateRecordsList(activity);
     }
 
-
     public static void cancelEditRecordMode(MainActivity activity) {
         activity.editingRecordIndex = -1;
         activity.selectedRecordDate = AppUtils.getCurrentDateString();
@@ -70,6 +69,50 @@ public class EditorModeHelper {
         EditorUIHelper.populateRecordsList(activity);
     }
 
-
-
+    public static void setupModeToggleUI(MainActivity activity, android.widget.TextView btnModeExpenses, android.widget.TextView btnModeBudget, android.widget.TextView textRemainingPurse) {
+        Runnable updateModeToggleUI = () -> {
+            if (btnModeExpenses != null && btnModeBudget != null) {
+                btnModeExpenses.setBackgroundColor(activity.isBudgetMode ? ThemeManager.getBgSecondaryColor(activity) : ThemeManager.getPrimaryAccentColor(activity));
+                btnModeExpenses.setTextColor(activity.getColor(activity.isBudgetMode ? R.color.text_tertiary : R.color.text_on_accent));
+                
+                btnModeBudget.setBackgroundColor(activity.isBudgetMode ? ThemeManager.getPrimaryAccentColor(activity) : ThemeManager.getBgSecondaryColor(activity));
+                btnModeBudget.setTextColor(activity.getColor(activity.isBudgetMode ? R.color.text_on_accent : R.color.text_tertiary));
+            }
+            EditorSortHelper.applySorting(activity);
+            if (activity.recordsAdapter != null) activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
+            EditorSortHelper.updateHeaderLabels(activity);
+            EditorSortHelper.updateDateHeaderIndicator(activity);
+            EditorSortHelper.updateAmountHeaderIndicator(activity);
+            
+            if (textRemainingPurse != null) {
+                if (activity.tempBudgetRecords.isEmpty() && !activity.isBudgetMode) {
+                    textRemainingPurse.setVisibility(android.view.View.GONE);
+                } else {
+                    textRemainingPurse.setVisibility(android.view.View.VISIBLE);
+                    double totalBudget = 0;
+                    for (Record r : activity.tempBudgetRecords) totalBudget += r.getAmount();
+                    double totalExpenses = 0;
+                    for (Record r : activity.tempRecords) totalExpenses += r.getAmount();
+                    double remaining = totalBudget - totalExpenses;
+                    textRemainingPurse.setText(String.format(java.util.Locale.getDefault(), "Balance : %.2f", remaining));
+                }
+            }
+        };
+        
+        if (btnModeExpenses != null) ResponsiveUI.setupClickable(btnModeExpenses, false, () -> {
+            if (activity.isBudgetMode) {
+                activity.isBudgetMode = false;
+                EditorModeHelper.cancelEditRecordMode(activity);
+                updateModeToggleUI.run();
+            }
+        });
+        if (btnModeBudget != null) ResponsiveUI.setupClickable(btnModeBudget, false, () -> {
+            if (!activity.isBudgetMode) {
+                activity.isBudgetMode = true;
+                EditorModeHelper.cancelEditRecordMode(activity);
+                updateModeToggleUI.run();
+            }
+        });
+        updateModeToggleUI.run();
+    }
 }

@@ -84,5 +84,35 @@ public class EditorSortHelper {
         activity.thAmountField.setTextColor(active ? ThemeManager.getPrimaryAccentColor(activity) : ThemeManager.getSecondaryAccentColor(activity));
     }
 
+    public static void setupHeaderSortListeners(MainActivity activity) {
+        activity.expenseSortColumn = 0;
+        activity.expenseSortAscending = false;
+        activity.budgetSortColumn = 0;
+        activity.budgetSortAscending = false;
 
+        if (activity.thSnoField != null) activity.thSnoField.setBackground(ResponsiveUI.createButtonSelector(activity, android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+        if (activity.thDescField != null) activity.thDescField.setBackground(ResponsiveUI.createButtonSelector(activity, android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+        if (activity.thDateField != null) activity.thDateField.setBackground(ResponsiveUI.createButtonSelector(activity, android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+        if (activity.thAmountField != null) activity.thAmountField.setBackground(ResponsiveUI.createButtonSelector(activity, android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
+
+        if (activity.thSnoField != null) ResponsiveUI.setupClickable(activity.thSnoField, false, () -> EditorSortHelper.onHeaderClicked(activity, 0));
+        if (activity.thDescField != null) ResponsiveUI.setupClickable(activity.thDescField, false, () -> EditorSortHelper.onHeaderClicked(activity, 1));
+
+        if (activity.thDateField != null) {
+            activity.thDateField.setOnClickListener(v -> EditorSortHelper.onHeaderClicked(activity, 2));
+            activity.thDateField.setOnLongClickListener(v -> {
+                FilterHelper.showDateRangeFilterDialog(activity);
+                return true;
+            });
+        }
+
+        if (activity.thAmountField != null) {
+            activity.thAmountField.setOnClickListener(v -> EditorSortHelper.onHeaderClicked(activity, 3));
+            activity.thAmountField.setOnLongClickListener(v -> {
+                FilterHelper.showAmountRangeFilterDialog(activity);
+                return true;
+            });
+        }
+        updateHeaderLabels(activity);
+    }
 }
