@@ -5,11 +5,8 @@ import android.widget.Toast;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 public class AttachmentHelper {
     public static void handleActivityResult(MainActivity activity, int requestCode, int resultCode, android.content.Intent data) {
-        
-        
         if (requestCode == MainActivity.REQUEST_CODE_CAMERA) {
             if (resultCode == android.app.Activity.RESULT_OK && activity.currentPhotoPath != null) {
                 activity.tempAttachments.add(activity.currentPhotoPath);
@@ -26,7 +23,7 @@ public class AttachmentHelper {
             android.net.Uri uri = data.getData();
             try {
                 java.io.File attachmentsDir = new java.io.File(activity.getFilesDir(), "attachments");
-                if (!attachmentsDir.exists()) attachmentsDir.mkdirs();
+                if (!attachmentsDir.exists()) { boolean ignored = attachmentsDir.mkdirs(); }
                 
                 String originalName = "attachment_" + System.currentTimeMillis();
                 try (android.database.Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null)) {
@@ -63,7 +60,6 @@ public class AttachmentHelper {
             }
         }
     }
-
 
     @android.annotation.SuppressLint("SetTextI18n")
     public static void renderEditorAttachments(MainActivity activity) {
@@ -130,7 +126,4 @@ public class AttachmentHelper {
             }
         }
     }
-
-
-
 }
