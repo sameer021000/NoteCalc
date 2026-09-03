@@ -25,7 +25,6 @@ public class AppUtils {
         int length = text.length();
 
         while (start < length) {
-            // Skip leading spaces for the current line
             while (start < length && text.charAt(start) == ' ') {
                 start++;
             }
@@ -39,7 +38,6 @@ public class AppUtils {
             }
 
             if (start + count >= length) {
-                // The rest of the string fits
                 lines.add(text.substring(start));
                 break;
             }
@@ -48,11 +46,9 @@ public class AppUtils {
             int lastSpace = text.lastIndexOf(' ', end);
 
             if (lastSpace > start) {
-                // Break at the last space that fits
                 lines.add(text.substring(start, lastSpace));
                 start = lastSpace + 1;
             } else {
-                // No space found, forced character break
                 lines.add(text.substring(start, end));
                 start = end;
             }
