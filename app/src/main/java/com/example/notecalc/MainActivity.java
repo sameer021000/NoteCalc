@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         java.io.OutputStream os = getContentResolver().openOutputStream(uri);
                         if (os != null) {
-                            String json = appStorage.toJSONObject().toString(4);
+                            String json = AppStorageJsonMapper.toJSONObject(appStorage).toString(4);
                             os.write(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
                             os.close();
                             android.widget.Toast.makeText(this, "Backup Exported Successfully", android.widget.Toast.LENGTH_SHORT).show();
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                                 while ((line = reader.readLine()) != null) sb.append(line);
                                 if (is != null) is.close();
                                 
-                                appStorage = AppStorage.fromJSONObject(new org.json.JSONObject(sb.toString()));
+                                appStorage = AppStorageJsonMapper.fromJSONObject(new org.json.JSONObject(sb.toString()));
                                 StorageHelper.saveAppStorage(this, appStorage);
                                 DashboardHelper.showDashboard(MainActivity.this);
                                 android.widget.Toast.makeText(this, "Backup Restored!", android.widget.Toast.LENGTH_SHORT).show();

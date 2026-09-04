@@ -42,7 +42,7 @@ public class StorageHelper {
                     if (obj.has("groups")) {
                         JSONArray groupsArray = obj.getJSONArray("groups");
                         for (int i = 0; i < groupsArray.length(); i++) {
-                            storage.groups.add(AccountGroup.fromJSONObject(groupsArray.getJSONObject(i)));
+                            storage.groups.add(AccountGroupJsonMapper.fromJSONObject(groupsArray.getJSONObject(i)));
                         }
                     }
                     if (obj.has("standaloneAccounts")) {
@@ -65,7 +65,7 @@ public class StorageHelper {
             
             JSONArray groupsArray = new JSONArray();
             for (AccountGroup group : storage.groups) {
-                groupsArray.put(group.toJSONObject());
+                groupsArray.put(AccountGroupJsonMapper.toJSONObject(group));
             }
             root.put("groups", groupsArray);
             
