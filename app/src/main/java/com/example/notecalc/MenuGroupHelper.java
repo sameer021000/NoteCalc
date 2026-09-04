@@ -23,7 +23,7 @@ public class MenuGroupHelper {
         
         ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
-            DialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenGroupPdf(activity, group, order));
+            PdfDialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenGroupPdf(activity, group, order));
         });
         
         View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
@@ -44,7 +44,7 @@ public class MenuGroupHelper {
 
         ResponsiveUI.setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
-            DialogHelper.showDeleteGroupConfirmation(activity, group);
+            GroupDialogHelper.showDeleteGroupConfirmation(activity, group);
         });
         
         popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);

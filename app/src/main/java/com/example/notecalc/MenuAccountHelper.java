@@ -23,7 +23,7 @@ public class MenuAccountHelper {
         
         ResponsiveUI.setupClickable(btnDownload, false, () -> {
             popupWindow.dismiss();
-            DialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenPdf(activity, account, order));
+            PdfDialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenPdf(activity, account, order));
         });
         
         View btnArchive = popupView.findViewById(R.id.btn_popup_archive);
@@ -41,7 +41,7 @@ public class MenuAccountHelper {
 
         ResponsiveUI.setupClickable(btnDelete, false, () -> {
             popupWindow.dismiss();
-            DialogHelper.showDeleteAccountConfirmationDialog(activity, account);
+            AccountDialogHelper.showDeleteAccountConfirmationDialog(activity, account);
         });
         
         popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);

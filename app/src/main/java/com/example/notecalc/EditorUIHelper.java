@@ -232,7 +232,7 @@ public class EditorUIHelper {
     }
 
     public static void setupFormListeners(MainActivity activity, android.widget.TextView btnDate, android.widget.TextView btnCancelEdit) {
-        ResponsiveUI.setupClickable(btnDate, () -> DialogHelper.showDatePicker(activity, activity.selectedRecordDate, btnDate, newDate -> activity.selectedRecordDate = newDate));
+        ResponsiveUI.setupClickable(btnDate, () -> RecordDialogHelper.showDatePicker(activity, activity.selectedRecordDate, btnDate, newDate -> activity.selectedRecordDate = newDate));
         ResponsiveUI.setupClickable(btnCancelEdit, () -> EditorModeHelper.cancelEditRecordMode(activity));
     }
 }

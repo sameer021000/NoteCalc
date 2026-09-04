@@ -53,7 +53,7 @@ public class DashboardHelper {
 
         ResponsiveUI.setupClickable(btnCreateAccount, () -> activity.openEditor(null));
         if (btnCreateGroup != null) {
-            ResponsiveUI.setupClickable(btnCreateGroup, () -> DialogHelper.showCreateGroupDialog(activity));
+            ResponsiveUI.setupClickable(btnCreateGroup, () -> GroupDialogHelper.showCreateGroupDialog(activity));
         }
         ResponsiveUI.setupClickable(cardEmptyState, () -> {
             if (activity.currentViewGroup != null) {

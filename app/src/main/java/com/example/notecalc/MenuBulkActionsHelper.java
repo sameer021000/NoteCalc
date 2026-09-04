@@ -72,7 +72,7 @@ public class MenuBulkActionsHelper {
             if (btnExport != null) {
                 ResponsiveUI.setupClickable(btnExport, false, () -> {
                     popupWindow.dismiss();
-                    DialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenSelectedPdf(activity, selectedRecords, order));
+                    PdfDialogHelper.showPdfSortDialog(activity, order -> PdfHelper.generateAndOpenSelectedPdf(activity, selectedRecords, order));
                 });
             }
             ResponsiveUI.setupClickable(btnCut, false, () -> {
@@ -85,7 +85,7 @@ public class MenuBulkActionsHelper {
             });
             ResponsiveUI.setupClickable(btnDelete, false, () -> {
                 popupWindow.dismiss();
-                DialogHelper.showDeleteMultipleConfirmationDialog(activity, selectedRecords);
+                RecordDialogHelper.showDeleteMultipleConfirmationDialog(activity, selectedRecords);
             });
         }
         

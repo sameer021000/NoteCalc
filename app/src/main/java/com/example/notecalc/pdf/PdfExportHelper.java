@@ -2,14 +2,14 @@ package com.example.notecalc.pdf;
 
 import com.example.notecalc.Account;
 import com.example.notecalc.AccountGroup;
-import com.example.notecalc.DialogHelper;
+import com.example.notecalc.PdfDialogHelper;
 import com.example.notecalc.MainActivity;
 import com.example.notecalc.Record;
 
 public class PdfExportHelper {
 
     public static void generateAndOpenAllPdf(MainActivity activity) {
-        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(activity);
+        android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -54,7 +54,7 @@ public class PdfExportHelper {
     }
 
     public static void generateAndOpenGroupPdf(MainActivity activity, AccountGroup group, PdfSortOrder sortOrder) {
-        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(activity);
+        android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -91,7 +91,7 @@ public class PdfExportHelper {
     }
 
     public static void generateAndOpenPdf(MainActivity activity, Account account, PdfSortOrder sortOrder) {
-        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(activity);
+        android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
@@ -113,7 +113,7 @@ public class PdfExportHelper {
     public static void generateAndOpenSelectedPdf(MainActivity activity, java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
         
-        android.app.Dialog progressDialog = DialogHelper.showProgressDialog(activity);
+        android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
         
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();

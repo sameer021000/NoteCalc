@@ -50,7 +50,7 @@ public class DashboardUIHelper {
             DashboardHelper.refreshDashboardList(activity);
         });
         
-        if(btnTips != null) btnTips.setOnClickListener(v -> DialogHelper.showTipsDialog(activity));
+        if(btnTips != null) btnTips.setOnClickListener(v -> AppDialogHelper.showTipsDialog(activity));
     }
 
     public static void applyDashboardStyling(MainActivity activity, View btnCreateAccount, View btnCreateGroup, View cardEmptyState) {

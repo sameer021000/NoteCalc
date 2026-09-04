@@ -143,7 +143,7 @@ import android.graphics.Color;
                             
 
                             
-                            DialogHelper.showMoveAccountDialog(activity, account);
+                            AccountDialogHelper.showMoveAccountDialog(activity, account);
                         }
                     });
                 }
@@ -188,7 +188,7 @@ import android.graphics.Color;
                     DashboardHelper.showDashboard(activity);
                 }, () -> MenuHelper.showGroupPopupMenu(activity, grpHolder.itemView, group));
                 
-                ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> DialogHelper.showDeleteGroupConfirmation(activity, group));
+                ResponsiveUI.setupClickable(grpHolder.btnDeleteGroup, false, () -> GroupDialogHelper.showDeleteGroupConfirmation(activity, group));
             }
         }
 
