@@ -41,47 +41,7 @@ public class PdfExportHelper {
                     return;
                 }
 
-                java.io.File pdfDir = activity.getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
-                if (pdfDir == null) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                if (!pdfDir.exists() && !pdfDir.mkdirs()) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Failed to create directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                java.io.File file = new java.io.File(pdfDir, "All_Accounts_Export.pdf");
-                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
-                    document.writeTo(fos);
-                }
-                try { document.close(); } catch (Exception ignored) {}
-
-                activity.runOnUiThread(() -> {
-                    progressDialog.dismiss();
-                    try {
-                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".fileprovider", file);
-                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(uri, "application/pdf");
-                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        
-                        if (intent.resolveActivity(activity.getPackageManager()) == null) {
-                            android.widget.Toast.makeText(activity, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        activity.startActivity(intent);
-                    } catch (Exception ex) {
-                        android.widget.Toast.makeText(activity, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
-                    }
-                });
+                PdfIOHelper.saveAndOpenPdf(activity, document, "All_Accounts_Export.pdf", progressDialog);
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
                 activity.runOnUiThread(() -> {
@@ -118,47 +78,7 @@ public class PdfExportHelper {
                     return;
                 }
 
-                java.io.File pdfDir = activity.getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
-                if (pdfDir == null) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                if (!pdfDir.exists() && !pdfDir.mkdirs()) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Failed to create directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                java.io.File file = new java.io.File(pdfDir, group.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + "_Export.pdf");
-                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
-                    document.writeTo(fos);
-                }
-                try { document.close(); } catch (Exception ignored) {}
-
-                activity.runOnUiThread(() -> {
-                    progressDialog.dismiss();
-                    try {
-                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".fileprovider", file);
-                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(uri, "application/pdf");
-                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        
-                        if (intent.resolveActivity(activity.getPackageManager()) == null) {
-                            android.widget.Toast.makeText(activity, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        activity.startActivity(intent);
-                    } catch (Exception ex) {
-                        android.widget.Toast.makeText(activity, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
-                    }
-                });
+                PdfIOHelper.saveAndOpenPdf(activity, document, group.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + "_Export.pdf", progressDialog);
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
                 activity.runOnUiThread(() -> {
@@ -178,47 +98,7 @@ public class PdfExportHelper {
             try {
                 int[] pageTracker = {0};
                 PdfRenderHelper.appendAccountToPdf(activity, document, account, pageTracker, sortOrder);
-                java.io.File pdfDir = activity.getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
-                if (pdfDir == null) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                if (!pdfDir.exists() && !pdfDir.mkdirs()) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Failed to create directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                java.io.File file = new java.io.File(pdfDir, account.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + ".pdf");
-                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
-                    document.writeTo(fos);
-                }
-                try { document.close(); } catch (Exception ignored) {}
-                
-                activity.runOnUiThread(() -> {
-                    progressDialog.dismiss();
-                    try {
-                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".fileprovider", file);
-                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(uri, "application/pdf");
-                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        
-                        if (intent.resolveActivity(activity.getPackageManager()) == null) {
-                            android.widget.Toast.makeText(activity, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        activity.startActivity(intent);
-                    } catch (Exception ex) {
-                        android.widget.Toast.makeText(activity, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
-                    }
-                });
+                PdfIOHelper.saveAndOpenPdf(activity, document, account.getTitle().replaceAll("[\\\\/:*?\"<>|]", "_") + ".pdf", progressDialog);
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
                 activity.runOnUiThread(() -> {
@@ -240,47 +120,7 @@ public class PdfExportHelper {
             try {
                 int[] pageTracker = {0};
                 PdfRenderHelper.appendSelectedRecordsToPdf(activity, document, activity.currentEditingAccount, selectedRecords, pageTracker, sortOrder);
-                java.io.File pdfDir = activity.getExternalFilesDir(android.os.Environment.DIRECTORY_DOCUMENTS);
-                if (pdfDir == null) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Cannot access documents directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                if (!pdfDir.exists() && !pdfDir.mkdirs()) {
-                    activity.runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        android.widget.Toast.makeText(activity, "Failed to create directory.", android.widget.Toast.LENGTH_LONG).show();
-                    });
-                    document.close();
-                    return;
-                }
-                java.io.File file = new java.io.File(pdfDir, "Selected_Export.pdf");
-                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
-                    document.writeTo(fos);
-                }
-                try { document.close(); } catch (Exception ignored) {}
-                
-                activity.runOnUiThread(() -> {
-                    progressDialog.dismiss();
-                    try {
-                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".fileprovider", file);
-                        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(uri, "application/pdf");
-                        intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        
-                        if (intent.resolveActivity(activity.getPackageManager()) == null) {
-                            android.widget.Toast.makeText(activity, "No PDF viewer installed. Please install one from the Play Store.", android.widget.Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        activity.startActivity(intent);
-                    } catch (Exception ex) {
-                        android.widget.Toast.makeText(activity, "Failed to open PDF: " + ex.getMessage(), android.widget.Toast.LENGTH_LONG).show();
-                    }
-                });
+                PdfIOHelper.saveAndOpenPdf(activity, document, "Selected_Export.pdf", progressDialog);
             } catch (Exception e) {
                 android.util.Log.e("NoteCalc", "Failed to generate PDF", e);
                 activity.runOnUiThread(() -> {
