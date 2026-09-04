@@ -39,18 +39,11 @@ public class StorageHelper {
                 } else if (json instanceof JSONObject) {
                     // New format
                     JSONObject obj = (JSONObject) json;
-                    if (obj.has("groups")) {
-                        JSONArray groupsArray = obj.getJSONArray("groups");
-                        for (int i = 0; i < groupsArray.length(); i++) {
-                            storage.groups.add(AccountGroupJsonMapper.fromJSONObject(groupsArray.getJSONObject(i)));
-                        }
-                    }
-                    if (obj.has("standaloneAccounts")) {
-                        JSONArray accountsArray = obj.getJSONArray("standaloneAccounts");
-                        for (int i = 0; i < accountsArray.length(); i++) {
-                            storage.standaloneAccounts.add(AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i)));
-                        }
-                    }
+                    
+                    // Use the dedicated mapper to handle all groups and accounts mapping!
+                    AppStorage loadedStorage = AppStorageJsonMapper.fromJSONObject(obj);
+                    storage.groups.addAll(loadedStorage.groups);
+                    storage.standaloneAccounts.addAll(loadedStorage.standaloneAccounts);
                 }
             }
         } catch (IOException | JSONException e) {
@@ -61,20 +54,8 @@ public class StorageHelper {
 
     public static void saveAppStorage(Context context, AppStorage storage) {
         try {
-            JSONObject root = new JSONObject();
-            
-            JSONArray groupsArray = new JSONArray();
-            for (AccountGroup group : storage.groups) {
-                groupsArray.put(AccountGroupJsonMapper.toJSONObject(group));
-            }
-            root.put("groups", groupsArray);
-            
-            JSONArray accountsArray = new JSONArray();
-            for (Account account : storage.standaloneAccounts) {
-                accountsArray.put(AccountJsonMapper.toJSONObject(account));
-            }
-            root.put("standaloneAccounts", accountsArray);
-            
+            // Let the dedicated mapper handle all the heavy lifting!
+            JSONObject root = AppStorageJsonMapper.toJSONObject(storage);
             String jsonStr = root.toString();
             File file = new File(context.getFilesDir(), FILE_NAME);
             try (FileOutputStream fos = new FileOutputStream(file)) {
