@@ -20,7 +20,7 @@ public class NCAgentHelper {
         LinearLayout root = new LinearLayout(activity);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setGravity(android.view.Gravity.BOTTOM);
-        root.setBackgroundColor(0x80000000); // dim background
+        root.setBackgroundColor(0x80000000);
         
         LinearLayout sheet = new LinearLayout(activity);
         sheet.setOrientation(LinearLayout.VERTICAL);
@@ -84,11 +84,11 @@ public class NCAgentHelper {
         root.addView(sheet, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         
         root.setOnClickListener(v -> dialog.dismiss());
-        sheet.setOnClickListener(v -> {}); // prevent dismiss when clicking sheet
+        sheet.setOnClickListener(v -> {});
         
         dialog.setContentView(root);
         
-        // State variables to hold parsed actions
+
         List<NCAction> parsedActions = new ArrayList<>();
         
         btnAnalyze.setOnClickListener(v -> {
@@ -98,7 +98,7 @@ public class NCAgentHelper {
             parsedActions.clear();
             parsedActions.addAll(ncAgent.process(text, StateHelper.getActiveRecords(activity)));
             
-            // Build Preview UI
+
             previewContainer.removeAllViews();
             input.setVisibility(View.GONE);
             btnAnalyze.setVisibility(View.GONE);
@@ -139,7 +139,7 @@ public class NCAgentHelper {
                         CheckBox cb = new CheckBox(activity);
                         cb.setText(matched.getDescription() + " (?" + matched.getAmount() + ") - " + matched.getDate());
                         cb.setTextColor(activity.getColor(R.color.text_primary));
-                        // Save the checkbox view in a tag to retrieve its state on Confirm
+
                         cb.setTag(matched);
                         card.addView(cb);
                     }
@@ -163,7 +163,7 @@ public class NCAgentHelper {
                 if (!action.isValid()) continue;
                 
                 if (action.isNeedsDisambiguation()) {
-                    // Find the card view
+
                     LinearLayout card = (LinearLayout) previewContainer.getChildAt(i);
                     for (int j = 0; j < card.getChildCount(); j++) {
                         View child = card.getChildAt(j);
@@ -226,5 +226,4 @@ public class NCAgentHelper {
             }
         }
     }
-
 }
