@@ -2,7 +2,7 @@ package com.example.notecalc.pdf;
 
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import com.example.notecalc.AppUtils;
+import com.example.notecalc.DateUtils;
 import com.example.notecalc.Record;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -127,7 +127,7 @@ public class PdfTableHelper {
                 currentY += 12f;
             }
 
-            state.canvas.drawText(AppUtils.formatDateCompact(rec.getDate()), theme.margin + colSno + colDesc + 4, state.y + 15f, theme.cellMutedPaint);
+            state.canvas.drawText(DateUtils.formatDateCompact(rec.getDate()), theme.margin + colSno + colDesc + 4, state.y + 15f, theme.cellMutedPaint);
             String timeStr = rec.getTimestampMillis() > 0 ? timeSdf.format(new Date(rec.getTimestampMillis())) : "-";
             state.canvas.drawText(timeStr, theme.margin + colSno + colDesc + colDate + 4, state.y + 15f, theme.cellMutedPaint);
 

@@ -21,7 +21,7 @@ public class AppStorage {
         
         JSONArray accountsArray = new JSONArray();
         for (Account account : standaloneAccounts) {
-            accountsArray.put(account.toJSONObject());
+            accountsArray.put(AccountJsonMapper.toJSONObject(account));
         }
         root.put("standaloneAccounts", accountsArray);
         return root;
@@ -38,7 +38,7 @@ public class AppStorage {
         if (obj.has("standaloneAccounts")) {
             JSONArray accountsArray = obj.getJSONArray("standaloneAccounts");
             for (int i = 0; i < accountsArray.length(); i++) {
-                storage.standaloneAccounts.add(Account.fromJSONObject(accountsArray.getJSONObject(i)));
+                storage.standaloneAccounts.add(AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i)));
             }
         }
         return storage;

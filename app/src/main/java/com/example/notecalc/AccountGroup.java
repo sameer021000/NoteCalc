@@ -94,7 +94,7 @@ public class AccountGroup {
         
         JSONArray accountsArray = new JSONArray();
         for (Account account : accounts) {
-            accountsArray.put(account.toJSONObject());
+            accountsArray.put(AccountJsonMapper.toJSONObject(account));
         }
         obj.put("accounts", accountsArray);
         obj.put("sortMode", sortMode);
@@ -112,7 +112,7 @@ public class AccountGroup {
         if (obj.has("accounts")) {
             JSONArray accountsArray = obj.getJSONArray("accounts");
             for (int i = 0; i < accountsArray.length(); i++) {
-                accounts.add(Account.fromJSONObject(accountsArray.getJSONObject(i)));
+                accounts.add(AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i)));
             }
         }
         AccountGroup group = new AccountGroup(title, accounts, lastModified);

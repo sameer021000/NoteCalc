@@ -46,8 +46,8 @@ public class EditorSaveHelper {
 
             if (!EditorValidationHelper.validateAccountTitle(activity, title)) return;
 
-            AppUtils.resequentializeRecords(activity.tempRecords);
-            AppUtils.resequentializeRecords(activity.tempBudgetRecords);
+            RecordUtils.resequentializeRecords(activity.tempRecords);
+            RecordUtils.resequentializeRecords(activity.tempBudgetRecords);
 
             if (activity.currentEditingAccount == null) {
                 Account newAccount = new Account(title, activity.tempRecords, System.currentTimeMillis());

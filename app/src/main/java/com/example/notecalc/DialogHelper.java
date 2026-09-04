@@ -279,7 +279,7 @@ public static void showCreateGroupDialog(MainActivity activity) {
             // Build a simple text row for each selected item
             TextView rowView = new TextView(activity);
             String lineText = "• " + r.getDescription()
-                    + "   " + AppUtils.formatDateCompact(r.getDate())
+                    + "   " + DateUtils.formatDateCompact(r.getDate())
                     + "   " + String.format(Locale.getDefault(), "%.2f", r.getAmount());
             rowView.setText(lineText);
             rowView.setTextColor(activity.getColor(R.color.text_primary));
@@ -467,7 +467,7 @@ public static void showPdfSortDialog(MainActivity activity, PdfSortCallback call
         tvAmount.setText(String.format(Locale.getDefault(), "%.2f", account.calculateTotal()));
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String accountDateFormatted = sdf.format(new Date(account.getLastModified()));
-        tvDate.setText(accountDateFormatted + " (" + AppUtils.formatDateCompact(accountDateFormatted) + ")");
+        tvDate.setText(accountDateFormatted + " (" + DateUtils.formatDateCompact(accountDateFormatted) + ")");
 
         // Apply premium styling
         dialogRoot.setBackground(ResponsiveUI.createRoundedBg(

@@ -114,7 +114,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                 holder.revertDateTask = null;
             }
             holder.isShowingDay = false;
-            holder.tvDate.setText(AppUtils.formatDateCompact(record.getDate()));
+            holder.tvDate.setText(DateUtils.formatDateCompact(record.getDate()));
             
             holder.tvDate.setOnClickListener(v -> {
                 if (holder.isShowingDay) {
@@ -123,7 +123,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                         holder.revertDateTask = null;
                     }
                     holder.isShowingDay = false;
-                    holder.tvDate.setText(AppUtils.formatDateCompact(record.getDate()));
+                    holder.tvDate.setText(DateUtils.formatDateCompact(record.getDate()));
                 } else {
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -138,7 +138,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                             }
                             holder.revertDateTask = () -> {
                                 holder.isShowingDay = false;
-                                holder.tvDate.setText(AppUtils.formatDateCompact(record.getDate()));
+                                holder.tvDate.setText(DateUtils.formatDateCompact(record.getDate()));
                                 holder.revertDateTask = null;
                             };
                             holder.tvDate.postDelayed(holder.revertDateTask, 5000);

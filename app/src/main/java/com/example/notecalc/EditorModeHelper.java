@@ -42,7 +42,7 @@ public class EditorModeHelper {
 
     public static void cancelEditRecordMode(MainActivity activity) {
         activity.editingRecordIndex = -1;
-        activity.selectedRecordDate = AppUtils.getCurrentDateString();
+        activity.selectedRecordDate = DateUtils.getCurrentDateString();
 
         activity.editDescField.setText("");
         activity.editAmountField.setText("");

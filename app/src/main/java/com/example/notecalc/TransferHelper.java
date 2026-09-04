@@ -237,7 +237,7 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
         
         if (isCut) {
             StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
-            AppUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
+            RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
             if (activity.recordsAdapter != null) {
                 activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             }

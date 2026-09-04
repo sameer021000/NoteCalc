@@ -1,7 +1,7 @@
 package com.example.notecalc.pdf;
 
 import android.graphics.pdf.PdfDocument;
-import com.example.notecalc.AppUtils;
+import com.example.notecalc.CanvasTextHelper;
 import com.example.notecalc.MainActivity;
 import com.example.notecalc.Record;
 import java.util.LinkedHashMap;
@@ -30,7 +30,7 @@ public class PdfDocumentRenderer {
 
         float titleLineHeight = 28f;
         float maxTitleWidth = contentWidth - 15f;
-        List<String> titleLines = AppUtils.wrapText(titleText, theme.titlePaint, maxTitleWidth);
+        List<String> titleLines = CanvasTextHelper.wrapText(titleText, theme.titlePaint, maxTitleWidth);
         for (String line : titleLines) {
             state.canvas.drawText(line, theme.margin, state.y + 22f, theme.titlePaint);
             state.y += titleLineHeight;

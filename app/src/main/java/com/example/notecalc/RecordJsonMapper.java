@@ -28,7 +28,7 @@ public class RecordJsonMapper {
         String description = obj.getString("description");
         double amount = obj.getDouble("amount");
         String date = obj.getString("date");
-        date = AppUtils.formatToDdMmYyyy(date);
+        date = DateUtils.formatToDdMmYyyy(date);
         String remarks = obj.optString("remarks", "");
         String category = obj.optString("category", "");
         int originalIndex = obj.optInt("originalIndex", -1);

@@ -34,7 +34,7 @@ public class StorageHelper {
                     // Legacy migration: It's an array of accounts
                     JSONArray array = (JSONArray) json;
                     for (int i = 0; i < array.length(); i++) {
-                        storage.standaloneAccounts.add(Account.fromJSONObject(array.getJSONObject(i)));
+                        storage.standaloneAccounts.add(AccountJsonMapper.fromJSONObject(array.getJSONObject(i)));
                     }
                 } else if (json instanceof JSONObject) {
                     // New format
@@ -48,7 +48,7 @@ public class StorageHelper {
                     if (obj.has("standaloneAccounts")) {
                         JSONArray accountsArray = obj.getJSONArray("standaloneAccounts");
                         for (int i = 0; i < accountsArray.length(); i++) {
-                            storage.standaloneAccounts.add(Account.fromJSONObject(accountsArray.getJSONObject(i)));
+                            storage.standaloneAccounts.add(AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i)));
                         }
                     }
                 }
@@ -71,7 +71,7 @@ public class StorageHelper {
             
             JSONArray accountsArray = new JSONArray();
             for (Account account : storage.standaloneAccounts) {
-                accountsArray.put(account.toJSONObject());
+                accountsArray.put(AccountJsonMapper.toJSONObject(account));
             }
             root.put("standaloneAccounts", accountsArray);
             

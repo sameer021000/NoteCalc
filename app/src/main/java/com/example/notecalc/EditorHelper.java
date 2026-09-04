@@ -25,7 +25,7 @@ public class EditorHelper {
         activity.tempRecords = new ArrayList<>();
         activity.tempBudgetRecords = new ArrayList<>();
         activity.isBudgetMode = false;
-        activity.selectedRecordDate = AppUtils.getCurrentDateString();
+        activity.selectedRecordDate = DateUtils.getCurrentDateString();
         activity.editingRecordIndex = -1;
 
         ImageView btnBack = editorView.findViewById(R.id.btn_back);
