@@ -146,14 +146,14 @@ public class Account {
         
         JSONArray recordsArray = new JSONArray();
         for (Record record : records) {
-            recordsArray.put(record.toJSONObject());
+            recordsArray.put(RecordJsonMapper.toJSONObject(record));
         }
         obj.put("records", recordsArray);
         
         obj.put("hasBudget", hasBudget);
         JSONArray budgetArray = new JSONArray();
         for (Record record : budgetRecords) {
-            budgetArray.put(record.toJSONObject());
+            budgetArray.put(RecordJsonMapper.toJSONObject(record));
         }
         obj.put("budgetRecords", budgetArray);
         
@@ -169,7 +169,7 @@ public class Account {
         List<Record> records = new ArrayList<>();
         JSONArray recordsArray = obj.getJSONArray("records");
         for (int i = 0; i < recordsArray.length(); i++) {
-            records.add(Record.fromJSONObject(recordsArray.getJSONObject(i)));
+            records.add(RecordJsonMapper.fromJSONObject(recordsArray.getJSONObject(i)));
         }
         
         boolean hasBudget = obj.optBoolean("hasBudget", false);
@@ -177,7 +177,7 @@ public class Account {
         if (obj.has("budgetRecords")) {
             JSONArray budgetArray = obj.getJSONArray("budgetRecords");
             for (int i = 0; i < budgetArray.length(); i++) {
-                budgetRecords.add(Record.fromJSONObject(budgetArray.getJSONObject(i)));
+                budgetRecords.add(RecordJsonMapper.fromJSONObject(budgetArray.getJSONObject(i)));
             }
         }
         

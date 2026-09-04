@@ -85,4 +85,22 @@ public class AppUtils {
             copy.get(i).setOriginalIndex(i);
         }
     }
+
+    public static String formatToDdMmYyyy(String dateStr) {
+        if (dateStr == null) return "";
+        if (dateStr.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            return dateStr;
+        }
+        if (dateStr.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            try {
+                SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                Date date = parser.parse(dateStr);
+                if (date != null) {
+                    return formatter.format(date);
+                }
+            } catch (Exception ignored) {}
+        }
+        return dateStr;
+    }
 }
