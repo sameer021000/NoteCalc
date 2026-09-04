@@ -1,6 +1,5 @@
 package com.example.notecalc.pdf;
 
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import com.example.notecalc.AppUtils;
@@ -13,14 +12,7 @@ import java.util.Locale;
 
 public class PdfTableHelper {
 
-    public static class PdfState {
-        public PdfDocument.Page page;
-        public Canvas canvas;
-        public float y;
-        public int pageNum;
-    }
-
-    public static void drawRecordTable(PdfDocument document, PdfState state, PdfThemeHelper.PdfTheme theme, List<Record> records, String tableName, double totalAmt, String accountTitle, float colSno, float colDate, float colTime, float colAmount, float colDesc, float rowHeight) {
+    public static void drawRecordTable(PdfDocument document, PdfPageHelper.PdfState state, PdfThemeHelper.PdfTheme theme, List<Record> records, String tableName, double totalAmt, String accountTitle, float colSno, float colDate, float colTime, float colAmount, float colDesc, float rowHeight) {
         float bottomLimit = theme.pageHeight - theme.margin;
         int contentWidth = theme.pageWidth - theme.margin * 2;
         SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
@@ -28,13 +20,7 @@ public class PdfTableHelper {
         
         if (tableName != null) {
             if (state.y + 50f > bottomLimit) {
-                document.finishPage(state.page);
-                state.pageNum++;
-                PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(theme.pageWidth, theme.pageHeight, state.pageNum).create();
-                state.page = document.startPage(pageInfo);
-                state.canvas = state.page.getCanvas();
-                state.canvas.drawRect(0, 0, theme.pageWidth, theme.pageHeight, theme.bgPaint);
-                state.y = theme.margin;
+                PdfPageHelper.startNewPage(document, state, theme);
             }
             state.y += 10f;
             state.canvas.drawText(tableName, theme.margin, state.y + 15f, theme.titlePaint);
@@ -66,13 +52,7 @@ public class PdfTableHelper {
             actualRowHeight += (12f * numFiles);
 
             if (state.y + actualRowHeight > bottomLimit - 10f) {
-                document.finishPage(state.page);
-                state.pageNum++;
-                PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(theme.pageWidth, theme.pageHeight, state.pageNum).create();
-                state.page = document.startPage(pageInfo);
-                state.canvas = state.page.getCanvas();
-                state.canvas.drawRect(0, 0, theme.pageWidth, theme.pageHeight, theme.bgPaint);
-                state.y = theme.margin;
+                PdfPageHelper.startNewPage(document, state, theme);
 
                 state.canvas.drawText(accountTitle + " (contd.)", theme.margin, state.y + 13f, theme.subPaint);
                 state.y += 20f;
@@ -160,13 +140,7 @@ public class PdfTableHelper {
         }
 
         if (state.y + rowHeight + 30f > bottomLimit) {
-            document.finishPage(state.page);
-            state.pageNum++;
-            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(theme.pageWidth, theme.pageHeight, state.pageNum).create();
-            state.page = document.startPage(pageInfo);
-            state.canvas = state.page.getCanvas();
-            state.canvas.drawRect(0, 0, theme.pageWidth, theme.pageHeight, theme.bgPaint);
-            state.y = theme.margin;
+            PdfPageHelper.startNewPage(document, state, theme);
         }
 
         state.y += 4f;

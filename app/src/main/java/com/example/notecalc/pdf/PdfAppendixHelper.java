@@ -1,6 +1,5 @@
 package com.example.notecalc.pdf;
 
-import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 import com.example.notecalc.MainActivity;
 import com.example.notecalc.Record;
@@ -39,10 +38,11 @@ public class PdfAppendixHelper {
         
         float bottomLimit = theme.pageHeight - theme.margin;
         
-        int pageNum = pageTracker[0];
-        Canvas canvas = null;
-        PdfDocument.Page page = null;
-        float y = bottomLimit + 100f; 
+        PdfPageHelper.PdfState state = new PdfPageHelper.PdfState();
+        state.pageNum = pageTracker[0];
+        state.canvas = null;
+        state.page = null;
+        state.y = bottomLimit + 100f; 
         
         int colWidth = (theme.pageWidth - (theme.margin * 2) - 15) / 2;
         int maxImgHeight = 350;
@@ -60,36 +60,24 @@ public class PdfAppendixHelper {
             }
             if (imgPaths.isEmpty()) continue;
             
-            if (canvas == null || y + 50f > bottomLimit) {
-                if (page != null) document.finishPage(page);
-                pageNum++;
-                PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(theme.pageWidth, theme.pageHeight, pageNum).create();
-                page = document.startPage(pageInfo);
-                canvas = page.getCanvas();
-                canvas.drawRect(0, 0, theme.pageWidth, theme.pageHeight, theme.bgPaint);
-                y = theme.margin;
-                canvas.drawText("Attachments Appendix", theme.margin, y + 15f, theme.appendixTitlePaint);
-                y += 30f;
-                canvas.drawLine(theme.margin, y, theme.pageWidth - theme.margin, y, theme.dividerPaint);
+            if (state.canvas == null || state.y + 50f > bottomLimit) {
+                PdfPageHelper.startNewPage(document, state, theme);
+                state.canvas.drawText("Attachments Appendix", theme.margin, state.y + 15f, theme.appendixTitlePaint);
+                state.y += 30f;
+                state.canvas.drawLine(theme.margin, state.y, theme.pageWidth - theme.margin, state.y, theme.dividerPaint);
             }
-            y += 20f;
+            state.y += 20f;
             
             String recTitle = recordLabels.get(r);
             if (recTitle == null) recTitle = "Record: " + r.getDescription();
-            canvas.drawText(recTitle, theme.margin, y + 12f, theme.appendixSubPaint);
-            y += 20f;
+            state.canvas.drawText(recTitle, theme.margin, state.y + 12f, theme.appendixSubPaint);
+            state.y += 20f;
             
             for (int i = 0; i < imgPaths.size(); i += 2) {
-                if (y + 100f > bottomLimit) {
-                    document.finishPage(page);
-                    pageNum++;
-                    PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(theme.pageWidth, theme.pageHeight, pageNum).create();
-                    page = document.startPage(pageInfo);
-                    canvas = page.getCanvas();
-                    canvas.drawRect(0, 0, theme.pageWidth, theme.pageHeight, theme.bgPaint);
-                    y = theme.margin;
-                    canvas.drawText(recTitle + " (contd.)", theme.margin, y + 12f, theme.appendixSubPaint);
-                    y += 20f;
+                if (state.y + 100f > bottomLimit) {
+                    PdfPageHelper.startNewPage(document, state, theme);
+                    state.canvas.drawText(recTitle + " (contd.)", theme.margin, state.y + 12f, theme.appendixSubPaint);
+                    state.y += 20f;
                 }
                 
                 float rowMaxHeight = 0;
@@ -115,7 +103,7 @@ public class PdfAppendixHelper {
                             
                             float drawX = x + (colWidth - drawW) / 2f;
                             
-                            float spaceLeft = bottomLimit - y - 20f; 
+                            float spaceLeft = bottomLimit - state.y - 20f; 
                             if (drawH > spaceLeft && spaceLeft > 100f) {
                                 float newScale = spaceLeft / bitmap.getHeight();
                                 if(newScale < scale) {
@@ -126,8 +114,8 @@ public class PdfAppendixHelper {
                                 }
                             }
 
-                            android.graphics.Rect destRect = new android.graphics.Rect((int) drawX, (int) y, (int) (drawX + drawW), (int) (y + drawH));
-                            canvas.drawBitmap(bitmap, null, destRect, null);
+                            android.graphics.Rect destRect = new android.graphics.Rect((int) drawX, (int) state.y, (int) (drawX + drawW), (int) (state.y + drawH));
+                            state.canvas.drawBitmap(bitmap, null, destRect, null);
                             bitmap.recycle();
                             
                             String fileName = path;
@@ -141,7 +129,7 @@ public class PdfAppendixHelper {
                             if (!truncFn.equals(fileName)) truncFn += "…";
                             
                             float fnX = x + (colWidth - theme.appendixSubPaint.measureText(truncFn)) / 2f;
-                            canvas.drawText(truncFn, fnX, y + drawH + 15f, theme.appendixSubPaint);
+                            state.canvas.drawText(truncFn, fnX, state.y + drawH + 15f, theme.appendixSubPaint);
                             
                             if (drawH + 20f > rowMaxHeight) rowMaxHeight = drawH + 20f;
                         }
@@ -149,14 +137,14 @@ public class PdfAppendixHelper {
                         android.util.Log.e("NoteCalc", "Error appending attachment", e);
                     }
                 }
-                y += rowMaxHeight + 15f;
+                state.y += rowMaxHeight + 15f;
             }
         }
         
-        if (page != null) {
-            canvas.drawText("Generated by NoteCalc  •  Page " + pageNum, 40f, bottomLimit + 25f, theme.appendixSubPaint);
-            document.finishPage(page);
+        if (state.page != null) {
+            state.canvas.drawText("Generated by NoteCalc  •  Page " + state.pageNum, 40f, bottomLimit + 25f, theme.appendixSubPaint);
+            document.finishPage(state.page);
         }
-        pageTracker[0] = pageNum;
+        pageTracker[0] = state.pageNum;
     }
 }
