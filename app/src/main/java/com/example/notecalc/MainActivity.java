@@ -29,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
     androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
 
     FrameLayout mainContainer;
-    AppStorage appStorage;
-    AccountGroup currentViewGroup = null; // null means we are in the Dashboard
-    Account currentEditingAccount;
+    public AppStorage appStorage;
+    public AccountGroup currentViewGroup = null; // null means we are in the Dashboard
+    public Account currentEditingAccount;
     
     // Editor state
     List<Record> tempRecords;
