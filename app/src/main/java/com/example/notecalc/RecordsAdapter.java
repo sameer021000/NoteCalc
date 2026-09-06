@@ -11,10 +11,9 @@ import java.util.List;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.text.ParseException;
 
     @android.annotation.SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
-public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordViewHolder> {
+    public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordViewHolder> {
     private final MainActivity activity;
 
     public RecordsAdapter(MainActivity activity) {
@@ -40,53 +39,14 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
             refreshDisplay();
         }
 
-        /** Rebuilds the displayRecords list from tempRecords using the given query filter. */
         void setFilter(String query) {
             displayRecords.clear();
-            String q = (query == null ? "" : query.trim().toLowerCase(Locale.getDefault()));
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-            for (Record r : StateHelper.getActiveRecords(activity)) {
-                // Category filter
-                if (!filterCategories.isEmpty()) {
-                    if (!filterCategories.contains(r.getCategory())) continue;
-                }
-                // Text search filter
-                if (!q.isEmpty()) {
-                    boolean matchDesc = r.getDescription().toLowerCase(Locale.getDefault()).contains(q);
-                    boolean matchRem = r.getRemarks() != null && r.getRemarks().toLowerCase(Locale.getDefault()).contains(q);
-                    if (!matchDesc && !matchRem) {
-                        continue;
-                    }
-                }
-                // Date range filter
-                if (StateHelper.getFilterDateFrom(activity) != null || StateHelper.getFilterDateTo(activity) != null) {
-                    try {
-                        Date recordDate = sdf.parse(r.getDate());
-                        if (StateHelper.getFilterDateFrom(activity) != null) {
-                            Date from = sdf.parse(StateHelper.getFilterDateFrom(activity));
-                            if (recordDate != null && recordDate.before(from)) continue;
-                        }
-                        if (StateHelper.getFilterDateTo(activity) != null) {
-                            Date to = sdf.parse(StateHelper.getFilterDateTo(activity));
-                            if (recordDate != null && recordDate.after(to)) continue;
-                        }
-                    } catch (ParseException e) {
-                        android.util.Log.e("NoteCalc", "Date parse error", e);
-                    }
-                }
-                // Amount range filter
-                if (StateHelper.getFilterAmountFrom(activity) != null && r.getAmount() < StateHelper.getFilterAmountFrom(activity)) continue;
-                if (StateHelper.getFilterAmountTo(activity) != null && r.getAmount() > StateHelper.getFilterAmountTo(activity)) continue;
-
-                displayRecords.add(r);
-            }
+            displayRecords.addAll(RecordsFilterEngine.filterRecords(activity, StateHelper.getActiveRecords(activity), query, filterCategories));
             notifyDataSetChanged();
             BulkActionsHelper.updateBulkActionsState(activity);
         }
 
-        /** Call this whenever tempRecords changes (add/edit/delete/sort) to refresh display. */
         void refreshDisplay() {
-            // Preserve the current filter text if any — re-filter from scratch
             setFilter(activity.currentRecordSearchQuery);
         }
 
@@ -151,7 +111,6 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
 
             holder.tvAmount.setText(String.format(Locale.getDefault(), "%.2f", record.getAmount()));
 
-            // Bind remarks (show only if non-empty)
             String remarks = record.getRemarks();
             if (holder.tvRemarks != null) {
                 if (remarks != null && !remarks.isEmpty()) {
@@ -162,7 +121,6 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                 }
             }
             
-            // Bind category
             String category = record.getCategory();
             if (holder.tvCategory != null) {
                 if (category != null && !category.isEmpty()) {
@@ -173,104 +131,8 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                 }
             }
 
-            // Bind attachments
-            if (holder.attachmentSummary != null && holder.attachmentsScroll != null && holder.attachmentsContainer != null) {
-                if (record.getAttachments() != null && !record.getAttachments().isEmpty()) {
-                    java.util.List<String> atts = record.getAttachments();
-                    String firstPath = atts.get(0);
-                    java.io.File f = new java.io.File(firstPath);
-                    String name = f.getName();
-                    if (name.length() > 15) name = name.substring(0, 15) + "...";
-                    String icon = (firstPath.toLowerCase().endsWith(".pdf") || firstPath.toLowerCase().endsWith(".doc") || firstPath.toLowerCase().endsWith(".docx")) ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ";
-                    
-                    if (atts.size() == 1) {
-                        holder.attachmentSummary.setText(icon + name);
-                    } else {
-                        holder.attachmentSummary.setText(icon + name + " ▾"); // ?
-                    }
-                    
-                    holder.attachmentSummary.setVisibility(View.VISIBLE);
-                    holder.attachmentsScroll.setVisibility(View.GONE);
-                    
-                    holder.attachmentsScroll.setOnTouchListener((v, event) -> {
-                        int action = event.getActionMasked();
-                        if (action == android.view.MotionEvent.ACTION_DOWN || action == android.view.MotionEvent.ACTION_MOVE) {
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                        } else if (action == android.view.MotionEvent.ACTION_UP || action == android.view.MotionEvent.ACTION_CANCEL) {
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            if (action == android.view.MotionEvent.ACTION_UP) {
-                                v.performClick();
-                            }
-                        }
-                        return false;
-                    });
-                    
-                    holder.attachmentsContainer.removeAllViews();
-                    for (int i = 0; i < atts.size(); i++) {
-                        String path = atts.get(i);
-                        java.io.File file = new java.io.File(path);
-                        String fname = file.getName();
-                        if (fname.length() > 15) fname = fname.substring(0, 15) + "...";
-                        String ficon = (path.toLowerCase().endsWith(".pdf") || path.toLowerCase().endsWith(".doc") || path.toLowerCase().endsWith(".docx")) ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ";
-                        
-                        android.widget.TextView chip = new android.widget.TextView(activity);
-                        chip.setText(ficon + fname);
-                        chip.setTextSize(11);
-                        chip.setTextColor(activity.getColor(R.color.text_primary));
-                        chip.setBackground(ResponsiveUI.createButtonSelector(activity, ThemeManager.getBgSecondaryColor(activity), 6.0f));
-                        chip.setPadding(12, 6, 12, 6);
-                        android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-                        lp.setMargins(0, 0, 12, 0);
-                        chip.setLayoutParams(lp);
-                        
-                        chip.setOnTouchListener((v, event) -> {
-                            int action = event.getActionMasked();
-                            if (action == android.view.MotionEvent.ACTION_DOWN || action == android.view.MotionEvent.ACTION_MOVE) {
-                                v.getParent().getParent().getParent().requestDisallowInterceptTouchEvent(true);
-                            } else if (action == android.view.MotionEvent.ACTION_UP || action == android.view.MotionEvent.ACTION_CANCEL) {
-                                v.getParent().getParent().getParent().requestDisallowInterceptTouchEvent(false);
-                            }
-                            return false;
-                        });
-                        
-                        chip.setOnClickListener(_unused_v -> {
-                            try {
-                                android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
-                                android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                                viewIntent.setDataAndType(uri, activity.getContentResolver().getType(uri));
-                                viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                activity.startActivity(viewIntent);
-                            } catch (Exception e) {
-                                android.widget.Toast.makeText(activity, "Cannot open file", android.widget.Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        holder.attachmentsContainer.addView(chip);
-                    }
-                    
-                    ResponsiveUI.setupClickable(holder.attachmentSummary, false, () -> {
-                        if (atts.size() == 1) {
-                            try {
-                                android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", f);
-                                android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-                                viewIntent.setDataAndType(uri, activity.getContentResolver().getType(uri));
-                                viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                activity.startActivity(viewIntent);
-                            } catch (Exception e) {
-                                android.widget.Toast.makeText(activity, "Cannot open file", android.widget.Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            holder.attachmentSummary.setVisibility(View.GONE);
-                            holder.attachmentsScroll.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    
-                } else {
-                    holder.attachmentSummary.setVisibility(View.GONE);
-                    holder.attachmentsScroll.setVisibility(View.GONE);
-                }
-            }
+            RecordAttachmentBinder.bindAttachments(activity, record, holder);
             
-            // Bind selection checkbox without triggering the listener
             if (holder.cbSelect != null) {
                 holder.cbSelect.setVisibility(isSelectionMode ? View.VISIBLE : View.GONE);
                 holder.cbSelect.setOnCheckedChangeListener(null);
@@ -282,7 +144,6 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
                 });
             }
 
-            // Highlight row if actively being edited
             int rowBgColor = (position % 2 == 0) ? ThemeManager.getBgSecondaryColor(activity) : ThemeManager.getBgTertiaryColor(activity);
             if (trueIndex == activity.editingRecordIndex) {
                 holder.itemView.setBackground(ResponsiveUI.createRoundedBg(
@@ -348,4 +209,3 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordVi
             }
         }
     }
-
