@@ -8,15 +8,11 @@ import java.util.ArrayList;
 public class TransferHelper {
     @android.annotation.SuppressLint("SetTextI18n")
     public static void showTransferDialog(MainActivity activity, List<Record> selectedRecords, boolean isCut) {
-        List<Account> targetAccounts = new ArrayList<>();
-        for (AccountGroup g : activity.appStorage.groups) targetAccounts.addAll(g.getAccounts());
-        targetAccounts.addAll(activity.appStorage.standaloneAccounts);
+        List<Account> targetAccounts = StorageHelper.getValidTransferTargets(activity.appStorage, activity.currentEditingAccount);
         
         List<String> accountNames = new ArrayList<>();
         for (Account a : targetAccounts) {
-            if (a != activity.currentEditingAccount && !a.isArchived()) {
-                accountNames.add(a.getTitle());
-            }
+            accountNames.add(a.getTitle());
         }
         accountNames.sort(String.CASE_INSENSITIVE_ORDER);
         List<String> names = new ArrayList<>();
@@ -173,19 +169,9 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
                 return;
             }
             // Check if title exists
-            for (AccountGroup g : activity.appStorage.groups) {
-                for (Account a : g.getAccounts()) {
-                    if (a.getTitle().equalsIgnoreCase(title)) {
-                        android.widget.Toast.makeText(activity, "List with activity title already exists", android.widget.Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-            }
-            for (Account a : activity.appStorage.standaloneAccounts) {
-                if (a.getTitle().equalsIgnoreCase(title)) {
-                    android.widget.Toast.makeText(activity, "List with activity title already exists", android.widget.Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            if (StorageHelper.doesAccountExist(activity.appStorage, title)) {
+                android.widget.Toast.makeText(activity, "List with activity title already exists", android.widget.Toast.LENGTH_SHORT).show();
+                return;
             }
             
             dialog.dismiss();

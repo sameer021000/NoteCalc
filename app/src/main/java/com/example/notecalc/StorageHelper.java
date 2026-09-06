@@ -65,4 +65,34 @@ public class StorageHelper {
             android.util.Log.e("StorageHelper", "Error saving storage", e);
         }
     }
+
+    public static boolean doesAccountExist(AppStorage storage, String title) {
+        for (AccountGroup g : storage.groups) {
+            for (Account a : g.getAccounts()) {
+                if (a.getTitle().equalsIgnoreCase(title)) {
+                    return true;
+                }
+            }
+        }
+        for (Account a : storage.standaloneAccounts) {
+            if (a.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static java.util.List<Account> getValidTransferTargets(AppStorage storage, Account currentAccount) {
+        java.util.List<Account> targetAccounts = new java.util.ArrayList<>();
+        for (AccountGroup g : storage.groups) targetAccounts.addAll(g.getAccounts());
+        targetAccounts.addAll(storage.standaloneAccounts);
+        
+        java.util.List<Account> validTargets = new java.util.ArrayList<>();
+        for (Account a : targetAccounts) {
+            if (a != currentAccount && !a.isArchived()) {
+                validTargets.add(a);
+            }
+        }
+        return validTargets;
+    }
 }
