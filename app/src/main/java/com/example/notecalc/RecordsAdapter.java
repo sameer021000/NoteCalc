@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
     @android.annotation.SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.RecordViewHolder> {
@@ -68,46 +66,7 @@ import java.util.Date;
             holder.tvSno.setText(String.valueOf(record.getOriginalIndex() + 1));
             holder.tvDesc.setText(record.getDescription());
             
-            // Reset date view state to avoid recycling bugs
-            if (holder.revertDateTask != null) {
-                holder.tvDate.removeCallbacks(holder.revertDateTask);
-                holder.revertDateTask = null;
-            }
-            holder.isShowingDay = false;
-            holder.tvDate.setText(DateUtils.formatDateCompact(record.getDate()));
-            
-            holder.tvDate.setOnClickListener(v -> {
-                if (holder.isShowingDay) {
-                    if (holder.revertDateTask != null) {
-                        holder.tvDate.removeCallbacks(holder.revertDateTask);
-                        holder.revertDateTask = null;
-                    }
-                    holder.isShowingDay = false;
-                    holder.tvDate.setText(DateUtils.formatDateCompact(record.getDate()));
-                } else {
-                    try {
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                        Date d = sdf.parse(record.getDate());
-                        if (d != null) {
-                            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
-                            holder.tvDate.setText(dayFormat.format(d));
-                            holder.isShowingDay = true;
-                            
-                            if (holder.revertDateTask != null) {
-                                holder.tvDate.removeCallbacks(holder.revertDateTask);
-                            }
-                            holder.revertDateTask = () -> {
-                                holder.isShowingDay = false;
-                                holder.tvDate.setText(DateUtils.formatDateCompact(record.getDate()));
-                                holder.revertDateTask = null;
-                            };
-                            holder.tvDate.postDelayed(holder.revertDateTask, 5000);
-                        }
-                    } catch (Exception e) {
-                        android.util.Log.e("NoteCalc", "Error resetting date", e);
-                    }
-                }
-            });
+            RecordDateBinder.bindDateInteraction(record, holder);
 
             holder.tvAmount.setText(String.format(Locale.getDefault(), "%.2f", record.getAmount()));
 
