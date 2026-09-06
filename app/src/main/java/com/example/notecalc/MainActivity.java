@@ -117,56 +117,9 @@ public class MainActivity extends AppCompatActivity {
         settingsHelper = new SettingsHelper(this);
         androidx.activity.EdgeToEdge.enable(this);
         
-        exportJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                android.net.Uri uri = result.getData().getData();
-                if (uri != null) {
-                    try {
-                        java.io.OutputStream os = getContentResolver().openOutputStream(uri);
-                        if (os != null) {
-                            String json = AppStorageJsonMapper.toJSONObject(appStorage).toString(4);
-                            os.write(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-                            os.close();
-                            android.widget.Toast.makeText(this, "Backup Exported Successfully", android.widget.Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                        android.util.Log.e("NoteCalc", "Error exporting JSON", e);
-                        android.widget.Toast.makeText(this, "Export failed", android.widget.Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+        exportJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> BackupHelper.handleExportResult(this, result));
 
-        importJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                android.net.Uri uri = result.getData().getData();
-                if (uri != null) {
-                    new androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
-                        .setTitle(getString(R.string.auto_restore_backup_38))
-                        .setMessage(getString(R.string.auto_are_you_sure_this_wi_39))
-                        .setPositiveButton("Overwrite", (d, w) -> {
-                            try {
-                                java.io.InputStream is = getContentResolver().openInputStream(uri);
-                                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is));
-                                StringBuilder sb = new StringBuilder();
-                                String line;
-                                while ((line = reader.readLine()) != null) sb.append(line);
-                                if (is != null) is.close();
-                                
-                                appStorage = AppStorageJsonMapper.fromJSONObject(new org.json.JSONObject(sb.toString()));
-                                StorageHelper.saveAppStorage(this, appStorage);
-                                DashboardHelper.showDashboard(MainActivity.this);
-                                android.widget.Toast.makeText(this, "Backup Restored!", android.widget.Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                android.util.Log.e("NoteCalc", "Error restoring JSON", e);
-                                android.widget.Toast.makeText(this, "Invalid backup file", android.widget.Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-                }
-            }
-        });
+        importJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> BackupHelper.handleImportResult(this, result));
 
         setContentView(R.layout.activity_main);
 
@@ -186,23 +139,7 @@ public class MainActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (currentEditingAccount != null || (mainContainer.getChildAt(0) != null && mainContainer.getChildAt(0).getId() != R.id.dashboard_root)) {
-                    if (tempRecords != null) for (Record r : tempRecords) r.setSelected(false);
-                    if (tempBudgetRecords != null) for (Record r : tempBudgetRecords) r.setSelected(false);
-                    currentEditingAccount = null;
-                    tempRecords = null;
-                    tempBudgetRecords = null;
-                    dashboardSearchQuery = "";
-                    DashboardHelper.showDashboard(MainActivity.this);
-                } else if (currentViewGroup != null) {
-                    currentViewGroup = null;
-                    dashboardSearchQuery = "";
-                    DashboardHelper.showDashboard(MainActivity.this);
-                } else {
-                    setEnabled(false);
-                    getOnBackPressedDispatcher().onBackPressed();
-                    setEnabled(true);
-                }
+                NavigationHelper.handleBackPress(MainActivity.this, this);
             }
         });
 
