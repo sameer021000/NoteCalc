@@ -6,7 +6,7 @@ public class RecordCandidate {
     private String date;
     private String category;
     private String remarks;
-    
+
     public RecordCandidate() {}
 
     public String getDescription() { return description; }
@@ -23,7 +23,7 @@ public class RecordCandidate {
 
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
-    
+
     @Override
     public String toString() {
         return "RecordCandidate{" +

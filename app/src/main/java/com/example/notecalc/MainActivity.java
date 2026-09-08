@@ -1,5 +1,11 @@
 package com.example.notecalc;
-
+import com.example.notecalc.records.Record;
+import com.example.notecalc.records.*;
+import com.example.notecalc.editor.*;
+import com.example.notecalc.accounts.*;
+import com.example.notecalc.dashboard.*;
+import com.example.notecalc.storage.*;
+import com.example.notecalc.core.*;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,100 +21,100 @@ import androidx.core.view.WindowInsetsCompat;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
-    SettingsHelper settingsHelper;
+    public SettingsHelper settingsHelper;
 
-    final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
-    static final int REQUEST_CODE_ATTACH = 1001;
-    static final int REQUEST_CODE_CAMERA = 1002;
-    String currentPhotoPath = null;
-    android.widget.LinearLayout attachmentsContainer;
-    android.widget.HorizontalScrollView attachmentsScroll;
-    android.widget.TextView btnAttachFile;
+    public final java.util.List<String> tempAttachments = new java.util.ArrayList<>();
+    public static final int REQUEST_CODE_ATTACH = 1001;
+    public static final int REQUEST_CODE_CAMERA = 1002;
+    public String currentPhotoPath = null;
+    public android.widget.LinearLayout attachmentsContainer;
+    public android.widget.HorizontalScrollView attachmentsScroll;
+    public android.widget.TextView btnAttachFile;
 
-    androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
-    androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
+    public androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
+    public androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
 
-    FrameLayout mainContainer;
+    public FrameLayout mainContainer;
     public AppStorage appStorage;
     public AccountGroup currentViewGroup = null; // null means we are in the Dashboard
     public Account currentEditingAccount;
-    
+
     // Editor state
-    List<Record> tempRecords;
-    List<Record> tempBudgetRecords;
-    boolean isBudgetMode = false; // false = Expenses, true = Budget
-    
-    String originalTitle = "";
-    String selectedRecordDate = "";
+    public List<Record> tempRecords;
+    public List<Record> tempBudgetRecords;
+    public boolean isBudgetMode = false; // false = Expenses, true = Budget
 
-    int editingRecordIndex = -1;
-    EditText editDescField;
-    EditText editAmountField;
-    TextView btnRecordDateField;
-    TextView btnAddRecordField;
-    TextView btnCancelEditField;
-    TextView labelAddRecordField;
-    RecordsAdapter recordsAdapter;
-    AccountsAdapter accountsAdapter;
-    AccountsAdapter groupsAdapter;
-    String dashboardSearchQuery = "";
-    boolean groupSortAscending = true;
-    TextView btnSortTitle;
-    TextView btnSortTotal;
-    TextView btnSortLatest;
-    TextView btnSortGroupTitle;
-    TextView textTotalValField;
-    TextView textTotalLabelField;
-    com.google.android.material.snackbar.Snackbar currentSnackbar;
+    public String originalTitle = "";
+    public String selectedRecordDate = "";
 
-    TextView thSnoField;
-    TextView thDescField;
-    TextView thDateField;
-    TextView thAmountField;
+    public int editingRecordIndex = -1;
+    public EditText editDescField;
+    public EditText editAmountField;
+    public TextView btnRecordDateField;
+    public TextView btnAddRecordField;
+    public TextView btnCancelEditField;
+    public TextView labelAddRecordField;
+    public RecordsAdapter recordsAdapter;
+    public AccountsAdapter accountsAdapter;
+    public AccountsAdapter groupsAdapter;
+    public String dashboardSearchQuery = "";
+    public boolean groupSortAscending = true;
+    public TextView btnSortTitle;
+    public TextView btnSortTotal;
+    public TextView btnSortLatest;
+    public TextView btnSortGroupTitle;
+    public TextView textTotalValField;
+    public TextView textTotalLabelField;
+    public com.google.android.material.snackbar.Snackbar currentSnackbar;
 
-    int expenseSortColumn = 0;
-    boolean expenseSortAscending = false;
-    int budgetSortColumn = 0;
-    boolean budgetSortAscending = false;
-    
+    public TextView thSnoField;
+    public TextView thDescField;
+    public TextView thDateField;
+    public TextView thAmountField;
+
+    public int expenseSortColumn = 0;
+    public boolean expenseSortAscending = false;
+    public int budgetSortColumn = 0;
+    public boolean budgetSortAscending = false;
+
 
     // Dashboard sort state: 0 = Title, 1 = Total Spending, 2 = Latest Modified
-    int dashboardSortMode = 0;
-    boolean dashboardSortAscending = true;
-    
-    int archivedDashboardSortMode = 0;
-    boolean archivedDashboardSortAscending = true;
-    boolean archivedGroupSortAscending = true;
+    public int dashboardSortMode = 0;
+    public boolean dashboardSortAscending = true;
+
+    public int archivedDashboardSortMode = 0;
+    public boolean archivedDashboardSortAscending = true;
+    public boolean archivedGroupSortAscending = true;
 
     // Editor record search query (persists while in editor, reset on openEditor)
-    String currentRecordSearchQuery = "";
+    public String currentRecordSearchQuery = "";
 
     // Fields for collapsible form, remarks, empty state, and bulk delete
-    EditText editRemarksField;
-    android.widget.AutoCompleteTextView editCategoryField;
-    View formInputsContainer;
-    TextView btnToggleForm;
-    CheckBox cbSelectAllHeader;
-    ImageView btnBulkActionsMenu;
-    View editorEmptyState;
-    View rowSearchAndBulk;
-    View tableHeaderField;
-    boolean isFormInputsCollapsed = false;
+    public EditText editRemarksField;
+    public android.widget.AutoCompleteTextView editCategoryField;
+    public View formInputsContainer;
+    public TextView btnToggleForm;
+    public CheckBox cbSelectAllHeader;
+    public ImageView btnBulkActionsMenu;
+    public View editorEmptyState;
+    public View rowSearchAndBulk;
+    public View tableHeaderField;
+    public boolean isFormInputsCollapsed = false;
 
     // Bulk action container and selected total display
-    View containerBulkActions;
-    TextView textSelectedTotal;
+    public View containerBulkActions;
+    public TextView textSelectedTotal;
 
     // Date range filter state (dd-MM-yyyy strings, null = no filter)
-    String expenseFilterDateFrom = null;
-    String expenseFilterDateTo = null;
-    Double expenseFilterAmountFrom = null;
-    Double expenseFilterAmountTo = null;
+    public String expenseFilterDateFrom = null;
+    public String expenseFilterDateTo = null;
+    public Double expenseFilterAmountFrom = null;
+    public Double expenseFilterAmountTo = null;
 
-    String budgetFilterDateFrom = null;
-    String budgetFilterDateTo = null;
-    Double budgetFilterAmountFrom = null;
-    Double budgetFilterAmountTo = null;
+    public String budgetFilterDateFrom = null;
+    public String budgetFilterDateTo = null;
+    public Double budgetFilterAmountFrom = null;
+    public Double budgetFilterAmountTo = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         settingsHelper = new SettingsHelper(this);
         androidx.activity.EdgeToEdge.enable(this);
-        
+
         exportJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> BackupHelper.handleExportResult(this, result));
 
         importJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> BackupHelper.handleImportResult(this, result));
@@ -147,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
         DashboardHelper.showDashboard(MainActivity.this);
     }
 
-    final NCAgent ncAgent = new NCAgent();
-    void openEditor(Account account) {
+    public final NCAgent ncAgent = new NCAgent();
+    public void openEditor(Account account) {
         EditorHelper.openEditor(this, account);
     }
 

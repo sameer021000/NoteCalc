@@ -1,16 +1,15 @@
 package com.example.notecalc.ncagent;
-
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 import java.util.List;
 
 public class NCAction {
     private final NCAgentIntent intent;
     private Record targetRecord;
     private Record validatedRecord;
-    
+
     private boolean valid;
     private String errorMessage;
-    
+
     private boolean needsDisambiguation;
     private List<Record> disambiguationCandidates;
 

@@ -1,9 +1,8 @@
 package com.example.notecalc.pdf;
-
+import com.example.notecalc.accounts.*;
 import android.graphics.pdf.PdfDocument;
-import com.example.notecalc.Account;
 import com.example.notecalc.MainActivity;
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,20 +14,20 @@ public class PdfRenderHelper {
 
     public static void appendAccountToPdf(MainActivity activity, PdfDocument document, Account account, int[] pageTracker, PdfSortOrder sortOrder) {
         PdfThemeHelper.PdfTheme theme = new PdfThemeHelper.PdfTheme(activity);
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String lastMod = sdf.format(new Date(account.getLastModified()));
-        
+
         List<Record> expRecords = new ArrayList<>(account.getRecords());
         PdfSortHelper.sortRecords(expRecords, sortOrder);
-        
+
         List<Record> budRecords = new ArrayList<>(account.getBudgetRecords());
         PdfSortHelper.sortRecords(budRecords, sortOrder);
-        
+
         List<List<Record>> allRecordLists = new ArrayList<>();
         List<String> listNames = new ArrayList<>();
         List<Double> listTotals = new ArrayList<>();
-        
+
         if (!budRecords.isEmpty()) {
             allRecordLists.add(budRecords);
             listNames.add("Budgets");
@@ -57,10 +56,10 @@ public class PdfRenderHelper {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String lastMod = sdf.format(new Date(account.getLastModified()));
-        
+
         List<Record> recordsToPrint = new ArrayList<>(selectedRecords);
         PdfSortHelper.sortRecords(recordsToPrint, sortOrder);
-        
+
         double totalAmt = 0;
         for (Record r : recordsToPrint) totalAmt += r.getAmount();
 

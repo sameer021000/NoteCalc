@@ -1,5 +1,4 @@
 package com.example.notecalc.ncagent.parser;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -32,14 +31,14 @@ public class RecordSplitter {
     public List<String> split(String expenseLine) {
         List<String> segments = new ArrayList<>();
         if (expenseLine == null || expenseLine.trim().isEmpty()) return segments;
-        
+
         String[] parts = SEPARATOR_PATTERN.split(expenseLine);
         StringBuilder currentSegment = new StringBuilder();
-        
+
         for (String part : parts) {
             String trimmed = part.trim();
             if (trimmed.isEmpty()) continue;
-            
+
             if (currentSegment.length() > 0) {
                 if (hasAmount(currentSegment.toString()) && hasAmount(trimmed)) {
                     segments.add(currentSegment.toString().trim());
@@ -51,16 +50,16 @@ public class RecordSplitter {
                 currentSegment.append(trimmed);
             }
         }
-        
+
         if (currentSegment.length() > 0) {
             segments.add(currentSegment.toString().trim());
         }
-        
+
         if (segments.size() == 1) {
             segments.clear();
             segments.add(expenseLine.trim()); // preserve exact original if no split occurred
         }
-        
+
         return segments;
     }
 }

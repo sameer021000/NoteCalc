@@ -1,5 +1,4 @@
 package com.example.notecalc.pdf;
-
 import com.example.notecalc.MainActivity;
 import android.graphics.pdf.PdfDocument;
 import android.app.Dialog;
@@ -46,7 +45,7 @@ public class PdfIOHelper {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(uri, "application/pdf");
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                
+
                 if (intent.resolveActivity(activity.getPackageManager()) == null) {
                     Toast.makeText(activity, "No PDF viewer installed. Please install one from the Play Store.", Toast.LENGTH_LONG).show();
                     return;

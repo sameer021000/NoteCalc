@@ -1,22 +1,19 @@
 package com.example.notecalc.pdf;
-
-import com.example.notecalc.Account;
-import com.example.notecalc.AccountGroup;
-import com.example.notecalc.PdfDialogHelper;
+import com.example.notecalc.accounts.*;
 import com.example.notecalc.MainActivity;
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 
 public class PdfExportHelper {
 
     public static void generateAndOpenAllPdf(MainActivity activity) {
         android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
-        
+
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
             try {
                 int[] pageTracker = {0};
                 boolean hasRecords = false;
-                
+
                 for (AccountGroup group : activity.appStorage.groups) {
                     for (Account account : group.getAccounts()) {
                         if (!account.getRecords().isEmpty()) {
@@ -31,7 +28,7 @@ public class PdfExportHelper {
                         hasRecords = true;
                     }
                 }
-                
+
                 if (!hasRecords) {
                     activity.runOnUiThread(() -> {
                         progressDialog.dismiss();
@@ -55,20 +52,20 @@ public class PdfExportHelper {
 
     public static void generateAndOpenGroupPdf(MainActivity activity, AccountGroup group, PdfSortOrder sortOrder) {
         android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
-        
+
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
             try {
                 int[] pageTracker = {0};
                 boolean hasRecords = false;
-                
+
                 for (Account account : group.getAccounts()) {
                     if (!account.getRecords().isEmpty()) {
                         PdfRenderHelper.appendAccountToPdf(activity, document, account, pageTracker, sortOrder);
                         hasRecords = true;
                     }
                 }
-                
+
                 if (!hasRecords) {
                     activity.runOnUiThread(() -> {
                         progressDialog.dismiss();
@@ -92,7 +89,7 @@ public class PdfExportHelper {
 
     public static void generateAndOpenPdf(MainActivity activity, Account account, PdfSortOrder sortOrder) {
         android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
-        
+
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
             try {
@@ -112,9 +109,9 @@ public class PdfExportHelper {
 
     public static void generateAndOpenSelectedPdf(MainActivity activity, java.util.List<Record> selectedRecords, PdfSortOrder sortOrder) {
         if (selectedRecords.isEmpty()) return;
-        
+
         android.app.Dialog progressDialog = PdfDialogHelper.showProgressDialog(activity);
-        
+
         new Thread(() -> {
             android.graphics.pdf.PdfDocument document = new android.graphics.pdf.PdfDocument();
             try {

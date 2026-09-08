@@ -1,6 +1,5 @@
 package com.example.notecalc.pdf;
-
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

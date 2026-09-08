@@ -1,6 +1,5 @@
 package com.example.notecalc.ncagent;
-
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +13,7 @@ public class ActionExecutor {
         }
         String lower = dateStr.toLowerCase(Locale.US).trim();
         Calendar cal = Calendar.getInstance();
-        
+
         if (lower.equals("yesterday")) {
             cal.add(Calendar.DAY_OF_YEAR, -1);
             return new SimpleDateFormat("dd-MM-yyyy", Locale.US).format(cal.getTime());
@@ -36,12 +35,12 @@ public class ActionExecutor {
 
         String[] parts = lower.split("\\s+");
         String dayName = parts[parts.length - 1];
-        
+
         if (days.containsKey(dayName)) {
             int targetDay = days.get(dayName);
             int currentDay = cal.get(Calendar.DAY_OF_WEEK);
             int diff = targetDay - currentDay;
-            
+
             if (lower.startsWith("last ")) {
                 if (diff >= 0) diff -= 7;
             } else if (lower.startsWith("next ")) {
@@ -49,9 +48,9 @@ public class ActionExecutor {
             } else {
                 if (diff >= 0) diff -= 7; 
             }
-            
+
             // If it's exactly the same day (e.g. today is Monday and user says "Monday"), diff is 0, so diff-=7 makes it last Monday.
-            
+
             cal.add(Calendar.DAY_OF_YEAR, diff);
             return new SimpleDateFormat("dd-MM-yyyy", Locale.US).format(cal.getTime());
         }
@@ -82,22 +81,22 @@ public class ActionExecutor {
             String desc = (candidate.getDescription() == null || candidate.getDescription().isEmpty()) ? "Expense" : candidate.getDescription();
             String date = normalizeDate(candidate.getDate());
             double amt = candidate.getAmount() != null ? candidate.getAmount() : 0.0;
-            
+
             Record newRecord = new Record(desc, amt, date);
             newRecord.setCategory(candidate.getCategory() == null ? "" : candidate.getCategory());
             newRecord.setRemarks(candidate.getRemarks() == null ? "" : candidate.getRemarks());
-            
+
             action.setValidatedRecord(newRecord);
-            
+
         } else if (intent == NCAgentIntent.UPDATE || intent == NCAgentIntent.DELETE) {
             List<Record> matches = matcher.match(candidate, databaseRecords);
-            
+
             if (matches.isEmpty()) {
                 action.setValid(false);
                 action.setErrorMessage("No matching record found to " + intent.name().toLowerCase() + ".");
             } else if (matches.size() == 1) {
                 action.setTargetRecord(matches.get(0));
-                
+
                 if (intent == NCAgentIntent.UPDATE) {
                     // Copy old
                     Record updatedRecord = new Record(matches.get(0).getDescription(), matches.get(0).getAmount(), matches.get(0).getDate());
@@ -108,14 +107,14 @@ public class ActionExecutor {
                     if (matches.get(0).getAttachments() != null) {
                         updatedRecord.getAttachments().addAll(matches.get(0).getAttachments());
                     }
-                    
+
                     // Apply new
                     if (candidate.getDescription() != null && !candidate.getDescription().isEmpty()) updatedRecord.setDescription(candidate.getDescription());
                     if (candidate.getAmount() != null) updatedRecord.setAmount(candidate.getAmount());
                     if (candidate.getDate() != null && !candidate.getDate().isEmpty()) updatedRecord.setDate(normalizeDate(candidate.getDate()));
                     if (candidate.getCategory() != null && !candidate.getCategory().isEmpty()) updatedRecord.setCategory(candidate.getCategory());
                     if (candidate.getRemarks() != null && !candidate.getRemarks().isEmpty()) updatedRecord.setRemarks(candidate.getRemarks());
-                    
+
                     action.setValidatedRecord(updatedRecord);
                 }
             } else {

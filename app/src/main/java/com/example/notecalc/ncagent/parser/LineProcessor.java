@@ -1,12 +1,11 @@
 package com.example.notecalc.ncagent.parser;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class LineProcessor {
-    
+
     // Pattern to match supported dates roughly to classify a line as purely a date context line if it only contains a date
     private static final Pattern DATE_PATTERN = Pattern.compile(
             "^(today|yesterday|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday|" +
@@ -22,7 +21,7 @@ public class LineProcessor {
     public List<ClassifiedLine> process(String normalizedText) {
         List<ClassifiedLine> results = new ArrayList<>();
         if (normalizedText == null || normalizedText.isEmpty()) return results;
-        
+
         String[] lines = normalizedText.split("\n");
         for (String line : lines) {
             String lower = line.toLowerCase(Locale.US).trim();
@@ -36,7 +35,7 @@ public class LineProcessor {
                 results.add(new ClassifiedLine(line, ClassifiedLine.LineType.EXPENSE));
             }
         }
-        
+
         return results;
     }
 }

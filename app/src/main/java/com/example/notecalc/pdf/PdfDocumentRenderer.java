@@ -1,9 +1,7 @@
 package com.example.notecalc.pdf;
-
 import android.graphics.pdf.PdfDocument;
-import com.example.notecalc.CanvasTextHelper;
 import com.example.notecalc.MainActivity;
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -13,7 +11,7 @@ public class PdfDocumentRenderer {
                                       String titleText, String subtitle, String footerLastMod, 
                                       List<List<Record>> allRecordLists, List<String> listNames, 
                                       List<Double> listTotals, String accountTitle, int[] pageTracker) {
-                                          
+
         int contentWidth = theme.pageWidth - theme.margin * 2;
         float bottomLimit = theme.pageHeight - theme.margin;
 
@@ -47,7 +45,7 @@ public class PdfDocumentRenderer {
             List<Record> records = allRecordLists.get(listIdx);
             String tableName = listNames.get(listIdx);
             double totalAmt = listTotals.get(listIdx);
-            
+
             PdfTableHelper.drawRecordTable(document, state, theme, records, tableName, totalAmt, accountTitle, colSno, colDate, colTime, colAmount, colDesc, rowHeight);
         }
 

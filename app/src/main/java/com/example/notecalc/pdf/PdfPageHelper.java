@@ -1,5 +1,4 @@
 package com.example.notecalc.pdf;
-
 import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 

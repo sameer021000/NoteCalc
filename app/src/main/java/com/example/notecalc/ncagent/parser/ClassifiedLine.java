@@ -7,15 +7,15 @@ public class ClassifiedLine {
         CONTEXT_DATE,
         EXPENSE
     }
-    
+
     private final String rawText;
     private final LineType type;
-    
+
     public ClassifiedLine(String rawText, LineType type) {
         this.rawText = rawText;
         this.type = type;
     }
-    
+
     public String getRawText() { return rawText; }
     public LineType getType() { return type; }
 }

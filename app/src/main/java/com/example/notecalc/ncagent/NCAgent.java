@@ -1,8 +1,6 @@
 package com.example.notecalc.ncagent;
-
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 import com.example.notecalc.ncagent.parser.InputParser;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +20,9 @@ public class NCAgent {
     public List<NCAction> process(String rawInput, List<Record> databaseRecords) {
         NCAgentIntent intent = intentEngine.detectIntent(rawInput);
         List<RecordCandidate> candidates = parser.parse(rawInput);
-        
+
         List<NCAction> actions = new ArrayList<>();
-        
+
         // If ambiguous intent, we just return one generic action error, 
         // no need to map over all parsed candidates.
         if (intent == NCAgentIntent.AMBIGUOUS) {
@@ -37,7 +35,7 @@ public class NCAgent {
             NCAction action = executor.execute(intent, candidate, databaseRecords, matcher);
             actions.add(action);
         }
-        
+
         return actions;
     }
 }

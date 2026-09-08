@@ -1,5 +1,4 @@
 package com.example.notecalc.ncagent.parser;
-
 import com.example.notecalc.ncagent.RecordCandidate;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -35,21 +34,21 @@ public class InputParser {
 
         for (ClassifiedLine line : lines) {
             String text = line.getRawText();
-            
+
             if (line.getType() == ClassifiedLine.LineType.CONTEXT_DATE) {
                 // Future expansion: normalize "Yesterday" to "25-07-2026"
                 // For now we just pass it along
                 contextManager.setDateContext(text);
                 continue;
             }
-            
+
             if (line.getType() == ClassifiedLine.LineType.CONTEXT_CATEGORY) {
                 // e.g. "Category: Food" -> "Food"
                 String cat = text.replaceAll("(?i)^category\\s*(?:is|:)\\s*", "").trim();
                 contextManager.setCategoryContext(cat);
                 continue;
             }
-            
+
             if (line.getType() == ClassifiedLine.LineType.CONTEXT_REMARKS) {
                 // Remarks do NOT propagate, so we don't store them in ContextManager.
                 // But wait! If the line is purely a remark, which record does it attach to?
@@ -63,20 +62,20 @@ public class InputParser {
                 }
                 continue;
             }
-            
+
             if (line.getType() == ClassifiedLine.LineType.EXPENSE) {
                 // We might have inline context in an expense line (e.g. "Tea 20 Category: Food")
                 // For a robust implementation, we would extract them here.
                 String inlineDate = null;
                 String inlineCategory = null;
                 String inlineRemarks = null;
-                
+
                 Matcher dateMatcher = INLINE_DATE_PATTERN.matcher(text);
                 if (dateMatcher.find()) {
                     inlineDate = dateMatcher.group(1);
                     text = new StringBuilder(text).replace(dateMatcher.start(), dateMatcher.end(), "").toString().trim();
                 }
-                
+
                 // Very basic inline remark extraction
                 int remarkIdx = text.toLowerCase().indexOf("remark:");
                 if (remarkIdx == -1) remarkIdx = text.toLowerCase().indexOf("note:");
@@ -84,7 +83,7 @@ public class InputParser {
                     inlineRemarks = text.substring(remarkIdx).replaceAll("(?i)^(?:remarks?|note)\\s*:\\s*", "").trim();
                     text = text.substring(0, remarkIdx).trim();
                 }
-                
+
                 int catIdx = text.toLowerCase().indexOf("category:");
                 if (catIdx != -1) {
                     inlineCategory = text.substring(catIdx).replaceAll("(?i)^category\\s*:\\s*", "").trim();
@@ -94,7 +93,7 @@ public class InputParser {
                 List<String> segments = recordSplitter.split(text);
                 for (String segment : segments) {
                     FieldExtractor.ExtractedFields fields = fieldExtractor.extract(segment, contextManager, inlineDate, inlineCategory, inlineRemarks);
-                    
+
                     // Clear inline context after first segment so it doesn't duplicate to multiple items on same line
                     inlineDate = null;
                     inlineCategory = null;
@@ -105,7 +104,7 @@ public class InputParser {
                 }
             }
         }
-        
+
         return candidates;
     }
 }

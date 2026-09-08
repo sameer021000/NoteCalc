@@ -1,7 +1,5 @@
 package com.example.notecalc.ncagent;
-
-import com.example.notecalc.Record;
-
+import com.example.notecalc.records.Record;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,13 +7,13 @@ public class RecordMatchingEngine {
 
     public List<Record> match(RecordCandidate candidate, List<Record> databaseRecords) {
         List<Record> matches = new ArrayList<>();
-        
+
         for (Record record : databaseRecords) {
             if (isMatch(candidate, record)) {
                 matches.add(record);
             }
         }
-        
+
         return matches;
     }
 
@@ -26,7 +24,7 @@ public class RecordMatchingEngine {
                 return false;
             }
         }
-        
+
         // Priority 2: Amount
         if (candidate.getAmount() != null) {
             // Use an epsilon for double comparison to avoid floating point issues
@@ -34,7 +32,7 @@ public class RecordMatchingEngine {
                 return false;
             }
         }
-        
+
         // Priority 3: Date
         if (candidate.getDate() != null && !candidate.getDate().isEmpty()) {
             // In a real app we'd normalize the date string before comparing
@@ -43,28 +41,28 @@ public class RecordMatchingEngine {
                 return false;
             }
         }
-        
+
         // Priority 4: Category
         if (candidate.getCategory() != null && !candidate.getCategory().isEmpty()) {
             if (!candidate.getCategory().equalsIgnoreCase(record.getCategory())) {
                 return false;
             }
         }
-        
+
         // Priority 5: Remarks
         if (candidate.getRemarks() != null && !candidate.getRemarks().isEmpty()) {
             if (!candidate.getRemarks().equalsIgnoreCase(record.getRemarks())) {
                 return false;
             }
         }
-        
+
         // If the candidate provided no fields at all, it shouldn't match anything
         boolean hasAnyField = (candidate.getDescription() != null && !candidate.getDescription().isEmpty()) ||
                               (candidate.getAmount() != null) ||
                               (candidate.getDate() != null && !candidate.getDate().isEmpty()) ||
                               (candidate.getCategory() != null && !candidate.getCategory().isEmpty()) ||
                               (candidate.getRemarks() != null && !candidate.getRemarks().isEmpty());
-                              
+
         return hasAnyField;
     }
 }

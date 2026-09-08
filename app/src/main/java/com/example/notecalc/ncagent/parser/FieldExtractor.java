@@ -1,5 +1,4 @@
 package com.example.notecalc.ncagent.parser;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,7 +53,7 @@ public class FieldExtractor {
 
         // Clean up description (remove leftover 'for', '-', etc.)
         description = description.replaceAll("^(for|-|:)", "").replaceAll("(for|-|:)$", "").replaceAll("\\s+", " ").trim();
-        
+
         // Spec rule: If description is absent but remarks exist, use remarks as description.
         // Spec rule: If both are absent, Action Executor later assigns 'Expense'.
         if (description.isEmpty() && fields.remarks != null && !fields.remarks.isEmpty()) {

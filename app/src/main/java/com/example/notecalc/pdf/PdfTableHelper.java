@@ -1,9 +1,8 @@
 package com.example.notecalc.pdf;
-
+import com.example.notecalc.core.*;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import com.example.notecalc.DateUtils;
-import com.example.notecalc.Record;
+import com.example.notecalc.records.Record;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +16,7 @@ public class PdfTableHelper {
         int contentWidth = theme.pageWidth - theme.margin * 2;
         SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         float amountColEndX = theme.margin + colSno + colDesc + colDate + colTime + colAmount;
-        
+
         if (tableName != null) {
             if (state.y + 50f > bottomLimit) {
                 PdfPageHelper.startNewPage(document, state, theme);
@@ -79,7 +78,7 @@ public class PdfTableHelper {
             if (cat != null && !cat.isEmpty()) combinedNotes += "[" + cat + "] ";
             if (recRemarks != null && !recRemarks.isEmpty()) combinedNotes += recRemarks;
             boolean hasRemarks = !combinedNotes.isEmpty();
-            
+
             List<String> attachments = rec.getAttachments();
             List<String> fileNames = new ArrayList<>();
             if (attachments != null && !attachments.isEmpty()) {

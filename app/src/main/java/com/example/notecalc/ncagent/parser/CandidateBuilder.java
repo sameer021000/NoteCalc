@@ -1,5 +1,4 @@
 package com.example.notecalc.ncagent.parser;
-
 import com.example.notecalc.ncagent.RecordCandidate;
 
 public class CandidateBuilder {
