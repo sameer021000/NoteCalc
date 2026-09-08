@@ -1,5 +1,5 @@
 package com.example.notecalc.pdf;
-import com.example.notecalc.core.*;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
 import android.widget.TextView;
 

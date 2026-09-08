@@ -1,6 +1,6 @@
 package com.example.notecalc.dashboard;
-import com.example.notecalc.accounts.*;
-import com.example.notecalc.core.*;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.storage.*;
 import java.util.ArrayList;
 import java.util.List;

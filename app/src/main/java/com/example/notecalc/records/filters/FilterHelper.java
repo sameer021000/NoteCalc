@@ -1,7 +1,7 @@
 package com.example.notecalc.records.filters;
-import com.example.notecalc.core.StateHelper;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.*;
-import com.example.notecalc.accounts.*;
 
 public class FilterHelper {
 

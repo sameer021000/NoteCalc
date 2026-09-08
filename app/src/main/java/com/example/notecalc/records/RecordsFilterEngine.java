@@ -1,5 +1,6 @@
 package com.example.notecalc.records;
-import com.example.notecalc.core.StateHelper;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

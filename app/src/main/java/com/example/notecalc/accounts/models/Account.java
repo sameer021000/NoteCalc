@@ -1,5 +1,5 @@
-package com.example.notecalc.accounts;
-import com.example.notecalc.records.Record;
+package com.example.notecalc.accounts.models;
+import com.example.notecalc.records.models.Record;
 import java.util.ArrayList;
 import java.util.List;
 

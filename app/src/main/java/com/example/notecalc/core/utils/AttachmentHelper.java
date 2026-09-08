@@ -1,4 +1,5 @@
-package com.example.notecalc.core;
+package com.example.notecalc.core.utils;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
 import android.view.View;
 import android.widget.Toast;

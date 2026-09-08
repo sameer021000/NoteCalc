@@ -1,6 +1,6 @@
 package com.example.notecalc.pdf;
-import com.example.notecalc.accounts.*;
-import com.example.notecalc.records.Record;
+import com.example.notecalc.accounts.models.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
 import java.util.List;
 

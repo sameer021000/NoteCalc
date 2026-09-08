@@ -1,7 +1,9 @@
-package com.example.notecalc.records;
-import com.example.notecalc.core.StateHelper;
+package com.example.notecalc.records.adapters;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.core.ui.*;
+import com.example.notecalc.records.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
-import com.example.notecalc.core.*;
 import com.example.notecalc.editor.*;
 import android.view.LayoutInflater;
 import android.view.View;

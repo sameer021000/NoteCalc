@@ -1,7 +1,7 @@
 package com.example.notecalc.pdf;
 import android.graphics.pdf.PdfDocument;
 import com.example.notecalc.MainActivity;
-import com.example.notecalc.records.Record;
+import com.example.notecalc.records.models.Record;
 import java.util.LinkedHashMap;
 import java.util.List;
 

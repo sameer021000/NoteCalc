@@ -1,12 +1,13 @@
 package com.example.notecalc.editor;
-import com.example.notecalc.core.StateHelper;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.core.ui.*;
+import com.example.notecalc.editor.ui.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.records.*;
 import com.example.notecalc.*;
-import com.example.notecalc.records.Record;
-import com.example.notecalc.core.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.storage.*;
 import com.example.notecalc.dashboard.*;
-import com.example.notecalc.accounts.*;
 import android.widget.EditText;
 
 public class EditorSaveHelper {

@@ -1,10 +1,13 @@
 package com.example.notecalc.editor;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.core.ui.*;
+import com.example.notecalc.editor.ui.*;
+import com.example.notecalc.editor.dialogs.*;
+import com.example.notecalc.records.adapters.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.tools.ai.NCAgentHelper;
-import com.example.notecalc.records.*;
 import com.example.notecalc.*;
-import com.example.notecalc.core.*;
 import com.example.notecalc.dashboard.*;
-import com.example.notecalc.accounts.*;
 import com.example.notecalc.tools.analytics.*;
 import android.view.LayoutInflater;
 import android.view.View;

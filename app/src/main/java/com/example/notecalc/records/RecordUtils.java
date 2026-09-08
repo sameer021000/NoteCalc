@@ -1,4 +1,5 @@
 package com.example.notecalc.records;
+import com.example.notecalc.records.models.Record;
 import java.util.ArrayList;
 import java.util.List;
 

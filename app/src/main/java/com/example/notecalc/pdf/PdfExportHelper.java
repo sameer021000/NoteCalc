@@ -1,7 +1,7 @@
 package com.example.notecalc.pdf;
-import com.example.notecalc.accounts.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.MainActivity;
-import com.example.notecalc.records.Record;
+import com.example.notecalc.records.models.Record;
 
 public class PdfExportHelper {
 

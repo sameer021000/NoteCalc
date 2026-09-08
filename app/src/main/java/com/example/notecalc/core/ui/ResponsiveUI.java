@@ -1,4 +1,4 @@
-package com.example.notecalc.core;
+package com.example.notecalc.core.ui;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.Drawable;
 import android.content.res.ColorStateList;

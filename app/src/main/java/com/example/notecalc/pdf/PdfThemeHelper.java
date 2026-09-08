@@ -1,5 +1,5 @@
 package com.example.notecalc.pdf;
-import com.example.notecalc.core.*;
+import com.example.notecalc.core.ui.*;
 import android.graphics.Color;
 import android.graphics.Paint;
 import com.example.notecalc.MainActivity;

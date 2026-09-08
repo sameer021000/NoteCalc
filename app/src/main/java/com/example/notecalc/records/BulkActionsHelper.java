@@ -1,8 +1,9 @@
 package com.example.notecalc.records;
-import com.example.notecalc.core.StateHelper;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.editor.ui.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.records.filters.*;
 import com.example.notecalc.*;
-import com.example.notecalc.editor.*;
 import java.util.List;
 
 public class BulkActionsHelper {

@@ -1,4 +1,4 @@
-package com.example.notecalc.records;
+package com.example.notecalc.records.models;
 
 public class Record {
     private String description;

@@ -1,5 +1,6 @@
-package com.example.notecalc.records;
-import com.example.notecalc.core.*;
+package com.example.notecalc.records.adapters;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.records.models.Record;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

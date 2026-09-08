@@ -1,6 +1,6 @@
-package com.example.notecalc.editor;
+package com.example.notecalc.editor.dialogs;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
-import com.example.notecalc.core.*;
 import android.widget.Toast;
 
 public class EditorAttachmentsDialogHelper {

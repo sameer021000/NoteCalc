@@ -1,6 +1,6 @@
 package com.example.notecalc.tools.analytics;
-import com.example.notecalc.accounts.*;
-import com.example.notecalc.records.Record;
+import com.example.notecalc.accounts.models.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
 import java.util.ArrayList;
 import java.util.Calendar;

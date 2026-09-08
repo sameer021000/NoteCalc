@@ -1,4 +1,4 @@
-package com.example.notecalc.core;
+package com.example.notecalc.core.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

@@ -1,9 +1,9 @@
 package com.example.notecalc.tools.transfer;
-import com.example.notecalc.accounts.*;
+import com.example.notecalc.core.ui.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.dashboard.*;
 import com.example.notecalc.storage.*;
-import com.example.notecalc.records.Record;
-import com.example.notecalc.core.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
 import android.view.View;
 import android.widget.TextView;

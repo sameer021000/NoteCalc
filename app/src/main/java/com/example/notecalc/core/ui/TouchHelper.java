@@ -1,7 +1,9 @@
-package com.example.notecalc.core;
+package com.example.notecalc.core.ui;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.editor.ui.*;
 import com.example.notecalc.records.*;
 import com.example.notecalc.editor.*;
-import com.example.notecalc.records.Record;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;

@@ -1,6 +1,6 @@
 package com.example.notecalc.editor;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.*;
-import com.example.notecalc.accounts.*;
 import android.widget.Toast;
 
 public class EditorValidationHelper {

@@ -1,8 +1,8 @@
 package com.example.notecalc.pdf;
-import com.example.notecalc.core.*;
+import com.example.notecalc.core.utils.*;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import com.example.notecalc.records.Record;
+import com.example.notecalc.records.models.Record;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,7 +1,9 @@
 package com.example.notecalc.records;
-import com.example.notecalc.core.StateHelper;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.core.ui.*;
+import com.example.notecalc.editor.ui.*;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
-import com.example.notecalc.core.*;
 import com.example.notecalc.editor.*;
 import android.app.DatePickerDialog;
 import android.content.Context;

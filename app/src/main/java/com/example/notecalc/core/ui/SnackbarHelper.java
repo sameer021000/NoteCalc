@@ -1,4 +1,4 @@
-package com.example.notecalc.core;
+package com.example.notecalc.core.ui;
 import com.example.notecalc.*;
 import android.view.View;
 import com.google.android.material.snackbar.Snackbar;

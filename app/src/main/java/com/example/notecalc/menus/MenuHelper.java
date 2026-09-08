@@ -1,6 +1,6 @@
 package com.example.notecalc.menus;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.*;
-import com.example.notecalc.accounts.*;
 import android.view.View;
 
 public class MenuHelper {

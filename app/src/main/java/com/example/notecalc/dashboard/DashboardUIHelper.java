@@ -1,6 +1,7 @@
 package com.example.notecalc.dashboard;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
-import com.example.notecalc.core.*;
 import android.view.View;
 import android.view.MotionEvent;
 import android.widget.EditText;

@@ -1,5 +1,5 @@
 package com.example.notecalc.storage;
-import com.example.notecalc.accounts.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.storage.mappers.*;
 import android.content.Context;
 import org.json.JSONArray;

@@ -1,5 +1,5 @@
 package com.example.notecalc.storage;
-import com.example.notecalc.accounts.*;
+import com.example.notecalc.accounts.models.*;
 import java.util.ArrayList;
 import java.util.List;
 

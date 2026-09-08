@@ -1,7 +1,7 @@
 package com.example.notecalc.editor;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
-import com.example.notecalc.records.Record;
-import com.example.notecalc.core.*;
+import com.example.notecalc.records.models.Record;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;

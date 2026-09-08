@@ -1,7 +1,7 @@
 package com.example.notecalc.tools.analytics;
+import com.example.notecalc.core.ui.*;
+import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.editor.*;
-import com.example.notecalc.accounts.*;
-import com.example.notecalc.core.*;
 import com.example.notecalc.*;
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,6 +1,6 @@
 package com.example.notecalc.storage.mappers;
-import com.example.notecalc.accounts.*;
-import com.example.notecalc.records.Record;
+import com.example.notecalc.accounts.models.*;
+import com.example.notecalc.records.models.Record;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

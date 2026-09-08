@@ -1,5 +1,5 @@
-package com.example.notecalc.core;
-import com.example.notecalc.records.Record;
+package com.example.notecalc.core.utils;
+import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
 import java.util.List;
 public class StateHelper {

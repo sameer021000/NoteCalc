@@ -1,4 +1,4 @@
-package com.example.notecalc.accounts;
+package com.example.notecalc.accounts.models;
 import java.util.ArrayList;
 import java.util.List;
 

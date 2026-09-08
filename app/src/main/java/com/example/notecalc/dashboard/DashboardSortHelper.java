@@ -1,7 +1,7 @@
 package com.example.notecalc.dashboard;
-import com.example.notecalc.core.StateHelper;
+import com.example.notecalc.core.utils.*;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
-import com.example.notecalc.core.*;
 import com.example.notecalc.storage.*;
 
 public class DashboardSortHelper {

@@ -1,6 +1,6 @@
-package com.example.notecalc.editor;
+package com.example.notecalc.editor.ui;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
-import com.example.notecalc.core.*;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;

@@ -1,4 +1,5 @@
-package com.example.notecalc.core;
+package com.example.notecalc.core.utils;
+import com.example.notecalc.core.ui.*;
 import com.example.notecalc.dashboard.*;
 import com.example.notecalc.pdf.*;
 import com.example.notecalc.*;
