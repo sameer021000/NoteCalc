@@ -193,6 +193,8 @@
                     android:id="@+id/list_groups"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scrollbarSize="4dp"
+                    android:scrollbarThumbVertical="@drawable/custom_scrollbar_thumb"
                     android:scrollbars="vertical" />
             </LinearLayout>
 
@@ -212,6 +214,8 @@
                     android:id="@+id/list_accounts"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scrollbarSize="4dp"
+                    android:scrollbarThumbVertical="@drawable/custom_scrollbar_thumb"
                     android:scrollbars="vertical" />
             </LinearLayout>
         </LinearLayout>
