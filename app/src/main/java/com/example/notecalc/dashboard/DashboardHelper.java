@@ -114,14 +114,24 @@ public class DashboardHelper {
 
         TextView textAppTitle = activity.findViewById(R.id.text_app_title);
         TextView textAppSubtitle = activity.findViewById(R.id.text_app_subtitle);
-        if (textAppTitle != null) textAppTitle.setText(ArchiveHelper.isShowingArchive ? "Archive" : activity.getString(R.string.app_name));
-        if (textAppSubtitle != null) textAppSubtitle.setText(ArchiveHelper.isShowingArchive ? "Read-only history" : activity.getString(R.string.app_subtitle));
-
         View btnCreateAccount = activity.findViewById(R.id.btn_create_account);
         View btnCreateGroup = activity.findViewById(R.id.btn_create_group);
         android.widget.ImageView btnArchive = activity.findViewById(R.id.btn_archive);
-        if (btnCreateAccount != null) btnCreateAccount.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
-        if (btnCreateGroup != null) btnCreateGroup.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
+
+        if (activity.currentViewGroup != null) {
+            if (textAppTitle != null) textAppTitle.setText(activity.currentViewGroup.getTitle());
+            if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.GONE);
+            if (btnCreateAccount != null) btnCreateAccount.setVisibility(View.GONE);
+            if (btnCreateGroup != null) btnCreateGroup.setVisibility(View.GONE);
+        } else {
+            if (textAppTitle != null) textAppTitle.setText(ArchiveHelper.isShowingArchive ? "Archive" : activity.getString(R.string.app_name));
+            if (textAppSubtitle != null) {
+                textAppSubtitle.setVisibility(View.VISIBLE);
+                textAppSubtitle.setText(ArchiveHelper.isShowingArchive ? "Read-only history" : activity.getString(R.string.app_subtitle));
+            }
+            if (btnCreateAccount != null) btnCreateAccount.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
+            if (btnCreateGroup != null) btnCreateGroup.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
+        }
         if (btnArchive != null) btnArchive.setImageResource(ArchiveHelper.isShowingArchive ? R.drawable.ic_archive : R.drawable.ic_archive_outline);
 
         String query = activity.dashboardSearchQuery.trim().toLowerCase(Locale.getDefault());
