@@ -1,4 +1,5 @@
 package com.example.notecalc.editor;
+import com.example.notecalc.editor.core.*;
 import com.example.notecalc.core.utils.*;
 import com.example.notecalc.core.ui.*;
 import com.example.notecalc.editor.ui.*;

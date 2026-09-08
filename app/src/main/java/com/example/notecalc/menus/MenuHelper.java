@@ -1,4 +1,5 @@
 package com.example.notecalc.menus;
+import com.example.notecalc.menus.helpers.*;
 import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.*;
 import android.view.View;

@@ -1,7 +1,11 @@
 package com.example.notecalc.dashboard;
+import com.example.notecalc.accounts.dialogs.*;
+import com.example.notecalc.accounts.adapters.*;
+import com.example.notecalc.dashboard.engine.*;
+import com.example.notecalc.dashboard.ui.*;
+import com.example.notecalc.dashboard.models.*;
 import com.example.notecalc.core.utils.*;
 import com.example.notecalc.core.ui.*;
-import com.example.notecalc.accounts.*;
 import com.example.notecalc.*;
 import com.example.notecalc.records.models.Record;
 import android.view.LayoutInflater;

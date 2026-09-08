@@ -1,4 +1,6 @@
 package com.example.notecalc.ncagent;
+import com.example.notecalc.ncagent.engine.*;
+import com.example.notecalc.ncagent.models.*;
 import com.example.notecalc.records.models.Record;
 import com.example.notecalc.ncagent.parser.InputParser;
 import java.util.ArrayList;

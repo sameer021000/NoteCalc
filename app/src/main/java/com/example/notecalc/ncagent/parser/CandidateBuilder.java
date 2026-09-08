@@ -1,5 +1,5 @@
 package com.example.notecalc.ncagent.parser;
-import com.example.notecalc.ncagent.RecordCandidate;
+import com.example.notecalc.ncagent.models.*;
 
 public class CandidateBuilder {
     public RecordCandidate build(FieldExtractor.ExtractedFields fields) {

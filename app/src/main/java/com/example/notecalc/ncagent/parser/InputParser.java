@@ -1,5 +1,5 @@
 package com.example.notecalc.ncagent.parser;
-import com.example.notecalc.ncagent.RecordCandidate;
+import com.example.notecalc.ncagent.models.*;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

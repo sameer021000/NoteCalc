@@ -1,8 +1,8 @@
 package com.example.notecalc.records.filters;
+import com.example.notecalc.editor.core.*;
 import com.example.notecalc.core.utils.*;
 import com.example.notecalc.core.ui.*;
 import com.example.notecalc.*;
-import com.example.notecalc.editor.*;
 import android.view.View;
 import android.widget.TextView;
 import java.util.Calendar;
