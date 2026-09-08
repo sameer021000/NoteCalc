@@ -49,14 +49,36 @@ public class DashboardUIHelper {
         if(btnSettings != null) btnSettings.setOnClickListener(v -> activity.settingsHelper.openSettings());
 
         if(btnArchive != null) btnArchive.setOnClickListener(v -> {
+            if (!ArchiveHelper.isShowingArchive) {
+                boolean hasArchived = false;
+                for (com.example.notecalc.accounts.models.AccountGroup group : activity.appStorage.groups) {
+                    if (group.isArchived()) { hasArchived = true; break; }
+                }
+                if (!hasArchived) {
+                    for (com.example.notecalc.accounts.models.Account account : activity.appStorage.standaloneAccounts) {
+                        if (account.isArchived()) { hasArchived = true; break; }
+                    }
+                }
+                if (!hasArchived) {
+                    android.widget.Toast.makeText(activity, "No archived items", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
             ArchiveHelper.isShowingArchive = !ArchiveHelper.isShowingArchive;
-            DashboardSortHelper.updateDashboardSortUI(activity);
-            DashboardHelper.refreshDashboardList(activity);
             
-            androidx.recyclerview.widget.RecyclerView rvAccounts = activity.findViewById(R.id.list_accounts);
-            if (rvAccounts != null) rvAccounts.scrollToPosition(0);
-            androidx.recyclerview.widget.RecyclerView rvGroups = activity.findViewById(R.id.list_groups);
-            if (rvGroups != null) rvGroups.scrollToPosition(0);
+            if (activity.currentViewGroup != null) {
+                activity.currentViewGroup = null;
+                DashboardHelper.showDashboard(activity);
+            } else {
+                DashboardSortHelper.updateDashboardSortUI(activity);
+                DashboardHelper.refreshDashboardList(activity);
+                
+                androidx.recyclerview.widget.RecyclerView rvAccounts = activity.findViewById(R.id.list_accounts);
+                if (rvAccounts != null) rvAccounts.scrollToPosition(0);
+                androidx.recyclerview.widget.RecyclerView rvGroups = activity.findViewById(R.id.list_groups);
+                if (rvGroups != null) rvGroups.scrollToPosition(0);
+            }
         });
 
         if(btnTips != null) btnTips.setOnClickListener(v -> AppDialogHelper.showTipsDialog(activity));

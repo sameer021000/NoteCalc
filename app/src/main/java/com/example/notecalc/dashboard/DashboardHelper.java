@@ -157,6 +157,27 @@ public class DashboardHelper {
 
             DashboardSortHelper.updateDashboardSortUI(activity);
         }
+
+        TextView textEmptyTitle = activity.findViewById(R.id.text_empty_title);
+        TextView textEmptyDesc = activity.findViewById(R.id.text_empty_desc);
+        if (textEmptyTitle != null && textEmptyDesc != null) {
+            if (ArchiveHelper.isShowingArchive) {
+                textEmptyTitle.setText(activity.getString(R.string.no_archived_items_title));
+                textEmptyDesc.setText(activity.getString(R.string.no_archived_items_desc));
+                cardEmptyState.setOnTouchListener(null);
+                cardEmptyState.setOnClickListener(null);
+                cardEmptyState.setClickable(false);
+                cardEmptyState.setFocusable(false);
+            } else {
+                textEmptyTitle.setText(activity.getString(R.string.empty_state_title));
+                textEmptyDesc.setText(activity.getString(R.string.empty_state_desc));
+                ResponsiveUI.setupClickable(cardEmptyState, () -> {
+                    if (activity.currentViewGroup != null) {
+                        activity.openEditor(null);
+                    }
+                });
+            }
+        }
     }
 
     public static void setupBackButton(MainActivity activity, android.widget.ImageView btnBack) {

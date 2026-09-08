@@ -49,4 +49,6 @@
     <string name="auto_restore_backup_38">Restore Backup</string>
     <string name="auto_are_you_sure_this_wi_39">Are you sure? This will completely overwrite your current data.</string>
     <string name="msg_generating_pdf">Generating PDF...</string>
+    <string name="no_archived_items_title">No Archived Items</string>
+    <string name="no_archived_items_desc">There are no archived lists or groups.</string>
 </resources>
