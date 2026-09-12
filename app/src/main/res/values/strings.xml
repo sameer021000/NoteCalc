@@ -51,4 +51,6 @@
     <string name="msg_generating_pdf">Generating PDF...</string>
     <string name="no_archived_items_title">No Archived Items</string>
     <string name="no_archived_items_desc">There are no archived lists or groups.</string>
+    <string name="auto_group_title_cannot_be_empty">Group title cannot be empty</string>
+    <string name="auto_a_group_with_this_title_already_exists">A group with this title already exists</string>
 </resources>

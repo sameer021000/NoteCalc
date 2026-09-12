@@ -82,13 +82,27 @@ public class GroupDialogHelper {
         ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
         ResponsiveUI.setupClickable(btnApply, false, () -> {
             String title = input.getText().toString().trim();
-            if (!title.isEmpty()) {
-                AccountGroup group = new AccountGroup(title);
-                activity.appStorage.groups.add(group);
-                StorageHelper.saveAppStorage(activity, activity.appStorage);
-                DashboardHelper.refreshDashboardList(activity);
-                dialog.dismiss();
+            if (title.isEmpty()) {
+                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_group_title_cannot_be_empty), android.widget.Toast.LENGTH_SHORT).show();
+                return;
             }
+            boolean exists = false;
+            for (AccountGroup existingGroup : activity.appStorage.groups) {
+                if (existingGroup.getTitle().equalsIgnoreCase(title)) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) {
+                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_group_with_this_title_already_exists), android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            AccountGroup group = new AccountGroup(title);
+            activity.appStorage.groups.add(group);
+            StorageHelper.saveAppStorage(activity, activity.appStorage);
+            DashboardHelper.refreshDashboardList(activity);
+            dialog.dismiss();
         });
 
         dialog.show();
