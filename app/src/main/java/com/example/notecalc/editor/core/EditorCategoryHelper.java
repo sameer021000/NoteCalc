@@ -65,11 +65,15 @@ public class EditorCategoryHelper {
             activity.editCategoryField.setDropDownHeight((int) (180 * activity.getResources().getDisplayMetrics().density));
 
             activity.editCategoryField.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus) {
+                if (hasFocus && !catList.isEmpty()) {
                     activity.editCategoryField.showDropDown();
                 }
             });
-            activity.editCategoryField.setOnClickListener(v -> activity.editCategoryField.showDropDown());
+            activity.editCategoryField.setOnClickListener(v -> {
+                if (!catList.isEmpty()) {
+                    activity.editCategoryField.showDropDown();
+                }
+            });
         }
     }
 }
