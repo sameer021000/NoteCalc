@@ -101,24 +101,14 @@ import android.graphics.Color;
                 String recordsStr = itemsSize + (itemsSize == 1 ? " Record" : " Records");
 
                 if (!account.hasBudget() || budget == 0) {
-                    expensesStr = String.format(Locale.getDefault(), "%.2f", expenses);
-                    int expensesIntDigits = String.valueOf((int) expenses).length();
-                    StringBuilder zeros = new StringBuilder();
-                    for (int i = 0; i < expensesIntDigits; i++) {
-                        zeros.append("0");
-                    }
-                    budgetStr = zeros.toString();
+                    expensesStr = String.valueOf((int) expenses);
+                    budgetStr = "0";
                 } else if (expenses == 0) {
-                    budgetStr = String.format(Locale.getDefault(), "%.2f", budget);
-                    int budgetIntDigits = String.valueOf((int) budget).length();
-                    StringBuilder zeros = new StringBuilder();
-                    for (int i = 0; i < budgetIntDigits; i++) {
-                        zeros.append("0");
-                    }
-                    expensesStr = zeros.toString();
+                    budgetStr = String.valueOf((int) budget);
+                    expensesStr = "0";
                 } else {
-                    budgetStr = String.format(Locale.getDefault(), "%.2f", budget);
-                    expensesStr = String.format(Locale.getDefault(), "%.2f", expenses);
+                    budgetStr = String.valueOf((int) budget);
+                    expensesStr = String.valueOf((int) expenses);
                 }
 
                 String summary = budgetStr + " - " + expensesStr + " = " + balanceStr + " | " + recordsStr;
