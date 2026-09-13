@@ -59,7 +59,7 @@ public class DashboardHelper {
         DashboardUIHelper.setupAddMenuPopup(activity, btnCreateAdd);
 
         ResponsiveUI.setupClickable(cardEmptyState, () -> {
-            if (activity.currentViewGroup != null) {
+            if (!ArchiveHelper.isShowingArchive) {
                 activity.openEditor(null);
             }
         });
