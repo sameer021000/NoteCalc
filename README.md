@@ -2,7 +2,7 @@
 
 ![Android](https://img.shields.io/badge/Platform-Android-green)
 ![Java](https://img.shields.io/badge/Language-Java-blue)
-![Version](https://img.shields.io/badge/Version-1.5.0-orange)
+![Version](https://img.shields.io/badge/Version-1.6.0-orange)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
 **NoteCalc** is a premium, offline-first Android expense tracker and calculator designed to bridge the gap between simple note-taking and structured financial tracking. It combines a modern interface with powerful tools such as dual tracking modes, file attachments, detailed PDF reporting, JSON backups, advanced filtering, and an organized dashboard for an intuitive accounting experience.
@@ -11,7 +11,7 @@
 
 ## 📌 App Information
 
-* **Current Version:** v1.5.0
+* **Current Version:** v1.6.0
 * **Minimum SDK:** Android 7.0 (Nougat)
 * **Target SDK:** Android 15 (API 36)
 * **Language:** Java
@@ -86,13 +86,13 @@
 
 ## 📱 Screenshots
 
-|                     Dashboard                     |                       Group Dashboard                      |
-| :-----------------------------------------------: | :--------------------------------------------------------: |
-|   ![Dashboard](screenshots/dashboard_screen.jpg)  | ![Group Dashboard](screenshots/group_dashboard_screen.jpg) |
-|                 **Expenses Mode**                 |                       **Budget Mode**                      |
-| ![Expenses Mode](screenshots/expenses_screen.jpg) |        ![Budget Mode](screenshots/budget_screen.jpg)       |
-|                   **Settings 1**                  |                       **Settings 2**                       |
-|  ![Settings 1](screenshots/settings_screen1.jpg)  |       ![Settings 2](screenshots/settings_screen2.jpg)      |
+|                       Dashboard                       |                          Group Dashboard                          |
+|:-----------------------------------------------------:|:-----------------------------------------------------------------:|
+| ![Dashboard](screenshots/dashboard_screen_v1.6.0.jpg) | ![Group Dashboard](screenshots/group_dashboard_screen_v1.6.0.jpg) |
+|                   **Expenses Mode**                   |                          **Budget Mode**                          |
+|   ![Expenses Mode](screenshots/expenses_screen.jpg)   |           ![Budget Mode](screenshots/budget_screen.jpg)           |
+|                    **Settings 1**                     |                          **Settings 2**                           |
+| ![Settings 1](screenshots/settings_screen1_v1.6.0.jpg) |      ![Settings 2](screenshots/settings_screen2_v1.6.0.jpg)       |
 
 ---
 
@@ -130,6 +130,7 @@
 
 ## 📋 Version History
 
+* **v1.6.0** – Redesigned dashboard header with a unified '+' dropdown menu, fixed critical search state-sync bugs, added ripple touch feedback to menus, and improved empty states interaction.
 * **v1.5.0** – Added archiving functionality for lists and groups, protecting past data in a read-only state and keeping the dashboard decluttered.
 * **v1.4.0** – Added Group PDF Export, a new interactive "What's New" rainbow card dialog, overhauled the Settings UI, unified premium touch feedback across the app, migrated strings for localization, and fixed background PDF generation crashes.
 * **v1.3.0** – Added file attachments, in-app camera, PDF attachment integration, PDF timestamps, improved PDF layouts, dynamic filtering, enhanced bulk actions, and multiple sorting and persistence fixes.

@@ -37,6 +37,8 @@
     <string name="tips_cat2_item8_desc">Your Dashboard lists can also be sorted by:\n\nTitle\nTotal\nLatest Modified\n\nTap the corresponding sorting option to change the order.</string>
     <string name="tips_cat2_item9_title">View Filter Results Count</string>
     <string name="tips_cat2_item9_desc">When you apply a search query or filter, NoteCalc dynamically displays the total number of matching records that were found.</string>
+    <string name="tips_cat2_item10_title">Create Lists Directly From Search</string>
+    <string name="tips_cat2_item10_desc">Searching for a list that doesn\'t exist gives you a quick shortcut to create it.\n\n<b>How:</b>\nJust tap the empty state card that appears when no lists are found, and NoteCalc will instantly open a new list creation screen for you.</string>
     <string name="tips_cat3_title">3. Bulk Actions</string>
     <string name="tips_cat3_item1_title">See the Count and Total of Selected Records</string>
     <string name="tips_cat3_item1_desc">When records are selected, NoteCalc shows the number of selected records and their combined amount.\n\n<b>Where:</b>\nLook at the information displayed in the Bulk Actions/selection area after selecting records.</string>

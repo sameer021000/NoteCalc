@@ -4,6 +4,26 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.6.0] - 2026-09-13
+
+### ✨ Added
+
+* **Unified Header Button**: Unified `+` button in the dashboard header with a dropdown menu for creating Lists and Groups.
+* **Popup Menus**: Material ripple touch feedback (`selectableItemBackground`) and intuitive icons added to all popup menus.
+
+### 🎨 Improved
+
+* **Dashboard Header**: Refined dashboard header aesthetic by removing the wide `+ List` and `+ Group` buttons.
+* **Layout Migration**: Dashboard header migrated to `ConstraintLayout` to prevent UI "jumping" when navigating contexts.
+
+### 🐛 Fixed
+
+* **Search State-Sync**: Critical state-sync bug: Navigating between screens with an active search no longer hides items or empties the visual search box.
+* **Empty State Interaction**: Clicking the blank state when searching for a non-existent list now correctly navigates to the list creation screen.
+* **Category Dropdown**: Blank category dropdown box appearing in the Editor when no categories exist has been resolved.
+
+---
+
 ## [1.5.0] - 2026-08-27
 
 ### ✨ Added

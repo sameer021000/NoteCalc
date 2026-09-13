@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_version_title">What\'s New in NoteCalc v1.5.0</string>
+    <string name="about_version_title">What\'s New in NoteCalc v1.6.0</string>
     <string name="about_version_btn_dismiss">Awesome!</string>
     
-    <string name="about_item1_title">\uD83D\uDDC4\uFE0F Archiving System</string>
-    <string name="about_item1_desc">Declutter your dashboard by archiving old lists and groups! Archived items become completely read-only to prevent accidental changes.</string>
+    <string name="about_item1_title">✨ Streamlined Dashboard</string>
+    <string name="about_item1_desc">Enjoy a cleaner, more spacious top bar! Creating lists and groups is now neatly tucked under a single + menu.</string>
     
-    <string name="about_item2_title">\uD83D\uDD0D Dedicated Archive View</string>
-    <string name="about_item2_desc">Access, sort, and search through all of your archived lists and groups safely separated from your active items via the new dashboard icon.</string>
+    <string name="about_item2_title">🚀 Flawless Search</string>
+    <string name="about_item2_desc">Fixed an issue where your search text would sometimes hide items unexpectedly when navigating into groups or archives.</string>
     
-    <string name="about_item3_title">\u26A1 Quick Delete</string>
-    <string name="about_item3_desc">We\'ve bypassed the confirmation dialog when you are bulk-deleting 2 or fewer records for a much faster workflow.</string>
+    <string name="about_item3_title">⚡ Smart Empty States</string>
+    <string name="about_item3_desc">Searching for a list that doesn\'t exist? You can now tap the blank empty state to instantly create it!</string>
     
-    <string name="about_item4_title">\uD83D\uDEE1\uFE0F Bulk Transfer Safety</string>
-    <string name="about_item4_desc">To keep your past financial data securely intact, you can no longer accidentally cut or copy active records into archived lists.</string>
+    <string name="about_item4_title">🎨 Polished Interactions</string>
+    <string name="about_item4_desc">Added smooth ripple touch effects and intuitive icons to our menus for a premium feel.</string>
     
-    <string name="about_item5_title">\uD83D\uDCA1 New Tips &amp; Features</string>
-    <string name="about_item5_desc">Added a brand new tip card detailing exactly how to manage Archived items and when to use them.</string>
+    <string name="about_item5_title">🛠️ Bug Fixes</string>
+    <string name="about_item5_desc">Category dropdown logic has been refined and UI layout jumping has been completely eliminated.</string>
 </resources>
