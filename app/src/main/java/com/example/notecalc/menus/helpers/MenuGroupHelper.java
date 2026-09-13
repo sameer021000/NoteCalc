@@ -25,6 +25,12 @@ public class MenuGroupHelper {
 
         popupWindow.setElevation(8.0f);
 
+        View btnRename = popupView.findViewById(R.id.btn_popup_rename);
+        ResponsiveUI.setupClickable(btnRename, false, () -> {
+            popupWindow.dismiss();
+            GroupDialogHelper.showRenameGroupDialog(activity, group);
+        });
+
         View btnDownload = popupView.findViewById(R.id.btn_popup_download);
         View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
 

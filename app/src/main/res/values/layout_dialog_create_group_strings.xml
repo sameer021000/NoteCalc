@@ -4,4 +4,6 @@
     <string name="create_group_name_hint">Group Name</string>
     <string name="create_group_btn_cancel">Cancel</string>
     <string name="create_group_btn_create">Create</string>
+    <string name="rename_group_title">Rename Group</string>
+    <string name="rename_group_btn">Rename</string>
 </resources>

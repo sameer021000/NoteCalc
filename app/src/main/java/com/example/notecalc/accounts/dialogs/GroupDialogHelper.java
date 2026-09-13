@@ -107,4 +107,66 @@ public class GroupDialogHelper {
 
         dialog.show();
     }
+
+    public static void showRenameGroupDialog(MainActivity activity, AccountGroup group) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
+        builder.setView(dialogView);
+
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
+        View detailsContainer = dialogView.findViewById(R.id.details_container);
+        TextView titleView = dialogView.findViewById(R.id.dialog_title);
+        EditText input = dialogView.findViewById(R.id.edit_group_name);
+        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
+        TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
+
+        titleView.setText(R.string.rename_group_title);
+        btnApply.setText(R.string.rename_group_btn);
+        
+        input.setText(group.getTitle());
+        input.setSelection(input.getText().length());
+
+        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
+        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
+        btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
+        btnCancel.setTextColor(activity.getColor(R.color.error_red));
+        btnApply.setBackground(ResponsiveUI.createButtonSelector(activity, ThemeManager.getPrimaryAccentColor(activity), 4.0f));
+        btnApply.setTextColor(activity.getColor(R.color.text_primary));
+
+        ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
+        ResponsiveUI.setupClickable(btnApply, false, () -> {
+            String newTitle = input.getText().toString().trim();
+            if (newTitle.isEmpty()) {
+                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_group_title_cannot_be_empty), android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (newTitle.equalsIgnoreCase(group.getTitle())) {
+                dialog.dismiss();
+                return;
+            }
+            boolean exists = false;
+            for (AccountGroup existingGroup : activity.appStorage.groups) {
+                if (existingGroup != group && existingGroup.getTitle().equalsIgnoreCase(newTitle)) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) {
+                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_group_with_this_title_already_exists), android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            group.setTitle(newTitle);
+            StorageHelper.saveAppStorage(activity, activity.appStorage);
+            DashboardHelper.refreshDashboardList(activity);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
 }

@@ -8,6 +8,39 @@
     android:padding="8dp">
 
     <LinearLayout
+        android:id="@+id/btn_popup_rename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_edit"
+            app:tint="?attr/colorAccentSecondary" 
+            android:contentDescription="@string/popup_menu_icon_desc"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/popup_menu_btn_rename"
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider_rename"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorBorder"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+    <LinearLayout
         android:id="@+id/btn_popup_download"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
