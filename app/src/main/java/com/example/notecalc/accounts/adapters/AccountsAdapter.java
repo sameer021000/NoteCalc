@@ -90,19 +90,39 @@ import android.graphics.Color;
                 Account account = (Account) item;
 
                 accHolder.tvTitle.setText(account.getTitle());
-                accHolder.tvTotal.setText(String.format(Locale.getDefault(), "%.2f", account.calculateTotal()));
+                double expenses = account.calculateTotal();
+                double budget = account.hasBudget() ? account.calculateTotalBudget() : 0.0;
+                double balance = budget - expenses;
+                int itemsSize = account.getRecords().size();
 
-                if (accHolder.tvPurse != null) {
-                    if (account.hasBudget()) {
-                        accHolder.tvPurse.setVisibility(View.VISIBLE);
-                        accHolder.tvPurse.setText(String.format(Locale.getDefault(), "Bal : %.2f", account.calculateRemainingPurse()));
-                    } else {
-                        accHolder.tvPurse.setVisibility(View.GONE);
+                String budgetStr;
+                String expensesStr;
+                String balanceStr = String.format(Locale.getDefault(), "%.2f", balance);
+                String recordsStr = itemsSize + (itemsSize == 1 ? " Record" : " Records");
+
+                if (!account.hasBudget() || budget == 0) {
+                    expensesStr = String.format(Locale.getDefault(), "%.2f", expenses);
+                    int expensesIntDigits = String.valueOf((int) expenses).length();
+                    StringBuilder zeros = new StringBuilder();
+                    for (int i = 0; i < expensesIntDigits; i++) {
+                        zeros.append("0");
                     }
+                    budgetStr = zeros.toString();
+                } else if (expenses == 0) {
+                    budgetStr = String.format(Locale.getDefault(), "%.2f", budget);
+                    int budgetIntDigits = String.valueOf((int) budget).length();
+                    StringBuilder zeros = new StringBuilder();
+                    for (int i = 0; i < budgetIntDigits; i++) {
+                        zeros.append("0");
+                    }
+                    expensesStr = zeros.toString();
+                } else {
+                    budgetStr = String.format(Locale.getDefault(), "%.2f", budget);
+                    expensesStr = String.format(Locale.getDefault(), "%.2f", expenses);
                 }
 
-                int itemsSize = account.getRecords().size();
-                accHolder.tvItemsCount.setText(String.format(Locale.getDefault(), "%d %s", itemsSize, itemsSize == 1 ? "item" : "items"));
+                String summary = budgetStr + " - " + expensesStr + " = " + balanceStr + " | " + recordsStr;
+                accHolder.tvSummary.setText(summary);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                 accHolder.tvDate.setText(sdf.format(new Date(account.getLastModified())));
@@ -217,17 +237,14 @@ import android.graphics.Color;
         }
 
         static class AccountViewHolder extends RecyclerView.ViewHolder {
-            TextView tvTitle, tvTotal, tvDate, tvItemsCount, tvPurse;
+            TextView tvTitle, tvDate, tvSummary;
             ImageView btnPinAccount, btnMoveAccount;
 
             AccountViewHolder(View itemView) {
                 super(itemView);
                 tvTitle = itemView.findViewById(R.id.text_account_title);
-                tvTotal = itemView.findViewById(R.id.text_account_total);
-                tvPurse = itemView.findViewById(R.id.text_account_purse);
+                tvSummary = itemView.findViewById(R.id.text_account_summary);
                 tvDate = itemView.findViewById(R.id.text_account_date);
-                tvItemsCount = itemView.findViewById(R.id.text_account_items_count);
-
                 btnPinAccount = itemView.findViewById(R.id.btn_pin_account);
                 btnMoveAccount = itemView.findViewById(R.id.btn_move_account);
             }
