@@ -170,12 +170,12 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
         ResponsiveUI.setupClickable(btnCreate, true, () -> {
             String title = input.getText().toString().trim();
             if (title.isEmpty()) {
-                android.widget.Toast.makeText(activity, "Title cannot be empty", android.widget.Toast.LENGTH_SHORT).show();
+                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_list_title_cannot_be_6), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
             // Check if title exists
             if (StorageHelper.doesAccountExist(activity.appStorage, title)) {
-                android.widget.Toast.makeText(activity, "List with activity title already exists", android.widget.Toast.LENGTH_SHORT).show();
+                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_list_with_this_tit_7), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
 
