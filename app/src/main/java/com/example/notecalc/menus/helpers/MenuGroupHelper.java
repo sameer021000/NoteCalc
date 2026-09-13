@@ -26,10 +26,17 @@ public class MenuGroupHelper {
         popupWindow.setElevation(8.0f);
 
         View btnRename = popupView.findViewById(R.id.btn_popup_rename);
-        ResponsiveUI.setupClickable(btnRename, false, () -> {
-            popupWindow.dismiss();
-            GroupDialogHelper.showRenameGroupDialog(activity, group);
-        });
+        View dividerRename = popupView.findViewById(R.id.divider_rename);
+        
+        if (group.isArchived()) {
+            if (btnRename != null) btnRename.setVisibility(View.GONE);
+            if (dividerRename != null) dividerRename.setVisibility(View.GONE);
+        } else {
+            ResponsiveUI.setupClickable(btnRename, false, () -> {
+                popupWindow.dismiss();
+                GroupDialogHelper.showRenameGroupDialog(activity, group);
+            });
+        }
 
         View btnDownload = popupView.findViewById(R.id.btn_popup_download);
         View btnDelete = popupView.findViewById(R.id.btn_popup_delete);
