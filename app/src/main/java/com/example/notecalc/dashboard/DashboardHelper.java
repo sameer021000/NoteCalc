@@ -1,5 +1,4 @@
 package com.example.notecalc.dashboard;
-import com.example.notecalc.accounts.dialogs.*;
 import com.example.notecalc.accounts.adapters.*;
 import com.example.notecalc.dashboard.engine.*;
 import com.example.notecalc.dashboard.ui.*;
@@ -27,11 +26,10 @@ public class DashboardHelper {
         LayoutInflater inflater = activity.getLayoutInflater();
         View dashboardView = inflater.inflate(R.layout.layout_dashboard, activity.mainContainer, false);
 
-        View btnCreateAccount = dashboardView.findViewById(R.id.btn_create_account);
+        View btnCreateAdd = dashboardView.findViewById(R.id.btn_create_add);
         View btnSettings = dashboardView.findViewById(R.id.btn_settings);
         View btnArchive = dashboardView.findViewById(R.id.btn_archive);
         View btnTips = dashboardView.findViewById(R.id.btn_tips);
-        View btnCreateGroup = dashboardView.findViewById(R.id.btn_create_group);
         View cardEmptyState = dashboardView.findViewById(R.id.card_empty_state);
 
         DashboardUIHelper.setupActionButtons(activity, btnSettings, btnArchive, btnTips);
@@ -57,12 +55,9 @@ public class DashboardHelper {
 
         ResponsiveUI.applyResponsiveness(dashboardView);
 
-        DashboardUIHelper.applyDashboardStyling(activity, btnCreateAccount, btnCreateGroup, cardEmptyState);
+        DashboardUIHelper.applyDashboardStyling(activity, cardEmptyState);
+        DashboardUIHelper.setupAddMenuPopup(activity, btnCreateAdd);
 
-        ResponsiveUI.setupClickable(btnCreateAccount, () -> activity.openEditor(null));
-        if (btnCreateGroup != null) {
-            ResponsiveUI.setupClickable(btnCreateGroup, () -> GroupDialogHelper.showCreateGroupDialog(activity));
-        }
         ResponsiveUI.setupClickable(cardEmptyState, () -> {
             if (activity.currentViewGroup != null) {
                 activity.openEditor(null);
@@ -77,9 +72,10 @@ public class DashboardHelper {
         if (activity.currentViewGroup != null) {
             if (textAppTitle != null) textAppTitle.setText(activity.currentViewGroup.getTitle());
             if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.GONE);
-            if (btnCreateGroup != null) btnCreateGroup.setVisibility(View.GONE);
+            if (btnCreateAdd != null) btnCreateAdd.setVisibility(View.GONE);
             if (btnDashboardBack != null) {
                 btnDashboardBack.setVisibility(View.VISIBLE);
+                btnDashboardBack.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 10f));
                 ResponsiveUI.setupClickable(btnDashboardBack, false, () -> {
                     activity.currentViewGroup = null;
                     showDashboard(activity);
@@ -88,7 +84,7 @@ public class DashboardHelper {
         } else {
             if (textAppTitle != null) textAppTitle.setText(activity.getString(R.string.app_name));
             if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.VISIBLE);
-            if (btnCreateGroup != null) btnCreateGroup.setVisibility(View.VISIBLE);
+            if (btnCreateAdd != null) btnCreateAdd.setVisibility(View.VISIBLE);
             if (btnDashboardBack != null) btnDashboardBack.setVisibility(View.GONE);
         }
 
@@ -114,25 +110,25 @@ public class DashboardHelper {
 
         TextView textAppTitle = activity.findViewById(R.id.text_app_title);
         TextView textAppSubtitle = activity.findViewById(R.id.text_app_subtitle);
-        View btnCreateAccount = activity.findViewById(R.id.btn_create_account);
-        View btnCreateGroup = activity.findViewById(R.id.btn_create_group);
+        View btnCreateAdd = activity.findViewById(R.id.btn_create_add);
         android.widget.ImageView btnArchive = activity.findViewById(R.id.btn_archive);
 
         if (activity.currentViewGroup != null) {
             if (textAppTitle != null) textAppTitle.setText(activity.currentViewGroup.getTitle());
             if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.GONE);
-            if (btnCreateAccount != null) btnCreateAccount.setVisibility(View.GONE);
-            if (btnCreateGroup != null) btnCreateGroup.setVisibility(View.GONE);
+            if (btnCreateAdd != null) btnCreateAdd.setVisibility(View.GONE);
         } else {
             if (textAppTitle != null) textAppTitle.setText(ArchiveHelper.isShowingArchive ? "Archive" : activity.getString(R.string.app_name));
             if (textAppSubtitle != null) {
-                textAppSubtitle.setVisibility(View.VISIBLE);
+                textAppSubtitle.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
                 textAppSubtitle.setText(ArchiveHelper.isShowingArchive ? "Read-only history" : activity.getString(R.string.app_subtitle));
             }
-            if (btnCreateAccount != null) btnCreateAccount.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
-            if (btnCreateGroup != null) btnCreateGroup.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
+            if (btnCreateAdd != null) btnCreateAdd.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
         }
-        if (btnArchive != null) btnArchive.setImageResource(ArchiveHelper.isShowingArchive ? R.drawable.ic_archive : R.drawable.ic_archive_outline);
+        if (btnArchive != null) {
+            btnArchive.setVisibility(activity.currentViewGroup != null ? View.GONE : View.VISIBLE);
+            btnArchive.setImageResource(ArchiveHelper.isShowingArchive ? R.drawable.ic_archive : R.drawable.ic_archive_outline);
+        }
 
         String query = activity.dashboardSearchQuery.trim().toLowerCase(Locale.getDefault());
         activity.accountsAdapter.setFilter(result.processedAccounts, query);

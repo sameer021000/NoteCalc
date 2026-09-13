@@ -10,38 +10,40 @@
     android:padding="20dp">
 
     <!-- Header Section (Title + Create Buttons) -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="12dp"
-        android:baselineAligned="false">
+        android:layout_marginBottom="12dp">
 
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btn_dashboard_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="?attr/colorAccentSecondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:contentDescription="@string/dashboard_btn_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Title Container (handles vertical centering perfectly) -->
         <LinearLayout
+            android:id="@+id/title_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-            
-            <ImageView
-                android:id="@+id/btn_dashboard_back"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_arrow_back"
-                app:tint="?attr/colorAccentSecondary"
-                android:clickable="true"
-                android:focusable="true"
-                android:visibility="gone"
-                android:contentDescription="@string/dashboard_btn_back" />
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@+id/btn_dashboard_back"
+            app:layout_constraintEnd_toStartOf="@+id/btn_create_add"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
             <TextView
                 android:id="@+id/text_app_title"
                 android:layout_width="wrap_content"
@@ -49,7 +51,10 @@
                 android:text="@string/app_name"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="@color/text_primary"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
             <TextView
                 android:id="@+id/text_app_subtitle"
                 android:layout_width="wrap_content"
@@ -57,67 +62,55 @@
                 android:text="@string/app_subtitle"
                 android:textSize="12sp"
                 android:textColor="?attr/colorAccentSecondary" />
-            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-            
-            <TextView
-                android:id="@+id/btn_create_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dashboard_btn_list"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:padding="8dp"
-                android:background="?attr/colorBgSecondary"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:focusable="true"/>
-                
-            <TextView
-                android:id="@+id/btn_create_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dashboard_btn_group"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:padding="8dp"
-                android:background="?attr/colorBgSecondary"
-                android:clickable="true"
-                android:focusable="true"/>
+        <!-- Right Side Icons -->
+        <ImageView
+            android:id="@+id/btn_settings"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_preferences"
+            app:tint="?attr/colorAccentSecondary"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/dashboard_btn_settings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-            <ImageView
-                android:id="@+id/btn_archive"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="12dp"
-                android:src="@drawable/ic_archive"
-                app:tint="?attr/colorAccentSecondary"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:contentDescription="@string/action_archive" />
+        <ImageView
+            android:id="@+id/btn_archive"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_archive"
+            app:tint="?attr/colorAccentSecondary"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/action_archive"
+            app:layout_constraintEnd_toStartOf="@+id/btn_settings"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="12dp" />
 
-            <ImageView
-                android:id="@+id/btn_settings"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="12dp"
-                android:src="@android:drawable/ic_menu_preferences"
-                app:tint="?attr/colorAccentSecondary"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:contentDescription="@string/dashboard_btn_settings"/>
-        </LinearLayout>
-    </LinearLayout>
+        <!-- Single + Icon replacing the split button -->
+        <ImageView
+            android:id="@+id/btn_create_add"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_add"
+            app:tint="?attr/colorAccentSecondary"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/dashboard_btn_add"
+            app:layout_constraintEnd_toStartOf="@+id/btn_archive"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="12dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Dashboard Search Bar -->
     <LinearLayout

@@ -84,26 +84,7 @@ public class DashboardUIHelper {
         if(btnTips != null) btnTips.setOnClickListener(v -> AppDialogHelper.showTipsDialog(activity));
     }
 
-    public static void applyDashboardStyling(MainActivity activity, View btnCreateAccount, View btnCreateGroup, View cardEmptyState) {
-        if (btnCreateAccount != null) {
-            btnCreateAccount.setBackground(ResponsiveUI.createRoundedBg(
-                    activity,
-                    ThemeManager.getBgSecondaryColor(activity),
-                    ThemeManager.getBorderColor(activity),
-                    1.0f,
-                    8.0f
-            ));
-        }
-        if (btnCreateGroup != null) {
-            btnCreateGroup.setBackground(ResponsiveUI.createRoundedBg(
-                    activity,
-                    ThemeManager.getBgSecondaryColor(activity),
-                    ThemeManager.getBorderColor(activity),
-                    1.0f,
-                    8.0f
-            ));
-        }
-
+    public static void applyDashboardStyling(MainActivity activity, View cardEmptyState) {
         if (cardEmptyState != null) {
             cardEmptyState.setBackground(ResponsiveUI.createRoundedBg(
                     activity,
@@ -112,6 +93,40 @@ public class DashboardUIHelper {
                     1.5f,
                     12f
             ));
+        }
+    }
+
+    public static void setupAddMenuPopup(MainActivity activity, View btnCreateAdd) {
+        if (btnCreateAdd != null) {
+            ResponsiveUI.setupClickable(btnCreateAdd, () -> {
+                android.view.View popupView = activity.getLayoutInflater().inflate(R.layout.layout_create_menu, null);
+                android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
+                        popupView,
+                        (int) (180 * activity.getResources().getDisplayMetrics().density),
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                        true
+                );
+
+                popupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+                popupWindow.setElevation(8f);
+
+                popupView.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+
+                android.view.View btnCreateList = popupView.findViewById(R.id.btn_popup_create_list);
+                android.view.View btnCreateGroupPopup = popupView.findViewById(R.id.btn_popup_create_group);
+
+                ResponsiveUI.setupClickable(btnCreateList, true, () -> {
+                    popupWindow.dismiss();
+                    activity.openEditor(null);
+                });
+
+                ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {
+                    popupWindow.dismiss();
+                    com.example.notecalc.accounts.dialogs.GroupDialogHelper.showCreateGroupDialog(activity);
+                });
+
+                popupWindow.showAsDropDown(btnCreateAdd, 0, 16);
+            });
         }
     }
 }
