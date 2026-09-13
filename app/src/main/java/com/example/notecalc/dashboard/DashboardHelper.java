@@ -77,6 +77,7 @@ public class DashboardHelper {
                 btnDashboardBack.setVisibility(View.VISIBLE);
                 btnDashboardBack.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 10f));
                 ResponsiveUI.setupClickable(btnDashboardBack, false, () -> {
+                    activity.dashboardSearchQuery = "";
                     activity.currentViewGroup = null;
                     showDashboard(activity);
                 });
@@ -178,7 +179,7 @@ public class DashboardHelper {
                 textEmptyTitle.setText(activity.getString(R.string.empty_state_title));
                 textEmptyDesc.setText(activity.getString(R.string.empty_state_desc));
                 ResponsiveUI.setupClickable(cardEmptyState, () -> {
-                    if (activity.currentViewGroup != null) {
+                    if (!ArchiveHelper.isShowingArchive) {
                         activity.openEditor(null);
                     }
                 });

@@ -34,6 +34,10 @@ public class DashboardUIHelper {
             return false;
         });
 
+        if (activity.dashboardSearchQuery != null && !activity.dashboardSearchQuery.isEmpty()) {
+            editDashboardSearch.setText(activity.dashboardSearchQuery);
+        }
+
         editDashboardSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
@@ -66,6 +70,12 @@ public class DashboardUIHelper {
             }
 
             ArchiveHelper.isShowingArchive = !ArchiveHelper.isShowingArchive;
+            
+            activity.dashboardSearchQuery = "";
+            android.widget.EditText searchBox = activity.findViewById(R.id.edit_dashboard_search);
+            if (searchBox != null) {
+                searchBox.setText("");
+            }
             
             if (activity.currentViewGroup != null) {
                 activity.currentViewGroup = null;

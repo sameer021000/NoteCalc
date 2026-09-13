@@ -190,6 +190,7 @@ import android.graphics.Color;
                 ));
 
                 ResponsiveUI.setupClickable(grpHolder.itemView, false, () -> {
+                    activity.dashboardSearchQuery = "";
                     activity.currentViewGroup = group;
                     DashboardHelper.showDashboard(activity);
                 }, () -> MenuHelper.showGroupPopupMenu(activity, grpHolder.itemView, group));
