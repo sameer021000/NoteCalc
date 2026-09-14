@@ -21,13 +21,22 @@ public class EditorSaveHelper {
 
             if (activity.editingRecordIndex != -1) {
                 Record record = StateHelper.getActiveRecords(activity).get(activity.editingRecordIndex);
-                record.setDescription(desc);
-                record.setAmount(amount);
-                record.setDate(activity.selectedRecordDate);
-                record.setRemarks(remarks);
-                record.setCategory(category);
-                record.setAttachments(new java.util.ArrayList<>(activity.tempAttachments));
-                record.setTimestampMillis(System.currentTimeMillis());
+                boolean contentChanged = !record.getDescription().equals(desc) ||
+                                         Double.compare(record.getAmount(), amount) != 0 ||
+                                         !record.getDate().equals(activity.selectedRecordDate) ||
+                                         !record.getRemarks().equals(remarks) ||
+                                         !record.getCategory().equals(category) ||
+                                         !record.getAttachments().equals(activity.tempAttachments);
+
+                if (contentChanged) {
+                    record.setDescription(desc);
+                    record.setAmount(amount);
+                    record.setDate(activity.selectedRecordDate);
+                    record.setRemarks(remarks);
+                    record.setCategory(category);
+                    record.setAttachments(new java.util.ArrayList<>(activity.tempAttachments));
+                    record.setTimestampMillis(System.currentTimeMillis());
+                }
                 EditorSortHelper.applySorting(activity);
                 EditorModeHelper.cancelEditRecordMode(activity);
             } else {
