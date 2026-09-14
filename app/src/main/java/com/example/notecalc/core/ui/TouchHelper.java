@@ -17,6 +17,7 @@ public class TouchHelper {
             @Override
             public int getSwipeDirs(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
                 if (activity.currentEditingAccount != null && activity.currentEditingAccount.isArchived()) return 0;
+                if (activity.containerBulkActions != null && activity.containerBulkActions.getVisibility() == android.view.View.VISIBLE) return 0;
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
 

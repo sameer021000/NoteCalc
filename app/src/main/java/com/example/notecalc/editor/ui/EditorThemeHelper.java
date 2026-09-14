@@ -89,14 +89,6 @@ public class EditorThemeHelper {
                 4.0f
         ));
 
-        if (btnSave != null) {
-            btnSave.setBackground(ResponsiveUI.createRoundedBg(
-                    activity,
-                    ThemeManager.getPrimaryAccentColor(activity),
-                    0,
-                    0,
-                    6.0f
-            ));
-        }
+
     }
 }
