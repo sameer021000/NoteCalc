@@ -9,14 +9,7 @@ import android.widget.TextView;
 public class EditorCategoryHelper {
     public static void setupCategoryDropdown(MainActivity activity) {
         if (activity.editCategoryField != null) {
-            java.util.Set<String> catSet = new java.util.HashSet<>();
-            if (activity.currentEditingAccount != null) {
-                for (Record r : activity.currentEditingAccount.getRecords()) {
-                    if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
-                }
-            }
-            java.util.List<String> catList = new java.util.ArrayList<>(catSet);
-            java.util.Collections.sort(catList);
+            java.util.List<String> catList = getCategoryList(activity);
             android.widget.ArrayAdapter<String> catAdapter = new android.widget.ArrayAdapter<>(activity, android.R.layout.simple_dropdown_item_1line, catList) {
                 @androidx.annotation.NonNull
                 @Override
@@ -75,5 +68,22 @@ public class EditorCategoryHelper {
                 }
             });
         }
+    }
+
+    private static java.util.List<String> getCategoryList(MainActivity activity) {
+        java.util.Set<String> catSet = new java.util.HashSet<>();
+        if (activity.currentEditingAccount != null) {
+            for (Record r : activity.currentEditingAccount.getRecords()) {
+                if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
+            }
+            if (activity.currentEditingAccount.getBudgetRecords() != null) {
+                for (Record r : activity.currentEditingAccount.getBudgetRecords()) {
+                    if (!r.getCategory().isEmpty()) catSet.add(r.getCategory());
+                }
+            }
+        }
+        java.util.List<String> catList = new java.util.ArrayList<>(catSet);
+        java.util.Collections.sort(catList);
+        return catList;
     }
 }
