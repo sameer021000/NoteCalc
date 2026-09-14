@@ -8,11 +8,15 @@ public class NavigationHelper {
 
     public static void handleBackPress(MainActivity activity, OnBackPressedCallback callback) {
         if (activity.currentEditingAccount != null || (activity.mainContainer.getChildAt(0) != null && activity.mainContainer.getChildAt(0).getId() != R.id.dashboard_root)) {
-            if (activity.tempRecords != null) for (Record r : activity.tempRecords) r.setSelected(false);
-            if (activity.tempBudgetRecords != null) for (Record r : activity.tempBudgetRecords) r.setSelected(false);
+            if (activity.currentEditingAccount != null) {
+                if (activity.currentEditingAccount.getRecords() != null) {
+                    for (Record r : activity.currentEditingAccount.getRecords()) r.setSelected(false);
+                }
+                if (activity.currentEditingAccount.getBudgetRecords() != null) {
+                    for (Record r : activity.currentEditingAccount.getBudgetRecords()) r.setSelected(false);
+                }
+            }
             activity.currentEditingAccount = null;
-            activity.tempRecords = null;
-            activity.tempBudgetRecords = null;
             activity.dashboardSearchQuery = "";
             DashboardHelper.showDashboard(activity);
         } else if (activity.currentViewGroup != null) {

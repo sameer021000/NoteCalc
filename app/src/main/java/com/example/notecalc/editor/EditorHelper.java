@@ -42,8 +42,7 @@ public class EditorHelper {
         ImageView btnAnalytics = editorView.findViewById(R.id.btn_analytics);
         AnalyticsHelper.setupAnalyticsButton(activity, btnAnalytics);
 
-        EditText editTitle = editorView.findViewById(R.id.edit_account_title);
-        TextView textTitleError = editorView.findViewById(R.id.text_title_error);
+        TextView editTitle = editorView.findViewById(R.id.edit_account_title);
         EditText editDesc = editorView.findViewById(R.id.edit_record_desc);
         EditText editAmount = editorView.findViewById(R.id.edit_record_amount);
         TextView btnDate = editorView.findViewById(R.id.btn_record_date);
@@ -63,7 +62,7 @@ public class EditorHelper {
         RecyclerView listRecordsRecyclerView = editorView.findViewById(R.id.list_records);
         TextView textTotalVal = editorView.findViewById(R.id.text_total_value);
         TextView textTotalLabel = editorView.findViewById(R.id.text_total_label);
-        TextView btnSave = editorView.findViewById(R.id.btn_save_account);
+        // TextView btnSave = editorView.findViewById(R.id.btn_save_account);
         View formContainer = editorView.findViewById(R.id.form_container);
         View tableHeader = editorView.findViewById(R.id.table_header);
 
@@ -150,20 +149,17 @@ public class EditorHelper {
 
         ResponsiveUI.applyResponsiveness(editorView);
 
-        if (account != null && account.isArchived()) {
-            btnSave.setVisibility(View.GONE);
-        }
-        EditorThemeHelper.applyEditorTheme(activity, formContainer, tableHeader, editTitle, editDesc, editAmount, btnDate, btnCancelEdit, btnAdd, btnSave);
+        EditorThemeHelper.applyEditorTheme(activity, formContainer, tableHeader, editDesc, editAmount, btnDate, btnCancelEdit, btnAdd);
 
         btnDate.setText(activity.selectedRecordDate);
 
-        EditorUIHelper.setupTitleWatcher(activity, editTitle, textTitleError);
+        // Title watcher removed since title is read-only in editor
 
         DashboardHelper.setupBackButton(activity, btnBack);
 
         EditorUIHelper.setupFormListeners(activity, btnDate, btnCancelEdit);
 
-        EditorSaveHelper.setupSaveActions(activity, editTitle, editDesc, editAmount, btnAdd, btnSave);
+        EditorSaveHelper.setupSaveActions(activity, editDesc, editAmount, btnAdd);
 
         EditorUIHelper.populateRecordsList(activity);
 

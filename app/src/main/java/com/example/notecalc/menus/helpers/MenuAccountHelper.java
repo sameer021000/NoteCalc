@@ -27,8 +27,13 @@ public class MenuAccountHelper {
 
         View btnRename = popupView.findViewById(R.id.btn_popup_rename);
         View dividerRename = popupView.findViewById(R.id.divider_rename);
-        if (btnRename != null) btnRename.setVisibility(View.GONE);
-        if (dividerRename != null) dividerRename.setVisibility(View.GONE);
+        if (btnRename != null) btnRename.setVisibility(account.isArchived() ? View.GONE : View.VISIBLE);
+        if (dividerRename != null) dividerRename.setVisibility(account.isArchived() ? View.GONE : View.VISIBLE);
+        
+        ResponsiveUI.setupClickable(btnRename, false, () -> {
+            popupWindow.dismiss();
+            AccountDialogHelper.showRenameAccountDialog(activity, account);
+        });
 
         View btnDownload = popupView.findViewById(R.id.btn_popup_download);
         View btnDelete = popupView.findViewById(R.id.btn_popup_delete);

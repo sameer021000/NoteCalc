@@ -60,7 +60,7 @@ public class DashboardHelper {
 
         ResponsiveUI.setupClickable(cardEmptyState, () -> {
             if (!ArchiveHelper.isShowingArchive) {
-                activity.openEditor(null);
+                com.example.notecalc.accounts.dialogs.AccountDialogHelper.showCreateAccountDialog(activity, activity.currentViewGroup);
             }
         });
         activity.currentEditingAccount = null;
@@ -180,7 +180,7 @@ public class DashboardHelper {
                 textEmptyDesc.setText(activity.getString(R.string.empty_state_desc));
                 ResponsiveUI.setupClickable(cardEmptyState, () -> {
                     if (!ArchiveHelper.isShowingArchive) {
-                        activity.openEditor(null);
+                        com.example.notecalc.accounts.dialogs.AccountDialogHelper.showCreateAccountDialog(activity, activity.currentViewGroup);
                     }
                 });
             }

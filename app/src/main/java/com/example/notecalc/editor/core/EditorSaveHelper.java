@@ -3,15 +3,13 @@ import com.example.notecalc.storage.core.*;
 import com.example.notecalc.core.utils.*;
 import com.example.notecalc.core.ui.*;
 import com.example.notecalc.editor.ui.*;
-import com.example.notecalc.accounts.models.*;
-import com.example.notecalc.records.*;
 import com.example.notecalc.*;
 import com.example.notecalc.records.models.Record;
-import com.example.notecalc.dashboard.*;
+import android.widget.TextView;
 import android.widget.EditText;
 
 public class EditorSaveHelper {
-    public static void setupSaveActions(MainActivity activity, EditText editTitle, EditText editDesc, EditText editAmount, android.widget.TextView btnAdd, android.widget.TextView btnSave) {
+    public static void setupSaveActions(MainActivity activity, EditText editDesc, EditText editAmount, TextView btnAdd) {
         ResponsiveUI.setupClickable(btnAdd, () -> {
             String desc = editDesc.getText().toString().trim();
             String amountStr = editAmount.getText().toString().trim();
@@ -46,42 +44,20 @@ public class EditorSaveHelper {
                 if (activity.editCategoryField != null) activity.editCategoryField.setText("");
                 EditorSortHelper.applySorting(activity);
                 EditorUIHelper.populateRecordsList(activity);
+                EditorCategoryHelper.setupCategoryDropdown(activity);
             }
-        });
-
-        ResponsiveUI.setupClickable(btnSave, () -> {
-            String title = editTitle.getText().toString().trim();
-
-            if (!EditorValidationHelper.validateAccountTitle(activity, title)) return;
-
-            RecordUtils.resequentializeRecords(activity.tempRecords);
-            RecordUtils.resequentializeRecords(activity.tempBudgetRecords);
-
-            if (activity.currentEditingAccount == null) {
-                Account newAccount = new Account(title, activity.tempRecords, System.currentTimeMillis());
-                newAccount.setBudgetRecords(activity.tempBudgetRecords);
-                newAccount.setHasBudget(!activity.tempBudgetRecords.isEmpty());
-
-                if (activity.currentViewGroup != null) {
-                    activity.currentViewGroup.getAccounts().add(newAccount);
-                    activity.currentViewGroup.updateLastModified();
-                } else {
-                    activity.appStorage.standaloneAccounts.add(newAccount);
-                }
-            } else {
-                activity.currentEditingAccount.setTitle(title);
-                activity.currentEditingAccount.setRecords(activity.tempRecords);
-                activity.currentEditingAccount.setBudgetRecords(activity.tempBudgetRecords);
-                activity.currentEditingAccount.setHasBudget(!activity.tempBudgetRecords.isEmpty());
+            
+            // Autosave after adding or editing a record
+            if (activity.currentEditingAccount != null) {
+                activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
                 activity.currentEditingAccount.updateLastModified();
+                
+                if (activity.currentViewGroup != null) {
+                    activity.currentViewGroup.updateLastModified();
+                }
+                
+                StorageHelper.saveAppStorage(activity, activity.appStorage);
             }
-
-            StorageHelper.saveAppStorage(activity, activity.appStorage);
-
-            activity.currentEditingAccount = null;
-            activity.tempRecords = null;
-            activity.tempBudgetRecords = null;
-            DashboardHelper.showDashboard(activity);
         });
     }
 }

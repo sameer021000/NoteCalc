@@ -120,7 +120,7 @@ public class EditorUIHelper {
         int pTB = (int) (6 * activity.getResources().getDisplayMetrics().density);
         activity.btnToggleForm.setPadding(pLR, pTB, pLR, pTB);
 
-        if (account == null) {
+        if (account == null || account.getRecords().isEmpty()) {
             activity.isFormInputsCollapsed = false;
             activity.formInputsContainer.setVisibility(View.VISIBLE);
             activity.btnToggleForm.setText(activity.getString(R.string.auto_minimize_19));
@@ -182,39 +182,6 @@ public class EditorUIHelper {
             activity.btnBulkActionsMenu.setBackground(ResponsiveUI.createButtonSelector(activity, android.graphics.Color.parseColor("#15FFFFFF"), 4.0f));
             ResponsiveUI.setupClickable(activity.btnBulkActionsMenu, true, () -> MenuHelper.showBulkActionsMenu(activity, activity.btnBulkActionsMenu));
         }
-    }
-
-    public static void setupTitleWatcher(MainActivity activity, android.widget.EditText editTitle, TextView textTitleError) {
-        editTitle.addTextChangedListener(new android.text.TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String input = s.toString().trim();
-                if (EditorValidationHelper.isDuplicateTitle(activity, input)) {
-                    textTitleError.setVisibility(View.VISIBLE);
-                    editTitle.setBackground(ResponsiveUI.createRoundedBg(
-                            activity,
-                            ThemeManager.getBgSecondaryColor(activity),
-                            activity.getColor(R.color.error_red),
-                            1.5f,
-                            6.0f
-                    ));
-                } else {
-                    textTitleError.setVisibility(View.GONE);
-                    editTitle.setBackground(ResponsiveUI.createRoundedBg(
-                            activity,
-                            ThemeManager.getBgSecondaryColor(activity),
-                            ThemeManager.getBorderColor(activity),
-                            1.0f,
-                            6.0f
-                    ));
-                }
-            }
-            @Override
-            public void afterTextChanged(android.text.Editable s) {}
-        });
     }
 
     public static void migrateLegacyIndices(MainActivity activity, Account account) {

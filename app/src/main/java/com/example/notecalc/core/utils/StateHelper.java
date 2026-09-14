@@ -59,7 +59,14 @@ public class StateHelper {
     }
 
     public static List<Record> getActiveRecords(MainActivity activity) {
-        return activity.isBudgetMode ? activity.tempBudgetRecords : activity.tempRecords;
+        if (activity.currentEditingAccount == null) return new java.util.ArrayList<>();
+        if (activity.isBudgetMode) {
+            if (activity.currentEditingAccount.getBudgetRecords() == null) {
+                activity.currentEditingAccount.setBudgetRecords(new java.util.ArrayList<>());
+            }
+            return activity.currentEditingAccount.getBudgetRecords();
+        }
+        return activity.currentEditingAccount.getRecords();
     }
 
 }

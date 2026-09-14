@@ -46,8 +46,6 @@ public class TransferEngine {
             }
         }
 
-        StorageHelper.saveAppStorage(activity, activity.appStorage);
-
         if (isCut) {
             StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
             RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
@@ -55,6 +53,8 @@ public class TransferEngine {
                 activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             }
         }
+
+        StorageHelper.saveAppStorage(activity, activity.appStorage);
 
         for (Record r : StateHelper.getActiveRecords(activity)) r.setSelected(false);
         if (activity.cbSelectAllHeader != null) {

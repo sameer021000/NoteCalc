@@ -127,7 +127,7 @@ public class DashboardUIHelper {
 
                 ResponsiveUI.setupClickable(btnCreateList, true, () -> {
                     popupWindow.dismiss();
-                    activity.openEditor(null);
+                    com.example.notecalc.accounts.dialogs.AccountDialogHelper.showCreateAccountDialog(activity, activity.currentViewGroup);
                 });
 
                 ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {

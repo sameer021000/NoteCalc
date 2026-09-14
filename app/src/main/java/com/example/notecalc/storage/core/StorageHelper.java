@@ -49,6 +49,23 @@ public class StorageHelper {
         } catch (IOException | JSONException e) {
             android.util.Log.e("StorageHelper", "Error loading storage", e);
         }
+        
+        // Auto-heal any gaps in serial numbers
+        for (AccountGroup g : storage.groups) {
+            for (Account a : g.getAccounts()) {
+                com.example.notecalc.records.RecordUtils.resequentializeRecords(a.getRecords());
+                if (a.getBudgetRecords() != null) {
+                    com.example.notecalc.records.RecordUtils.resequentializeRecords(a.getBudgetRecords());
+                }
+            }
+        }
+        for (Account a : storage.standaloneAccounts) {
+            com.example.notecalc.records.RecordUtils.resequentializeRecords(a.getRecords());
+            if (a.getBudgetRecords() != null) {
+                com.example.notecalc.records.RecordUtils.resequentializeRecords(a.getBudgetRecords());
+            }
+        }
+        
         return storage;
     }
 

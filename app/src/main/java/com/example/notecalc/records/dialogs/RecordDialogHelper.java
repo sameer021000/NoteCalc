@@ -74,6 +74,14 @@ public class RecordDialogHelper {
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);
+            
+            if (activity.currentEditingAccount != null) {
+                com.example.notecalc.records.RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
+                activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
+                activity.currentEditingAccount.updateLastModified();
+                if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
+                com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
+            }
             return;
         }
 
@@ -200,6 +208,14 @@ public class RecordDialogHelper {
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);
+            
+            if (activity.currentEditingAccount != null) {
+                com.example.notecalc.records.RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
+                activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
+                activity.currentEditingAccount.updateLastModified();
+                if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
+                com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
+            }
         });
 
         dialog.show();

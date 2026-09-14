@@ -68,18 +68,40 @@ public class TouchHelper {
 
                 Record deletedRecord = activity.recordsAdapter.displayRecords.get(pos);
                 int trueIndex = StateHelper.getActiveRecords(activity).indexOf(deletedRecord);
+                int deletedIndex = deletedRecord.getOriginalIndex();
 
                 // Temporarily remove
                 StateHelper.getActiveRecords(activity).remove(trueIndex);
                 activity.recordsAdapter.refreshDisplay();
                 BulkActionsHelper.updateBulkActionsState(activity);
                 EditorSortHelper.updateHeaderLabels(activity);
+                
+                if (activity.currentEditingAccount != null) {
+                    com.example.notecalc.records.RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
+                    activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
+                    activity.currentEditingAccount.updateLastModified();
+                    if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
+                    com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
+                }
 
                 SnackbarHelper.showUndoSnackbar(activity, "Record deleted", () -> {
                     StateHelper.getActiveRecords(activity).add(trueIndex, deletedRecord);
+                    deletedRecord.setOriginalIndex(deletedIndex);
+                    for (Record r : StateHelper.getActiveRecords(activity)) {
+                        if (r != deletedRecord && r.getOriginalIndex() >= deletedIndex) {
+                            r.setOriginalIndex(r.getOriginalIndex() + 1);
+                        }
+                    }
                     activity.recordsAdapter.refreshDisplay();
                     BulkActionsHelper.updateBulkActionsState(activity);
                     EditorSortHelper.updateHeaderLabels(activity);
+                    
+                    if (activity.currentEditingAccount != null) {
+                        activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
+                        activity.currentEditingAccount.updateLastModified();
+                        if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
+                        com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
+                    }
                 }, null);
             }
         };
