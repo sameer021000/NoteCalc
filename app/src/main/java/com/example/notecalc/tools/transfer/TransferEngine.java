@@ -70,10 +70,14 @@ public class TransferEngine {
                 }
             });
         }
-        if (activity.recordsAdapter != null) {
-            activity.recordsAdapter.notifyDataSetChanged();
+        if (isCut) {
+            com.example.notecalc.editor.ui.EditorUIHelper.populateRecordsList(activity);
+        } else {
+            if (activity.recordsAdapter != null) {
+                activity.recordsAdapter.notifyDataSetChanged();
+            }
+            BulkActionsHelper.updateBulkActionsState(activity);
         }
-        BulkActionsHelper.updateBulkActionsState(activity);
 
         String action = isCut ? "Cut" : "Copied";
         android.widget.Toast.makeText(activity, action + " " + selectedRecords.size() + " records to " + targetAccount.getTitle(), android.widget.Toast.LENGTH_SHORT).show();

@@ -1,6 +1,5 @@
 package com.example.notecalc.core.ui;
 import com.example.notecalc.editor.core.*;
-import com.example.notecalc.records.dialogs.*;
 import com.example.notecalc.core.utils.*;
 import com.example.notecalc.editor.ui.*;
 import com.example.notecalc.records.models.Record;
@@ -80,8 +79,7 @@ public class TouchHelper {
 
                 // Temporarily remove
                 StateHelper.getActiveRecords(activity).remove(trueIndex);
-                activity.recordsAdapter.refreshDisplay();
-                BulkActionsHelper.updateBulkActionsState(activity);
+                EditorUIHelper.populateRecordsList(activity);
                 EditorSortHelper.updateHeaderLabels(activity);
                 
                 if (activity.currentEditingAccount != null) {
@@ -100,8 +98,7 @@ public class TouchHelper {
                             r.setOriginalIndex(r.getOriginalIndex() + 1);
                         }
                     }
-                    activity.recordsAdapter.refreshDisplay();
-                    BulkActionsHelper.updateBulkActionsState(activity);
+                    EditorUIHelper.populateRecordsList(activity);
                     EditorSortHelper.updateHeaderLabels(activity);
                     
                     if (activity.currentEditingAccount != null) {

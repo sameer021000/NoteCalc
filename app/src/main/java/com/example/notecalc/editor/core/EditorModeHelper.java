@@ -73,7 +73,7 @@ public class EditorModeHelper {
         EditorUIHelper.populateRecordsList(activity);
     }
 
-    public static void setupModeToggleUI(MainActivity activity, android.widget.TextView btnModeExpenses, android.widget.TextView btnModeBudget, android.widget.TextView textRemainingPurse) {
+    public static void setupModeToggleUI(MainActivity activity, android.widget.TextView btnModeExpenses, android.widget.TextView btnModeBudget) {
         Runnable updateModeToggleUI = () -> {
             if (btnModeExpenses != null && btnModeBudget != null) {
                 btnModeExpenses.setBackgroundColor(activity.isBudgetMode ? ThemeManager.getBgSecondaryColor(activity) : ThemeManager.getPrimaryAccentColor(activity));
@@ -88,19 +88,7 @@ public class EditorModeHelper {
             EditorSortHelper.updateDateHeaderIndicator(activity);
             EditorSortHelper.updateAmountHeaderIndicator(activity);
 
-            if (textRemainingPurse != null) {
-                if (activity.tempBudgetRecords.isEmpty() && !activity.isBudgetMode) {
-                    textRemainingPurse.setVisibility(android.view.View.GONE);
-                } else {
-                    textRemainingPurse.setVisibility(android.view.View.VISIBLE);
-                    double totalBudget = 0;
-                    for (Record r : activity.tempBudgetRecords) totalBudget += r.getAmount();
-                    double totalExpenses = 0;
-                    for (Record r : activity.tempRecords) totalExpenses += r.getAmount();
-                    double remaining = totalBudget - totalExpenses;
-                    textRemainingPurse.setText(String.format(java.util.Locale.getDefault(), "Balance : %.2f", remaining));
-                }
-            }
+
         };
 
         if (btnModeExpenses != null) ResponsiveUI.setupClickable(btnModeExpenses, false, () -> {

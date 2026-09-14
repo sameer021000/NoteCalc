@@ -19,7 +19,20 @@ public class EditorUIHelper {
         if (activity.recordsAdapter != null) {
             activity.recordsAdapter.refreshDisplay();
         }
-
+        TextView textRemainingPurse = activity.textRemainingPurseField;
+        if (textRemainingPurse != null) {
+            textRemainingPurse.setVisibility(View.VISIBLE);
+            double totalBudget = 0;
+            if (activity.currentEditingAccount != null && activity.currentEditingAccount.getBudgetRecords() != null) {
+                for (Record r : activity.currentEditingAccount.getBudgetRecords()) totalBudget += r.getAmount();
+            }
+            double totalExpenses = 0;
+            if (activity.currentEditingAccount != null && activity.currentEditingAccount.getRecords() != null) {
+                for (Record r : activity.currentEditingAccount.getRecords()) totalExpenses += r.getAmount();
+            }
+            double remaining = totalBudget - totalExpenses;
+            textRemainingPurse.setText(String.format(Locale.getDefault(), "Balance : %.2f", remaining));
+        }
 
         boolean isEmpty = StateHelper.getActiveRecords(activity).isEmpty();
         if (activity.editorEmptyState != null) {

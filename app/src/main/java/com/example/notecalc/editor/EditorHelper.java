@@ -68,7 +68,7 @@ public class EditorHelper {
 
         TextView btnModeExpenses = editorView.findViewById(R.id.btn_mode_expenses);
         TextView btnModeBudget = editorView.findViewById(R.id.btn_mode_budget);
-        TextView textRemainingPurse = editorView.findViewById(R.id.text_remaining_purse);
+        activity.textRemainingPurseField = editorView.findViewById(R.id.text_remaining_purse);
 
         activity.editDescField = editDesc;
         activity.editAmountField = editAmount;
@@ -143,7 +143,7 @@ public class EditorHelper {
             activity.originalTitle = "";
         }
 
-        EditorModeHelper.setupModeToggleUI(activity, btnModeExpenses, btnModeBudget, textRemainingPurse);
+        EditorModeHelper.setupModeToggleUI(activity, btnModeExpenses, btnModeBudget);
         EditorSortHelper.applySorting(activity);
         EditorUIHelper.populateRecordsList(activity);
 

@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
     // Bulk action container and selected total display
     public View containerBulkActions;
     public TextView textSelectedTotal;
+    public TextView textRemainingPurseField;
 
     // Date range filter state (dd-MM-yyyy strings, null = no filter)
     public String expenseFilterDateFrom = null;
