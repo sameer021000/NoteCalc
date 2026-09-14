@@ -17,7 +17,14 @@ public class TouchHelper {
             @Override
             public int getSwipeDirs(@androidx.annotation.NonNull RecyclerView recyclerView, @androidx.annotation.NonNull RecyclerView.ViewHolder viewHolder) {
                 if (activity.currentEditingAccount != null && activity.currentEditingAccount.isArchived()) return 0;
-                if (activity.containerBulkActions != null && activity.containerBulkActions.getVisibility() == android.view.View.VISIBLE) return 0;
+                boolean anySelected = false;
+                for (com.example.notecalc.records.models.Record r : com.example.notecalc.core.utils.StateHelper.getActiveRecords(activity)) {
+                    if (r.isSelected()) {
+                        anySelected = true;
+                        break;
+                    }
+                }
+                if (anySelected) return 0;
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
 
@@ -106,6 +113,5 @@ public class TouchHelper {
                 }, null);
             }
         };
-
     }
 }
