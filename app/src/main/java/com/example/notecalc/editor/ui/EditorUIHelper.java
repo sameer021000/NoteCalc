@@ -57,7 +57,8 @@ public class EditorUIHelper {
             TextView textSelectedTotal,
             TextView textTotalValField,
             TextView textTotalLabel,
-            CheckBox cbSelectAllHeader) {
+            CheckBox cbSelectAllHeader,
+            boolean isBudgetMode) {
 
         boolean anySelected = false;
         double selectedTotal = 0.0;
@@ -81,7 +82,9 @@ public class EditorUIHelper {
                 if (textTotalLabel != null) textTotalLabel.setText(textTotalLabel.getContext().getString(R.string.total_of_selection));
             } else {
                 textTotalValField.setText(String.format(Locale.getDefault(), "%.2f", overallTotal));
-                if (textTotalLabel != null) textTotalLabel.setText(textTotalLabel.getContext().getString(R.string.total_spendings_label));
+                if (textTotalLabel != null) {
+                    textTotalLabel.setText(isBudgetMode ? "TOTAL BUDGET" : textTotalLabel.getContext().getString(R.string.total_spendings_label));
+                }
             }
         }
 

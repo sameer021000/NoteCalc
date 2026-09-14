@@ -20,7 +20,8 @@ public class BulkActionsHelper {
                 activity.textSelectedTotal,
                 activity.textTotalValField,
                 activity.textTotalLabelField,
-                activity.cbSelectAllHeader
+                activity.cbSelectAllHeader,
+                activity.isBudgetMode
         );
 
         if (activity.recordsAdapter != null) {
