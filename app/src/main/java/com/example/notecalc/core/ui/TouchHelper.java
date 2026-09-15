@@ -1,6 +1,8 @@
 package com.example.notecalc.core.ui;
 import com.example.notecalc.editor.core.*;
 import com.example.notecalc.core.utils.*;
+import com.example.notecalc.R;
+import com.example.notecalc.accounts.models.Account;
 import com.example.notecalc.editor.ui.*;
 import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
@@ -90,6 +92,9 @@ public class TouchHelper {
                     com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
                 }
 
+                final Account accountAtSwipe = activity.currentEditingAccount;
+                final boolean isBudgetAtSwipe = activity.isBudgetMode;
+
                 SnackbarHelper.showUndoSnackbar(activity, "Record deleted", () -> {
                     StateHelper.getActiveRecords(activity).add(trueIndex, deletedRecord);
                     deletedRecord.setOriginalIndex(deletedIndex);
@@ -110,7 +115,9 @@ public class TouchHelper {
                 }, () -> {
                     java.util.List<Record> toTrash = new java.util.ArrayList<>();
                     toTrash.add(deletedRecord);
-                    com.example.notecalc.tools.trash.TrashEngine.moveToTrash(activity, activity.currentEditingAccount, toTrash, activity.isBudgetMode);
+                    if (accountAtSwipe != null) {
+                        com.example.notecalc.tools.trash.TrashEngine.moveToTrash(activity, accountAtSwipe, toTrash, isBudgetAtSwipe);
+                    }
                 });
             }
         };

@@ -20,6 +20,15 @@ public class AppStorageJsonMapper {
             accountsArray.put(AccountJsonMapper.toJSONObject(account));
         }
         root.put("standaloneAccounts", accountsArray);
+
+        JSONArray trashArray = new JSONArray();
+        if (storage.trashAccounts != null) {
+            for (Account account : storage.trashAccounts) {
+                trashArray.put(AccountJsonMapper.toJSONObject(account));
+            }
+        }
+        root.put("trashAccounts", trashArray);
+
         return root;
     }
 
@@ -35,6 +44,12 @@ public class AppStorageJsonMapper {
             JSONArray accountsArray = obj.getJSONArray("standaloneAccounts");
             for (int i = 0; i < accountsArray.length(); i++) {
                 storage.standaloneAccounts.add(AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i)));
+            }
+        }
+        if (obj.has("trashAccounts")) {
+            JSONArray trashArray = obj.getJSONArray("trashAccounts");
+            for (int i = 0; i < trashArray.length(); i++) {
+                storage.trashAccounts.add(AccountJsonMapper.fromJSONObject(trashArray.getJSONObject(i)));
             }
         }
         return storage;

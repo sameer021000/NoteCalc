@@ -45,6 +45,14 @@ public class TrashActionEngine {
             RecordUtils.resequentializeRecords(targetAccount.getRecords());
         }
         targetAccount.updateLastModified();
+        
+        // If targetAccount is part of a group, update the group's last modified as well
+        for (com.example.notecalc.accounts.models.AccountGroup group : activity.appStorage.groups) {
+            if (group.getAccounts().contains(targetAccount)) {
+                group.updateLastModified();
+                break;
+            }
+        }
 
         // 4. Update the active tempRecords so UI reflects the change immediately if we are in Trash List
         if (activity.currentEditingAccount == trashAccount) {

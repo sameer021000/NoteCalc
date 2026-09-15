@@ -44,6 +44,9 @@ public class StorageHelper {
                     AppStorage loadedStorage = AppStorageJsonMapper.fromJSONObject(obj);
                     storage.groups.addAll(loadedStorage.groups);
                     storage.standaloneAccounts.addAll(loadedStorage.standaloneAccounts);
+                    if (loadedStorage.trashAccounts != null) {
+                        storage.trashAccounts.addAll(loadedStorage.trashAccounts);
+                    }
                 }
             }
         } catch (IOException | JSONException e) {

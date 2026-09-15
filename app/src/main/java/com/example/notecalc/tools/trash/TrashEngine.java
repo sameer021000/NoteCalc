@@ -38,6 +38,7 @@ public class TrashEngine {
             copy.setCategory(r.getCategory());
             copy.setTimestampMillis(r.getTimestampMillis());
             copy.setDeletedTimestamp(now);
+            copy.setOriginalIndex(r.getOriginalIndex());
             if (r.getAttachments() != null) {
                 copy.getAttachments().addAll(r.getAttachments());
             }
