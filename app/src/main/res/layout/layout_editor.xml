@@ -78,9 +78,8 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:padding="8dp"
+            android:padding="10dp"
             android:textColor="@color/text_on_accent"
-            android:background="?attr/colorAccentPrimary"
             android:clickable="true"
             android:focusable="true"/>
 
@@ -93,10 +92,8 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:padding="8dp"
+            android:padding="10dp"
             android:textColor="@color/text_tertiary"
-            android:background="?attr/colorBgSecondary"
-            android:layout_marginStart="8dp"
             android:clickable="true"
             android:focusable="true"/>
     </LinearLayout>

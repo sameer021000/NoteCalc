@@ -107,6 +107,27 @@ public class ResponsiveUI {
         return gd;
     }
 
+    // Dynamic Helper to build responsive rounded backgrounds with specific corners
+    public static GradientDrawable createAsymmetricRoundedBg(Context context, int bgColor, int strokeColor, float strokeWidthDp, float topLeftDp, float topRightDp, float bottomRightDp, float bottomLeftDp) {
+        float factor = getScaleFactor(context);
+        float density = context.getResources().getDisplayMetrics().density;
+
+        GradientDrawable gd = new GradientDrawable();
+        gd.setColor(bgColor);
+        
+        float tl = topLeftDp * factor * density;
+        float tr = topRightDp * factor * density;
+        float br = bottomRightDp * factor * density;
+        float bl = bottomLeftDp * factor * density;
+        gd.setCornerRadii(new float[] { tl, tl, tr, tr, br, br, bl, bl });
+
+        if (strokeColor != 0 && strokeWidthDp > 0) {
+            int strokePx = Math.round(strokeWidthDp * factor * density);
+            gd.setStroke(strokePx, strokeColor);
+        }
+        return gd;
+    }
+
     // Dynamic Helper to build responsive rounded backgrounds with a ripple touch effect
     public static android.graphics.drawable.RippleDrawable createRippleRoundedBg(Context context, int bgColor, int strokeColor, float strokeWidthDp, float cornerRadiusDp) {
         GradientDrawable content = createRoundedBg(context, bgColor, strokeColor, strokeWidthDp, cornerRadiusDp);

@@ -76,10 +76,14 @@ public class EditorModeHelper {
     public static void setupModeToggleUI(MainActivity activity, android.widget.TextView btnModeExpenses, android.widget.TextView btnModeBudget) {
         Runnable updateModeToggleUI = () -> {
             if (btnModeExpenses != null && btnModeBudget != null) {
-                btnModeExpenses.setBackgroundColor(activity.isBudgetMode ? ThemeManager.getBgSecondaryColor(activity) : ThemeManager.getPrimaryAccentColor(activity));
+                btnModeExpenses.setBackground(ResponsiveUI.createAsymmetricRoundedBg(activity, 
+                        activity.isBudgetMode ? ThemeManager.getBgSecondaryColor(activity) : ThemeManager.getPrimaryAccentColor(activity), 
+                        0, 0, 8f, 0f, 0f, 8f));
                 btnModeExpenses.setTextColor(activity.getColor(activity.isBudgetMode ? R.color.text_tertiary : R.color.text_on_accent));
 
-                btnModeBudget.setBackgroundColor(activity.isBudgetMode ? ThemeManager.getPrimaryAccentColor(activity) : ThemeManager.getBgSecondaryColor(activity));
+                btnModeBudget.setBackground(ResponsiveUI.createAsymmetricRoundedBg(activity, 
+                        activity.isBudgetMode ? ThemeManager.getPrimaryAccentColor(activity) : ThemeManager.getBgSecondaryColor(activity), 
+                        0, 0, 0f, 8f, 8f, 0f));
                 btnModeBudget.setTextColor(activity.getColor(activity.isBudgetMode ? R.color.text_on_accent : R.color.text_tertiary));
             }
             EditorSortHelper.applySorting(activity);
