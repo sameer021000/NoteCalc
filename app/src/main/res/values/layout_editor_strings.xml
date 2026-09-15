@@ -17,7 +17,7 @@
 
     <string name="label_add_record">ADD EXPENDITURE</string>
     <string name="label_edit_record">EDIT EXPENDITURE</string>
-    <string name="btn_add_record">Add Item</string>
+    <string name="btn_add_record">Add Record</string>
     <string name="btn_edit_record">Update Item</string>
     <string name="btn_cancel_edit_record">Cancel</string>
     <string name="hint_list_title">Enter List Title (e.g. June Expenses)</string>
