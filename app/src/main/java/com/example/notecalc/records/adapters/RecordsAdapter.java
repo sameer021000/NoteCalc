@@ -25,6 +25,7 @@ import java.util.Locale;
     }
 
         private boolean isSelectionMode = false;
+        public boolean isTrashMode = false;
 
         public void setSelectionMode(boolean mode) {
             if (this.isSelectionMode != mode) {
@@ -129,6 +130,13 @@ import java.util.Locale;
             }
 
             ResponsiveUI.setupClickable(holder.itemView, true, () -> {
+                if (isTrashMode) {
+                    record.setSelected(!record.isSelected());
+                    holder.cbSelect.setChecked(record.isSelected());
+                    BulkActionsHelper.updateSelectAllHeaderState(activity);
+                    BulkActionsHelper.updateBulkActionsState(activity);
+                    return;
+                }
                 if (activity.currentEditingAccount != null && activity.currentEditingAccount.isArchived()) return;
                 EditorModeHelper.enterEditRecordMode(activity, trueIndex, record);
             }, () -> {

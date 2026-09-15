@@ -222,4 +222,125 @@ public class RecordDialogHelper {
 
         dialog.show();
     }
+
+    @android.annotation.SuppressLint("SetTextI18n")
+    public static void showRestoreMultipleConfirmationDialog(MainActivity activity, com.example.notecalc.accounts.models.Account trashAccount, List<Record> selectedRecords) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_delete_multiple_dialog, null);
+        builder.setView(dialogView);
+
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
+        View detailsContainer = dialogView.findViewById(R.id.details_container);
+        LinearLayout selectedItemsList = dialogView.findViewById(R.id.selected_items_list);
+        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
+        TextView btnRestore = dialogView.findViewById(R.id.btn_dialog_delete);
+        TextView dialogTitle = dialogView.findViewById(R.id.dialog_title);
+        TextView dialogMessage = dialogView.findViewById(R.id.dialog_message);
+
+        dialogTitle.setText("Restore " + selectedRecords.size() + " Records?");
+        dialogTitle.setTextColor(ThemeManager.getPrimaryAccentColor(activity));
+        dialogMessage.setText("These records will be restored to their original lists.");
+
+        // Style dialog
+        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
+                activity,
+                ThemeManager.getBgSecondaryColor(activity),
+                ThemeManager.getBorderColor(activity),
+                1.5f,
+                12f
+        ));
+        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(
+                activity,
+                ThemeManager.getBgPrimaryColor(activity),
+                ThemeManager.getBorderColor(activity),
+                1.0f,
+                6f
+        ));
+        btnCancel.setBackground(ResponsiveUI.createRippleRoundedBg(
+                activity,
+                ThemeManager.getBgPrimaryColor(activity),
+                ThemeManager.getBorderColor(activity),
+                1.0f,
+                4f
+        ));
+        btnRestore.setText("RESTORE");
+        btnRestore.setBackground(ResponsiveUI.createRippleRoundedBg(
+                activity,
+                ThemeManager.getPrimaryAccentColor(activity),
+                0,
+                0,
+                4f
+        ));
+
+        // Populate selected items list inside the dialog
+        for (Record r : selectedRecords) {
+            TextView rowView = new TextView(activity);
+            String lineText = "• " + r.getDescription()
+                    + "   " + DateUtils.formatDateCompact(r.getDate())
+                    + "   " + String.format(Locale.getDefault(), "%.2f", r.getAmount());
+            rowView.setText(lineText);
+            rowView.setTextColor(activity.getColor(R.color.text_primary));
+            rowView.setTextSize(13f);
+            int padPx = (int) (6 * activity.getResources().getDisplayMetrics().density);
+            rowView.setPadding(0, padPx, 0, padPx);
+
+            String remarks = r.getRemarks();
+            boolean hasRemarks = (remarks != null && !remarks.isEmpty());
+            boolean hasAttachments = (r.getAttachments() != null && !r.getAttachments().isEmpty());
+
+            if (hasRemarks || hasAttachments) {
+                LinearLayout rowContainer = new LinearLayout(activity);
+                rowContainer.setOrientation(LinearLayout.VERTICAL);
+                rowContainer.addView(rowView);
+
+                if (hasRemarks) {
+                    TextView remarksView = new TextView(activity);
+                    remarksView.setText("  ↳ " + remarks);
+                    remarksView.setTextColor(activity.getColor(R.color.text_tertiary));
+                    remarksView.setTextSize(11f);
+                    remarksView.setTypeface(null, android.graphics.Typeface.ITALIC);
+                    remarksView.setPadding(0, 0, 0, hasAttachments ? 0 : padPx);
+                    rowContainer.addView(remarksView);
+                }
+
+                if (hasAttachments) {
+                    TextView attachView = new TextView(activity);
+                    attachView.setText("  \uD83D\uDCCE " + r.getAttachments().size() + " attached file(s)");
+                    attachView.setTextColor(ThemeManager.getSecondaryAccentColor(activity));
+                    attachView.setTextSize(11f);
+                    attachView.setPadding(0, hasRemarks ? (padPx / 2) : 0, 0, padPx);
+                    rowContainer.addView(attachView);
+                }
+
+                selectedItemsList.addView(rowContainer);
+            } else {
+                selectedItemsList.addView(rowView);
+            }
+
+            if (selectedRecords.indexOf(r) < selectedRecords.size() - 1) {
+                View divider = new View(activity);
+                divider.setBackgroundColor(ThemeManager.getBorderColor(activity));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                divider.setLayoutParams(lp);
+                selectedItemsList.addView(divider);
+            }
+        }
+
+        ResponsiveUI.applyResponsiveness(dialogView);
+
+        ResponsiveUI.setupClickable(btnCancel, dialog::dismiss);
+        ResponsiveUI.setupClickable(btnRestore, () -> {
+            dialog.dismiss();
+            com.example.notecalc.tools.trash.TrashActionEngine.restoreRecords(activity, trashAccount, selectedRecords, activity.isBudgetMode);
+            EditorUIHelper.populateRecordsList(activity);
+        });
+
+        dialog.show();
+    }
 }

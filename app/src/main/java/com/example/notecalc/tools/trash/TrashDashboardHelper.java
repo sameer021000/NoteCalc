@@ -61,7 +61,7 @@ public class TrashDashboardHelper {
                 card.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
 
                 ResponsiveUI.setupClickable(card, false, () -> {
-                    android.widget.Toast.makeText(activity, "Trash List Screen coming in Phase 4!", android.widget.Toast.LENGTH_SHORT).show();
+                    com.example.notecalc.tools.trash.TrashListHelper.showTrashList(activity, account);
                 });
 
                 ResponsiveUI.setupClickable(btnRestore, false, () -> {
