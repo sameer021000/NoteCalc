@@ -70,7 +70,11 @@ import java.util.Locale;
             // Find the true index in tempRecords (or budget records) so that edit/delete work correctly
             int trueIndex = StateHelper.getActiveRecords(activity).indexOf(record);
 
-            holder.tvSno.setText(String.valueOf(record.getOriginalIndex() + 1));
+            if (isTrashMode) {
+                holder.tvSno.setText(String.valueOf(position + 1));
+            } else {
+                holder.tvSno.setText(String.valueOf(record.getOriginalIndex() + 1));
+            }
             holder.tvDesc.setText(record.getDescription());
 
             RecordDateBinder.bindDateInteraction(record, holder);

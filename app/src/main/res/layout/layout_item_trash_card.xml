@@ -48,18 +48,8 @@
             android:padding="6dp"
             android:src="@android:drawable/ic_menu_revert"
             app:tint="@color/text_primary"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
             android:contentDescription="Restore All" />
-
-        <ImageView
-            android:id="@+id/btn_trash_card_delete"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="6dp"
-            android:src="@android:drawable/ic_menu_delete"
-            app:tint="@color/error_red"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_marginStart="8dp"
-            android:contentDescription="Delete Permanently" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

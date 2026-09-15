@@ -23,6 +23,7 @@ public class TrashActionEngine {
         for (Record r : recordsToRestore) {
             r.setSelected(false);
             r.setDeletedTimestamp(0); // Reset deleted timestamp
+            r.setOriginalIndex(Integer.MAX_VALUE); // Push to bottom
             
             if (isBudgetMode) {
                 trashAccount.getBudgetRecords().remove(r);

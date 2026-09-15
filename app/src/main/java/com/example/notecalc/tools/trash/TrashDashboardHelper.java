@@ -48,7 +48,6 @@ public class TrashDashboardHelper {
                 TextView titleView = card.findViewById(R.id.trash_card_title);
                 TextView itemsCountView = card.findViewById(R.id.trash_card_items_count);
                 ImageView btnRestore = card.findViewById(R.id.btn_trash_card_restore);
-                ImageView btnDelete = card.findViewById(R.id.btn_trash_card_delete);
 
                 titleView.setText(account.getTitle());
                 
@@ -65,11 +64,23 @@ public class TrashDashboardHelper {
                 });
 
                 ResponsiveUI.setupClickable(btnRestore, false, () -> {
-                    android.widget.Toast.makeText(activity, "Restore coming in Phase 4!", android.widget.Toast.LENGTH_SHORT).show();
-                });
-                
-                ResponsiveUI.setupClickable(btnDelete, false, () -> {
-                    android.widget.Toast.makeText(activity, "Delete coming in Phase 4!", android.widget.Toast.LENGTH_SHORT).show();
+                    java.util.List<com.example.notecalc.records.models.Record> allRecords = new java.util.ArrayList<>();
+                    if (account.getRecords() != null) allRecords.addAll(account.getRecords());
+                    if (account.getBudgetRecords() != null) allRecords.addAll(account.getBudgetRecords());
+                    
+                    if (allRecords.isEmpty()) return;
+                    
+                    if (allRecords.size() > 2) {
+                        com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, account, allRecords);
+                    } else {
+                        if (account.getRecords() != null && !account.getRecords().isEmpty()) {
+                            com.example.notecalc.tools.trash.TrashActionEngine.restoreRecords(activity, account, new java.util.ArrayList<>(account.getRecords()), false);
+                        }
+                        if (account.getBudgetRecords() != null && !account.getBudgetRecords().isEmpty()) {
+                            com.example.notecalc.tools.trash.TrashActionEngine.restoreRecords(activity, account, new java.util.ArrayList<>(account.getBudgetRecords()), true);
+                        }
+                        showTrashDashboard(activity);
+                    }
                 });
 
                 listContainer.addView(card);

@@ -57,7 +57,33 @@ public class TrashListHelper {
         });
         
         ResponsiveUI.setupClickable(btnRestore, false, () -> {
-            android.widget.Toast.makeText(activity, "Bulk Restore All not fully wired up yet!", android.widget.Toast.LENGTH_SHORT).show();
+            List<Record> selectedRecords = new ArrayList<>();
+            for (Record r : StateHelper.getActiveRecords(activity)) {
+                if (r.isSelected()) selectedRecords.add(r);
+            }
+            
+            if (!selectedRecords.isEmpty()) {
+                if (selectedRecords.size() > 2) {
+                    com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, trashAccount, selectedRecords);
+                } else {
+                    TrashActionEngine.restoreRecords(activity, trashAccount, selectedRecords, activity.isBudgetMode);
+                    EditorUIHelper.populateRecordsList(activity);
+                }
+            } else {
+                List<Record> all = new ArrayList<>(StateHelper.getActiveRecords(activity));
+                if (all.isEmpty()) return;
+                
+                if (all.size() > 2) {
+                    com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, trashAccount, all);
+                } else {
+                    TrashActionEngine.restoreRecords(activity, trashAccount, all, activity.isBudgetMode);
+                    EditorUIHelper.populateRecordsList(activity);
+                    if (StateHelper.getActiveRecords(activity).isEmpty()) {
+                        activity.currentEditingAccount = null;
+                        TrashDashboardHelper.showTrashDashboard(activity);
+                    }
+                }
+            }
         });
 
         TextView btnModeExpenses = trashListView.findViewById(R.id.btn_trash_mode_expenses);
@@ -88,35 +114,6 @@ public class TrashListHelper {
         EditorSortHelper.setupHeaderSortListeners(activity);
         EditorSortHelper.applySorting(activity);
         EditorUIHelper.populateRecordsList(activity);
-
-        ImageView btnBulkRestore = trashListView.findViewById(R.id.btn_trash_bulk_restore);
-        ImageView btnBulkDelete = trashListView.findViewById(R.id.btn_trash_bulk_delete);
-        
-        ResponsiveUI.setupClickable(btnBulkRestore, false, () -> {
-            List<Record> selectedRecords = new ArrayList<>();
-            for (Record r : StateHelper.getActiveRecords(activity)) {
-                if (r.isSelected()) selectedRecords.add(r);
-            }
-            if (selectedRecords.isEmpty()) return;
-            
-            if (selectedRecords.size() > 2) {
-                com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, trashAccount, selectedRecords);
-            } else {
-                TrashActionEngine.restoreRecords(activity, trashAccount, selectedRecords, activity.isBudgetMode);
-                EditorUIHelper.populateRecordsList(activity);
-            }
-        });
-        
-        ResponsiveUI.setupClickable(btnBulkDelete, false, () -> {
-            List<Record> selectedRecords = new ArrayList<>();
-            for (Record r : StateHelper.getActiveRecords(activity)) {
-                if (r.isSelected()) selectedRecords.add(r);
-            }
-            if (selectedRecords.isEmpty()) return;
-            
-            TrashActionEngine.deleteRecordsPermanently(activity, trashAccount, selectedRecords, activity.isBudgetMode);
-            EditorUIHelper.populateRecordsList(activity);
-        });
 
         ResponsiveUI.applyResponsiveness(trashListView);
         
