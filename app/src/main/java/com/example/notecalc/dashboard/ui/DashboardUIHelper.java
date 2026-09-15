@@ -138,7 +138,7 @@ public class DashboardUIHelper {
 
                 ResponsiveUI.setupClickable(btnTrashPopup, true, () -> {
                     popupWindow.dismiss();
-                    android.widget.Toast.makeText(activity, "Trash functionality coming in Phase 3!", android.widget.Toast.LENGTH_SHORT).show();
+                    com.example.notecalc.tools.trash.TrashDashboardHelper.showTrashDashboard(activity);
                 });
 
                 popupWindow.showAsDropDown(btnCreateAdd, 0, 16);
