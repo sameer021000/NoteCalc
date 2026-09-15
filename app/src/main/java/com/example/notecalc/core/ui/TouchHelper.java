@@ -107,7 +107,11 @@ public class TouchHelper {
                         if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
                         com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
                     }
-                }, null);
+                }, () -> {
+                    java.util.List<Record> toTrash = new java.util.ArrayList<>();
+                    toTrash.add(deletedRecord);
+                    com.example.notecalc.tools.trash.TrashEngine.moveToTrash(activity, activity.currentEditingAccount, toTrash, activity.isBudgetMode);
+                });
             }
         };
     }

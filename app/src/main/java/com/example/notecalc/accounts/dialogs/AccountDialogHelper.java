@@ -84,6 +84,15 @@ public class AccountDialogHelper {
         ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
         ResponsiveUI.setupClickable(btnDelete, true, () -> {
             dialog.dismiss();
+            
+            // Move all records to Trash
+            if (account.getRecords() != null && !account.getRecords().isEmpty()) {
+                com.example.notecalc.tools.trash.TrashEngine.moveToTrash(activity, account, account.getRecords(), false);
+            }
+            if (account.getBudgetRecords() != null && !account.getBudgetRecords().isEmpty()) {
+                com.example.notecalc.tools.trash.TrashEngine.moveToTrash(activity, account, account.getBudgetRecords(), true);
+            }
+            
             if (activity.currentViewGroup != null) {
                 activity.currentViewGroup.getAccounts().remove(account);
             } else {

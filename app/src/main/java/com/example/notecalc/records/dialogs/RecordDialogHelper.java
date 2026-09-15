@@ -70,6 +70,7 @@ public class RecordDialogHelper {
                     }
                 }
             }
+            com.example.notecalc.tools.trash.TrashEngine.moveToTrash(activity, activity.currentEditingAccount, selectedRecords, activity.isBudgetMode);
             StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
@@ -204,6 +205,7 @@ public class RecordDialogHelper {
                     }
                 }
             }
+            com.example.notecalc.tools.trash.TrashEngine.moveToTrash(activity, activity.currentEditingAccount, selectedRecords, activity.isBudgetMode);
             StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
