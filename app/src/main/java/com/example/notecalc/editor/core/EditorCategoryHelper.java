@@ -55,7 +55,11 @@ public class EditorCategoryHelper {
                     1.0f,
                     8.0f
             ));
-            activity.editCategoryField.setDropDownHeight((int) (180 * activity.getResources().getDisplayMetrics().density));
+            if (catList.size() <= 4) {
+                activity.editCategoryField.setDropDownHeight(android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+            } else {
+                activity.editCategoryField.setDropDownHeight((int) (180 * activity.getResources().getDisplayMetrics().density));
+            }
 
             activity.editCategoryField.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus && !catList.isEmpty()) {
