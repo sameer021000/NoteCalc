@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="5dp">
 
         <ImageView
             android:id="@+id/btn_back"
@@ -54,22 +54,12 @@
             android:contentDescription="@string/editor_btn_analytics" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/text_title_error"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/error_title_exists"
-        android:textSize="12sp"
-        android:textColor="@color/error_red"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
     <!-- Divider -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/colorBorder"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="10dp" />
 
     <!-- Mode Toggle: Expenses vs Budget -->
     <LinearLayout
