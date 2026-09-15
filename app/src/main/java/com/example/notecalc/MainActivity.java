@@ -145,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Load existing saved storage (groups and standalone accounts)
         appStorage = StorageHelper.loadAppStorage(this);
+        
+        com.example.notecalc.tools.trash.TrashCleanupEngine.cleanup(this);
 
         getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
             @Override
