@@ -80,7 +80,7 @@
             android:layout_weight="1"
             tools:text="Grocery, Rent, Utilities"
             android:textSize="13sp"
-            android:textColor="?attr/colorAccentSecondary"
+            android:textColor="@color/text_tertiary"
             android:maxLines="2"
             android:ellipsize="end" />
 
