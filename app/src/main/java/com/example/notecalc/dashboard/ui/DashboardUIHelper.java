@@ -124,6 +124,7 @@ public class DashboardUIHelper {
 
                 android.view.View btnCreateList = popupView.findViewById(R.id.btn_popup_create_list);
                 android.view.View btnCreateGroupPopup = popupView.findViewById(R.id.btn_popup_create_group);
+                android.view.View btnTrashPopup = popupView.findViewById(R.id.btn_popup_trash);
 
                 ResponsiveUI.setupClickable(btnCreateList, true, () -> {
                     popupWindow.dismiss();
@@ -133,6 +134,11 @@ public class DashboardUIHelper {
                 ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {
                     popupWindow.dismiss();
                     com.example.notecalc.accounts.dialogs.GroupDialogHelper.showCreateGroupDialog(activity);
+                });
+
+                ResponsiveUI.setupClickable(btnTrashPopup, true, () -> {
+                    popupWindow.dismiss();
+                    android.widget.Toast.makeText(activity, "Trash functionality coming in Phase 3!", android.widget.Toast.LENGTH_SHORT).show();
                 });
 
                 popupWindow.showAsDropDown(btnCreateAdd, 0, 16);

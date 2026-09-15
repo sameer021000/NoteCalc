@@ -6,5 +6,6 @@ import java.util.List;
 public class AppStorage {
     public List<AccountGroup> groups = new ArrayList<>();
     public List<Account> standaloneAccounts = new ArrayList<>();
+    public List<Account> trashAccounts = new ArrayList<>();
 
 }

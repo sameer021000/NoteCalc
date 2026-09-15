@@ -10,6 +10,7 @@ public class Record {
     private boolean selected = false;
     private String category = "";
     private long timestampMillis;
+    private long deletedTimestamp = 0;
 
     public Record(String description, double amount, String date) {
         this.description = description;
@@ -20,6 +21,9 @@ public class Record {
 
     public long getTimestampMillis() { return timestampMillis; }
     public void setTimestampMillis(long timestampMillis) { this.timestampMillis = timestampMillis; }
+    
+    public long getDeletedTimestamp() { return deletedTimestamp; }
+    public void setDeletedTimestamp(long deletedTimestamp) { this.deletedTimestamp = deletedTimestamp; }
 
     public String getDescription() {
         return description;
