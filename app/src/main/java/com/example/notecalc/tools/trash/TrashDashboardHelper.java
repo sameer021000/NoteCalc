@@ -71,7 +71,15 @@ public class TrashDashboardHelper {
                     if (allRecords.isEmpty()) return;
                     
                     if (allRecords.size() > 2) {
-                        com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, account, allRecords);
+                        com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, account, allRecords, () -> {
+                            if (account.getRecords() != null && !account.getRecords().isEmpty()) {
+                                com.example.notecalc.tools.trash.TrashActionEngine.restoreRecords(activity, account, new java.util.ArrayList<>(account.getRecords()), false);
+                            }
+                            if (account.getBudgetRecords() != null && !account.getBudgetRecords().isEmpty()) {
+                                com.example.notecalc.tools.trash.TrashActionEngine.restoreRecords(activity, account, new java.util.ArrayList<>(account.getBudgetRecords()), true);
+                            }
+                            showTrashDashboard(activity);
+                        });
                     } else {
                         if (account.getRecords() != null && !account.getRecords().isEmpty()) {
                             com.example.notecalc.tools.trash.TrashActionEngine.restoreRecords(activity, account, new java.util.ArrayList<>(account.getRecords()), false);

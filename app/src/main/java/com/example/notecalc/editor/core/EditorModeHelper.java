@@ -48,27 +48,27 @@ public class EditorModeHelper {
         activity.editingRecordIndex = -1;
         activity.selectedRecordDate = DateUtils.getCurrentDateString();
 
-        activity.editDescField.setText("");
-        activity.editAmountField.setText("");
-        activity.editRemarksField.setText("");
-        activity.btnRecordDateField.setText(activity.selectedRecordDate);
+        if (activity.editDescField != null) activity.editDescField.setText("");
+        if (activity.editAmountField != null) activity.editAmountField.setText("");
+        if (activity.editRemarksField != null) activity.editRemarksField.setText("");
+        if (activity.btnRecordDateField != null) activity.btnRecordDateField.setText(activity.selectedRecordDate);
 
         activity.tempAttachments.clear();
         AttachmentHelper.renderEditorAttachments(activity);
 
         if (activity.isBudgetMode) {
-            activity.labelAddRecordField.setText(activity.getString(R.string.auto_add_budget_24));
-            activity.btnAddRecordField.setText(activity.getString(R.string.auto_add_budget_25));
-            activity.editDescField.setHint(activity.getString(R.string.auto_description_35));
-            activity.editRemarksField.setHint(activity.getString(R.string.auto_remarks_optional_36));
+            if (activity.labelAddRecordField != null) activity.labelAddRecordField.setText(activity.getString(R.string.auto_add_budget_24));
+            if (activity.btnAddRecordField != null) activity.btnAddRecordField.setText(activity.getString(R.string.auto_add_budget_25));
+            if (activity.editDescField != null) activity.editDescField.setHint(activity.getString(R.string.auto_description_35));
+            if (activity.editRemarksField != null) activity.editRemarksField.setHint(activity.getString(R.string.auto_remarks_optional_36));
         } else {
-            activity.labelAddRecordField.setText(R.string.label_add_record);
-            activity.btnAddRecordField.setText(R.string.btn_add_record);
-            activity.editDescField.setHint(R.string.hint_record_desc);
-            activity.editRemarksField.setHint(activity.getString(R.string.auto_remarks_e_g_bought_a_37));
+            if (activity.labelAddRecordField != null) activity.labelAddRecordField.setText(R.string.label_add_record);
+            if (activity.btnAddRecordField != null) activity.btnAddRecordField.setText(R.string.btn_add_record);
+            if (activity.editDescField != null) activity.editDescField.setHint(R.string.hint_record_desc);
+            if (activity.editRemarksField != null) activity.editRemarksField.setHint(activity.getString(R.string.auto_remarks_e_g_bought_a_37));
         }
 
-        activity.btnCancelEditField.setVisibility(View.GONE);
+        if (activity.btnCancelEditField != null) activity.btnCancelEditField.setVisibility(View.GONE);
 
         EditorUIHelper.populateRecordsList(activity);
     }

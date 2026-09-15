@@ -64,24 +64,13 @@ public class TrashListHelper {
             
             if (!selectedRecords.isEmpty()) {
                 if (selectedRecords.size() > 2) {
-                    com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, trashAccount, selectedRecords);
+                    com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, trashAccount, selectedRecords, () -> {
+                        TrashActionEngine.restoreRecords(activity, trashAccount, selectedRecords, activity.isBudgetMode);
+                        EditorUIHelper.populateRecordsList(activity);
+                    });
                 } else {
                     TrashActionEngine.restoreRecords(activity, trashAccount, selectedRecords, activity.isBudgetMode);
                     EditorUIHelper.populateRecordsList(activity);
-                }
-            } else {
-                List<Record> all = new ArrayList<>(StateHelper.getActiveRecords(activity));
-                if (all.isEmpty()) return;
-                
-                if (all.size() > 2) {
-                    com.example.notecalc.records.dialogs.RecordDialogHelper.showRestoreMultipleConfirmationDialog(activity, trashAccount, all);
-                } else {
-                    TrashActionEngine.restoreRecords(activity, trashAccount, all, activity.isBudgetMode);
-                    EditorUIHelper.populateRecordsList(activity);
-                    if (StateHelper.getActiveRecords(activity).isEmpty()) {
-                        activity.currentEditingAccount = null;
-                        TrashDashboardHelper.showTrashDashboard(activity);
-                    }
                 }
             }
         });
@@ -90,10 +79,11 @@ public class TrashListHelper {
         TextView btnModeBudget = trashListView.findViewById(R.id.btn_trash_mode_budget);
         
         activity.cbSelectAllHeader = trashListView.findViewById(R.id.trash_cb_select_all);
-        activity.containerBulkActions = trashListView.findViewById(R.id.trash_container_bulk_actions);
-        activity.textSelectedTotal = trashListView.findViewById(R.id.trash_text_selected_total);
+        activity.cbSelectAllHeader = trashListView.findViewById(R.id.trash_cb_select_all);
+        activity.containerBulkActions = null; // Removed from trash list to prevent Total: 0.00
+        activity.textSelectedTotal = null; // Removed from trash list
         activity.editorEmptyState = trashListView.findViewById(R.id.trash_list_empty_state);
-        activity.rowSearchAndBulk = trashListView.findViewById(R.id.trash_container_bulk_actions); // We reuse this for bulk actions visibility
+        activity.rowSearchAndBulk = null; // Removed from trash list
         activity.tableHeaderField = trashListView.findViewById(R.id.trash_table_header);
         
         activity.textTotalValField = null; // Removed from trash list

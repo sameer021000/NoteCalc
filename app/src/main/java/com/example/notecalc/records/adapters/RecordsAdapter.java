@@ -70,11 +70,7 @@ import java.util.Locale;
             // Find the true index in tempRecords (or budget records) so that edit/delete work correctly
             int trueIndex = StateHelper.getActiveRecords(activity).indexOf(record);
 
-            if (isTrashMode) {
-                holder.tvSno.setText(String.valueOf(position + 1));
-            } else {
-                holder.tvSno.setText(String.valueOf(record.getOriginalIndex() + 1));
-            }
+            holder.tvSno.setText(String.valueOf(record.getOriginalIndex() + 1));
             holder.tvDesc.setText(record.getDescription());
 
             RecordDateBinder.bindDateInteraction(record, holder);
@@ -135,10 +131,12 @@ import java.util.Locale;
 
             ResponsiveUI.setupClickable(holder.itemView, true, () -> {
                 if (isTrashMode) {
-                    record.setSelected(!record.isSelected());
-                    holder.cbSelect.setChecked(record.isSelected());
-                    BulkActionsHelper.updateSelectAllHeaderState(activity);
-                    BulkActionsHelper.updateBulkActionsState(activity);
+                    if (isSelectionMode) {
+                        record.setSelected(!record.isSelected());
+                        holder.cbSelect.setChecked(record.isSelected());
+                        BulkActionsHelper.updateSelectAllHeaderState(activity);
+                        BulkActionsHelper.updateBulkActionsState(activity);
+                    }
                     return;
                 }
                 if (activity.currentEditingAccount != null && activity.currentEditingAccount.isArchived()) return;

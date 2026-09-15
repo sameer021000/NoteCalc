@@ -224,7 +224,7 @@ public class RecordDialogHelper {
     }
 
     @android.annotation.SuppressLint("SetTextI18n")
-    public static void showRestoreMultipleConfirmationDialog(MainActivity activity, com.example.notecalc.accounts.models.Account trashAccount, List<Record> selectedRecords) {
+    public static void showRestoreMultipleConfirmationDialog(MainActivity activity, com.example.notecalc.accounts.models.Account trashAccount, List<Record> selectedRecords, Runnable onSuccess) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_delete_multiple_dialog, null);
         builder.setView(dialogView);
@@ -337,8 +337,9 @@ public class RecordDialogHelper {
         ResponsiveUI.setupClickable(btnCancel, dialog::dismiss);
         ResponsiveUI.setupClickable(btnRestore, () -> {
             dialog.dismiss();
-            com.example.notecalc.tools.trash.TrashActionEngine.restoreRecords(activity, trashAccount, selectedRecords, activity.isBudgetMode);
-            EditorUIHelper.populateRecordsList(activity);
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
         });
 
         dialog.show();
