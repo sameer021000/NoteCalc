@@ -51,7 +51,21 @@ public class MenuAccountHelper {
 
         ResponsiveUI.setupClickable(btnArchive, false, () -> {
             popupWindow.dismiss();
-            account.setArchived(!account.isArchived());
+            boolean newStatus = !account.isArchived();
+            account.setArchived(newStatus);
+            
+            AccountGroup parentGroup = null;
+            for (AccountGroup g : activity.appStorage.groups) {
+                if (g.getAccounts().contains(account)) {
+                    parentGroup = g;
+                    break;
+                }
+            }
+            if (parentGroup != null && parentGroup.isArchived() != newStatus) {
+                parentGroup.getAccounts().remove(account);
+                activity.appStorage.standaloneAccounts.add(account);
+            }
+            
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             DashboardHelper.refreshDashboardList(activity);
         });

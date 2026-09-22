@@ -2,6 +2,7 @@ package com.example.notecalc.accounts.adapters;
 import com.example.notecalc.storage.core.*;
 import com.example.notecalc.accounts.dialogs.*;
 import com.example.notecalc.core.ui.*;
+import com.example.notecalc.core.utils.*;
 import com.example.notecalc.accounts.models.*;
 import com.example.notecalc.menus.*;
 import com.example.notecalc.*;
@@ -188,7 +189,7 @@ import android.graphics.Color;
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                 grpHolder.tvDate.setText(sdf.format(new Date(latestDate)));
 
-                int listCount = group.getAccounts().size();
+                int listCount = ArchiveHelper.getVisibleAccounts(group.getAccounts()).size();
                 grpHolder.tvAccounts.setText(listCount + (listCount == 1 ? " List" : " Lists"));
 
                 grpHolder.itemView.setBackground(ResponsiveUI.createCardSelector(activity));

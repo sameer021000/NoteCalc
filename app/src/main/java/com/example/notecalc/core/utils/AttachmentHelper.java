@@ -73,9 +73,8 @@ public class AttachmentHelper {
             activity.attachmentsScroll.setVisibility(View.VISIBLE);
             if (activity.btnAttachFile != null) activity.btnAttachFile.setAlpha(!activity.tempAttachments.isEmpty() ? 0.5f : 1.0f);
 
-            for (int i = 0; i < activity.tempAttachments.size(); i++) {
-                final int idx = i;
-                String path = activity.tempAttachments.get(i);
+            if (!activity.tempAttachments.isEmpty()) {
+                String path = activity.tempAttachments.get(0);
                 java.io.File f = new java.io.File(path);
                 String name = f.getName();
                 if (name.length() > 15) name = name.substring(0, 15) + "...";
@@ -117,7 +116,7 @@ public class AttachmentHelper {
                 closeBtn.setPadding(10, 10, 20, 10);
 
                 ResponsiveUI.setupClickable(closeBtn, false, () -> {
-                    activity.tempAttachments.remove(idx);
+                    activity.tempAttachments.clear();
                     renderEditorAttachments(activity);
                 });
 
