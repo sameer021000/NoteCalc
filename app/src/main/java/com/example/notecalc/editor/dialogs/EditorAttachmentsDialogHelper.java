@@ -7,8 +7,8 @@ public class EditorAttachmentsDialogHelper {
     public static void setupAttachmentsDialog(MainActivity activity) {
         if (activity.btnAttachFile != null) {
             ResponsiveUI.setupClickable(activity.btnAttachFile, true, () -> {
-                if (activity.tempAttachments.size() >= 3) {
-                    Toast.makeText(activity, activity.getString(R.string.auto_max_3_files_allowed_2), Toast.LENGTH_SHORT).show();
+                if (!activity.tempAttachments.isEmpty()) {
+                    Toast.makeText(activity, "Max 1 file allowed", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -50,8 +50,8 @@ public class EditorAttachmentsDialogHelper {
                 ResponsiveUI.setupClickable(btnChooseFile, false, () -> {
                     dialog.dismiss();
                     android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_GET_CONTENT);
-                    intent.setType("*/*");
-                    String[] mimeTypes = {"image/jpeg", "image/png", "image/jpg", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+                    intent.setType("image/*");
+                    String[] mimeTypes = {"image/jpeg", "image/png", "image/jpg"};
                     intent.putExtra(android.content.Intent.EXTRA_MIME_TYPES, mimeTypes);
                     activity.startActivityForResult(intent, MainActivity.REQUEST_CODE_ATTACH);
                 });

@@ -71,7 +71,7 @@ public class AttachmentHelper {
             if (activity.btnAttachFile != null) activity.btnAttachFile.setAlpha(1.0f);
         } else {
             activity.attachmentsScroll.setVisibility(View.VISIBLE);
-            if (activity.btnAttachFile != null) activity.btnAttachFile.setAlpha(activity.tempAttachments.size() >= 3 ? 0.5f : 1.0f);
+            if (activity.btnAttachFile != null) activity.btnAttachFile.setAlpha(!activity.tempAttachments.isEmpty() ? 0.5f : 1.0f);
 
             for (int i = 0; i < activity.tempAttachments.size(); i++) {
                 final int idx = i;
