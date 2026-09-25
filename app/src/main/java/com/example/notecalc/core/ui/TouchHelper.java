@@ -65,6 +65,12 @@ public class TouchHelper {
                     isDragActive = false;
                     EditorSortHelper.applySorting(activity);
                     EditorUIHelper.populateRecordsList(activity);
+                    
+                    if (activity.currentEditingAccount != null) {
+                        activity.currentEditingAccount.updateLastModified();
+                        if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
+                        com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
+                    }
                 }
             }
 
