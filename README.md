@@ -89,13 +89,13 @@
 
 ## 📱 Screenshots
 
-|                       Dashboard                       |                          Group Dashboard                          |
-|:-----------------------------------------------------:|:-----------------------------------------------------------------:|
-| ![Dashboard](screenshots/dashboard_screen_v1.6.0.jpg) | ![Group Dashboard](screenshots/group_dashboard_screen_v1.6.0.jpg) |
-|                   **Expenses Mode**                   |                          **Budget Mode**                          |
-|   ![Expenses Mode](screenshots/expenses_screen.jpg)   |           ![Budget Mode](screenshots/budget_screen.jpg)           |
-|                    **Settings 1**                     |                          **Settings 2**                           |
-| ![Settings 1](screenshots/settings_screen1_v1.6.0.jpg) |      ![Settings 2](screenshots/settings_screen2_v1.6.0.jpg)       |
+|                        Dashboard                         |                          Group Dashboard                          |
+|:--------------------------------------------------------:|:-----------------------------------------------------------------:|
+|  ![Dashboard](screenshots/dashboard_screen_v1.7.0.jpg)   | ![Group Dashboard](screenshots/group_dashboard_screen_v1.6.0.jpg) |
+|                    **Expenses Mode**                     |                          **Budget Mode**                          |
+| ![Expenses Mode](screenshots/expenses_screen_v1.7.0.jpg) |       ![Budget Mode](screenshots/budget_screen_v1.7.0.jpg)        |
+|                      **Settings 1**                      |                          **Settings 2**                           |
+|  ![Settings 1](screenshots/settings_screen1_v1.6.0.jpg)  |      ![Settings 2](screenshots/settings_screen2_v1.6.0.jpg)       |
 
 ---
 
