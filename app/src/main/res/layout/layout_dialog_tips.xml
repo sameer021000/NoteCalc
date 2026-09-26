@@ -390,7 +390,53 @@
                         android:paddingStart="16dp"/>
                         
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_tip_card_pink"
+                    android:padding="16dp"
+                    android:layout_marginBottom="12dp">
+                    
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item8_title"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent_pink_secondary"
+                            android:textSize="16sp" 
+                            android:layout_marginBottom="6dp"/>
+                            
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tips_cat1_item8_desc"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"/>
+                            
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|end"
+                        android:text="@string/tips_watermark_08"
+                        android:textSize="48sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent_pink_secondary"
+                        android:alpha="0.2"
+                        android:paddingStart="16dp"/>
+                        
+                </LinearLayout>
             </LinearLayout>
+
 
             <!-- Category Header -->
             <LinearLayout
@@ -1326,11 +1372,12 @@
                         android:paddingStart="16dp"/>
                         
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="@drawable/bg_tip_card_purple"
+                    android:background="@drawable/bg_tip_card_red"
                     android:padding="16dp"
                     android:layout_marginBottom="12dp">
                     
@@ -1345,7 +1392,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/tips_cat4_item6_title"
                             android:textStyle="bold"
-                            android:textColor="@color/accent_purple_secondary"
+                            android:textColor="@color/accent_red_secondary"
                             android:textSize="16sp" 
                             android:layout_marginBottom="6dp"/>
                             
@@ -1364,51 +1411,6 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|end"
                         android:text="@string/tips_watermark_06"
-                        android:textSize="48sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/accent_purple_secondary"
-                        android:alpha="0.2"
-                        android:paddingStart="16dp"/>
-                        
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_tip_card_red"
-                    android:padding="16dp"
-                    android:layout_marginBottom="12dp">
-                    
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tips_cat4_item7_title"
-                            android:textStyle="bold"
-                            android:textColor="@color/accent_red_secondary"
-                            android:textSize="16sp" 
-                            android:layout_marginBottom="6dp"/>
-                            
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tips_cat4_item7_desc"
-                            android:textColor="@color/text_primary"
-                            android:textSize="14sp"
-                            android:lineSpacingExtra="4dp"/>
-                            
-                    </LinearLayout>
-                    
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical|end"
-                        android:text="@string/tips_watermark_07"
                         android:textSize="48sp"
                         android:textStyle="bold"
                         android:textColor="@color/accent_red_secondary"

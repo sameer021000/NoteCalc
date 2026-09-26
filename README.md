@@ -2,7 +2,7 @@
 
 ![Android](https://img.shields.io/badge/Platform-Android-green)
 ![Java](https://img.shields.io/badge/Language-Java-blue)
-![Version](https://img.shields.io/badge/Version-1.6.0-orange)
+![Version](https://img.shields.io/badge/Version-1.7.0-orange)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
 **NoteCalc** is a premium, offline-first Android expense tracker and calculator designed to bridge the gap between simple note-taking and structured financial tracking. It combines a modern interface with powerful tools such as dual tracking modes, file attachments, detailed PDF reporting, JSON backups, advanced filtering, and an organized dashboard for an intuitive accounting experience.
@@ -11,7 +11,7 @@
 
 ## 📌 App Information
 
-* **Current Version:** v1.6.0
+* **Current Version:** v1.7.0
 * **Minimum SDK:** Android 7.0 (Nougat)
 * **Target SDK:** Android 15 (API 36)
 * **Language:** Java
@@ -43,6 +43,7 @@
 * **Bulk Actions & Transfers**: Seamlessly cut or copy selected records between lists, delete or export records, and quickly create a new list from your selection.
 * **Isolated Category Tracking**: Category dropdown suggestions are isolated to the currently active list, keeping autocomplete clean and relevant.
 * **Dynamic PDF Sorting**: Sort PDF statements by Serial Number, Description, Date, or Amount before generating the report.
+* **Persistent Custom Sorting**: Intuitive drag-and-drop interface allowing users to manually re-order list items, backed by a persistent storage engine that remembers custom layouts across app sessions.
 
 ### 📎 **File Attachments**
 
@@ -73,6 +74,8 @@
 
 ### 🎨 **Premium UI/UX**
 
+* **Transparent Dashboard UI**: A redesigned list card system that displays a clear `[Budget] - [Expenses] = [Balance]` breakdown, with dynamic real-time updates as you modify records.
+* **Polished Modern Interface**: Asymmetric toggle buttons, unified thematic text colors, dynamic dropdown sizing, and context-aware summary footers (Expenses vs Budget).
 * **Modern Aesthetics**: Features rounded layouts, smooth animations, custom styling, and clean Material Design. Edge-to-edge window insets provide an immersive visual experience.
 * **Dynamic Interactions**: Fluid `StateListDrawable` feedback provides responsive visual interactions throughout the application.
 * **Themed Dialogs**: Custom dialogs are designed to maintain a consistent and polished visual language across the application.
@@ -130,6 +133,7 @@
 
 ## 📋 Version History
 
+* **v1.7.0** – Redesigned list cards with math breakdown and real-time balance updates, persistent drag-and-drop custom sorting, quick list rename via long-press, and a polished modern UI with asymmetric buttons and dynamic sizing.
 * **v1.6.0** – Redesigned dashboard header with a unified '+' dropdown menu, fixed critical search state-sync bugs, added ripple touch feedback to menus, and improved empty states interaction.
 * **v1.5.0** – Added archiving functionality for lists and groups, protecting past data in a read-only state and keeping the dashboard decluttered.
 * **v1.4.0** – Added Group PDF Export, a new interactive "What's New" rainbow card dialog, overhauled the Settings UI, unified premium touch feedback across the app, migrated strings for localization, and fixed background PDF generation crashes.

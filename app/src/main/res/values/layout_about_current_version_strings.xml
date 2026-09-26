@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_version_title">What\'s New in NoteCalc v1.6.0</string>
+    <string name="about_version_title">What\'s New in NoteCalc v1.7.0</string>
     <string name="about_version_btn_dismiss">Awesome!</string>
     
-    <string name="about_item1_title">✨ Streamlined Dashboard</string>
-    <string name="about_item1_desc">Enjoy a cleaner, more spacious top bar! Creating lists and groups is now neatly tucked under a single + menu.</string>
+    <string name="about_item1_title">✨ Dashboard Redesign</string>
+    <string name="about_item1_desc">List cards now display a clean, mathematical breakdown of [Budget] - [Expenses] = [Balance] with zero-decimals removed!</string>
     
-    <string name="about_item2_title">🚀 Flawless Search</string>
-    <string name="about_item2_desc">Fixed an issue where your search text would sometimes hide items unexpectedly when navigating into groups or archives.</string>
+    <string name="about_item2_title">⚡ Quick Rename</string>
+    <string name="about_item2_desc">Need to fix a typo? You can now quickly rename any list simply by long-pressing its card on the dashboard.</string>
     
-    <string name="about_item3_title">⚡ Smart Empty States</string>
-    <string name="about_item3_desc">Searching for a list that doesn\'t exist? You can now tap the blank empty state to instantly create it!</string>
+    <string name="about_item3_title">↕️ Persistent Sorting</string>
+    <string name="about_item3_desc">Custom layouts are now permanently saved! Manually drag and drop your records and we\'ll remember your layout.</string>
     
-    <string name="about_item4_title">🎨 Polished Interactions</string>
-    <string name="about_item4_desc">Added smooth ripple touch effects and intuitive icons to our menus for a premium feel.</string>
+    <string name="about_item4_title">🎨 Polished UI &amp; Live Balances</string>
+    <string name="about_item4_desc">The dashboard balances now update instantly. Plus, new asymmetric buttons and unified theme colors.</string>
     
     <string name="about_item5_title">🛠️ Bug Fixes</string>
-    <string name="about_item5_desc">Category dropdown logic has been refined and UI layout jumping has been completely eliminated.</string>
+    <string name="about_item5_desc">Fixed attachment bugs, smart timestamps only update on actual changes, and swipe-to-delete selection conflicts resolved.</string>
 </resources>

@@ -4,6 +4,28 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.7.0] - 2026-09-26
+
+### ✨ Added
+
+* **List Dashboard Redesign**: Completely revamped the list cards on the dashboard to display a clean, mathematical breakdown: `[Budget] - [Expenses] = [Balance] | [Records Count] Records`. Removed decimal clutter from zero-budgets/expenses for a cleaner look.
+* **Quick Rename**: You can now quickly rename any list simply by long-pressing its card on the dashboard.
+* **Persistent Custom Sorting**: When you manually drag and drop records to re-arrange their order in a list, your custom layout is now permanently saved, even after completely closing and reopening the app.
+
+### 🎨 Improved
+
+* **Live Balances**: The dashboard balance now dynamically updates the instant you add, edit, delete, or cut records.
+* **Refined Editor**: The Expenses/Budget toggle buttons have a sleek new asymmetric shape, and unified text colors have been applied across lists, groups, and records.
+* **Intelligent Timestamps**: Editing a record will now only update its "last modified" time if you *actually* changed the content.
+
+### 🐛 Fixed
+
+* **UI Glitches**: Fixed an issue where the category dropdown box had ugly empty space; it now perfectly wraps its contents. Fixed bottom summary text to correctly say "TOTAL BUDGET" when viewing the budget tab.
+* **Swipe & Interactions**: Fixed swipe-to-delete so it is properly disabled while selection mode is active.
+* **Data Integrity**: Fixed image attachments not clearing when adding a new record, restricted attachments to a single image file for stability, and resolved a bug related to Archiving/Unarchiving lists.
+
+---
+
 ## [1.6.0] - 2026-09-13
 
 ### ✨ Added
