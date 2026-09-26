@@ -47,11 +47,11 @@
 
 ### 📎 **File Attachments**
 
-* **Multiple Attachments**: Attach up to 3 files to each record, including images, PDFs, and documents.
+* **Image Attachments**: Attach an image file to a record.
 * **In-App Camera**: Capture photos directly from the attachment interface without leaving NoteCalc.
 * **Automatic Timestamps**: Photos captured through the in-app camera are automatically timestamped and securely stored in the app's internal storage.
-* **Attachment Chips**: Attached files are displayed as beautifully themed chips directly within records.
-* **Native File Viewing**: Open attached files directly through Android's native file viewer.
+* **Attachment Chips**: Attached images are displayed as beautifully themed chips directly within records.
+* **Native File Viewing**: Open attached images directly through Android's native file viewer.
 * **PDF Attachment Integration**: Attached images are embedded directly into exported PDFs in a dedicated 2-column image appendix.
 * **Attachment Names in PDFs**: Attachment names are included beneath record remarks with a paperclip indicator for easy reference.
 
