@@ -52,6 +52,7 @@ public class EditorModeHelper {
         activity.editAmountField.setText("");
         activity.editRemarksField.setText("");
         activity.btnRecordDateField.setText(activity.selectedRecordDate);
+        if (activity.editCategoryField != null) activity.editCategoryField.setText("");
 
         activity.tempAttachments.clear();
         AttachmentHelper.renderEditorAttachments(activity);

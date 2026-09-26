@@ -39,6 +39,7 @@ public class EditorSaveHelper {
                 }
                 EditorSortHelper.applySorting(activity);
                 EditorModeHelper.cancelEditRecordMode(activity);
+                EditorCategoryHelper.setupCategoryDropdown(activity);
             } else {
                 Record newRecord = new Record(desc, amount, activity.selectedRecordDate);
                 newRecord.setRemarks(remarks);
@@ -51,6 +52,9 @@ public class EditorSaveHelper {
                 editAmount.setText("");
                 if (activity.editRemarksField != null) activity.editRemarksField.setText("");
                 if (activity.editCategoryField != null) activity.editCategoryField.setText("");
+                activity.tempAttachments.clear();
+                com.example.notecalc.core.utils.AttachmentHelper.renderEditorAttachments(activity);
+                
                 EditorSortHelper.applySorting(activity);
                 EditorUIHelper.populateRecordsList(activity);
                 EditorCategoryHelper.setupCategoryDropdown(activity);
