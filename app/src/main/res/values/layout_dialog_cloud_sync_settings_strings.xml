@@ -16,4 +16,5 @@
     <string name="toggle_on">ON</string>
     <string name="toggle_off">OFF</string>
     <string name="last_sync_time">Last Sync: %s</string>
+    <string name="cloud_folder_path">Folder: %s</string>
 </resources>

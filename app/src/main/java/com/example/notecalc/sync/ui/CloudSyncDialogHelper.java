@@ -57,6 +57,7 @@ public class CloudSyncDialogHelper {
         
         TextView tvStatus = view.findViewById(com.example.notecalc.R.id.tv_cloud_sync_status);
         TextView tvLastSync = view.findViewById(com.example.notecalc.R.id.tv_last_sync_timestamp);
+        TextView tvFolderPath = view.findViewById(com.example.notecalc.R.id.tv_cloud_folder_path);
         TextView btnConnect = view.findViewById(com.example.notecalc.R.id.btn_connect_cloud);
         TextView btnSyncNow = view.findViewById(com.example.notecalc.R.id.btn_sync_now);
         TextView btnDisconnect = view.findViewById(com.example.notecalc.R.id.btn_disconnect_cloud);
@@ -85,10 +86,24 @@ public class CloudSyncDialogHelper {
                     tvLastSync.setText(activity.getString(com.example.notecalc.R.string.last_sync_never));
                 }
                 
+                String uriStr = com.example.notecalc.sync.models.SyncConfig.getSafUriString(activity);
+                if (uriStr != null) {
+                    androidx.documentfile.provider.DocumentFile df = androidx.documentfile.provider.DocumentFile.fromTreeUri(activity, android.net.Uri.parse(uriStr));
+                    if (df != null && df.getName() != null) {
+                        tvFolderPath.setText(activity.getString(com.example.notecalc.R.string.cloud_folder_path, df.getName()));
+                        tvFolderPath.setVisibility(android.view.View.VISIBLE);
+                    } else {
+                        tvFolderPath.setVisibility(android.view.View.GONE);
+                    }
+                } else {
+                    tvFolderPath.setVisibility(android.view.View.GONE);
+                }
+                
             } else {
                 tvStatus.setText(activity.getString(com.example.notecalc.R.string.not_connected));
                 tvStatus.setTextColor(activity.getColor(com.example.notecalc.R.color.text_primary));
                 tvLastSync.setText(activity.getString(com.example.notecalc.R.string.backup_data_securely));
+                tvFolderPath.setVisibility(android.view.View.GONE);
                 btnConnect.setVisibility(android.view.View.VISIBLE);
                 syncImagesContainer.setVisibility(android.view.View.GONE);
                 btnSyncNow.setVisibility(android.view.View.GONE);
