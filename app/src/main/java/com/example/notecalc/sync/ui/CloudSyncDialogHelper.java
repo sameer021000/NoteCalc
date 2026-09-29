@@ -90,7 +90,24 @@ public class CloudSyncDialogHelper {
                 if (uriStr != null) {
                     androidx.documentfile.provider.DocumentFile df = androidx.documentfile.provider.DocumentFile.fromTreeUri(activity, android.net.Uri.parse(uriStr));
                     if (df != null && df.getName() != null) {
-                        tvFolderPath.setText(activity.getString(com.example.notecalc.R.string.cloud_folder_path, df.getName()));
+                        String readablePath = df.getName();
+                        try {
+                            String decodedPath = android.net.Uri.decode(uriStr);
+                            int treeIdx = decodedPath.indexOf("/tree/");
+                            if (treeIdx != -1) {
+                                String sub = decodedPath.substring(treeIdx + 6);
+                                String[] parts = sub.split(":");
+                                if (parts.length == 2) {
+                                    String root = parts[0].equals("primary") ? "Internal Storage" : "SD Card";
+                                    readablePath = root + " / " + parts[1].replace("/", " / ");
+                                } else if (parts.length == 1) {
+                                    readablePath = parts[0].equals("primary") ? "Internal Storage" : "SD Card";
+                                }
+                            }
+                        } catch (Exception e) {
+                            // Fallback to df.getName()
+                        }
+                        tvFolderPath.setText(activity.getString(com.example.notecalc.R.string.cloud_folder_path, readablePath));
                         tvFolderPath.setVisibility(android.view.View.VISIBLE);
                     } else {
                         tvFolderPath.setVisibility(android.view.View.GONE);
