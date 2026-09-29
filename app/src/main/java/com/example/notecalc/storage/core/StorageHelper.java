@@ -70,6 +70,14 @@ public class StorageHelper {
     }
 
     public static void saveAppStorage(Context context, AppStorage storage) {
+        saveAppStorageInternal(context, storage, true);
+    }
+    
+    public static void saveAppStorageSilently(Context context, AppStorage storage) {
+        saveAppStorageInternal(context, storage, false);
+    }
+
+    private static void saveAppStorageInternal(Context context, AppStorage storage, boolean triggerSync) {
         try {
             // Let the dedicated mapper handle all the heavy lifting!
             JSONObject root = AppStorageJsonMapper.toJSONObject(storage);
@@ -77,6 +85,10 @@ public class StorageHelper {
             File file = new File(context.getFilesDir(), FILE_NAME);
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 fos.write(jsonStr.getBytes(StandardCharsets.UTF_8));
+            }
+            if (triggerSync) {
+                // Trigger Cloud Sync background worker if enabled
+                com.example.notecalc.sync.core.SyncManager.recordSave(context);
             }
         } catch (IOException | JSONException e) {
             android.util.Log.e("StorageHelper", "Error saving storage", e);

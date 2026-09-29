@@ -26,6 +26,20 @@ private void initSettings() {
         cardAppearance.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 16f));
         cardData.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 16f));
         cardPrint.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 16f));
+        
+        View cardCloudSyncEntry = settingsView.findViewById(R.id.card_cloud_sync_entry);
+        if (cardCloudSyncEntry != null) {
+            cardCloudSyncEntry.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 16f));
+            android.widget.TextView btnOpenCloud = settingsView.findViewById(R.id.btn_open_cloud_sync_settings);
+            android.widget.TextView tvCloudStatus = settingsView.findViewById(R.id.tv_settings_cloud_status);
+            
+            btnOpenCloud.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), 0, 0f, 12f));
+            ResponsiveUI.setupClickable(btnOpenCloud, true, () -> com.example.notecalc.sync.ui.CloudSyncDialogHelper.showSettingsDialog(activity));
+            
+            Runnable refreshCloudSyncDashboardUI = getRefreshCloudSyncDashboardUIRunnable(activity, tvCloudStatus, btnOpenCloud);
+            refreshCloudSyncDashboardUI.run();
+            activity.settingsRefreshDashboardCloudUI = refreshCloudSyncDashboardUI;
+        }
 
         // Setup theme buttons instead of RadioGroup
         android.widget.TextView btnSystem = settingsView.findViewById(R.id.btn_theme_system);
@@ -116,5 +130,25 @@ public void openSettings() {
 private void closeSettings() {
         activity.mainContainer.removeAllViews();
         DashboardHelper.showDashboard(activity);
+    }
+    private static Runnable getRefreshCloudSyncDashboardUIRunnable(com.example.notecalc.MainActivity activity, android.widget.TextView tvCloudStatus, android.widget.TextView btnOpenCloud) {
+        return () -> {
+            if (tvCloudStatus == null) return;
+            boolean isConnected = com.example.notecalc.sync.models.SyncConfig.isSyncEnabled(activity);
+            if (isConnected) {
+                tvCloudStatus.setVisibility(View.VISIBLE);
+                long lastSync = com.example.notecalc.sync.models.SyncConfig.getLastSyncTimestamp(activity);
+                String timeStr = activity.getString(R.string.cloud_never_synced);
+                if (lastSync > 0) {
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", java.util.Locale.getDefault());
+                    timeStr = sdf.format(new java.util.Date(lastSync));
+                }
+                tvCloudStatus.setText(activity.getString(R.string.cloud_connected_last_sync, timeStr));
+                btnOpenCloud.setText(activity.getString(R.string.manage_cloud_sync_settings));
+            } else {
+                tvCloudStatus.setVisibility(View.GONE);
+                btnOpenCloud.setText(activity.getString(R.string.cloud_setup_sync));
+            }
+        };
     }
 }

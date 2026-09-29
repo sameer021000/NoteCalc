@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cloud_backup_and_sync">Cloud Backup &amp; Sync</string>
+    <string name="cloud_onboarding_desc">Never lose your data. Securely back up and sync NoteCalc using your personal cloud storage (Google Drive, OneDrive, etc.) at zero cost.\n\nImportant: To ensure your data is safe, please select a folder inside your Cloud Provider. Do not select a local device folder.</string>
+    <string name="not_now">Not Now</string>
+    <string name="setup_sync">Setup Sync</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cloud_sync_status">Cloud Synchronization</string>
+    <string name="not_connected">Not Connected</string>
+    <string name="last_sync_never">Last Sync: Never</string>
+    <string name="connect_cloud_folder">Connect Cloud Folder</string>
+    <string name="sync_attachments">Sync Attachments</string>
+    <string name="sync_now">Sync Now</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="close">Close</string>
+
+    <string name="connected_to_cloud">Connected to Cloud</string>
+    <string name="backup_data_securely">Back up your data securely.</string>
+    <string name="syncing_dots">Syncing…</string>
+    <string name="folder_linked_syncing">Cloud linked! Initializing first sync…</string>
+    <string name="toggle_on">ON</string>
+    <string name="toggle_off">OFF</string>
+    <string name="last_sync_time">Last Sync: %s</string>
+</resources>

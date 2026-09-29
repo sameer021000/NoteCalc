@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cloud_sync_status"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="24dp" />
+
+    <TextView
+        android:id="@+id/tv_cloud_sync_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/not_connected"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="?android:textColorPrimary"/>
+        
+    <TextView
+        android:id="@+id/tv_last_sync_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/last_sync_never"
+        android:textSize="12sp"
+        android:textColor="?android:textColorSecondary"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/btn_connect_cloud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:text="@string/connect_cloud_folder"
+        android:textColor="@color/text_on_accent" />
+
+    <LinearLayout
+        android:id="@+id/ll_sync_images_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:visibility="gone"
+        android:gravity="center_vertical">
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/sync_attachments"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?android:textColorPrimary"/>
+            
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            
+            <TextView
+                android:id="@+id/btn_sync_img_on"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/toggle_on"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="4dp" />
+                
+            <TextView
+                android:id="@+id/btn_sync_img_off"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/toggle_off"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:paddingVertical="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_sync_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:text="@string/sync_now"
+        android:visibility="gone"
+        android:textColor="?attr/colorAccentPrimary" />
+
+    <TextView
+        android:id="@+id/btn_disconnect_cloud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:text="@string/disconnect"
+        android:textColor="#F44336"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/close"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:background="?attr/selectableItemBackground" />
+    </LinearLayout>
+</LinearLayout>

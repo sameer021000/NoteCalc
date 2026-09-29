@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="warning_local_folder_selected">Warning: Local Folder Selected</string>
+    <string name="local_folder_warning_desc_1">You selected a local folder on your device rather than a cloud provider like Google Drive.</string>
+    <string name="local_folder_warning_desc_2">If this device breaks or is lost, your backup will be lost with it.\n\nAre you sure you want to proceed with a local backup?</string>
+    <string name="continue_anyway">Continue Anyway</string>
+    <string name="choose_cloud">Choose Cloud</string>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tv_warning_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/warning_local_folder_selected"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tv_warning_message_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/local_folder_warning_desc_1"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="16sp"
+        android:paddingBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tv_warning_message_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/local_folder_warning_desc_2"
+        android:textColor="@color/error_red"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:paddingBottom="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/btn_continue_anyway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/continue_anyway"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/btn_choose_cloud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_cloud"
+            android:textColor="@color/text_on_accent"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:layout_marginStart="8dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp" />
+    </LinearLayout>
+</LinearLayout>

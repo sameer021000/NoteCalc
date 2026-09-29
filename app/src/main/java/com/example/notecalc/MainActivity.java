@@ -155,6 +155,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Open the dashboard screen
         DashboardHelper.showDashboard(MainActivity.this);
+        
+        androidx.work.WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData("NoteCalcCloudSync").observe(this, workInfos -> {
+            if (workInfos != null && !workInfos.isEmpty()) {
+                androidx.work.WorkInfo workInfo = workInfos.get(0);
+                if (workInfo.getState().isFinished()) {
+                    if (settingsRefreshDashboardCloudUI != null) settingsRefreshDashboardCloudUI.run();
+                    if (settingsRefreshCloudUI != null) settingsRefreshCloudUI.run();
+                }
+            }
+        });
+        
+        com.example.notecalc.sync.ui.CloudSyncDialogHelper.checkAndShowOnboarding(this);
     }
 
     public final NCAgent ncAgent = new NCAgent();
@@ -162,9 +174,19 @@ public class MainActivity extends AppCompatActivity {
         EditorHelper.openEditor(this, account);
     }
 
+    public Runnable settingsRefreshCloudUI;
+    public Runnable settingsRefreshDashboardCloudUI;
+    public static final int REQUEST_CODE_SAF_FOLDER = 1003;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        
+        if (requestCode == REQUEST_CODE_SAF_FOLDER && resultCode == RESULT_OK && data != null) {
+            com.example.notecalc.sync.ui.CloudSyncDialogHelper.handleSafResult(this, data);
+            return;
+        }
+        
         AttachmentHelper.handleActivityResult(MainActivity.this, requestCode, resultCode, data);
     }
 }
