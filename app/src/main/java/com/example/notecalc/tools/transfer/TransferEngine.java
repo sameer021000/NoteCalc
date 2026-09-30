@@ -46,15 +46,7 @@ public class TransferEngine {
             }
         }
 
-        if (activity.isBudgetMode && targetAccount.getBudgetRecords() != null && !targetAccount.getBudgetRecords().isEmpty()) {
-            targetAccount.setHasBudget(true);
-        }
-        targetAccount.updateLastModified();
-
         if (isCut) {
-            if (activity.currentEditingAccount != null) {
-                activity.currentEditingAccount.updateLastModified();
-            }
             StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
             RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
             if (activity.recordsAdapter != null) {
