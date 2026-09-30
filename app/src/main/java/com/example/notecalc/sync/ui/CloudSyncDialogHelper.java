@@ -62,6 +62,13 @@ public class CloudSyncDialogHelper {
         TextView btnSyncNow = view.findViewById(com.example.notecalc.R.id.btn_sync_now);
         TextView btnDisconnect = view.findViewById(com.example.notecalc.R.id.btn_disconnect_cloud);
         android.view.View syncImagesContainer = view.findViewById(com.example.notecalc.R.id.ll_sync_images_container);
+        android.view.View attachmentSyncDetails = view.findViewById(com.example.notecalc.R.id.ll_attachment_sync_details);
+        TextView tvLocalImageCount = view.findViewById(com.example.notecalc.R.id.tv_local_image_count);
+        TextView tvLastAttachmentSync = view.findViewById(com.example.notecalc.R.id.tv_last_attachment_sync);
+        android.view.View attachmentProgressContainer = view.findViewById(com.example.notecalc.R.id.ll_attachment_progress_container);
+        android.widget.ProgressBar pbAttachmentSync = view.findViewById(com.example.notecalc.R.id.pb_attachment_sync);
+        TextView tvAttachmentSyncProgress = view.findViewById(com.example.notecalc.R.id.tv_attachment_sync_progress);
+        TextView btnSyncAttachmentsNow = view.findViewById(com.example.notecalc.R.id.btn_sync_attachments_now);
         TextView btnClose = view.findViewById(com.example.notecalc.R.id.btn_close);
         
         btnConnect.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), 0, 0f, 12f));
@@ -79,12 +86,29 @@ public class CloudSyncDialogHelper {
                 btnDisconnect.setVisibility(android.view.View.VISIBLE);
                 
                 long lastSync = com.example.notecalc.sync.models.SyncConfig.getLastSyncTimestamp(activity);
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm:ss a", java.util.Locale.getDefault());
                 if (lastSync > 0) {
-                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm:ss a", java.util.Locale.getDefault());
                     tvLastSync.setText(activity.getString(com.example.notecalc.R.string.last_sync_time, sdf.format(new java.util.Date(lastSync))));
                 } else {
                     tvLastSync.setText(activity.getString(com.example.notecalc.R.string.last_sync_never));
                 }
+                
+                long lastAttachSync = com.example.notecalc.sync.models.SyncConfig.getLastAttachmentSyncTimestamp(activity);
+                if (lastAttachSync > 0) {
+                    tvLastAttachmentSync.setText(activity.getString(com.example.notecalc.R.string.last_sync_time, sdf.format(new java.util.Date(lastAttachSync))));
+                } else {
+                    tvLastAttachmentSync.setText(activity.getString(com.example.notecalc.R.string.last_sync_never));
+                }
+                
+                java.io.File attachDir = new java.io.File(activity.getFilesDir(), "attachments");
+                int imgCount = 0;
+                if (attachDir.exists()) {
+                    java.io.File[] files = attachDir.listFiles();
+                    if (files != null) imgCount = files.length;
+                }
+                tvLocalImageCount.setText("Total local images: " + imgCount);
+                
+                attachmentSyncDetails.setVisibility(android.view.View.VISIBLE);
                 
                 String uriStr = com.example.notecalc.sync.models.SyncConfig.getSafUriString(activity);
                 if (uriStr != null) {
@@ -130,11 +154,36 @@ public class CloudSyncDialogHelper {
                 tvFolderPath.setVisibility(android.view.View.GONE);
                 btnConnect.setVisibility(android.view.View.VISIBLE);
                 syncImagesContainer.setVisibility(android.view.View.GONE);
+                attachmentSyncDetails.setVisibility(android.view.View.GONE);
                 btnSyncNow.setVisibility(android.view.View.GONE);
                 btnDisconnect.setVisibility(android.view.View.GONE);
             }
         };
         refreshCloudSyncUI.run();
+        
+        androidx.work.WorkManager.getInstance(activity).getWorkInfosForUniqueWorkLiveData("AttachmentSyncJob").observe(activity, workInfos -> {
+            if (workInfos != null && !workInfos.isEmpty()) {
+                androidx.work.WorkInfo workInfo = workInfos.get(0);
+                if (workInfo.getState() == androidx.work.WorkInfo.State.RUNNING || workInfo.getState() == androidx.work.WorkInfo.State.ENQUEUED) {
+                    attachmentProgressContainer.setVisibility(android.view.View.VISIBLE);
+                    btnSyncAttachmentsNow.setEnabled(false);
+                    btnSyncAttachmentsNow.setAlpha(0.5f);
+                    int progress = workInfo.getProgress().getInt(com.example.notecalc.sync.jobs.AttachmentSyncWorker.PROGRESS_KEY, 0);
+                    pbAttachmentSync.setProgress(progress);
+                    tvAttachmentSyncProgress.setText(progress + "%");
+                } else if (workInfo.getState().isFinished() && btnSyncAttachmentsNow.getAlpha() == 0.5f) {
+                    pbAttachmentSync.setProgress(100);
+                    tvAttachmentSyncProgress.setText("100%");
+                    btnSyncAttachmentsNow.setEnabled(true);
+                    btnSyncAttachmentsNow.setAlpha(1.0f);
+                    android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
+                    handler.postDelayed(() -> {
+                        attachmentProgressContainer.setVisibility(android.view.View.GONE);
+                        refreshCloudSyncUI.run();
+                    }, 1000);
+                }
+            }
+        });
         
         TextView btnSyncImgOn = view.findViewById(com.example.notecalc.R.id.btn_sync_img_on);
         TextView btnSyncImgOff = view.findViewById(com.example.notecalc.R.id.btn_sync_img_off);
@@ -178,6 +227,17 @@ public class CloudSyncDialogHelper {
         ResponsiveUI.setupClickable(btnSyncNow, true, () -> {
             android.widget.Toast.makeText(activity, activity.getString(com.example.notecalc.R.string.syncing_dots), android.widget.Toast.LENGTH_SHORT).show();
             com.example.notecalc.sync.core.SyncManager.recordSave(activity);
+        });
+        
+        ResponsiveUI.setupClickable(btnSyncAttachmentsNow, true, () -> {
+            attachmentProgressContainer.setVisibility(android.view.View.VISIBLE);
+            pbAttachmentSync.setProgress(0);
+            tvAttachmentSyncProgress.setText("0%");
+            btnSyncAttachmentsNow.setEnabled(false);
+            btnSyncAttachmentsNow.setAlpha(0.5f);
+            
+            androidx.work.OneTimeWorkRequest syncRequest = new androidx.work.OneTimeWorkRequest.Builder(com.example.notecalc.sync.jobs.AttachmentSyncWorker.class).build();
+            androidx.work.WorkManager.getInstance(activity).enqueueUniqueWork("AttachmentSyncJob", androidx.work.ExistingWorkPolicy.REPLACE, syncRequest);
         });
         
         ResponsiveUI.setupClickable(btnClose, true, dialog::dismiss);

@@ -9,6 +9,7 @@ public class SyncConfig {
     private static final String KEY_SYNC_IMAGES = "sync_images_enabled";
     private static final String KEY_SAF_URI = "saf_uri_string";
     private static final String KEY_LAST_SYNC = "last_sync_timestamp";
+    private static final String KEY_LAST_ATTACHMENT_SYNC = "last_attachment_sync_timestamp";
 
     public static boolean isSyncEnabled(Context context) {
         return getPrefs(context).getBoolean(KEY_SYNC_ENABLED, false);
@@ -40,6 +41,14 @@ public class SyncConfig {
 
     public static void setLastSyncTimestamp(Context context, long timestamp) {
         getPrefs(context).edit().putLong(KEY_LAST_SYNC, timestamp).apply();
+    }
+
+    public static long getLastAttachmentSyncTimestamp(Context context) {
+        return getPrefs(context).getLong(KEY_LAST_ATTACHMENT_SYNC, 0);
+    }
+
+    public static void setLastAttachmentSyncTimestamp(Context context, long timestamp) {
+        getPrefs(context).edit().putLong(KEY_LAST_ATTACHMENT_SYNC, timestamp).apply();
     }
 
     private static SharedPreferences getPrefs(Context context) {

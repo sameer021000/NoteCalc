@@ -81,64 +81,12 @@ public class SyncWorker extends Worker {
                 SafHelper.writeTextFile(context, cloudFolder, "accounts.json", mergedJsonString);
             }
 
-            // --- Phase 7: Attachment Synchronization ---
-            if (SyncConfig.isSyncImagesEnabled(context)) {
-                syncAttachments(context, cloudFolder);
-            }
-
             // Record successful sync timestamp
             SyncConfig.setLastSyncTimestamp(context, System.currentTimeMillis());
             return Result.success();
         } catch (Exception e) {
             android.util.Log.e("SyncWorker", "Error during background sync execution", e);
             return Result.retry();
-        }
-    }
-
-    private void syncAttachments(Context context, DocumentFile cloudFolder) {
-        java.io.File localAttachDir = new java.io.File(context.getFilesDir(), "attachments");
-        if (!localAttachDir.exists()) {
-            if (!localAttachDir.mkdirs()) {
-                android.util.Log.e("SyncWorker", "Failed to create attachments directory");
-                return;
-            }
-        }
-
-        DocumentFile remoteAttachDir = SafHelper.getOrCreateDirectory(cloudFolder, "attachments");
-        if (remoteAttachDir == null) return;
-
-        java.io.File[] localFiles = localAttachDir.listFiles();
-        java.util.List<DocumentFile> remoteFiles = SafHelper.listFiles(remoteAttachDir);
-
-        // Map remote filenames for quick lookup
-        java.util.Set<String> remoteFileNames = new java.util.HashSet<>();
-        for (DocumentFile rf : remoteFiles) {
-            remoteFileNames.add(rf.getName());
-        }
-
-        // Push local files to remote if missing
-        if (localFiles != null) {
-            for (java.io.File lf : localFiles) {
-                if (lf.isFile() && !remoteFileNames.contains(lf.getName())) {
-                    String mimeType = lf.getName().toLowerCase().endsWith(".pdf") ? "application/pdf" : "image/*";
-                    SafHelper.copyFileToSaf(context, lf, remoteAttachDir, mimeType);
-                }
-            }
-        }
-
-        // Map local filenames for quick lookup
-        java.util.Set<String> localFileNames = new java.util.HashSet<>();
-        if (localFiles != null) {
-            for (java.io.File lf : localFiles) {
-                localFileNames.add(lf.getName());
-            }
-        }
-
-        // Pull remote files to local if missing
-        for (DocumentFile rf : remoteFiles) {
-            if (!localFileNames.contains(rf.getName())) {
-                SafHelper.copyFileFromSaf(context, rf, localAttachDir);
-            }
         }
     }
 }
