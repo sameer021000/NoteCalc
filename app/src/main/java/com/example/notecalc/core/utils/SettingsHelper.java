@@ -140,7 +140,7 @@ private void closeSettings() {
                 long lastSync = com.example.notecalc.sync.models.SyncConfig.getLastSyncTimestamp(activity);
                 String timeStr = activity.getString(R.string.cloud_never_synced);
                 if (lastSync > 0) {
-                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", java.util.Locale.getDefault());
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm:ss a", java.util.Locale.getDefault());
                     timeStr = sdf.format(new java.util.Date(lastSync));
                 }
                 tvCloudStatus.setText(activity.getString(R.string.cloud_connected_last_sync, timeStr));

@@ -19,7 +19,7 @@
     <string name="cloud_synchronization">CLOUD SYNCHRONIZATION</string>
     <string name="manage_cloud_sync_settings">Manage Cloud Sync Settings</string>
     <string name="open_cloud_backup_sync">Open Cloud Backup &amp; Sync</string>
-    <string name="cloud_connected_last_sync">✅ Connected • Last Sync: %s</string>
+    <string name="cloud_connected_last_sync">Last Sync: %s</string>
     <string name="cloud_setup_sync">Setup Cloud Sync</string>
     <string name="cloud_never_synced">Never</string>
 </resources>

@@ -80,7 +80,7 @@ public class CloudSyncDialogHelper {
                 
                 long lastSync = com.example.notecalc.sync.models.SyncConfig.getLastSyncTimestamp(activity);
                 if (lastSync > 0) {
-                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", java.util.Locale.getDefault());
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm:ss a", java.util.Locale.getDefault());
                     tvLastSync.setText(activity.getString(com.example.notecalc.R.string.last_sync_time, sdf.format(new java.util.Date(lastSync))));
                 } else {
                     tvLastSync.setText(activity.getString(com.example.notecalc.R.string.last_sync_never));
@@ -92,16 +92,23 @@ public class CloudSyncDialogHelper {
                     if (df != null && df.getName() != null) {
                         String readablePath = df.getName();
                         try {
+                            android.net.Uri parsedUri = android.net.Uri.parse(uriStr);
+                            String authority = parsedUri.getAuthority();
                             String decodedPath = android.net.Uri.decode(uriStr);
-                            int treeIdx = decodedPath.indexOf("/tree/");
-                            if (treeIdx != -1) {
-                                String sub = decodedPath.substring(treeIdx + 6);
-                                String[] parts = sub.split(":");
-                                if (parts.length == 2) {
-                                    String root = parts[0].equals("primary") ? "Internal Storage" : "SD Card";
-                                    readablePath = root + " / " + parts[1].replace("/", " / ");
-                                } else if (parts.length == 1) {
-                                    readablePath = parts[0].equals("primary") ? "Internal Storage" : "SD Card";
+                            
+                            if (authority != null && authority.contains("com.google.android.apps.docs")) {
+                                readablePath = "Google Drive / " + df.getName();
+                            } else {
+                                int treeIdx = decodedPath.indexOf("/tree/");
+                                if (treeIdx != -1) {
+                                    String sub = decodedPath.substring(treeIdx + 6);
+                                    String[] parts = sub.split(":");
+                                    if (parts.length == 2) {
+                                        String root = parts[0].equals("primary") ? "Internal Storage" : (parts[0].matches("[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}") ? "SD Card" : parts[0]);
+                                        readablePath = root + " / " + parts[1].replace("/", " / ");
+                                    } else if (parts.length == 1) {
+                                        readablePath = parts[0].equals("primary") ? "Internal Storage" : (parts[0].matches("[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}") ? "SD Card" : parts[0]);
+                                    }
                                 }
                             }
                         } catch (Exception e) {
@@ -157,7 +164,7 @@ public class CloudSyncDialogHelper {
             showOnboardingDialog(activity);
         });
         
-        ResponsiveUI.setupClickable(btnDisconnect, true, () -> {
+        ResponsiveUI.setupClickable(btnDisconnect, true, () -> showDisconnectConfirmDialog(activity, tvFolderPath.getText().toString(), () -> {
             com.example.notecalc.sync.models.SyncConfig.setSyncEnabled(activity, false);
             com.example.notecalc.sync.models.SyncConfig.setSafUriString(activity, null);
             com.example.notecalc.sync.models.SyncConfig.setLastSyncTimestamp(activity, 0);
@@ -166,7 +173,7 @@ public class CloudSyncDialogHelper {
             if (activity.settingsRefreshDashboardCloudUI != null) {
                 activity.settingsRefreshDashboardCloudUI.run();
             }
-        });
+        }));
         
         ResponsiveUI.setupClickable(btnSyncNow, true, () -> {
             android.widget.Toast.makeText(activity, activity.getString(com.example.notecalc.R.string.syncing_dots), android.widget.Toast.LENGTH_SHORT).show();
@@ -249,5 +256,35 @@ public class CloudSyncDialogHelper {
         if (activity.settingsRefreshDashboardCloudUI != null) {
             activity.settingsRefreshDashboardCloudUI.run();
         }
+    }
+
+    private static void showDisconnectConfirmDialog(MainActivity activity, String currentPath, Runnable onConfirm) {
+        android.view.View view = activity.getLayoutInflater().inflate(com.example.notecalc.R.layout.layout_dialog_cloud_sync_disconnect_confirm, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1f, 24f));
+        }
+        
+        TextView tvPath = view.findViewById(com.example.notecalc.R.id.tv_disconnect_path);
+        TextView btnCancel = view.findViewById(com.example.notecalc.R.id.btn_disconnect_cancel);
+        TextView btnConfirm = view.findViewById(com.example.notecalc.R.id.btn_disconnect_confirm);
+        
+        if (currentPath != null && !currentPath.isEmpty()) {
+            tvPath.setText(activity.getString(com.example.notecalc.R.string.disconnect_confirm_path, currentPath.replace("Folder: ", "")));
+        } else {
+            tvPath.setVisibility(android.view.View.GONE);
+        }
+        
+        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
+        
+        ResponsiveUI.setupClickable(btnConfirm, true, () -> {
+            dialog.dismiss();
+            if (onConfirm != null) onConfirm.run();
+        });
+        
+        dialog.show();
     }
 }
