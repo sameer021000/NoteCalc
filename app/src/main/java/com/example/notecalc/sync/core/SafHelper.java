@@ -76,18 +76,6 @@ public class SafHelper {
         return null;
     }
 
-    public static List<DocumentFile> listFiles(DocumentFile parent) {
-        List<DocumentFile> result = new ArrayList<>();
-        if (parent != null && parent.isDirectory()) {
-            DocumentFile[] files = parent.listFiles();
-            for (DocumentFile f : files) {
-                if (f.isFile()) {
-                    result.add(f);
-                }
-            }
-        }
-        return result;
-    }
 
     public static void copyFileToSaf(Context context, java.io.File sourceFile, DocumentFile destFolder, String mimeType) {
         if (sourceFile == null || !sourceFile.exists() || destFolder == null) return;
@@ -113,25 +101,4 @@ public class SafHelper {
         }
     }
 
-    public static void copyFileFromSaf(Context context, DocumentFile sourceSafFile, java.io.File destFolder) {
-        if (sourceSafFile == null || !sourceSafFile.exists() || !sourceSafFile.canRead() || destFolder == null) return;
-        String fileName = sourceSafFile.getName();
-        if (fileName == null) return;
-        if (!destFolder.exists() && !destFolder.mkdirs()) return;
-        try {
-            java.io.File destFile = new java.io.File(destFolder, fileName);
-            try (InputStream is = context.getContentResolver().openInputStream(sourceSafFile.getUri());
-                 OutputStream os = new java.io.FileOutputStream(destFile)) {
-                if (is != null) {
-                    byte[] buffer = new byte[8192];
-                    int read;
-                    while ((read = is.read(buffer)) != -1) {
-                        os.write(buffer, 0, read);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            android.util.Log.e("SafHelper", "Failed to copy file from SAF: " + fileName, e);
-        }
-    }
 }
