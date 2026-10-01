@@ -64,7 +64,7 @@ public class AttachmentSyncWorker extends Worker {
         // Phase 1: Local Duplicate Cleanup (The Pollution Fix)
         java.io.File[] rawFiles = localAttachDir.listFiles();
         if (rawFiles != null) {
-            java.util.regex.Pattern duplicatePattern = java.util.regex.Pattern.compile("^.*(?:(?:\\s*\\(\\d+\\))+\\.[a-zA-Z0-9]+|\\.[a-zA-Z0-9]+(?:\\s*\\(\\d+\\))+)$");
+            java.util.regex.Pattern duplicatePattern = java.util.regex.Pattern.compile(SyncConfig.DUPLICATE_IMAGE_REGEX);
             for (java.io.File rf : rawFiles) {
                 if (rf.isFile() && duplicatePattern.matcher(rf.getName()).matches()) {
                     @SuppressWarnings("unused")

@@ -98,5 +98,4 @@ public class SafHelper {
             android.util.Log.e("SafHelper", "Failed to copy file to SAF: " + sourceFile.getName(), e);
         }
     }
-
 }

@@ -11,6 +11,8 @@ public class SyncConfig {
     private static final String KEY_LAST_SYNC = "last_sync_timestamp";
     private static final String KEY_LAST_ATTACHMENT_SYNC = "last_attachment_sync_timestamp";
 
+    public static final String DUPLICATE_IMAGE_REGEX = "^.*(?:(?:\\s*\\(\\d+\\))+\\.[a-zA-Z0-9]+|\\.[a-zA-Z0-9]+(?:\\s*\\(\\d+\\))+)$";
+
     public static boolean isSyncEnabled(Context context) {
         return getPrefs(context).getBoolean(KEY_SYNC_ENABLED, false);
     }

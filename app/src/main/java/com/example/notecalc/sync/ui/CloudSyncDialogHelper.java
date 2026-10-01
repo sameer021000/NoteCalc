@@ -112,7 +112,7 @@ public class CloudSyncDialogHelper {
                 if (attachDir.exists()) {
                     java.io.File[] files = attachDir.listFiles();
                     if (files != null) {
-                        java.util.regex.Pattern duplicatePattern = java.util.regex.Pattern.compile("^.*(?:(?:\\s*\\(\\d+\\))+\\.[a-zA-Z0-9]+|\\.[a-zA-Z0-9]+(?:\\s*\\(\\d+\\))+)$");
+                        java.util.regex.Pattern duplicatePattern = java.util.regex.Pattern.compile(com.example.notecalc.sync.models.SyncConfig.DUPLICATE_IMAGE_REGEX);
                         for (java.io.File f : files) {
                             if (f.isFile()) {
                                 if (duplicatePattern.matcher(f.getName()).matches()) {
