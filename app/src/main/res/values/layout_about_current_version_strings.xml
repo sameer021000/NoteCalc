@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_version_title">What\'s New in NoteCalc v1.7.0</string>
+    <string name="about_version_title">What\'s New in NoteCalc v1.8.0</string>
     <string name="about_version_btn_dismiss">Awesome!</string>
     
-    <string name="about_item1_title">✨ Dashboard Redesign</string>
-    <string name="about_item1_desc">List cards now display a clean, mathematical breakdown of [Budget] - [Expenses] = [Balance] with zero-decimals removed!</string>
+    <string name="about_item1_title">☁️ Cloud Synchronization</string>
+    <string name="about_item1_desc">Connect a cloud folder to safely and securely back up all your JSON data automatically.</string>
     
-    <string name="about_item2_title">⚡ Quick Rename</string>
-    <string name="about_item2_desc">Need to fix a typo? You can now quickly rename any list simply by long-pressing its card on the dashboard.</string>
+    <string name="about_item2_title">🖼️ Auto Sync Attachments</string>
+    <string name="about_item2_desc">Enable background syncing to effortlessly push all your image attachments to your connected cloud folder.</string>
     
-    <string name="about_item3_title">↕️ Persistent Sorting</string>
-    <string name="about_item3_desc">Custom layouts are now permanently saved! Manually drag and drop your records and we\'ll remember your layout.</string>
+    <string name="about_item3_title">🖱️ Smart Selection Mode</string>
+    <string name="about_item3_desc">Tapping anywhere on a record during selection mode now intuitively selects it instead of opening the edit form.</string>
     
-    <string name="about_item4_title">🎨 Polished UI &amp; Live Balances</string>
-    <string name="about_item4_desc">The dashboard balances now update instantly. Plus, new asymmetric buttons and unified theme colors.</string>
+    <string name="about_item4_title">⏱️ Precise Timestamps</string>
+    <string name="about_item4_desc">Record timestamps now display the exact seconds, allowing for more precise tracking of your entries.</string>
     
-    <string name="about_item5_title">🛠️ Bug Fixes</string>
-    <string name="about_item5_desc">Fixed attachment bugs, smart timestamps only update on actual changes, and swipe-to-delete selection conflicts resolved.</string>
+    <string name="about_item5_title">🛠️ Cloud Safeguards</string>
+    <string name="about_item5_desc">Added attention-mode warnings when disconnecting from the cloud to prevent accidental loss of sync settings.</string>
 </resources>

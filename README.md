@@ -2,7 +2,7 @@
 
 ![Android](https://img.shields.io/badge/Platform-Android-green)
 ![Java](https://img.shields.io/badge/Language-Java-blue)
-![Version](https://img.shields.io/badge/Version-1.7.0-orange)
+![Version](https://img.shields.io/badge/Version-1.8.0-orange)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
 **NoteCalc** is a premium, offline-first Android expense tracker and calculator designed to bridge the gap between simple note-taking and structured financial tracking. It combines a modern interface with powerful tools such as dual tracking modes, file attachments, detailed PDF reporting, JSON backups, advanced filtering, and an organized dashboard for an intuitive accounting experience.
@@ -11,7 +11,7 @@
 
 ## 📌 App Information
 
-* **Current Version:** v1.7.0
+* **Current Version:** v1.8.0
 * **Minimum SDK:** Android 7.0 (Nougat)
 * **Target SDK:** Android 15 (API 36)
 * **Language:** Java
@@ -68,7 +68,8 @@
 
 ### 💾 **Backup & Privacy**
 
-* **Privacy-First & Offline**: No cloud syncing is forced upon you. Your data remains stored locally on your device.
+* **Cloud Synchronization**: Connect a cloud folder (e.g., Google Drive via SAF) to seamlessly back up your JSON data and automatically sync your image attachments in the background.
+* **Privacy-First & Offline**: No cloud syncing is forced upon you. Your data remains stored locally on your device by default.
 * **JSON Import / Export**: Easily back up your entire workspace to a JSON file and restore it whenever you switch devices or need to recover data.
 * **Local File Storage**: Attachments captured or selected within the app are managed locally, keeping your records and associated files available without requiring cloud storage.
 
@@ -133,6 +134,7 @@
 
 ## 📋 Version History
 
+* **v1.8.0** – Added Cloud Synchronization for data and attachments, introduced precise timestamps (with seconds), and improved the smart selection mode interaction.
 * **v1.7.0** – Redesigned list cards with math breakdown and real-time balance updates, persistent drag-and-drop custom sorting, quick list rename via long-press, and a polished modern UI with asymmetric buttons and dynamic sizing.
 * **v1.6.0** – Redesigned dashboard header with a unified '+' dropdown menu, fixed critical search state-sync bugs, added ripple touch feedback to menus, and improved empty states interaction.
 * **v1.5.0** – Added archiving functionality for lists and groups, protecting past data in a read-only state and keeping the dashboard decluttered.

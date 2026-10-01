@@ -10,8 +10,8 @@ android {
         applicationId = "com.example.notecalc"
         minSdk = 24
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.7.0"
+        versionCode = 9
+        versionName = "1.8.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

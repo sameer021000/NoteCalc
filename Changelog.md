@@ -4,6 +4,21 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.8.0] - 2026-10-01
+
+### ✨ Added
+
+* **Cloud Synchronization**: You can now connect a cloud folder via Android's Storage Access Framework (SAF) to securely and automatically back up your JSON data.
+* **Auto Sync Attachments**: A new toggle allows you to automatically push all your local image attachments to your connected cloud folder in the background.
+* **Disconnect Safeguards**: Added an attention-mode warning when disconnecting from the cloud to ensure you are aware of the implications.
+
+### 🎨 Improved
+
+* **Precise Timestamps**: Record timestamps now display the exact seconds for better tracking.
+* **Smart Selection Mode**: Tapping a record when selection mode is active now intelligently selects/deselects the record instead of annoyingly opening the edit form.
+
+---
+
 ## [1.7.0] - 2026-09-26
 
 ### ✨ Added

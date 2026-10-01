@@ -74,4 +74,6 @@
     <string name="tips_cat5_item4_desc">You can view the latest features and changes added to NoteCalc.\n\n<b>How:</b>\nGo to Settings and tap on the App Version number at the bottom of the screen.</string>
     <string name="tips_cat5_item5_title">Export a Group to PDF</string>
     <string name="tips_cat5_item5_desc">You can download all the lists inside a specific Group as a single combined PDF.\n\n<b>How:</b>\nLong-press on a Group in the Dashboard and select Export Group as PDF.</string>
+    <string name="tips_cat5_item6_title">Automate Backups with Cloud Sync</string>
+    <string name="tips_cat5_item6_desc">Keep your data and attachments safe automatically!\n\n<b>How:</b>\nGo to Settings &#x2192; Manage Cloud Sync to connect a folder and enable Auto Sync Attachments.</string>
 </resources>
