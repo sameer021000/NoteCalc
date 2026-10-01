@@ -133,30 +133,7 @@ public class CloudSyncDialogHelper {
                 if (uriStr != null) {
                     androidx.documentfile.provider.DocumentFile df = androidx.documentfile.provider.DocumentFile.fromTreeUri(activity, android.net.Uri.parse(uriStr));
                     if (df != null && df.getName() != null) {
-                        String readablePath = df.getName();
-                        try {
-                            android.net.Uri parsedUri = android.net.Uri.parse(uriStr);
-                            String authority = parsedUri.getAuthority();
-                            String decodedPath = android.net.Uri.decode(uriStr);
-                            
-                            if (authority != null && authority.contains("com.google.android.apps.docs")) {
-                                readablePath = "Google Drive / " + df.getName();
-                            } else {
-                                int treeIdx = decodedPath.indexOf("/tree/");
-                                if (treeIdx != -1) {
-                                    String sub = decodedPath.substring(treeIdx + 6);
-                                    String[] parts = sub.split(":");
-                                    if (parts.length == 2) {
-                                        String root = parts[0].equals("primary") ? "Internal Storage" : (parts[0].matches("[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}") ? "SD Card" : parts[0]);
-                                        readablePath = root + " / " + parts[1].replace("/", " / ");
-                                    } else if (parts.length == 1) {
-                                        readablePath = parts[0].equals("primary") ? "Internal Storage" : (parts[0].matches("[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}") ? "SD Card" : parts[0]);
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            // Fallback to df.getName()
-                        }
+                        String readablePath = com.example.notecalc.sync.core.SafHelper.getReadablePath(uriStr, df.getName());
                         tvFolderPath.setText(activity.getString(com.example.notecalc.R.string.cloud_folder_path, readablePath));
                         tvFolderPath.setVisibility(android.view.View.VISIBLE);
                     } else {
