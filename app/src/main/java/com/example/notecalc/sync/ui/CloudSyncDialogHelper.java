@@ -74,7 +74,11 @@ public class CloudSyncDialogHelper {
         
         btnConnect.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), 0, 0f, 12f));
         btnSyncNow.setBackground(ResponsiveUI.createRippleRoundedBg(activity, android.graphics.Color.TRANSPARENT, ThemeManager.getPrimaryAccentColor(activity), 1.5f, 12f));
+        btnSyncAttachmentsNow.setBackground(ResponsiveUI.createRippleRoundedBg(activity, android.graphics.Color.TRANSPARENT, ThemeManager.getPrimaryAccentColor(activity), 1.5f, 12f));
         btnDisconnect.setBackground(ResponsiveUI.createRippleRoundedBg(activity, android.graphics.Color.TRANSPARENT, android.graphics.Color.parseColor("#F44336"), 1.5f, 12f));
+        
+        pbAttachmentSync.setProgressTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getPrimaryAccentColor(activity)));
+        pbAttachmentSync.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(ThemeManager.getPrimaryAccentColor(activity)));
         
         Runnable refreshCloudSyncUI = () -> {
             boolean isConnected = com.example.notecalc.sync.models.SyncConfig.isSyncEnabled(activity);

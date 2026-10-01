@@ -21,6 +21,13 @@ public class SyncManager {
                 .build();
                 
             WorkManager.getInstance(context).enqueueUniqueWork("NoteCalcCloudSync", ExistingWorkPolicy.REPLACE, syncRequest);
+            
+            if (SyncConfig.isSyncImagesEnabled(context)) {
+                OneTimeWorkRequest attachmentRequest = new OneTimeWorkRequest.Builder(com.example.notecalc.sync.jobs.AttachmentSyncWorker.class)
+                    .setConstraints(constraints)
+                    .build();
+                WorkManager.getInstance(context).enqueueUniqueWork("AttachmentSyncJob", ExistingWorkPolicy.REPLACE, attachmentRequest);
+            }
         }
     }
 }
