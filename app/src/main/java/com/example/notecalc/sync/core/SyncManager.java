@@ -30,4 +30,18 @@ public class SyncManager {
             }
         }
     }
+
+    public static void triggerManualJsonSync(Context context) {
+        if (SyncConfig.isSyncEnabled(context)) {
+            Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+                
+            OneTimeWorkRequest syncRequest = new OneTimeWorkRequest.Builder(SyncWorker.class)
+                .setConstraints(constraints)
+                .build();
+                
+            WorkManager.getInstance(context).enqueueUniqueWork("NoteCalcCloudSync", ExistingWorkPolicy.REPLACE, syncRequest);
+        }
+    }
 }

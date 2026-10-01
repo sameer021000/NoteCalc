@@ -224,7 +224,7 @@ public class CloudSyncDialogHelper {
         
         ResponsiveUI.setupClickable(btnSyncNow, true, () -> {
             android.widget.Toast.makeText(activity, activity.getString(com.example.notecalc.R.string.syncing_dots), android.widget.Toast.LENGTH_SHORT).show();
-            com.example.notecalc.sync.core.SyncManager.recordSave(activity);
+            com.example.notecalc.sync.core.SyncManager.triggerManualJsonSync(activity);
         });
         
         ResponsiveUI.setupClickable(btnSyncAttachmentsNow, true, () -> {
