@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     public androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
     public androidx.activity.result.ActivityResultLauncher<android.content.Intent> importJsonLauncher;
+    public androidx.activity.result.ActivityResultLauncher<android.content.Intent> safFolderLauncher;
 
     public FrameLayout mainContainer;
     public AppStorage appStorage;
@@ -131,6 +132,12 @@ public class MainActivity extends AppCompatActivity {
 
         importJsonLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> BackupHelper.handleImportResult(this, result));
 
+        safFolderLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                com.example.notecalc.sync.ui.CloudSyncDialogHelper.handleSafResult(this, result.getData());
+            }
+        });
+
         setContentView(R.layout.activity_main);
 
         // Reference the root frame container
@@ -176,17 +183,9 @@ public class MainActivity extends AppCompatActivity {
 
     public Runnable settingsRefreshCloudUI;
     public Runnable settingsRefreshDashboardCloudUI;
-    public static final int REQUEST_CODE_SAF_FOLDER = 1003;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        
-        if (requestCode == REQUEST_CODE_SAF_FOLDER && resultCode == RESULT_OK && data != null) {
-            com.example.notecalc.sync.ui.CloudSyncDialogHelper.handleSafResult(this, data);
-            return;
-        }
-        
         AttachmentHelper.handleActivityResult(MainActivity.this, requestCode, resultCode, data);
     }
 }

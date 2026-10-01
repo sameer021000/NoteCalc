@@ -255,7 +255,7 @@ public class CloudSyncDialogHelper {
     private static void launchSafPicker(MainActivity activity) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-        activity.startActivityForResult(intent, MainActivity.REQUEST_CODE_SAF_FOLDER);
+        activity.safFolderLauncher.launch(intent);
     }
 
     public static void handleSafResult(MainActivity activity, Intent data) {
