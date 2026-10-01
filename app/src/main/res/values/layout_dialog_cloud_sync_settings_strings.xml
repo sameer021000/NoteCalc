@@ -17,4 +17,9 @@
     <string name="toggle_off">OFF</string>
     <string name="last_sync_time">Last Sync: %s</string>
     <string name="cloud_folder_path">Folder: %s</string>
+    
+    <string name="total_local_images_0">Total local images: 0</string>
+    <string name="last_sync_never_attachment">Last sync: Never</string>
+    <string name="zero_percent">0%</string>
+    <string name="sync_attachments_now">Sync Attachments Now</string>
 </resources>

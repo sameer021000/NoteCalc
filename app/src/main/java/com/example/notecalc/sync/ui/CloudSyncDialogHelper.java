@@ -69,6 +69,7 @@ public class CloudSyncDialogHelper {
         android.widget.ProgressBar pbAttachmentSync = view.findViewById(com.example.notecalc.R.id.pb_attachment_sync);
         TextView tvAttachmentSyncProgress = view.findViewById(com.example.notecalc.R.id.tv_attachment_sync_progress);
         TextView btnSyncAttachmentsNow = view.findViewById(com.example.notecalc.R.id.btn_sync_attachments_now);
+        android.view.View vSeparator = view.findViewById(com.example.notecalc.R.id.v_separator);
         TextView btnClose = view.findViewById(com.example.notecalc.R.id.btn_close);
         
         btnConnect.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getPrimaryAccentColor(activity), 0, 0f, 12f));
@@ -84,6 +85,8 @@ public class CloudSyncDialogHelper {
                 syncImagesContainer.setVisibility(android.view.View.VISIBLE);
                 btnSyncNow.setVisibility(android.view.View.VISIBLE);
                 btnDisconnect.setVisibility(android.view.View.VISIBLE);
+                vSeparator.setVisibility(android.view.View.VISIBLE);
+                btnSyncAttachmentsNow.setVisibility(android.view.View.VISIBLE);
                 
                 long lastSync = com.example.notecalc.sync.models.SyncConfig.getLastSyncTimestamp(activity);
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy 'at' hh:mm:ss a", java.util.Locale.getDefault());
@@ -104,7 +107,18 @@ public class CloudSyncDialogHelper {
                 int imgCount = 0;
                 if (attachDir.exists()) {
                     java.io.File[] files = attachDir.listFiles();
-                    if (files != null) imgCount = files.length;
+                    if (files != null) {
+                        java.util.regex.Pattern duplicatePattern = java.util.regex.Pattern.compile(".*(\\s*\\(\\d+\\))+\\.[^.]+$");
+                        for (java.io.File f : files) {
+                            if (f.isFile()) {
+                                if (duplicatePattern.matcher(f.getName()).matches()) {
+                                    f.delete();
+                                } else {
+                                    imgCount++;
+                                }
+                            }
+                        }
+                    }
                 }
                 tvLocalImageCount.setText("Total local images: " + imgCount);
                 
@@ -157,6 +171,8 @@ public class CloudSyncDialogHelper {
                 attachmentSyncDetails.setVisibility(android.view.View.GONE);
                 btnSyncNow.setVisibility(android.view.View.GONE);
                 btnDisconnect.setVisibility(android.view.View.GONE);
+                vSeparator.setVisibility(android.view.View.GONE);
+                btnSyncAttachmentsNow.setVisibility(android.view.View.GONE);
             }
         };
         refreshCloudSyncUI.run();

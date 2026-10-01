@@ -54,12 +54,44 @@
         android:text="@string/connect_cloud_folder"
         android:textColor="@color/text_on_accent" />
 
+    <TextView
+        android:id="@+id/btn_sync_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:text="@string/sync_now"
+        android:visibility="gone"
+        android:textColor="?attr/colorAccentPrimary" />
+
+    <TextView
+        android:id="@+id/btn_disconnect_cloud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:text="@string/disconnect"
+        android:textColor="#F44336"
+        android:visibility="gone"/>
+
+    <View
+        android:id="@+id/v_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="#33888888"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/ll_sync_images_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
         android:gravity="center_vertical">
         
@@ -117,7 +149,7 @@
             android:id="@+id/tv_local_image_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total local images: 0"
+            android:text="@string/total_local_images_0"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="?android:textColorPrimary"/>
@@ -126,7 +158,7 @@
             android:id="@+id/tv_last_attachment_sync"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last sync: Never"
+            android:text="@string/last_sync_never_attachment"
             android:textSize="12sp"
             android:textColor="?android:textColorSecondary"
             android:layout_marginTop="4dp"/>
@@ -153,47 +185,25 @@
                 android:id="@+id/tv_attachment_sync_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0%"
+                android:text="@string/zero_percent"
                 android:textSize="12sp"
                 android:layout_marginStart="8dp"
                 android:textColor="?android:textColorPrimary"/>
         </LinearLayout>
         
-        <TextView
-            android:id="@+id/btn_sync_attachments_now"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:text="Sync Attachments Now"
-            android:textColor="?attr/colorAccentPrimary" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/btn_sync_now"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:text="@string/sync_now"
-        android:visibility="gone"
-        android:textColor="?attr/colorAccentPrimary" />
-
-    <TextView
-        android:id="@+id/btn_disconnect_cloud"
+        android:id="@+id/btn_sync_attachments_now"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:gravity="center"
         android:textStyle="bold"
         android:layout_marginTop="8dp"
-        android:text="@string/disconnect"
-        android:textColor="#F44336"
-        android:visibility="gone"/>
+        android:text="@string/sync_attachments_now"
+        android:textColor="?attr/colorAccentPrimary"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
