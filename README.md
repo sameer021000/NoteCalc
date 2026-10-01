@@ -96,7 +96,7 @@
 |                    **Expenses Mode**                     |                          **Budget Mode**                          |
 | ![Expenses Mode](screenshots/expenses_screen_v1.7.0.jpg) |       ![Budget Mode](screenshots/budget_screen_v1.7.0.jpg)        |
 |                      **Settings 1**                      |                          **Settings 2**                           |
-|  ![Settings 1](screenshots/settings_screen1_v1.6.0.jpg)  |      ![Settings 2](screenshots/settings_screen2_v1.6.0.jpg)       |
+|  ![Settings 1](screenshots/settings_screen1_v1.8.0.jpg)  |      ![Settings 2](screenshots/settings_screen2_v1.8.0.jpg)       |
 
 ---
 
