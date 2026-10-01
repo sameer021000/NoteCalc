@@ -19,7 +19,9 @@
     <string name="cloud_folder_path">Folder: %s</string>
     
     <string name="total_local_images_0">Total local images: 0</string>
+    <string name="total_local_images_count">Total local images: %1$d</string>
     <string name="last_sync_never_attachment">Last sync: Never</string>
     <string name="zero_percent">0%</string>
+    <string name="attachment_sync_progress_format">%1$d%%</string>
     <string name="sync_attachments_now">Sync Attachments Now</string>
 </resources>

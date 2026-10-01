@@ -112,7 +112,8 @@ public class CloudSyncDialogHelper {
                         for (java.io.File f : files) {
                             if (f.isFile()) {
                                 if (duplicatePattern.matcher(f.getName()).matches()) {
-                                    f.delete();
+                                    @SuppressWarnings("unused")
+                                    boolean ignored = f.delete();
                                 } else {
                                     imgCount++;
                                 }
@@ -120,7 +121,7 @@ public class CloudSyncDialogHelper {
                         }
                     }
                 }
-                tvLocalImageCount.setText("Total local images: " + imgCount);
+                tvLocalImageCount.setText(activity.getString(com.example.notecalc.R.string.total_local_images_count, imgCount));
                 
                 attachmentSyncDetails.setVisibility(android.view.View.VISIBLE);
                 
@@ -186,10 +187,10 @@ public class CloudSyncDialogHelper {
                     btnSyncAttachmentsNow.setAlpha(0.5f);
                     int progress = workInfo.getProgress().getInt(com.example.notecalc.sync.jobs.AttachmentSyncWorker.PROGRESS_KEY, 0);
                     pbAttachmentSync.setProgress(progress);
-                    tvAttachmentSyncProgress.setText(progress + "%");
+                    tvAttachmentSyncProgress.setText(activity.getString(com.example.notecalc.R.string.attachment_sync_progress_format, progress));
                 } else if (workInfo.getState().isFinished() && btnSyncAttachmentsNow.getAlpha() == 0.5f) {
                     pbAttachmentSync.setProgress(100);
-                    tvAttachmentSyncProgress.setText("100%");
+                    tvAttachmentSyncProgress.setText(activity.getString(com.example.notecalc.R.string.attachment_sync_progress_format, 100));
                     btnSyncAttachmentsNow.setEnabled(true);
                     btnSyncAttachmentsNow.setAlpha(1.0f);
                     android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());

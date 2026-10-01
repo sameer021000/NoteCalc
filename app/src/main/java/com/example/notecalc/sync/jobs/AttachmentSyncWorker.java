@@ -67,7 +67,8 @@ public class AttachmentSyncWorker extends Worker {
             java.util.regex.Pattern duplicatePattern = java.util.regex.Pattern.compile("^.*(?:(?:\\s*\\(\\d+\\))+\\.[a-zA-Z0-9]+|\\.[a-zA-Z0-9]+(?:\\s*\\(\\d+\\))+)$");
             for (java.io.File rf : rawFiles) {
                 if (rf.isFile() && duplicatePattern.matcher(rf.getName()).matches()) {
-                    rf.delete();
+                    @SuppressWarnings("unused")
+                    boolean ignored = rf.delete();
                 }
             }
         }
@@ -115,7 +116,9 @@ public class AttachmentSyncWorker extends Worker {
                         needsUpload = false; // Delta sync match
                     }
                 }
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                // Ignore parsing errors for individual files
+            }
 
             if (needsUpload) {
                 String mimeType = fileName.toLowerCase().endsWith(".pdf") ? "application/pdf" : "image/*";
@@ -133,7 +136,9 @@ public class AttachmentSyncWorker extends Worker {
                     fileInfo.put("modified", localMod);
                     manifest.put(fileName, fileInfo);
                     manifestChanged = true;
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                    // Ignore manifest update errors for individual files
+                }
             }
 
             int progress = (int) (((i + 1) / (float) totalFiles) * 95); // Reserve 5% for finalizing
