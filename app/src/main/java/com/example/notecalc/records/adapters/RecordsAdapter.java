@@ -130,6 +130,10 @@ import java.util.Locale;
 
             ResponsiveUI.setupClickable(holder.itemView, true, () -> {
                 if (activity.currentEditingAccount != null && activity.currentEditingAccount.isArchived()) return;
+                if (isSelectionMode) {
+                    holder.cbSelect.setChecked(!record.isSelected());
+                    return;
+                }
                 EditorModeHelper.enterEditRecordMode(activity, trueIndex, record);
             }, () -> {
                 if (!record.isSelected()) {
