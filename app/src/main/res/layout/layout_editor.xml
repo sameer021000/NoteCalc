@@ -538,6 +538,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="bottom|end"
+            android:visibility="gone"
             android:layout_margin="16dp"
             android:padding="16dp"
             android:src="@android:drawable/ic_menu_edit"

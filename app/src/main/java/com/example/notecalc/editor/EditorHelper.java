@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class EditorHelper {
 
-
     @android.annotation.SuppressLint({"SetTextI18n", "ClickableViewAccessibility", "NotifyDataSetChanged"})
     public static void openEditor(MainActivity activity, Account account) {
         if (activity.currentSnackbar != null) {
@@ -82,10 +81,24 @@ public class EditorHelper {
 
         ImageView btnNCAgent = editorView.findViewById(R.id.btn_nc_agent);
         NCAgentHelper.setupNCAgentButton(activity, btnNCAgent, account);
+        
+        btnNCAgent.setOnLongClickListener(v -> {
+            btnNCAgent.setVisibility(View.GONE);
+            return true;
+        });
 
         new androidx.recyclerview.widget.ItemTouchHelper(TouchHelper.getRecordSwipeCallback(activity)).attachToRecyclerView(listRecordsRecyclerView);
         activity.textTotalValField = textTotalVal;
         activity.textTotalLabelField = textTotalLabel;
+
+        textTotalLabel.setOnLongClickListener(v -> {
+            if (btnNCAgent.getVisibility() == View.GONE) {
+                btnNCAgent.setVisibility(View.VISIBLE);
+            } else {
+                btnNCAgent.setVisibility(View.GONE);
+            }
+            return true;
+        });
 
         activity.editRemarksField = editorView.findViewById(R.id.edit_record_remarks);
         activity.formInputsContainer = editorView.findViewById(R.id.form_inputs_container);
