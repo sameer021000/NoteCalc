@@ -188,7 +188,7 @@ public class AccountDialogHelper {
         ResponsiveUI.setupClickable(btnApply, false, () -> {
             String title = input.getText().toString().trim();
             activity.currentEditingAccount = null; // Ensure validation treats it as new
-            if (!com.example.notecalc.editor.core.EditorValidationHelper.validateAccountTitle(activity, title)) {
+            if (!com.example.notecalc.editor.core.EditorValidationHelper.validateAccountTitle(activity, title, targetGroup)) {
                 return;
             }
 
@@ -249,9 +249,17 @@ public class AccountDialogHelper {
                 return;
             }
             
+            AccountGroup parentGroup = null;
+            for (AccountGroup g : activity.appStorage.groups) {
+                if (g.getAccounts().contains(account)) {
+                    parentGroup = g;
+                    break;
+                }
+            }
+            
             activity.currentEditingAccount = account;
             activity.originalTitle = account.getTitle();
-            if (!com.example.notecalc.editor.core.EditorValidationHelper.validateAccountTitle(activity, newTitle)) {
+            if (!com.example.notecalc.editor.core.EditorValidationHelper.validateAccountTitle(activity, newTitle, parentGroup)) {
                 return;
             }
             

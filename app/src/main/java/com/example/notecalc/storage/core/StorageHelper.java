@@ -95,18 +95,27 @@ public class StorageHelper {
         }
     }
 
+    /** @deprecated Use block-specific methods (doesNameExistInDashboard or doesNameExistInGroup) */
+    @Deprecated
     public static boolean doesAccountExist(AppStorage storage, String title) {
-        for (AccountGroup g : storage.groups) {
-            for (Account a : g.getAccounts()) {
-                if (a.getTitle().equalsIgnoreCase(title)) {
-                    return true;
-                }
-            }
-        }
+        return doesNameExistInDashboard(storage, title);
+    }
+    
+    public static boolean doesNameExistInDashboard(AppStorage storage, String title) {
+        String trimmed = title.trim();
         for (Account a : storage.standaloneAccounts) {
-            if (a.getTitle().equalsIgnoreCase(title)) {
-                return true;
-            }
+            if (a.getTitle().equalsIgnoreCase(trimmed)) return true;
+        }
+        for (AccountGroup g : storage.groups) {
+            if (g.getTitle().equalsIgnoreCase(trimmed)) return true;
+        }
+        return false;
+    }
+
+    public static boolean doesNameExistInGroup(AccountGroup group, String title) {
+        String trimmed = title.trim();
+        for (Account a : group.getAccounts()) {
+            if (a.getTitle().equalsIgnoreCase(trimmed)) return true;
         }
         return false;
     }

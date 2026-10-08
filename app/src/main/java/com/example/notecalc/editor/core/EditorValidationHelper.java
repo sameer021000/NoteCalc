@@ -23,35 +23,37 @@ public class EditorValidationHelper {
             return null;
         }
     }
-    public static boolean isDuplicateTitle(MainActivity activity, String title) {
-        for (Account acc : activity.appStorage.standaloneAccounts) {
-            if (activity.currentEditingAccount != null && acc.getTitle().equalsIgnoreCase(activity.originalTitle)) {
-                continue;
+    public static boolean isDuplicateTitle(MainActivity activity, String title, AccountGroup targetGroup) {
+        String trimmedTitle = title.trim();
+        String originalTitle = (activity.currentEditingAccount != null) ? activity.originalTitle : null;
+
+        if (targetGroup != null) {
+            // Check within the specific group block
+            for (Account acc : targetGroup.getAccounts()) {
+                if (originalTitle != null && acc.getTitle().equalsIgnoreCase(originalTitle)) continue;
+                if (acc.getTitle().equalsIgnoreCase(trimmedTitle)) return true;
             }
-            if (acc.getTitle().equalsIgnoreCase(title.trim())) {
-                return true;
+            return false;
+        } else {
+            // Check within the dashboard block (standalone accounts + groups)
+            for (Account acc : activity.appStorage.standaloneAccounts) {
+                if (originalTitle != null && acc.getTitle().equalsIgnoreCase(originalTitle)) continue;
+                if (acc.getTitle().equalsIgnoreCase(trimmedTitle)) return true;
             }
+            for (AccountGroup group : activity.appStorage.groups) {
+                if (group.getTitle().equalsIgnoreCase(trimmedTitle)) return true; // Groups don't have originalTitle here since we're validating an Account, not a Group. Wait, if we are renaming a group, maybe we do. We will assume group renaming validation is handled elsewhere or uses this. If validateAccountTitle is just for lists, this works.
+            }
+            return false;
         }
-        for (AccountGroup group : activity.appStorage.groups) {
-            for (Account acc : group.getAccounts()) {
-                if (activity.currentEditingAccount != null && acc.getTitle().equalsIgnoreCase(activity.originalTitle)) {
-                    continue;
-                }
-                if (acc.getTitle().equalsIgnoreCase(title.trim())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
-    public static boolean validateAccountTitle(MainActivity activity, String title) {
+    public static boolean validateAccountTitle(MainActivity activity, String title, AccountGroup targetGroup) {
         if (title.isEmpty()) {
             Toast.makeText(activity, activity.getString(R.string.auto_list_title_cannot_be_6), Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (isDuplicateTitle(activity, title)) {
+        if (isDuplicateTitle(activity, title, targetGroup)) {
             Toast.makeText(activity, activity.getString(R.string.auto_a_list_with_this_tit_7), Toast.LENGTH_SHORT).show();
             return false;
         }

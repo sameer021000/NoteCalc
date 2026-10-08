@@ -86,14 +86,7 @@ public class GroupDialogHelper {
                 android.widget.Toast.makeText(activity, activity.getString(R.string.auto_group_title_cannot_be_empty), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
-            boolean exists = false;
-            for (AccountGroup existingGroup : activity.appStorage.groups) {
-                if (existingGroup.getTitle().equalsIgnoreCase(title)) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (exists) {
+            if (StorageHelper.doesNameExistInDashboard(activity.appStorage, title)) {
                 android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_group_with_this_title_already_exists), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -149,14 +142,7 @@ public class GroupDialogHelper {
                 dialog.dismiss();
                 return;
             }
-            boolean exists = false;
-            for (AccountGroup existingGroup : activity.appStorage.groups) {
-                if (existingGroup != group && existingGroup.getTitle().equalsIgnoreCase(newTitle)) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (exists) {
+            if (StorageHelper.doesNameExistInDashboard(activity.appStorage, newTitle)) {
                 android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_group_with_this_title_already_exists), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
