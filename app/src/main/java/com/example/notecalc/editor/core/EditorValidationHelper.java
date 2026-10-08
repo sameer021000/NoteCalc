@@ -40,7 +40,7 @@ public class EditorValidationHelper {
                 if (acc.getTitle().equalsIgnoreCase(trimmedTitle)) return true;
             }
             for (AccountGroup group : activity.appStorage.groups) {
-                if (group.getTitle().equalsIgnoreCase(trimmedTitle)) return true; // Groups don't have originalTitle here since we're validating an Account, not a Group. Wait, if we are renaming a group, maybe we do. We will assume group renaming validation is handled elsewhere or uses this. If validateAccountTitle is just for lists, this works.
+                if (group.getTitle().equalsIgnoreCase(trimmedTitle)) return true;
             }
         }
         return false;
