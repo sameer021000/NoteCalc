@@ -24,11 +24,10 @@ public class AppStorageJsonMapper {
     }
 
     private static String resolveConflict(String title, java.util.Set<String> existingNames) {
-        String baseTitle = title;
-        String newTitle = baseTitle;
+        String newTitle = title;
         int counter = 1;
         while (existingNames.contains(newTitle.trim().toLowerCase())) {
-            newTitle = baseTitle + " (" + counter + ")";
+            newTitle = title + " (" + counter + ")";
             counter++;
         }
         return newTitle;

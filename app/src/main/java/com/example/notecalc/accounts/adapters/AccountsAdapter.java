@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import android.widget.Toast;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import android.graphics.Color;
@@ -152,9 +151,7 @@ import android.graphics.Color;
                             activity.getColor(R.color.text_tertiary),
                             ThemeManager.getSecondaryAccentColor(activity)
                     ));
-                    ResponsiveUI.setupClickable(accHolder.btnMoveAccount, false, () -> {
-                        AccountDialogHelper.showMoveAccountDialog(activity, account);
-                    });
+                    ResponsiveUI.setupClickable(accHolder.btnMoveAccount, false, () -> AccountDialogHelper.showMoveAccountDialog(activity, account));
                 }
                 accHolder.btnPinAccount.setVisibility(View.VISIBLE);
                 accHolder.btnPinAccount.setImageResource(R.drawable.ic_pin);

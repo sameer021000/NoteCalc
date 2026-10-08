@@ -139,7 +139,7 @@ public class AccountDialogHelper {
         // Add Dashboard option if it's currently in a group
         if (currentParent != null) {
             TextView tvDashboard = new TextView(activity);
-            tvDashboard.setText("Move to Dashboard");
+            tvDashboard.setText(R.string.action_move_to_dashboard);
             tvDashboard.setTextColor(activity.getColor(R.color.text_primary));
             tvDashboard.setTextSize(16f);
             tvDashboard.setPadding(32, 24, 32, 24);
@@ -359,8 +359,8 @@ public class AccountDialogHelper {
         TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
         TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
 
-        titleView.setText("Rename & Move");
-        btnApply.setText("Move");
+        titleView.setText(R.string.action_rename_and_move);
+        btnApply.setText(R.string.action_move);
         
         input.setText(account.getTitle());
         input.setSelection(input.getText().length());

@@ -108,41 +108,43 @@ public class DashboardUIHelper {
 
     public static void setupAddMenuPopup(MainActivity activity, View btnCreateAdd) {
         if (btnCreateAdd != null) {
-            ResponsiveUI.setupClickable(btnCreateAdd, () -> {
-                android.view.View popupView = activity.getLayoutInflater().inflate(R.layout.layout_create_menu, null);
-                android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
-                        popupView,
-                        (int) (180 * activity.getResources().getDisplayMetrics().density),
-                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
-                        true
-                );
+            ResponsiveUI.setupClickable(btnCreateAdd, () -> showCreateMenuPopup(activity, btnCreateAdd));
+        }
+    }
 
-                popupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-                popupWindow.setElevation(8f);
+    private static void showCreateMenuPopup(MainActivity activity, android.view.View anchorView) {
+        android.view.View popupView = activity.getLayoutInflater().inflate(R.layout.layout_create_menu, null);
+        android.widget.PopupWindow popupWindow = new android.widget.PopupWindow(
+                popupView,
+                (int) (180 * activity.getResources().getDisplayMetrics().density),
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                true
+        );
 
-                popupView.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+        popupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        popupWindow.setElevation(8f);
 
-                android.view.View btnCreateList = popupView.findViewById(R.id.btn_popup_create_list);
-                android.view.View btnCreateGroupPopup = popupView.findViewById(R.id.btn_popup_create_group);
+        popupView.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
 
-                ResponsiveUI.setupClickable(btnCreateList, true, () -> {
-                    popupWindow.dismiss();
-                    com.example.notecalc.accounts.dialogs.AccountDialogHelper.showCreateAccountDialog(activity, activity.currentViewGroup);
-                });
+        android.view.View btnCreateList = popupView.findViewById(R.id.btn_popup_create_list);
+        android.view.View btnCreateGroupPopup = popupView.findViewById(R.id.btn_popup_create_group);
 
-                if (activity.currentViewGroup != null) {
-                    btnCreateGroupPopup.setVisibility(android.view.View.GONE);
-                    android.view.View divider = popupView.findViewById(R.id.popup_divider);
-                    if (divider != null) divider.setVisibility(android.view.View.GONE);
-                } else {
-                    ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {
-                        popupWindow.dismiss();
-                        com.example.notecalc.accounts.dialogs.GroupDialogHelper.showCreateGroupDialog(activity);
-                    });
-                }
+        ResponsiveUI.setupClickable(btnCreateList, true, () -> {
+            popupWindow.dismiss();
+            com.example.notecalc.accounts.dialogs.AccountDialogHelper.showCreateAccountDialog(activity, activity.currentViewGroup);
+        });
 
-                popupWindow.showAsDropDown(btnCreateAdd, 0, 16);
+        if (activity.currentViewGroup != null) {
+            btnCreateGroupPopup.setVisibility(android.view.View.GONE);
+            android.view.View divider = popupView.findViewById(R.id.popup_divider);
+            if (divider != null) divider.setVisibility(android.view.View.GONE);
+        } else {
+            ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {
+                popupWindow.dismiss();
+                com.example.notecalc.accounts.dialogs.GroupDialogHelper.showCreateGroupDialog(activity);
             });
         }
+
+        popupWindow.showAsDropDown(anchorView, 0, 16);
     }
 }

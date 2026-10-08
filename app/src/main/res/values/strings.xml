@@ -24,7 +24,9 @@
     <string name="auto_analyze_16">Analyze</string>
     <string name="group_expanded_desc">Collapse group</string>
     <string name="action_archive">Archive</string>
-
+    <string name="action_move_to_dashboard">Move to Dashboard</string>
+    <string name="action_rename_and_move">Rename &amp; Move</string>
+    <string name="action_move">Move</string>
     <string name="auto_cancel_17">Cancel</string>
     <string name="auto_confirm_18">Confirm</string>
     <string name="auto_minimize_19">Minimize [ - ]</string>
