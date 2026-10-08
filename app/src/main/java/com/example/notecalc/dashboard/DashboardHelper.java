@@ -72,7 +72,7 @@ public class DashboardHelper {
         if (activity.currentViewGroup != null) {
             if (textAppTitle != null) textAppTitle.setText(activity.currentViewGroup.getTitle());
             if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.GONE);
-            if (btnCreateAdd != null) btnCreateAdd.setVisibility(View.GONE);
+            if (btnCreateAdd != null) btnCreateAdd.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
             if (btnDashboardBack != null) {
                 btnDashboardBack.setVisibility(View.VISIBLE);
                 btnDashboardBack.setBackground(ResponsiveUI.createRippleRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 10f));
@@ -117,7 +117,7 @@ public class DashboardHelper {
         if (activity.currentViewGroup != null) {
             if (textAppTitle != null) textAppTitle.setText(activity.currentViewGroup.getTitle());
             if (textAppSubtitle != null) textAppSubtitle.setVisibility(View.GONE);
-            if (btnCreateAdd != null) btnCreateAdd.setVisibility(View.GONE);
+            if (btnCreateAdd != null) btnCreateAdd.setVisibility(ArchiveHelper.isShowingArchive ? View.GONE : View.VISIBLE);
         } else {
             if (textAppTitle != null) textAppTitle.setText(ArchiveHelper.isShowingArchive ? "Archive" : activity.getString(R.string.app_name));
             if (textAppSubtitle != null) {

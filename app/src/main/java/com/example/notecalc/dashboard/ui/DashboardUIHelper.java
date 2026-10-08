@@ -132,10 +132,8 @@ public class DashboardUIHelper {
 
                 if (activity.currentViewGroup != null) {
                     btnCreateGroupPopup.setVisibility(android.view.View.GONE);
-                    // Hide divider (which is child index 1)
-                    if (((android.widget.LinearLayout) popupView).getChildCount() > 1) {
-                        ((android.widget.LinearLayout) popupView).getChildAt(1).setVisibility(android.view.View.GONE);
-                    }
+                    android.view.View divider = popupView.findViewById(R.id.popup_divider);
+                    if (divider != null) divider.setVisibility(android.view.View.GONE);
                 } else {
                     ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {
                         popupWindow.dismiss();
