@@ -146,7 +146,7 @@ public class AccountDialogHelper {
             tvDashboard.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
             ResponsiveUI.setupClickable(tvDashboard, false, () -> {
                 if (StorageHelper.doesNameExistInDashboard(activity.appStorage, account.getTitle())) {
-                    Toast.makeText(activity, "Name conflict in Dashboard. Please rename.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "A list with this name already exists in the Dashboard. Please choose a different name.", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                     showRenameForMoveDialog(activity, account, null);
                     return;
@@ -185,7 +185,7 @@ public class AccountDialogHelper {
             tvGroup.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
             ResponsiveUI.setupClickable(tvGroup, false, () -> {
                 if (StorageHelper.doesNameExistInGroup(selectedGroup, account.getTitle())) {
-                    Toast.makeText(activity, "Name conflict in destination. Please rename.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "A list with this name already exists in '" + selectedGroup.getTitle() + "'. Please choose a different name.", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                     showRenameForMoveDialog(activity, account, selectedGroup);
                     return;
@@ -376,7 +376,8 @@ public class AccountDialogHelper {
         ResponsiveUI.setupClickable(btnApply, false, () -> {
             String newTitle = input.getText().toString().trim();
             if (newTitle.equalsIgnoreCase(account.getTitle())) {
-                Toast.makeText(activity, "Name must be different to resolve conflict.", Toast.LENGTH_SHORT).show();
+                String blockName = targetGroup != null ? "the group '" + targetGroup.getTitle() + "'" : "the Dashboard";
+                Toast.makeText(activity, "A list with this name already exists in " + blockName + ". Please choose a different name.", Toast.LENGTH_SHORT).show();
                 return;
             }
             

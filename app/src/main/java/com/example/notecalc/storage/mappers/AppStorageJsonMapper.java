@@ -42,12 +42,18 @@ public class AppStorageJsonMapper {
             JSONArray groupsArray = obj.getJSONArray("groups");
             for (int i = 0; i < groupsArray.length(); i++) {
                 AccountGroup group = AccountGroupJsonMapper.fromJSONObject(groupsArray.getJSONObject(i));
-                group.setTitle(resolveConflict(group.getTitle(), dashboardNames));
+                String resolvedGroupTitle = resolveConflict(group.getTitle(), dashboardNames);
+                if (!resolvedGroupTitle.equals(group.getTitle())) {
+                    group.setTitle(resolvedGroupTitle);
+                }
                 dashboardNames.add(group.getTitle().trim().toLowerCase());
                 
                 java.util.Set<String> groupNames = new java.util.HashSet<>();
                 for (Account account : group.getAccounts()) {
-                    account.setTitle(resolveConflict(account.getTitle(), groupNames));
+                    String resolvedAccTitle = resolveConflict(account.getTitle(), groupNames);
+                    if (!resolvedAccTitle.equals(account.getTitle())) {
+                        account.setTitle(resolvedAccTitle);
+                    }
                     groupNames.add(account.getTitle().trim().toLowerCase());
                 }
                 
@@ -58,7 +64,10 @@ public class AppStorageJsonMapper {
             JSONArray accountsArray = obj.getJSONArray("standaloneAccounts");
             for (int i = 0; i < accountsArray.length(); i++) {
                 Account account = AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i));
-                account.setTitle(resolveConflict(account.getTitle(), dashboardNames));
+                String resolvedAccTitle = resolveConflict(account.getTitle(), dashboardNames);
+                if (!resolvedAccTitle.equals(account.getTitle())) {
+                    account.setTitle(resolvedAccTitle);
+                }
                 dashboardNames.add(account.getTitle().trim().toLowerCase());
                 storage.standaloneAccounts.add(account);
             }

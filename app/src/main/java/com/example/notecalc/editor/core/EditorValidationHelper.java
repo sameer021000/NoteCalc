@@ -54,7 +54,8 @@ public class EditorValidationHelper {
         }
 
         if (isDuplicateTitle(activity, title, targetGroup)) {
-            Toast.makeText(activity, activity.getString(R.string.auto_a_list_with_this_tit_7), Toast.LENGTH_SHORT).show();
+            String blockName = targetGroup != null ? "the group '" + targetGroup.getTitle() + "'" : "the Dashboard";
+            Toast.makeText(activity, "A list with this name already exists in " + blockName + ". Please choose a different name.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
