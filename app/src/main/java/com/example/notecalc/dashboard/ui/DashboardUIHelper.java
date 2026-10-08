@@ -130,10 +130,18 @@ public class DashboardUIHelper {
                     com.example.notecalc.accounts.dialogs.AccountDialogHelper.showCreateAccountDialog(activity, activity.currentViewGroup);
                 });
 
-                ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {
-                    popupWindow.dismiss();
-                    com.example.notecalc.accounts.dialogs.GroupDialogHelper.showCreateGroupDialog(activity);
-                });
+                if (activity.currentViewGroup != null) {
+                    btnCreateGroupPopup.setVisibility(android.view.View.GONE);
+                    // Hide divider (which is child index 1)
+                    if (((android.widget.LinearLayout) popupView).getChildCount() > 1) {
+                        ((android.widget.LinearLayout) popupView).getChildAt(1).setVisibility(android.view.View.GONE);
+                    }
+                } else {
+                    ResponsiveUI.setupClickable(btnCreateGroupPopup, true, () -> {
+                        popupWindow.dismiss();
+                        com.example.notecalc.accounts.dialogs.GroupDialogHelper.showCreateGroupDialog(activity);
+                    });
+                }
 
                 popupWindow.showAsDropDown(btnCreateAdd, 0, 16);
             });
