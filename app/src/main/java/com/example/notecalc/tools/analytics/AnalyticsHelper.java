@@ -30,8 +30,18 @@ public class AnalyticsHelper {
         android.widget.ImageButton btnBack = analyticsRoot.findViewById(R.id.btn_analytics_back);
         ResponsiveUI.setupClickable(btnBack, true, onBackClicked);
 
+        String subtitle = "Dashboard";
+        if (context instanceof MainActivity) {
+            com.example.notecalc.storage.core.AppStorage storage = ((MainActivity) context).appStorage;
+            for (com.example.notecalc.accounts.models.AccountGroup g : storage.groups) {
+                if (g.getAccounts().contains(account)) {
+                    subtitle = "Group: " + g.getTitle();
+                    break;
+                }
+            }
+        }
         TextView tvTitle = analyticsRoot.findViewById(R.id.tv_analytics_title);
-        tvTitle.setText(context.getString(R.string.analytics_title, account.getTitle()));
+        tvTitle.setText(context.getString(R.string.analytics_title, account.getTitle() + " • " + subtitle));
 
         TextView tvTotalSpent = analyticsRoot.findViewById(R.id.tv_total_spent);
         TextView tvHighestTxn = analyticsRoot.findViewById(R.id.tv_highest_txn);

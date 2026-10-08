@@ -90,7 +90,14 @@ import android.graphics.Color;
                 AccountViewHolder accHolder = (AccountViewHolder) holder;
                 Account account = (Account) item;
 
-                accHolder.tvTitle.setText(account.getTitle());
+                String title = account.getTitle();
+                if (activity.currentViewGroup == null) {
+                    AccountGroup parent = getAccountParentGroup(account);
+                    if (parent != null) {
+                        title += " • " + parent.getTitle();
+                    }
+                }
+                accHolder.tvTitle.setText(title);
                 double expenses = account.calculateTotal();
                 double budget = account.hasBudget() ? account.calculateTotalBudget() : 0.0;
                 double balance = budget - expenses;

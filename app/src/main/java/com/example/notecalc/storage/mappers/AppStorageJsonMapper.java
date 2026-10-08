@@ -23,18 +23,44 @@ public class AppStorageJsonMapper {
         return root;
     }
 
+    private static String resolveConflict(String title, java.util.Set<String> existingNames) {
+        String baseTitle = title;
+        String newTitle = baseTitle;
+        int counter = 1;
+        while (existingNames.contains(newTitle.trim().toLowerCase())) {
+            newTitle = baseTitle + " (" + counter + ")";
+            counter++;
+        }
+        return newTitle;
+    }
+
     public static AppStorage fromJSONObject(JSONObject obj) throws JSONException {
         AppStorage storage = new AppStorage();
+        java.util.Set<String> dashboardNames = new java.util.HashSet<>();
+        
         if (obj.has("groups")) {
             JSONArray groupsArray = obj.getJSONArray("groups");
             for (int i = 0; i < groupsArray.length(); i++) {
-                storage.groups.add(AccountGroupJsonMapper.fromJSONObject(groupsArray.getJSONObject(i)));
+                AccountGroup group = AccountGroupJsonMapper.fromJSONObject(groupsArray.getJSONObject(i));
+                group.setTitle(resolveConflict(group.getTitle(), dashboardNames));
+                dashboardNames.add(group.getTitle().trim().toLowerCase());
+                
+                java.util.Set<String> groupNames = new java.util.HashSet<>();
+                for (Account account : group.getAccounts()) {
+                    account.setTitle(resolveConflict(account.getTitle(), groupNames));
+                    groupNames.add(account.getTitle().trim().toLowerCase());
+                }
+                
+                storage.groups.add(group);
             }
         }
         if (obj.has("standaloneAccounts")) {
             JSONArray accountsArray = obj.getJSONArray("standaloneAccounts");
             for (int i = 0; i < accountsArray.length(); i++) {
-                storage.standaloneAccounts.add(AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i)));
+                Account account = AccountJsonMapper.fromJSONObject(accountsArray.getJSONObject(i));
+                account.setTitle(resolveConflict(account.getTitle(), dashboardNames));
+                dashboardNames.add(account.getTitle().trim().toLowerCase());
+                storage.standaloneAccounts.add(account);
             }
         }
         return storage;

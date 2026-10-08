@@ -14,15 +14,21 @@ public class TransferHelper {
     @android.annotation.SuppressLint("SetTextI18n")
     public static void showTransferDialog(MainActivity activity, List<Record> selectedRecords, boolean isCut) {
         List<Account> targetAccounts = StorageHelper.getValidTransferTargets(activity.appStorage, activity.currentEditingAccount);
+        
+        targetAccounts.sort((a, b) -> a.getTitle().compareToIgnoreCase(b.getTitle()));
 
-        List<String> accountNames = new ArrayList<>();
-        for (Account a : targetAccounts) {
-            accountNames.add(a.getTitle());
-        }
-        accountNames.sort(String.CASE_INSENSITIVE_ORDER);
         List<String> names = new ArrayList<>();
         names.add("Create New List");
-        names.addAll(accountNames);
+        for (Account a : targetAccounts) {
+            String parentName = "Dashboard";
+            for (AccountGroup g : activity.appStorage.groups) {
+                if (g.getAccounts().contains(a)) {
+                    parentName = "Group: " + g.getTitle();
+                    break;
+                }
+            }
+            names.add(a.getTitle() + " (" + parentName + ")");
+        }
 
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
         View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_transfer, null);
@@ -91,14 +97,7 @@ public class TransferHelper {
                 if (index == 0) { // Create New List
                     showNewListTitleDialog(activity, selectedRecords, isCut);
                 } else {
-                    Account target = null;
-                    String selectedName = names.get(index);
-                    for (Account a : targetAccounts) {
-                        if (a.getTitle().equals(selectedName)) {
-                            target = a;
-                            break;
-                        }
-                    }
+                    Account target = targetAccounts.get(index - 1);
                     if (target != null) {
                         TransferEngine.executeTransfer(activity, selectedRecords, target, isCut);
                     }
@@ -174,7 +173,7 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
                 return;
             }
             // Check if title exists
-            if (StorageHelper.doesAccountExist(activity.appStorage, title)) {
+            if (StorageHelper.doesNameExistInDashboard(activity.appStorage, title)) {
                 android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_list_with_this_tit_7), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
