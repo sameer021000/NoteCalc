@@ -145,8 +145,11 @@ public class AccountDialogHelper {
             tvDashboard.setPadding(32, 24, 32, 24);
             tvDashboard.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
             ResponsiveUI.setupClickable(tvDashboard, false, () -> {
-                if (StorageHelper.doesNameExistInDashboard(activity.appStorage, account.getTitle())) {
-                    Toast.makeText(activity, "A list with this name already exists in the Dashboard. Please choose a different name.", Toast.LENGTH_SHORT).show();
+                int conflict = StorageHelper.getDashboardConflictType(activity.appStorage, account.getTitle());
+                if (conflict != 0) {
+                    String msg = (conflict == 1) ? "A list with this name already exists in the Dashboard. Please choose a different name."
+                                                 : "A group with this name already exists in the Dashboard. Please choose a different name.";
+                    Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                     showRenameForMoveDialog(activity, account, null);
                     return;

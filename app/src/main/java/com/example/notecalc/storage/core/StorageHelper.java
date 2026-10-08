@@ -95,21 +95,21 @@ public class StorageHelper {
         }
     }
 
-    /** @deprecated Use block-specific methods (doesNameExistInDashboard or doesNameExistInGroup) */
+    /** @deprecated Use getDashboardConflictType or doesNameExistInGroup */
     @Deprecated
     public static boolean doesAccountExist(AppStorage storage, String title) {
-        return doesNameExistInDashboard(storage, title);
+        return getDashboardConflictType(storage, title) != 0;
     }
     
-    public static boolean doesNameExistInDashboard(AppStorage storage, String title) {
+    public static int getDashboardConflictType(AppStorage storage, String title) {
         String trimmed = title.trim();
         for (Account a : storage.standaloneAccounts) {
-            if (a.getTitle().equalsIgnoreCase(trimmed)) return true;
+            if (a.getTitle().equalsIgnoreCase(trimmed)) return 1;
         }
         for (AccountGroup g : storage.groups) {
-            if (g.getTitle().equalsIgnoreCase(trimmed)) return true;
+            if (g.getTitle().equalsIgnoreCase(trimmed)) return 2;
         }
-        return false;
+        return 0;
     }
 
     public static boolean doesNameExistInGroup(AccountGroup group, String title) {

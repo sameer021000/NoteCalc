@@ -23,7 +23,7 @@ public class EditorValidationHelper {
             return null;
         }
     }
-    public static boolean isDuplicateTitle(MainActivity activity, String title, AccountGroup targetGroup) {
+    public static int getConflictType(MainActivity activity, String title, AccountGroup targetGroup) {
         String trimmedTitle = title.trim();
         String originalTitle = (activity.currentEditingAccount != null) ? activity.originalTitle : null;
 
@@ -31,19 +31,19 @@ public class EditorValidationHelper {
             // Check within the specific group block
             for (Account acc : targetGroup.getAccounts()) {
                 if (acc.getTitle().equalsIgnoreCase(originalTitle)) continue;
-                if (acc.getTitle().equalsIgnoreCase(trimmedTitle)) return true;
+                if (acc.getTitle().equalsIgnoreCase(trimmedTitle)) return 1;
             }
         } else {
             // Check within the dashboard block (standalone accounts + groups)
             for (Account acc : activity.appStorage.standaloneAccounts) {
                 if (acc.getTitle().equalsIgnoreCase(originalTitle)) continue;
-                if (acc.getTitle().equalsIgnoreCase(trimmedTitle)) return true;
+                if (acc.getTitle().equalsIgnoreCase(trimmedTitle)) return 1;
             }
             for (AccountGroup group : activity.appStorage.groups) {
-                if (group.getTitle().equalsIgnoreCase(trimmedTitle)) return true;
+                if (group.getTitle().equalsIgnoreCase(trimmedTitle)) return 2;
             }
         }
-        return false;
+        return 0;
     }
 
     public static boolean validateAccountTitle(MainActivity activity, String title, AccountGroup targetGroup) {
@@ -52,9 +52,13 @@ public class EditorValidationHelper {
             return false;
         }
 
-        if (isDuplicateTitle(activity, title, targetGroup)) {
+        int conflict = getConflictType(activity, title, targetGroup);
+        if (conflict == 1) {
             String blockName = targetGroup != null ? "the group '" + targetGroup.getTitle() + "'" : "the Dashboard";
             Toast.makeText(activity, "A list with this name already exists in " + blockName + ". Please choose a different name.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (conflict == 2) {
+            Toast.makeText(activity, "A group with this name already exists in the Dashboard. Please choose a different name.", Toast.LENGTH_SHORT).show();
             return false;
         }
 

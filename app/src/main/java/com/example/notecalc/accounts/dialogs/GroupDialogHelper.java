@@ -86,8 +86,11 @@ public class GroupDialogHelper {
                 android.widget.Toast.makeText(activity, activity.getString(R.string.auto_group_title_cannot_be_empty), android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (StorageHelper.doesNameExistInDashboard(activity.appStorage, title)) {
-                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_group_with_this_title_already_exists), android.widget.Toast.LENGTH_SHORT).show();
+            int conflict = StorageHelper.getDashboardConflictType(activity.appStorage, title);
+            if (conflict != 0) {
+                String msg = (conflict == 1) ? "A list with this name already exists in the Dashboard. Please choose a different name."
+                                             : "A group with this name already exists in the Dashboard. Please choose a different name.";
+                android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
             
@@ -142,8 +145,11 @@ public class GroupDialogHelper {
                 dialog.dismiss();
                 return;
             }
-            if (StorageHelper.doesNameExistInDashboard(activity.appStorage, newTitle)) {
-                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_group_with_this_title_already_exists), android.widget.Toast.LENGTH_SHORT).show();
+            int conflict = StorageHelper.getDashboardConflictType(activity.appStorage, newTitle);
+            if (conflict != 0) {
+                String msg = (conflict == 1) ? "A list with this name already exists in the Dashboard. Please choose a different name."
+                                             : "A group with this name already exists in the Dashboard. Please choose a different name.";
+                android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
             

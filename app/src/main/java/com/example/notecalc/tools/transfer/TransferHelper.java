@@ -173,8 +173,11 @@ public static void showNewListTitleDialog(MainActivity activity, List<Record> se
                 return;
             }
             // Check if title exists
-            if (StorageHelper.doesNameExistInDashboard(activity.appStorage, title)) {
-                android.widget.Toast.makeText(activity, activity.getString(R.string.auto_a_list_with_this_tit_7), android.widget.Toast.LENGTH_SHORT).show();
+            int conflict = StorageHelper.getDashboardConflictType(activity.appStorage, title);
+            if (conflict != 0) {
+                String msg = (conflict == 1) ? "A list with this name already exists in the Dashboard. Please choose a different name."
+                                             : "A group with this name already exists in the Dashboard. Please choose a different name.";
+                android.widget.Toast.makeText(activity, msg, android.widget.Toast.LENGTH_SHORT).show();
                 return;
             }
 
