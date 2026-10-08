@@ -120,9 +120,59 @@ public class AccountDialogHelper {
             if (g.isArchived() == account.isArchived()) targetGroups.add(g);
         }
 
-        if (targetGroups.isEmpty()) {
+        AccountGroup currentParent = null;
+        for (AccountGroup g : activity.appStorage.groups) {
+            if (g.getAccounts().contains(account)) {
+                currentParent = g;
+                break;
+            }
+        }
+        
+        targetGroups.remove(currentParent);
+
+        if (targetGroups.isEmpty() && currentParent == null) {
             Toast.makeText(activity, activity.getString(R.string.auto_no_groups_available__9), Toast.LENGTH_SHORT).show();
             dialog.dismiss();
+            return;
+        }
+
+        // Add Dashboard option if it's currently in a group
+        if (currentParent != null) {
+            TextView tvDashboard = new TextView(activity);
+            tvDashboard.setText("Move to Dashboard");
+            tvDashboard.setTextColor(activity.getColor(R.color.text_primary));
+            tvDashboard.setTextSize(16f);
+            tvDashboard.setPadding(32, 24, 32, 24);
+            tvDashboard.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
+            ResponsiveUI.setupClickable(tvDashboard, false, () -> {
+                if (StorageHelper.doesNameExistInDashboard(activity.appStorage, account.getTitle())) {
+                    Toast.makeText(activity, "Name conflict in Dashboard. Please rename.", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    showRenameForMoveDialog(activity, account, null);
+                    return;
+                }
+                
+                // Perform move
+                AccountGroup pGroup = null;
+                for (AccountGroup g : activity.appStorage.groups) {
+                    if (g.getAccounts().contains(account)) { pGroup = g; break; }
+                }
+                if (pGroup != null) pGroup.getAccounts().remove(account);
+                
+                activity.appStorage.standaloneAccounts.add(account);
+                StorageHelper.saveAppStorage(activity, activity.appStorage);
+                DashboardHelper.refreshDashboardList(activity);
+                Toast.makeText(activity, activity.getString(R.string.auto_moved_to_dashboard_8), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            });
+            detailsContainer.addView(tvDashboard);
+            
+            if (!targetGroups.isEmpty()) {
+                View divider = new View(activity);
+                divider.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1));
+                divider.setBackgroundColor(ThemeManager.getBorderColor(activity));
+                detailsContainer.addView(divider);
+            }
         }
 
         for (int i = 0; i < targetGroups.size(); i++) {
@@ -134,7 +184,27 @@ public class AccountDialogHelper {
             tvGroup.setPadding(32, 24, 32, 24);
             tvGroup.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
             ResponsiveUI.setupClickable(tvGroup, false, () -> {
-                activity.appStorage.standaloneAccounts.remove(account);
+                if (StorageHelper.doesNameExistInGroup(selectedGroup, account.getTitle())) {
+                    Toast.makeText(activity, "Name conflict in destination. Please rename.", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    showRenameForMoveDialog(activity, account, selectedGroup);
+                    return;
+                }
+                
+                AccountGroup sourceGroup = null;
+                for (AccountGroup g : activity.appStorage.groups) {
+                    if (g.getAccounts().contains(account)) {
+                        sourceGroup = g;
+                        break;
+                    }
+                }
+                
+                if (sourceGroup != null) {
+                    sourceGroup.getAccounts().remove(account);
+                } else {
+                    activity.appStorage.standaloneAccounts.remove(account);
+                }
+                
                 selectedGroup.getAccounts().add(account);
                 selectedGroup.updateLastModified();
                 StorageHelper.saveAppStorage(activity, activity.appStorage);
@@ -264,6 +334,81 @@ public class AccountDialogHelper {
             }
             
             account.setTitle(newTitle);
+            StorageHelper.saveAppStorage(activity, activity.appStorage);
+            DashboardHelper.refreshDashboardList(activity);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    public static void showRenameForMoveDialog(MainActivity activity, Account account, AccountGroup targetGroup) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
+        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
+        builder.setView(dialogView);
+
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
+        View detailsContainer = dialogView.findViewById(R.id.details_container);
+        TextView titleView = dialogView.findViewById(R.id.dialog_title);
+        android.widget.EditText input = dialogView.findViewById(R.id.edit_group_name);
+        TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
+        TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
+
+        titleView.setText("Rename & Move");
+        btnApply.setText("Move");
+        
+        input.setText(account.getTitle());
+        input.setSelection(input.getText().length());
+
+        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
+        detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
+        btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
+        btnCancel.setTextColor(activity.getColor(R.color.error_red));
+        btnApply.setBackground(ResponsiveUI.createButtonSelector(activity, ThemeManager.getPrimaryAccentColor(activity), 4.0f));
+        btnApply.setTextColor(activity.getColor(R.color.text_primary));
+
+        ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
+        ResponsiveUI.setupClickable(btnApply, false, () -> {
+            String newTitle = input.getText().toString().trim();
+            if (newTitle.equalsIgnoreCase(account.getTitle())) {
+                Toast.makeText(activity, "Name must be different to resolve conflict.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            activity.currentEditingAccount = account;
+            activity.originalTitle = account.getTitle();
+            if (!com.example.notecalc.editor.core.EditorValidationHelper.validateAccountTitle(activity, newTitle, targetGroup)) {
+                return;
+            }
+            
+            // Validation passed! Update title and move
+            account.setTitle(newTitle);
+            
+            AccountGroup sourceGroup = null;
+            for (AccountGroup g : activity.appStorage.groups) {
+                if (g.getAccounts().contains(account)) {
+                    sourceGroup = g;
+                    break;
+                }
+            }
+            
+            if (sourceGroup != null) sourceGroup.getAccounts().remove(account);
+            else activity.appStorage.standaloneAccounts.remove(account);
+            
+            if (targetGroup != null) {
+                targetGroup.getAccounts().add(account);
+                targetGroup.updateLastModified();
+                Toast.makeText(activity, "Moved to " + targetGroup.getTitle(), Toast.LENGTH_SHORT).show();
+            } else {
+                activity.appStorage.standaloneAccounts.add(account);
+                Toast.makeText(activity, activity.getString(R.string.auto_moved_to_dashboard_8), Toast.LENGTH_SHORT).show();
+            }
+            
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             DashboardHelper.refreshDashboardList(activity);
             dialog.dismiss();

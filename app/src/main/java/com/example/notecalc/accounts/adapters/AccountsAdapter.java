@@ -146,22 +146,7 @@ import android.graphics.Color;
                             ThemeManager.getSecondaryAccentColor(activity)
                     ));
                     ResponsiveUI.setupClickable(accHolder.btnMoveAccount, false, () -> {
-                        if (accountParentGroup != null) {
-                            accountParentGroup.getAccounts().remove(account);
-                            activity.appStorage.standaloneAccounts.add(account);
-                            StorageHelper.saveAppStorage(activity, activity.appStorage);
-                            DashboardHelper.refreshDashboardList(activity);
-                            Toast.makeText(activity, activity.getString(R.string.auto_moved_to_dashboard_8), Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (activity.appStorage.groups.isEmpty()) {
-                                Toast.makeText(activity, activity.getString(R.string.auto_no_groups_available__9), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-
-
-                            AccountDialogHelper.showMoveAccountDialog(activity, account);
-                        }
+                        AccountDialogHelper.showMoveAccountDialog(activity, account);
                     });
                 }
                 accHolder.btnPinAccount.setVisibility(View.VISIBLE);
