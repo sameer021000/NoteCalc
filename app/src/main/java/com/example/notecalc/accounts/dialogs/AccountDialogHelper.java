@@ -85,10 +85,12 @@ public class AccountDialogHelper {
         ResponsiveUI.setupClickable(btnDelete, true, () -> {
             dialog.dismiss();
             if (activity.currentViewGroup != null) {
-                activity.currentViewGroup.getAccounts().remove(account);
+                // We keep it in the list for Tombstone sync
             } else {
-                activity.appStorage.standaloneAccounts.remove(account);
+                // We keep it in the list for Tombstone sync
             }
+            account.setDeleted(true);
+            account.setTitle(account.getTitle() + "_deleted_" + System.currentTimeMillis());
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             DashboardHelper.refreshDashboardList(activity);
         });
