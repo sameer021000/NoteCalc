@@ -22,6 +22,7 @@ public class AccountGroupJsonMapper {
         obj.put("sortAscending", group.isSortAscending());
         obj.put("pinned", group.isPinned());
         obj.put("isArchived", group.isArchived());
+        obj.put("isDeleted", group.isDeleted());
         return obj;
     }
 
@@ -41,6 +42,7 @@ public class AccountGroupJsonMapper {
         group.setSortAscending(obj.optBoolean("sortAscending", false));
         group.setPinned(obj.optBoolean("pinned", false));
         group.setArchived(obj.optBoolean("isArchived", false));
+        group.setDeleted(obj.optBoolean("isDeleted", false));
         return group;
     }
 }

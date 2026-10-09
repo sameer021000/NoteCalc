@@ -15,6 +15,7 @@ public class AccountJsonMapper {
         obj.put("lastModified", account.getLastModified());
         obj.put("pinned", account.isPinned());
         obj.put("isArchived", account.isArchived());
+        obj.put("isDeleted", account.isDeleted());
 
         JSONArray recordsArray = new JSONArray();
         for (Record record : account.getRecords()) {
@@ -37,6 +38,7 @@ public class AccountJsonMapper {
         long lastModified = obj.optLong("lastModified", System.currentTimeMillis());
         boolean pinned = obj.optBoolean("pinned", false);
         boolean isArchived = obj.optBoolean("isArchived", false);
+        boolean isDeleted = obj.optBoolean("isDeleted", false);
 
         List<Record> records = new ArrayList<>();
         JSONArray recordsArray = obj.getJSONArray("records");
@@ -55,6 +57,7 @@ public class AccountJsonMapper {
 
         Account acc = new Account(title, records, lastModified, pinned, hasBudget, budgetRecords);
         acc.setArchived(isArchived);
+        acc.setDeleted(isDeleted);
         return acc;
     }
 }
