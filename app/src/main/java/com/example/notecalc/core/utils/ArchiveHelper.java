@@ -10,6 +10,7 @@ public class ArchiveHelper {
     public static List<AccountGroup> getVisibleGroups(List<AccountGroup> allGroups) {
         List<AccountGroup> visibleGroups = new ArrayList<>();
         for (AccountGroup group : allGroups) {
+            if (group.isDeleted()) continue;
             if (group.isArchived() == isShowingArchive) {
                 visibleGroups.add(group);
             }
@@ -20,6 +21,7 @@ public class ArchiveHelper {
     public static List<Account> getVisibleAccounts(List<Account> allAccounts) {
         List<Account> visibleAccounts = new ArrayList<>();
         for (Account account : allAccounts) {
+            if (account.isDeleted()) continue;
             if (account.isArchived() == isShowingArchive) {
                 visibleAccounts.add(account);
             }

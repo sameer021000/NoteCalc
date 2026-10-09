@@ -119,6 +119,7 @@ public class AccountDialogHelper {
 
         List<AccountGroup> targetGroups = new ArrayList<>();
         for (AccountGroup g : activity.appStorage.groups) {
+            if (g.isDeleted()) continue;
             if (g.isArchived() == account.isArchived()) targetGroups.add(g);
         }
 

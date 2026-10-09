@@ -127,6 +127,7 @@ public class StorageHelper {
 
         java.util.List<Account> validTargets = new java.util.ArrayList<>();
         for (Account a : targetAccounts) {
+            if (a.isDeleted()) continue;
             if (a != currentAccount && !a.isArchived()) {
                 validTargets.add(a);
             }
