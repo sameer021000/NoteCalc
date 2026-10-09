@@ -12,6 +12,8 @@ public class Account {
     private List<Record> budgetRecords;
     private boolean isArchived;
 
+    private boolean isDeleted;
+
     public Account(String title) {
         this.title = title;
         this.records = new ArrayList<>();
@@ -20,6 +22,7 @@ public class Account {
         this.pinned = false;
         this.hasBudget = false;
         this.isArchived = false;
+        this.isDeleted = false;
     }
 
     public Account(String title, List<Record> records, long lastModified) {
@@ -92,6 +95,15 @@ public class Account {
 
     public void setArchived(boolean archived) {
         this.isArchived = archived;
+        this.lastModified = System.currentTimeMillis();
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.isDeleted = deleted;
         this.lastModified = System.currentTimeMillis();
     }
 

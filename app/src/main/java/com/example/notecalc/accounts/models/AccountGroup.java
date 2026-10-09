@@ -10,17 +10,20 @@ public class AccountGroup {
     private boolean sortAscending = false; // Default to false (Latest first)
     private boolean pinned = false;
     private boolean isArchived = false;
+    private boolean isDeleted = false;
 
     public AccountGroup(String title) {
         this.title = title;
         this.accounts = new ArrayList<>();
         this.lastModified = System.currentTimeMillis();
+        this.isDeleted = false;
     }
 
     public AccountGroup(String title, List<Account> accounts, long lastModified) {
         this.title = title;
         this.accounts = accounts;
         this.lastModified = lastModified;
+        this.isDeleted = false;
     }
 
     public String getTitle() {
@@ -79,6 +82,15 @@ public class AccountGroup {
 
     public void setArchived(boolean archived) {
         this.isArchived = archived;
+        this.lastModified = System.currentTimeMillis();
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.isDeleted = deleted;
         this.lastModified = System.currentTimeMillis();
     }
 
