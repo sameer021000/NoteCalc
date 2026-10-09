@@ -139,12 +139,26 @@ public class AccountDialogHelper {
         // Add Dashboard option if it's currently in a group
         if (currentParent != null) {
             TextView tvDashboard = new TextView(activity);
-            tvDashboard.setText(R.string.action_move_to_dashboard);
-            tvDashboard.setTextColor(activity.getColor(R.color.text_primary));
+            tvDashboard.setText(activity.getString(R.string.action_move_to_dashboard_styled, activity.getString(R.string.action_move_to_dashboard)));
+            tvDashboard.setTextColor(ThemeManager.getPrimaryAccentColor(activity));
+            tvDashboard.setTypeface(null, android.graphics.Typeface.BOLD);
             tvDashboard.setTextSize(16f);
             tvDashboard.setPadding(32, 24, 32, 24);
-            tvDashboard.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#15FFFFFF"), 4.0f));
-            ResponsiveUI.setupClickable(tvDashboard, false, () -> {
+            tvDashboard.setBackground(ResponsiveUI.createRippleRoundedBg(
+                    activity,
+                    ThemeManager.getBgPrimaryColor(activity),
+                    ThemeManager.getPrimaryAccentColor(activity),
+                    1.5f,
+                    6f
+            ));
+            
+            android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.bottomMargin = (int) (8 * activity.getResources().getDisplayMetrics().density);
+            tvDashboard.setLayoutParams(params);
+            ResponsiveUI.setupClickable(tvDashboard, true, () -> {
                 int conflict = StorageHelper.getDashboardConflictType(activity.appStorage, account.getTitle());
                 if (conflict != 0) {
                     String msg = (conflict == 1) ? "A list with this name already exists in the Dashboard. Please choose a different name."
