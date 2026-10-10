@@ -70,14 +70,12 @@ public class RecordDialogHelper {
                     }
                 }
             }
-            StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
+            com.example.notecalc.tools.transfer.ListMutationEngine.deleteRecords(selectedRecords, activity.currentEditingAccount, activity.isBudgetMode);
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);
             
             if (activity.currentEditingAccount != null) {
-                com.example.notecalc.records.RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
-                activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
                 activity.currentEditingAccount.updateLastModified();
                 if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
                 com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);
@@ -204,14 +202,12 @@ public class RecordDialogHelper {
                     }
                 }
             }
-            StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
+            com.example.notecalc.tools.transfer.ListMutationEngine.deleteRecords(selectedRecords, activity.currentEditingAccount, activity.isBudgetMode);
             EditorUIHelper.populateRecordsList(activity);
             BulkActionsHelper.updateBulkActionsState(activity);
             EditorSortHelper.updateHeaderLabels(activity);
             
             if (activity.currentEditingAccount != null) {
-                com.example.notecalc.records.RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
-                activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
                 activity.currentEditingAccount.updateLastModified();
                 if (activity.currentViewGroup != null) activity.currentViewGroup.updateLastModified();
                 com.example.notecalc.storage.core.StorageHelper.saveAppStorage(activity, activity.appStorage);

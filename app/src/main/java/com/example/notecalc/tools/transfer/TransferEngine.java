@@ -12,51 +12,13 @@ public class TransferEngine {
 
     @android.annotation.SuppressLint("NotifyDataSetChanged")
     public static void executeTransfer(MainActivity activity, List<Record> selectedRecords, Account targetAccount, boolean isCut) {
-        java.util.List<Record> targetList = activity.isBudgetMode ? targetAccount.getBudgetRecords() : targetAccount.getRecords();
-        int maxIndex = -1;
-        for (Record rec : targetList) {
-            if (rec.getOriginalIndex() > maxIndex) {
-                maxIndex = rec.getOriginalIndex();
-            }
-        }
-
-        for (Record r : selectedRecords) {
-            Record copy = new Record(r.getDescription(), r.getAmount(), r.getDate());
-            copy.setRemarks(r.getRemarks());
-            copy.setCategory(r.getCategory());
-            copy.setTimestampMillis(r.getTimestampMillis());
-            if (r.getAttachments() != null) {
-                copy.getAttachments().addAll(r.getAttachments());
-            }
-            maxIndex++;
-            copy.setOriginalIndex(maxIndex);
-
-            if (activity.isBudgetMode) {
-                targetAccount.getBudgetRecords().add(copy);
-            } else {
-                targetAccount.getRecords().add(copy);
-            }
-
-            if (isCut) {
-                if (activity.isBudgetMode) {
-                    activity.currentEditingAccount.getBudgetRecords().remove(r);
-                } else {
-                    activity.currentEditingAccount.getRecords().remove(r);
-                }
-            }
-        }
-        
-        // Fix: Ensure target account's hasBudget flag is updated
-        targetAccount.setHasBudget(targetAccount.getBudgetRecords() != null && !targetAccount.getBudgetRecords().isEmpty());
-        
-        // Update current editing account's hasBudget flag as well in case it's a Cut operation
-        if (isCut && activity.currentEditingAccount != null) {
-            activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
+        if (isCut) {
+            ListMutationEngine.cutRecords(selectedRecords, activity.currentEditingAccount, targetAccount, activity.isBudgetMode);
+        } else {
+            ListMutationEngine.copyRecords(selectedRecords, targetAccount, activity.isBudgetMode);
         }
 
         if (isCut) {
-            StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
-            RecordUtils.resequentializeRecords(StateHelper.getActiveRecords(activity));
             if (activity.recordsAdapter != null) {
                 activity.recordsAdapter.setFilter(activity.currentRecordSearchQuery);
             }
