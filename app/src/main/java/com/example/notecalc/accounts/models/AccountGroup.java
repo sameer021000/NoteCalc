@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountGroup {
+    private String uid = java.util.UUID.randomUUID().toString();
     private String title;
     private List<Account> accounts;
     private long lastModified;
@@ -11,6 +12,14 @@ public class AccountGroup {
     private boolean pinned = false;
     private boolean isArchived = false;
     private boolean isDeleted = false;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public AccountGroup(String title) {
         this.title = title;
@@ -46,6 +55,10 @@ public class AccountGroup {
 
     public long getLastModified() {
         return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
 
     public void updateLastModified() {

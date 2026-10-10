@@ -90,7 +90,6 @@ public class AccountDialogHelper {
                 // We keep it in the list for Tombstone sync
             }
             account.setDeleted(true);
-            account.setTitle(account.getTitle() + "_deleted_" + System.currentTimeMillis());
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             DashboardHelper.refreshDashboardList(activity);
         });

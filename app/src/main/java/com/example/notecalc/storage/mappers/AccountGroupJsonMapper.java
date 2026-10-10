@@ -10,6 +10,7 @@ public class AccountGroupJsonMapper {
 
     public static JSONObject toJSONObject(AccountGroup group) throws JSONException {
         JSONObject obj = new JSONObject();
+        obj.put("uid", group.getUid());
         obj.put("title", group.getTitle());
         obj.put("lastModified", group.getLastModified());
 
@@ -38,11 +39,13 @@ public class AccountGroupJsonMapper {
             }
         }
         AccountGroup group = new AccountGroup(title, accounts, lastModified);
+        group.setUid(obj.optString("uid", title));
         group.setSortMode(obj.optInt("sortMode", 2));
         group.setSortAscending(obj.optBoolean("sortAscending", false));
         group.setPinned(obj.optBoolean("pinned", false));
         group.setArchived(obj.optBoolean("isArchived", false));
         group.setDeleted(obj.optBoolean("isDeleted", false));
+        group.setLastModified(lastModified);
         return group;
     }
 }

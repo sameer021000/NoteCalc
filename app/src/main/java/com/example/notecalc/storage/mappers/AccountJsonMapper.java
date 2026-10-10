@@ -11,6 +11,7 @@ public class AccountJsonMapper {
 
     public static JSONObject toJSONObject(Account account) throws JSONException {
         JSONObject obj = new JSONObject();
+        obj.put("uid", account.getUid());
         obj.put("title", account.getTitle());
         obj.put("lastModified", account.getLastModified());
         obj.put("pinned", account.isPinned());
@@ -54,10 +55,11 @@ public class AccountJsonMapper {
                 budgetRecords.add(RecordJsonMapper.fromJSONObject(budgetArray.getJSONObject(i)));
             }
         }
-
         Account acc = new Account(title, records, lastModified, pinned, hasBudget, budgetRecords);
+        acc.setUid(obj.optString("uid", title));
         acc.setArchived(isArchived);
         acc.setDeleted(isDeleted);
+        acc.setLastModified(lastModified);
         return acc;
     }
 }

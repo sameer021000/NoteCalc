@@ -104,9 +104,11 @@ public class StorageHelper {
     public static int getDashboardConflictType(AppStorage storage, String title) {
         String trimmed = title.trim();
         for (Account a : storage.standaloneAccounts) {
+            if (a.isDeleted()) continue;
             if (a.getTitle().equalsIgnoreCase(trimmed)) return 1;
         }
         for (AccountGroup g : storage.groups) {
+            if (g.isDeleted()) continue;
             if (g.getTitle().equalsIgnoreCase(trimmed)) return 2;
         }
         return 0;
@@ -115,6 +117,7 @@ public class StorageHelper {
     public static boolean doesNameExistInGroup(AccountGroup group, String title) {
         String trimmed = title.trim();
         for (Account a : group.getAccounts()) {
+            if (a.isDeleted()) continue;
             if (a.getTitle().equalsIgnoreCase(trimmed)) return true;
         }
         return false;

@@ -48,7 +48,6 @@ public class GroupDialogHelper {
         ResponsiveUI.setupClickable(btnCancel, false, dialog::cancel);
         ResponsiveUI.setupClickable(btnDelete, false, () -> {
             group.setDeleted(true);
-            group.setTitle(group.getTitle() + "_deleted_" + System.currentTimeMillis());
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             DashboardHelper.refreshDashboardList(activity);
             dialog.dismiss();

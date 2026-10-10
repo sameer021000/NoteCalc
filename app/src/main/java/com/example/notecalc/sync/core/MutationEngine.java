@@ -21,7 +21,7 @@ public class MutationEngine {
         
         // Check remote standalone accounts
         for (Account rAcc : remote.standaloneAccounts) {
-            Account lAcc = findAccountInList(local.standaloneAccounts, rAcc.getTitle());
+            Account lAcc = findAccountInList(local.standaloneAccounts, rAcc);
             if (lAcc != null) {
                 // Exists in both
                 if (lAcc.getLastModified() >= rAcc.getLastModified()) {
@@ -44,7 +44,7 @@ public class MutationEngine {
         
         // Check local standalone accounts missing from remote
         for (Account lAcc : local.standaloneAccounts) {
-            Account rAcc = findAccountInList(remote.standaloneAccounts, lAcc.getTitle());
+            Account rAcc = findAccountInList(remote.standaloneAccounts, lAcc);
             if (rAcc == null) {
                 // Exists in Local, not in Remote
                 if (lAcc.getLastModified() > lastSyncTimestamp) {
@@ -60,7 +60,7 @@ public class MutationEngine {
         List<AccountGroup> mergedGroups = new java.util.ArrayList<>();
         
         for (AccountGroup rGroup : remote.groups) {
-            AccountGroup lGroup = findGroup(local.groups, rGroup.getTitle());
+            AccountGroup lGroup = findGroup(local.groups, rGroup);
             if (lGroup != null) {
                 // Exists in both, merge accounts inside the group
                 AccountGroup mergedGroup = new AccountGroup(lGroup.getTitle());
@@ -94,7 +94,7 @@ public class MutationEngine {
         }
         
         for (AccountGroup lGroup : local.groups) {
-            AccountGroup rGroup = findGroup(remote.groups, lGroup.getTitle());
+            AccountGroup rGroup = findGroup(remote.groups, lGroup);
             if (rGroup == null) {
                 // Exists in Local, not Remote
                 if (lGroup.getLastModified() > lastSyncTimestamp) {
@@ -117,7 +117,7 @@ public class MutationEngine {
     private static List<Account> mergeAccountsList(List<Account> localList, List<Account> remoteList, long lastSyncTimestamp) {
         List<Account> merged = new java.util.ArrayList<>();
         for (Account rAcc : remoteList) {
-            Account lAcc = findAccountInList(localList, rAcc.getTitle());
+            Account lAcc = findAccountInList(localList, rAcc);
             if (lAcc != null) {
                 merged.add(lAcc.getLastModified() >= rAcc.getLastModified() ? lAcc : rAcc);
             } else {
@@ -125,7 +125,7 @@ public class MutationEngine {
             }
         }
         for (Account lAcc : localList) {
-            if (findAccountInList(remoteList, lAcc.getTitle()) == null) {
+            if (findAccountInList(remoteList, lAcc) == null) {
                 if (lAcc.getLastModified() > lastSyncTimestamp) merged.add(lAcc);
             }
         }
@@ -134,24 +134,27 @@ public class MutationEngine {
     
     private static boolean hasLocalNewerAccounts(List<Account> localList, List<Account> remoteList) {
         for (Account lAcc : localList) {
-            Account rAcc = findAccountInList(remoteList, lAcc.getTitle());
+            Account rAcc = findAccountInList(remoteList, lAcc);
             if (rAcc != null && lAcc.getLastModified() > rAcc.getLastModified()) return true;
             if (rAcc == null) return true; // Local has an account remote doesn't
         }
         return false;
     }
 
-    private static Account findAccountInList(List<Account> list, String title) {
+    private static Account findAccountInList(List<Account> list, Account target) {
         for (Account a : list) {
-            if (a.getTitle().equals(title)) return a;
+            if (a.getUid() != null && target.getUid() != null && a.getUid().equals(target.getUid())) return a;
         }
         return null;
     }
     
-    private static AccountGroup findGroup(List<AccountGroup> groups, String title) {
+    private static AccountGroup findGroup(List<AccountGroup> groups, AccountGroup target) {
         for (AccountGroup g : groups) {
-            if (g.getTitle().equals(title)) return g;
+            if (g.getUid() != null && target.getUid() != null && g.getUid().equals(target.getUid())) return g;
         }
         return null;
     }
 }
+
+
+

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
+    private String uid = java.util.UUID.randomUUID().toString();
     private String title;
     private List<Record> records;
     private long lastModified;
@@ -13,6 +14,14 @@ public class Account {
     private boolean isArchived;
 
     private boolean isDeleted;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public Account(String title) {
         this.title = title;
@@ -75,6 +84,10 @@ public class Account {
 
     public long getLastModified() {
         return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
 
     public void updateLastModified() {
