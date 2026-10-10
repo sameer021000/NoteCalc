@@ -153,9 +153,4 @@ public class Account {
         }
         return total;
     }
-
-    public double calculateRemainingPurse() {
-        return calculateTotalBudget() - calculateTotal();
-    }
-
 }

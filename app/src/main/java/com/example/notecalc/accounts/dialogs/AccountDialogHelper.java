@@ -84,11 +84,7 @@ public class AccountDialogHelper {
         ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
         ResponsiveUI.setupClickable(btnDelete, true, () -> {
             dialog.dismiss();
-            if (activity.currentViewGroup != null) {
-                // We keep it in the list for Tombstone sync
-            } else {
-                // We keep it in the list for Tombstone sync
-            }
+            // We keep it in the list for Tombstone sync
             account.setDeleted(true);
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             DashboardHelper.refreshDashboardList(activity);

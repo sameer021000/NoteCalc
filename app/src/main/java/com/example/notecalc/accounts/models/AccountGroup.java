@@ -11,7 +11,7 @@ public class AccountGroup {
     private boolean sortAscending = false; // Default to false (Latest first)
     private boolean pinned = false;
     private boolean isArchived = false;
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 
     public String getUid() {
         return uid;
