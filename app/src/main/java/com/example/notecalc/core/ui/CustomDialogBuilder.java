@@ -9,12 +9,10 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.notecalc.R;
 
 public class CustomDialogBuilder {
-    private final Context context;
     private final View dialogView;
     private final AlertDialog dialog;
     
     public CustomDialogBuilder(Context context, int layoutResId) {
-        this.context = context;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         this.dialogView = LayoutInflater.from(context).inflate(layoutResId, null);
         builder.setView(dialogView);

@@ -3,7 +3,6 @@ import com.example.notecalc.storage.core.*;
 import com.example.notecalc.records.dialogs.*;
 import com.example.notecalc.core.utils.*;
 import com.example.notecalc.accounts.models.*;
-import com.example.notecalc.records.*;
 import com.example.notecalc.records.models.Record;
 import com.example.notecalc.*;
 import java.util.List;
