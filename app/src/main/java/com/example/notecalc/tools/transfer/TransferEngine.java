@@ -45,6 +45,14 @@ public class TransferEngine {
                 }
             }
         }
+        
+        // Fix: Ensure target account's hasBudget flag is updated
+        targetAccount.setHasBudget(targetAccount.getBudgetRecords() != null && !targetAccount.getBudgetRecords().isEmpty());
+        
+        // Update current editing account's hasBudget flag as well in case it's a Cut operation
+        if (isCut && activity.currentEditingAccount != null) {
+            activity.currentEditingAccount.setHasBudget(activity.currentEditingAccount.getBudgetRecords() != null && !activity.currentEditingAccount.getBudgetRecords().isEmpty());
+        }
 
         if (isCut) {
             StateHelper.getActiveRecords(activity).removeAll(selectedRecords);
