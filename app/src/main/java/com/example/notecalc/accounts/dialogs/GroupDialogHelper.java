@@ -12,22 +12,16 @@ import android.widget.TextView;
 public class GroupDialogHelper {
 
     public static void showDeleteGroupConfirmation(MainActivity activity, AccountGroup group) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_confirm_delete_group, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_confirm_delete_group);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         View detailsContainer = dialogView.findViewById(R.id.details_container);
         TextView tvDetails = dialogView.findViewById(R.id.text_group_details);
         TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
         TextView btnDelete = dialogView.findViewById(R.id.btn_dialog_delete);
 
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
+
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(activity.getColor(R.color.text_primary));
@@ -57,22 +51,15 @@ public class GroupDialogHelper {
     }
 
     public static void showCreateGroupDialog(MainActivity activity) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_create_group);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         View detailsContainer = dialogView.findViewById(R.id.details_container);
         EditText input = dialogView.findViewById(R.id.edit_group_name);
         TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
         TextView btnApply = dialogView.findViewById(R.id.btn_dialog_apply);
 
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(activity.getColor(R.color.error_red));
@@ -105,16 +92,10 @@ public class GroupDialogHelper {
     }
 
     public static void showRenameGroupDialog(MainActivity activity, AccountGroup group) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_create_group);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         View detailsContainer = dialogView.findViewById(R.id.details_container);
         TextView titleView = dialogView.findViewById(R.id.dialog_title);
         EditText input = dialogView.findViewById(R.id.edit_group_name);
@@ -127,7 +108,6 @@ public class GroupDialogHelper {
         input.setText(group.getTitle());
         input.setSelection(input.getText().length());
 
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(activity.getColor(R.color.error_red));

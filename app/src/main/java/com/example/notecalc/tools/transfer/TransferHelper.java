@@ -30,25 +30,9 @@ public class TransferHelper {
             names.add(a.getTitle() + " (" + parentName + ")");
         }
 
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_transfer, null);
-        builder.setView(dialogView);
-
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        if (dialogRoot != null) {
-            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
-                    activity,
-                    ThemeManager.getBgSecondaryColor(activity),
-                    ThemeManager.getBorderColor(activity),
-                    1.5f,
-                    12f
-            ));
-        }
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_transfer);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
         TextView title = dialogView.findViewById(R.id.dialog_title);
         title.setText(isCut ? "Cut to..." : "Copy to...");
@@ -119,25 +103,9 @@ public class TransferHelper {
         dialog.show();
     }
 public static void showNewListTitleDialog(MainActivity activity, List<Record> selectedRecords, boolean isCut) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_new_list, null);
-        builder.setView(dialogView);
-
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
-        if (dialogRoot != null) {
-            dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
-                    activity,
-                    ThemeManager.getBgSecondaryColor(activity),
-                    ThemeManager.getBorderColor(activity),
-                    1.5f,
-                    12f
-            ));
-        }
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_new_list);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
         final android.widget.EditText input = dialogView.findViewById(R.id.edit_new_list_title);
         input.setBackground(ResponsiveUI.createRoundedBg(

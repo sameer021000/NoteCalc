@@ -20,16 +20,9 @@ public class AccountDialogHelper {
 
     @android.annotation.SuppressLint("SetTextI18n")
     public static void showDeleteAccountConfirmationDialog(MainActivity activity, final Account account) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_delete_account_dialog, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_delete_account_dialog);
+        View dialogView = dialogBuilder.getView();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         View detailsContainer = dialogView.findViewById(R.id.details_container);
         TextView tvAccountTitle = dialogView.findViewById(R.id.dialog_account_title);
         TextView tvItemsCount = dialogView.findViewById(R.id.dialog_account_items_count);
@@ -47,14 +40,6 @@ public class AccountDialogHelper {
         tvDate.setText(accountDateFormatted + " (" + DateUtils.formatDateCompact(accountDateFormatted) + ")");
 
         // Apply premium styling
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(
-                activity,
-                ThemeManager.getBgSecondaryColor(activity),
-                ThemeManager.getBorderColor(activity),
-                1.5f,
-                12f
-        ));
-
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(
                 activity,
                 ThemeManager.getBgPrimaryColor(activity),
@@ -79,35 +64,25 @@ public class AccountDialogHelper {
                 4f
         ));
 
-        ResponsiveUI.applyResponsiveness(dialogView);
-
-        ResponsiveUI.setupClickable(btnCancel, true, dialog::dismiss);
-        ResponsiveUI.setupClickable(btnDelete, true, () -> {
-            dialog.dismiss();
+        dialogBuilder.setCancelButton(R.id.btn_dialog_cancel, null);
+        dialogBuilder.setConfirmButton(R.id.btn_dialog_delete, () -> {
             // We keep it in the list for Tombstone sync
             account.setDeleted(true);
             StorageHelper.saveAppStorage(activity, activity.appStorage);
             DashboardHelper.refreshDashboardList(activity);
         });
 
-        dialog.show();
+        dialogBuilder.show();
     }
 
     public static void showMoveAccountDialog(MainActivity activity, Account account) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_move_group, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_move_group);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         LinearLayout detailsContainer = dialogView.findViewById(R.id.details_container);
         TextView btnCancel = dialogView.findViewById(R.id.btn_dialog_cancel);
 
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(activity.getColor(R.color.error_red));
@@ -242,16 +217,10 @@ public class AccountDialogHelper {
     }
 
     public static void showCreateAccountDialog(MainActivity activity, AccountGroup targetGroup) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_create_group);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         View detailsContainer = dialogView.findViewById(R.id.details_container);
         TextView titleView = dialogView.findViewById(R.id.dialog_title);
         android.widget.EditText input = dialogView.findViewById(R.id.edit_group_name);
@@ -262,7 +231,7 @@ public class AccountDialogHelper {
         input.setHint(R.string.create_list_name_hint);
         btnApply.setText(R.string.create_group_btn_create);
 
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
+
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(activity.getColor(R.color.error_red));
@@ -297,16 +266,10 @@ public class AccountDialogHelper {
     }
 
     public static void showRenameAccountDialog(MainActivity activity, Account account) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_create_group);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         View detailsContainer = dialogView.findViewById(R.id.details_container);
         TextView titleView = dialogView.findViewById(R.id.dialog_title);
         android.widget.EditText input = dialogView.findViewById(R.id.edit_group_name);
@@ -319,7 +282,7 @@ public class AccountDialogHelper {
         input.setText(account.getTitle());
         input.setSelection(input.getText().length());
 
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
+
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(activity.getColor(R.color.error_red));
@@ -358,16 +321,10 @@ public class AccountDialogHelper {
     }
 
     public static void showRenameForMoveDialog(MainActivity activity, Account account, AccountGroup targetGroup) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.layout_dialog_create_group, null);
-        builder.setView(dialogView);
+        CustomDialogBuilder dialogBuilder = new CustomDialogBuilder(activity, R.layout.layout_dialog_create_group);
+        View dialogView = dialogBuilder.getView();
+        final androidx.appcompat.app.AlertDialog dialog = dialogBuilder.getDialog();
 
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        View dialogRoot = dialogView.findViewById(R.id.dialog_root);
         View detailsContainer = dialogView.findViewById(R.id.details_container);
         TextView titleView = dialogView.findViewById(R.id.dialog_title);
         android.widget.EditText input = dialogView.findViewById(R.id.edit_group_name);
@@ -380,7 +337,7 @@ public class AccountDialogHelper {
         input.setText(account.getTitle());
         input.setSelection(input.getText().length());
 
-        dialogRoot.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgSecondaryColor(activity), ThemeManager.getBorderColor(activity), 1.5f, 12f));
+
         detailsContainer.setBackground(ResponsiveUI.createRoundedBg(activity, ThemeManager.getBgPrimaryColor(activity), ThemeManager.getBorderColor(activity), 1.0f, 6f));
         btnCancel.setBackground(ResponsiveUI.createButtonSelector(activity, Color.parseColor("#20EF4444"), 4.0f));
         btnCancel.setTextColor(activity.getColor(R.color.error_red));
