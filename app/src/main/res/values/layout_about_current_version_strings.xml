@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_version_title">What\'s New in NoteCalc v1.8.0</string>
+    <string name="about_version_title">What\'s New in NoteCalc v1.9.0</string>
     <string name="about_version_btn_dismiss">Awesome!</string>
     
-    <string name="about_item1_title">☁️ Cloud Synchronization</string>
-    <string name="about_item1_desc">Connect a cloud folder to safely and securely back up all your JSON data automatically.</string>
+    <string name="about_item1_title">📂 In-Group List Creation</string>
+    <string name="about_item1_desc">You can now create new lists directly from inside a group dashboard, saving you from having to create and move them.</string>
     
-    <string name="about_item2_title">🖼️ Auto Sync Attachments</string>
-    <string name="about_item2_desc">Enable background syncing to effortlessly push all your image attachments to your connected cloud folder.</string>
+    <string name="about_item2_title">🛡️ Data Deletion Safeguards</string>
+    <string name="about_item2_desc">Overhauled the deletion mechanism with safe \"soft-deletion\" to ensure perfect background synchronization and data recovery.</string>
     
-    <string name="about_item3_title">🖱️ Smart Selection Mode</string>
-    <string name="about_item3_desc">Tapping anywhere on a record during selection mode now intuitively selects it instead of opening the edit form.</string>
+    <string name="about_item3_title">⚡ Real-Time Budget Updates</string>
+    <string name="about_item3_desc">Dashboard budget cards now update instantly and flawlessly when you cut or copy budget records between lists.</string>
     
-    <string name="about_item4_title">⏱️ Precise Timestamps</string>
-    <string name="about_item4_desc">Record timestamps now display the exact seconds, allowing for more precise tracking of your entries.</string>
+    <string name="about_item4_title">🎯 Smarter Transfer Dialogs</string>
+    <string name="about_item4_desc">Deleted lists will no longer erroneously appear as available targets when you copy or cut records.</string>
     
-    <string name="about_item5_title">🛠️ Cloud Safeguards</string>
-    <string name="about_item5_desc">Added attention-mode warnings when disconnecting from the cloud to prevent accidental loss of sync settings.</string>
+    <string name="about_item5_title">🏗️ Under-the-Hood Stability</string>
+    <string name="about_item5_desc">Centralized dialogs and bulk operations into a unified engine for a faster, more reliable application experience.</string>
 </resources>

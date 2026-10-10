@@ -4,6 +4,26 @@ All notable changes to **NoteCalc** will be documented in this file.
 
 ---
 
+## [1.9.0] - 2026-10-10
+
+### ✨ Added
+
+* **In-Group List Creation**: Added new UI functionality to create a list directly from inside a group dashboard, saving you from having to create it on the main dashboard and move it.
+
+### 🎨 Improved
+
+* **Move Dialog UI**: When moving a list, the "Move to Dashboard" option in the dialog now visually stands out from regular group names.
+* **Under-the-Hood Architecture**: Centralized all dialogs using `CustomDialogBuilder` and bulk record mutations using `ListMutationEngine` for a faster, more stable, and consistent application experience.
+* **Toast Feedback**: Refined and corrected inappropriate Toast message alerts when attempting to create a list with the same name as an existing group (and vice versa).
+
+### 🐛 Fixed
+
+* **Data Sync & Deletion (Tombstones)**: Completely overhauled the underlying list and group deletion mechanism. Deleting items now utilizes safe "soft-deletion" (tombstoning) to prevent critical UI crashes and synchronization anomalies. 
+* **Copy/Cut Target Visibility**: Fixed a bug where deleted lists (that were inside deleted groups) were still incorrectly showing up as available targets in the Copy/Cut dialog boxes.
+* **Budget UI Sync**: Fixed an issue where the budget dashboard card would not instantly reflect the new budget amounts when cutting or copying budget records between lists.
+
+---
+
 ## [1.8.0] - 2026-10-01
 
 ### ✨ Added

@@ -2,7 +2,7 @@
 
 ![Android](https://img.shields.io/badge/Platform-Android-green)
 ![Java](https://img.shields.io/badge/Language-Java-blue)
-![Version](https://img.shields.io/badge/Version-1.8.0-orange)
+![Version](https://img.shields.io/badge/Version-1.9.0-orange)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 
 **NoteCalc** is a premium, offline-first Android expense tracker and calculator designed to bridge the gap between simple note-taking and structured financial tracking. It combines a modern interface with powerful tools such as dual tracking modes, file attachments, detailed PDF reporting, JSON backups, advanced filtering, and an organized dashboard for an intuitive accounting experience.
@@ -11,11 +11,11 @@
 
 ## 📌 App Information
 
-* **Current Version:** v1.8.0
+* **Current Version:** v1.9.0
 * **Minimum SDK:** Android 7.0 (Nougat)
 * **Target SDK:** Android 15 (API 36)
 * **Language:** Java
-* **Last Updated:** August 2026
+* **Last Updated:** October 2026
 
 ---
 
@@ -92,7 +92,7 @@
 
 |                        Dashboard                         |                          Group Dashboard                          |
 |:--------------------------------------------------------:|:-----------------------------------------------------------------:|
-|  ![Dashboard](screenshots/dashboard_screen_v1.7.0.jpg)   | ![Group Dashboard](screenshots/group_dashboard_screen_v1.6.0.jpg) |
+|  ![Dashboard](screenshots/dashboard_screen_v1.7.0.jpg)   | ![Group Dashboard](screenshots/group_dashboard_screen_v1.9.0.jpg) |
 |                    **Expenses Mode**                     |                          **Budget Mode**                          |
 | ![Expenses Mode](screenshots/expenses_screen_v1.7.0.jpg) |       ![Budget Mode](screenshots/budget_screen_v1.7.0.jpg)        |
 |                      **Settings 1**                      |                          **Settings 2**                           |
@@ -134,6 +134,7 @@
 
 ## 📋 Version History
 
+* **v1.9.0** – Added direct in-group list creation, overhauled underlying deletion mechanics to fix critical sync bugs, resolved budget reflection anomalies, and unified codebase UI dialog architectures.
 * **v1.8.0** – Added Cloud Synchronization for data and attachments, introduced precise timestamps (with seconds), and improved the smart selection mode interaction.
 * **v1.7.0** – Redesigned list cards with math breakdown and real-time balance updates, persistent drag-and-drop custom sorting, quick list rename via long-press, and a polished modern UI with asymmetric buttons and dynamic sizing.
 * **v1.6.0** – Redesigned dashboard header with a unified '+' dropdown menu, fixed critical search state-sync bugs, added ripple touch feedback to menus, and improved empty states interaction.
