@@ -64,6 +64,8 @@ public class MutationEngine {
             if (lGroup != null) {
                 // Exists in both, merge accounts inside the group
                 AccountGroup mergedGroup = new AccountGroup(lGroup.getTitle());
+                mergedGroup.setUid(lGroup.getUid());
+                mergedGroup.setDeleted(lGroup.getLastModified() >= rGroup.getLastModified() ? lGroup.isDeleted() : rGroup.isDeleted());
                 mergedGroup.setPinned(lGroup.getLastModified() >= rGroup.getLastModified() ? lGroup.isPinned() : rGroup.isPinned());
                 mergedGroup.setArchived(lGroup.getLastModified() >= rGroup.getLastModified() ? lGroup.isArchived() : rGroup.isArchived());
                 mergedGroup.setSortMode(lGroup.getLastModified() >= rGroup.getLastModified() ? lGroup.getSortMode() : rGroup.getSortMode());
@@ -155,6 +157,7 @@ public class MutationEngine {
         return null;
     }
 }
+
 
 
 
