@@ -125,7 +125,11 @@ public class StorageHelper {
 
     public static java.util.List<Account> getValidTransferTargets(AppStorage storage, Account currentAccount) {
         java.util.List<Account> targetAccounts = new java.util.ArrayList<>();
-        for (AccountGroup g : storage.groups) targetAccounts.addAll(g.getAccounts());
+        for (AccountGroup g : storage.groups) {
+            if (!g.isDeleted()) {
+                targetAccounts.addAll(g.getAccounts());
+            }
+        }
         targetAccounts.addAll(storage.standaloneAccounts);
 
         java.util.List<Account> validTargets = new java.util.ArrayList<>();
