@@ -7,12 +7,14 @@
     <string name="editor_btn_minimize">Minimize [ - ]</string>
     <string name="editor_hint_remarks">Remarks (e.g. bought at DMart - optional)</string>
     <string name="editor_hint_category">Category</string>
-    <string name="editor_btn_attach_file">Attach File (Max 3)</string>
+    <string name="editor_btn_attach_file">Attach File (Only 1)</string>
     <string name="editor_search_hint">Search by description…</string>
     <string name="editor_total_placeholder">Total: 0.00</string>
     <string name="editor_menu_actions">Menu Actions</string>
     <string name="editor_empty_title">No Expenditures Added</string>
     <string name="editor_empty_desc">Use the \'ADD EXPENDITURE\' form above to begin noting down your costs.</string>
+    <string name="editor_empty_title_budget">No Budgets Added</string>
+    <string name="editor_empty_desc_budget">Use the \'ADD BUDGET\' form above to begin noting down your budgets.</string>
     <string name="editor_btn_nc_agent">NC Agent</string>
 
     <string name="label_add_record">ADD EXPENDITURE</string>

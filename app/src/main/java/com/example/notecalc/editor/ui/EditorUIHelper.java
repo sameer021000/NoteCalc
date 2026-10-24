@@ -37,6 +37,20 @@ public class EditorUIHelper {
         boolean isEmpty = StateHelper.getActiveRecords(activity).isEmpty();
         if (activity.editorEmptyState != null) {
             activity.editorEmptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+            if (isEmpty) {
+                android.widget.TextView emptyTitle = activity.editorEmptyState.findViewById(R.id.editor_empty_title);
+                android.widget.TextView emptyDesc = activity.editorEmptyState.findViewById(R.id.editor_empty_desc);
+                if (emptyTitle != null) {
+                    emptyTitle.setText(activity.isBudgetMode
+                            ? activity.getString(R.string.editor_empty_title_budget)
+                            : activity.getString(R.string.editor_empty_title));
+                }
+                if (emptyDesc != null) {
+                    emptyDesc.setText(activity.isBudgetMode
+                            ? activity.getString(R.string.editor_empty_desc_budget)
+                            : activity.getString(R.string.editor_empty_desc));
+                }
+            }
         }
         if (activity.rowSearchAndBulk != null) {
             activity.rowSearchAndBulk.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
