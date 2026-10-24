@@ -22,15 +22,7 @@ public class EditorUIHelper {
         TextView textRemainingPurse = activity.textRemainingPurseField;
         if (textRemainingPurse != null) {
             textRemainingPurse.setVisibility(View.VISIBLE);
-            double totalBudget = 0;
-            if (activity.currentEditingAccount != null && activity.currentEditingAccount.getBudgetRecords() != null) {
-                for (Record r : activity.currentEditingAccount.getBudgetRecords()) totalBudget += r.getAmount();
-            }
-            double totalExpenses = 0;
-            if (activity.currentEditingAccount != null && activity.currentEditingAccount.getRecords() != null) {
-                for (Record r : activity.currentEditingAccount.getRecords()) totalExpenses += r.getAmount();
-            }
-            double remaining = totalBudget - totalExpenses;
+            double remaining = calculateBalance(activity);
             textRemainingPurse.setText(String.format(Locale.getDefault(), "Balance : %.2f", remaining));
         }
 
@@ -62,6 +54,18 @@ public class EditorUIHelper {
 
         BulkActionsHelper.updateSelectAllHeaderState(activity);
         BulkActionsHelper.updateBulkActionsState(activity);
+    }
+
+    private static double calculateBalance(MainActivity activity) {
+        double totalBudget = 0;
+        if (activity.currentEditingAccount != null && activity.currentEditingAccount.getBudgetRecords() != null) {
+            for (Record r : activity.currentEditingAccount.getBudgetRecords()) totalBudget += r.getAmount();
+        }
+        double totalExpenses = 0;
+        if (activity.currentEditingAccount != null && activity.currentEditingAccount.getRecords() != null) {
+            for (Record r : activity.currentEditingAccount.getRecords()) totalExpenses += r.getAmount();
+        }
+        return totalBudget - totalExpenses;
     }
 
     public static int getNewOriginalIndex(MainActivity activity) {
