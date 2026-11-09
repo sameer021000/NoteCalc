@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_CAMERA = 1002;
     public String currentPhotoPath = null;
     public android.widget.LinearLayout attachmentsContainer;
-    public android.widget.HorizontalScrollView attachmentsScroll;
     public android.widget.TextView btnAttachFile;
 
     public androidx.activity.result.ActivityResultLauncher<android.content.Intent> exportJsonLauncher;
