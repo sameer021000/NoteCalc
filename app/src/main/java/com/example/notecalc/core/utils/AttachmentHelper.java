@@ -64,33 +64,39 @@ public class AttachmentHelper {
 
     @android.annotation.SuppressLint("SetTextI18n")
     public static void renderEditorAttachments(MainActivity activity) {
-        if (activity.attachmentsContainer == null || activity.attachmentsScroll == null) return;
+        if (activity.attachmentsContainer == null) return;
         activity.attachmentsContainer.removeAllViews();
         if (activity.tempAttachments.isEmpty()) {
-            activity.attachmentsScroll.setVisibility(View.GONE);
+            activity.attachmentsContainer.setVisibility(View.GONE);
             if (activity.btnAttachFile != null) activity.btnAttachFile.setAlpha(1.0f);
         } else {
-            activity.attachmentsScroll.setVisibility(View.VISIBLE);
+            activity.attachmentsContainer.setVisibility(View.VISIBLE);
             if (activity.btnAttachFile != null) activity.btnAttachFile.setAlpha(!activity.tempAttachments.isEmpty() ? 0.5f : 1.0f);
 
             if (!activity.tempAttachments.isEmpty()) {
-                String path = activity.tempAttachments.get(0);
-                java.io.File f = new java.io.File(path);
+                String filePath = activity.tempAttachments.get(0);
+                java.io.File f = new java.io.File(filePath);
                 String name = f.getName();
-                if (name.length() > 15) name = name.substring(0, 15) + "...";
 
                 LinearLayout chipContainer = new LinearLayout(activity);
                 chipContainer.setOrientation(LinearLayout.HORIZONTAL);
+                chipContainer.setGravity(android.view.Gravity.CENTER_VERTICAL);
                 chipContainer.setBackground(ResponsiveUI.createButtonSelector(activity, ThemeManager.getBgSecondaryColor(activity), 8.0f));
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(0, 0, 16, 0);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
                 chipContainer.setLayoutParams(lp);
 
                 TextView chip = new TextView(activity);
-                chip.setText((path.endsWith(".pdf") || path.endsWith(".doc") || path.endsWith(".docx") ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ") + name);
+                chip.setText((filePath.endsWith(".pdf") || filePath.endsWith(".doc") || filePath.endsWith(".docx") ? "\uD83D\uDCC4 " : "\uD83D\uDDBC ") + name);
                 chip.setTextSize(12);
                 chip.setTextColor(activity.getColor(R.color.text_primary));
-                chip.setPadding(20, 10, 10, 10);
+                chip.setPadding(16, 10, 8, 10);
+                chip.setSingleLine(true);
+                chip.setEllipsize(android.text.TextUtils.TruncateAt.MARQUEE);
+                chip.setMarqueeRepeatLimit(-1);
+                chip.setHorizontallyScrolling(true);
+                chip.setSelected(true);
+                LinearLayout.LayoutParams chipLp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+                chip.setLayoutParams(chipLp);
 
                 ResponsiveUI.setupClickable(chip, false, () -> {
                     try {
@@ -98,8 +104,8 @@ public class AttachmentHelper {
                         android.content.Intent viewIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
                         viewIntent.setDataAndType(uri, activity.getContentResolver().getType(uri));
                         if (viewIntent.getType() == null) {
-                            if (path.toLowerCase().endsWith(".pdf")) viewIntent.setDataAndType(uri, "application/pdf");
-                            else if (path.toLowerCase().endsWith(".jpg") || path.toLowerCase().endsWith(".png")) viewIntent.setDataAndType(uri, "image/*");
+                            if (filePath.toLowerCase().endsWith(".pdf")) viewIntent.setDataAndType(uri, "application/pdf");
+                            else if (filePath.toLowerCase().endsWith(".jpg") || filePath.toLowerCase().endsWith(".png")) viewIntent.setDataAndType(uri, "image/*");
                             else viewIntent.setDataAndType(uri, "*/*");
                         }
                         viewIntent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -113,7 +119,9 @@ public class AttachmentHelper {
                 closeBtn.setText(" ✕ ");
                 closeBtn.setTextSize(12);
                 closeBtn.setTextColor(activity.getColor(R.color.error_red));
-                closeBtn.setPadding(10, 10, 20, 10);
+                closeBtn.setPadding(8, 10, 16, 10);
+                LinearLayout.LayoutParams closeLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                closeBtn.setLayoutParams(closeLp);
 
                 ResponsiveUI.setupClickable(closeBtn, false, () -> {
                     activity.tempAttachments.clear();

@@ -48,7 +48,7 @@ public class EditorHelper {
         TextView btnAdd = editorView.findViewById(R.id.btn_add_record);
         activity.editCategoryField = editorView.findViewById(R.id.edit_record_category);
         activity.btnAttachFile = editorView.findViewById(R.id.btn_attach_file);
-        activity.attachmentsScroll = editorView.findViewById(R.id.attachments_scroll);
+        // activity.attachmentsScroll removed
         activity.attachmentsContainer = editorView.findViewById(R.id.attachments_container);
 
         activity.tempAttachments.clear();
