@@ -20,22 +20,6 @@
         android:layout_marginBottom="16dp" />
 
     <TextView
-        android:id="@+id/btn_take_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/attach_file_btn_photo"
-        android:textColor="@color/text_primary"
-        android:textSize="16sp"
-        android:padding="12dp"
-        app:drawableStartCompat="@android:drawable/ic_menu_camera"
-        app:drawableTint="?attr/colorAccentSecondary"
-        android:drawablePadding="16dp"
-        android:background="?attr/colorBgPrimary"
-        android:layout_marginBottom="12dp"
-        android:clickable="true"
-        android:focusable="true"/>
-
-    <TextView
         android:id="@+id/btn_choose_file"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,6 +28,22 @@
         android:textSize="16sp"
         android:padding="12dp"
         app:drawableStartCompat="@android:drawable/ic_menu_gallery"
+        app:drawableTint="?attr/colorAccentSecondary"
+        android:drawablePadding="16dp"
+        android:background="?attr/colorBgPrimary"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <TextView
+        android:id="@+id/btn_take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/attach_file_btn_photo"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        android:padding="12dp"
+        app:drawableStartCompat="@android:drawable/ic_menu_camera"
         app:drawableTint="?attr/colorAccentSecondary"
         android:drawablePadding="16dp"
         android:background="?attr/colorBgPrimary"
